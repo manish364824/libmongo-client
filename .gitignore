@@ -19,3 +19,4 @@ tests/*.ok
 docs/
 b/
 .pc/
+debian/patches
