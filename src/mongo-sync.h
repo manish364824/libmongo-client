@@ -23,12 +23,6 @@
 
 G_BEGIN_DECLS
 
-#if __GNUC__ >= 4
-#define GNUC_SENTINEL __attribute__((sentinel))
-#else
-#define GNUC_SENTINEL
-#endif
-
 /** Default maximum size for a single bulk insert.
  *
  * Defaults to somewhat shy of 4Mb.
@@ -231,7 +225,7 @@ gboolean mongo_sync_cmd_update (mongo_sync_connection *conn,
  * @returns TRUE on success, FALSE otherwise.
  */
 gboolean mongo_sync_cmd_insert (mongo_sync_connection *conn,
-				const gchar *ns, ...) GNUC_SENTINEL;
+				const gchar *ns, ...) G_GNUC_NULL_TERMINATED;
 
 
 /** Send an insert command to MongoDB.

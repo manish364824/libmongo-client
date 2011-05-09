@@ -23,12 +23,6 @@
 
 G_BEGIN_DECLS
 
-#if __GNUC__ >= 4
-#define GNUC_SENTINEL __attribute__((sentinel))
-#else
-#define GNUC_SENTINEL
-#endif
-
 /** @defgroup mongo_wire Mongo Wire Protocol
  *
  * The structures and functions within this module implement the
@@ -285,7 +279,8 @@ mongo_packet *mongo_wire_cmd_update (gint32 id, const gchar *ns,
  * responsibility of the caller to free the packet once it is not used
  * anymore.
  */
-mongo_packet *mongo_wire_cmd_insert (gint32 id, const gchar *ns, ...) GNUC_SENTINEL;
+mongo_packet *mongo_wire_cmd_insert (gint32 id, const gchar *ns, ...)
+  G_GNUC_NULL_TERMINATED;
 
 /** Construct an insert command with N documents.
  *
