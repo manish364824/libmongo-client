@@ -21,6 +21,8 @@
 
 #include <bson.h>
 
+G_BEGIN_DECLS
+
 #if __GNUC__ >= 4
 #define GNUC_SENTINEL __attribute__((sentinel))
 #else
@@ -424,5 +426,9 @@ mongo_packet *mongo_wire_cmd_custom (gint32 id, const gchar *db,
 				     const bson *command);
 
 /** @} */
+
 /** @} */
+
+G_END_DECLS
+
 #endif

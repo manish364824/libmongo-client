@@ -20,6 +20,8 @@
 #include <mongo-sync.h>
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 /** @defgroup mongo_sync_pool_api Mongo Sync Pool API
  *
  * These commands implement connection pooling over the mongo_sync
@@ -116,5 +118,7 @@ gboolean mongo_sync_pool_return (mongo_sync_pool *pool,
 				 mongo_sync_pool_connection *conn);
 
 /** @} */
+
+G_END_DECLS
 
 #endif

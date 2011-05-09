@@ -19,6 +19,8 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 /** @defgroup mongo_util Mongo Utils
  *
  * Various utility functions related to MongoDB.
@@ -97,5 +99,7 @@ gboolean mongo_util_parse_addr (const gchar *addr, gchar **host,
 				gint *port);
 
 /** @} */
+
+G_END_DECLS
 
 #endif

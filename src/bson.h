@@ -19,6 +19,8 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 /** @defgroup bson_mod BSON
  *
  * The types, functions and everything else within this module is
@@ -772,5 +774,7 @@ gboolean bson_cursor_get_int64 (const bson_cursor *c, gint64 *dest);
 /** @} */
 
 /** @} */
+
+G_END_DECLS
 
 #endif
