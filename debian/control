@@ -19,6 +19,18 @@ Description: Development files for the alternate C driver for MongoDB.
  as only it includes the header files and static libraries needed for
  compiling.
 
+Package: libmongo-client0-dbg
+Section: debug
+Architecture: any
+Depends: libmongo-client0 (= ${binary:Version}), ${misc:Depends}
+Description: Alternate C driver for MongoDB (debugging symbols).
+ libmongo-client is an alternative C language driver to the MongoDB
+ document-oriented datastore.
+ .
+ This package contains detached debugging symbols.
+ .
+ Most people will not need this package.
+ 
 Package: libmongo-client0
 Section: libs
 Architecture: any
