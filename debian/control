@@ -4,6 +4,7 @@ Maintainer: Gergely Nagy <algernon@madhouse-project.org>
 Build-Depends: debhelper (>= 8), autotools-dev, libglib2.0-dev, libssl-dev, perl, libtool, autoconf, automake
 Standards-Version: 3.9.1
 Section: libs
+DM-Upload-Allowed: yes
 Vcs-Git: git://git.madhouse-project.org/projects/libmongo-client.git
 Vcs-Browser: http://git.madhouse-project.org/projects/libmongo-client/
 
