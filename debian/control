@@ -2,7 +2,7 @@ Source: libmongo-client
 Priority: extra
 Maintainer: Gergely Nagy <algernon@madhouse-project.org>
 Build-Depends: debhelper (>= 8), autotools-dev, libglib2.0-dev, libssl-dev, perl, libtool, autoconf, automake
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Section: libs
 DM-Upload-Allowed: yes
 Homepage: https://github.com/algernon/libmongo-client
