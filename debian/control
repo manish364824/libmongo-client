@@ -7,6 +7,22 @@ Section: libs
 Vcs-Git: git://git.madhouse-project.org/projects/libmongo-client.git
 Vcs-Browser: http://git.madhouse-project.org/projects/libmongo-client/
 
+Package: libmongo-client0
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Alternate C driver for the MongoDB document-oriented datastore
+ MongoDB is a high-performance, open source, schema-free
+ document-oriented data store.
+ .
+ This library provides an alternative C language driver, focusing more
+ on ease of use.
+ .
+ Among its features are:
+ .
+   * Support for asynchronous operation.
+   * C-like error handling.
+   * ReplicaSet support.
+
 Package: libmongo-client-dev
 Section: libdevel
 Architecture: any
@@ -30,20 +46,3 @@ Description: Alternate C driver for MongoDB (debugging symbols)
  This package contains detached debugging symbols.
  .
  Most people will not need this package.
- 
-Package: libmongo-client0
-Section: libs
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Alternate C driver for the MongoDB document-oriented datastore
- MongoDB is a high-performance, open source, schema-free
- document-oriented data store.
- .
- This library provides an alternative C language driver, focusing more
- on ease of use.
- .
- Among its features are:
- .
-   * Support for asynchronous operation.
-   * C-like error handling.
-   * ReplicaSet support.
