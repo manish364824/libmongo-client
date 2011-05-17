@@ -20,3 +20,11 @@ docs/
 b/
 .pc/
 debian/patches
+debian/tmp/
+debian/libmongo-client-dev/
+debian/libmongo-client0-dbg/
+debian/libmongo-client0/
+*.debhelper*
+*.substvars
+build-tree/
+debian/files
