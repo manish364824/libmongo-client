@@ -34,8 +34,9 @@ coverage:
 		case "$$src" in \
 			*.c) \
 				obj=`echo $$src | sed 's|\.c|.o|'`; \
-				cov="$$src.gcov"; \
-				gcov $(srcdir)/$$src -o $(builddir)/libmongo_client_la-$$obj >>coverage; \
+				objdir=$(builddir)/.libs; \
+				test -f $(builddir)/libmongo_client_la-$$obj || objdir=$(builddir); \
+				gcov $(srcdir)/$$src -o $$objdir/libmongo_client_la-$$obj >>coverage; \
 				;;\
 		esac \
 	done
