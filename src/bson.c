@@ -258,7 +258,7 @@ bson_new_sized (gint32 size)
 {
   bson *b = g_new0 (bson, 1);
 
-  b->data = g_byte_array_sized_new (size + 1);
+  b->data = g_byte_array_sized_new (size + sizeof (gint32) + sizeof (guint8));
   _bson_append_int32 (b, 0);
 
   return b;
@@ -273,7 +273,7 @@ bson_new_from_data (const guint8 *data, gint32 size)
     return NULL;
 
   b = g_new0 (bson, 1);
-  b->data = g_byte_array_sized_new (size + 1);
+  b->data = g_byte_array_sized_new (size + sizeof (guint8));
   b->data = g_byte_array_append (b->data, data, size);
 
   return b;
