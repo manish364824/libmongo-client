@@ -40,25 +40,6 @@
 
 static const int one = 1;
 
-static int
-unset_nonblock (int fd)
-{
-  int val;
-
-  val = fcntl (fd, F_GETFL, 0);
-  if (val < 0)
-    return -1;
-
-  if (!(val & O_NONBLOCK))
-    return 0;
-
-  val &= ~O_NONBLOCK;
-  if (fcntl (fd, F_SETFL, val) == -1)
-    return -1;
-
-  return 0;
-}
-
 mongo_connection *
 mongo_connect (const char *host, int port)
 {
@@ -118,16 +99,6 @@ mongo_connect (const char *host, int port)
     }
 
   setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, (char *)&one, sizeof (one));
-
-  if (unset_nonblock (fd))
-    {
-      int err = errno;
-
-      g_free (conn);
-      close (fd);
-      errno = err;
-      return NULL;
-    }
 
   conn->fd = fd;
 
