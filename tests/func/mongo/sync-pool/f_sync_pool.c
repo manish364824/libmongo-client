@@ -9,7 +9,7 @@ void
 test_func_mongo_sync_pool_secondary (void)
 {
   mongo_sync_pool *pool;
-  mongo_sync_pool_connection *conn[11], *m, *s1, *s2;
+  mongo_sync_pool_connection *conn[11], *m, *s1, *s2, *t;
   gint i = 0;
   gboolean ret = TRUE;
 
@@ -54,6 +54,15 @@ test_func_mongo_sync_pool_secondary (void)
       "mongo_sync_pool_return() works when returning slaves");
 
   mongo_sync_pool_return (pool, m);
+
+  t = mongo_sync_pool_pick (pool, FALSE);
+  t->pool_id = 4242;
+
+  errno = 0;
+  ret = mongo_sync_pool_return (pool, t);
+  ok (ret == FALSE && errno == ERANGE,
+      "mongo_sync_pool_return() should fail if the connection ID is "
+      "out of range");
 
   /* Test whether masters and slaves are different. */
   m = mongo_sync_pool_pick (pool, TRUE);
@@ -157,4 +166,4 @@ test_func_mongo_sync_pool (void)
   test_func_mongo_sync_pool_secondary ();
 }
 
-RUN_NET_TEST (22, func_mongo_sync_pool);
+RUN_NET_TEST (23, func_mongo_sync_pool);
