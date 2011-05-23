@@ -877,9 +877,12 @@ bson_find (const bson *b, const gchar *name)
 {
   gint32 pos = sizeof (guint32), bs;
   const guint8 *d;
+  gint32 name_len;
 
   if (bson_size (b) == -1 || !name)
     return NULL;
+
+  name_len = strlen (name);
 
   d = bson_data (b);
 
@@ -887,9 +890,10 @@ bson_find (const bson *b, const gchar *name)
     {
       bson_type t = (bson_type) d[pos];
       const gchar *key = (gchar *) &d[pos + 1];
-      gint32 value_pos = pos + strlen (key) + 2;
+      gint32 key_len = strlen (key);
+      gint32 value_pos = pos + key_len + 2;
 
-      if (!strcmp (key, name))
+      if (!memcmp (key, name, (name_len <= key_len) ? name_len : key_len))
 	{
 	  bson_cursor *c;
 

@@ -56,6 +56,9 @@ bson_func_tests	= \
 		func/bson/huge_doc \
 		func/bson/f_weird_types
 
+bson_perf_tests	= \
+		perf/bson/p_bson_find
+
 mongo_utils_unit_tests	= \
 		unit/mongo/utils/oid_init \
 		unit/mongo/utils/oid_new \
@@ -135,7 +138,8 @@ UNIT_TESTS	= ${bson_unit_tests} ${mongo_utils_unit_tests} \
 		${mongo_sync_unit_tests} ${mongo_sync_pool_unit_tests}
 FUNC_TESTS	= ${bson_func_tests} ${mongo_sync_func_tests} \
 		${mongo_sync_pool_func_tests}
-TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS}
+PERF_TESTS	= ${bson_perf_tests}
+TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}
 
 check_PROGRAMS	= ${TESTCASES}
 noinst_PROGRAMS= test_cleanup
