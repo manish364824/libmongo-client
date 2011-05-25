@@ -1,5 +1,31 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.1.0 - <2011-05-25 Wed>
+
+** Shared library
+The configure script now defaults to enabling shared library building
+by default (along with a static library).
+
+** Bug fixes
+The pkg-config file was setting an incorrect include directory in it's
+Cflags. This is now fixed.
+
+** C++ Compatibility
+The public headers are now guarded by extern "C" {} wrappers, so that
+they can be included in C++ projects.
+
+** Performance enhancements
+A minor performance issue was corrected in the BSON code, that had the
+possibility of forcing unneccessary memory allocations. The library
+now allocates the proper amount of memory at the soonest time
+possible, so it doesn't have to grow it later on unnecessarily.
+
+Anoter performance issue was corrected in the BSON library:
+bson_find() was comparing key names in BSON objects with the sought
+for key using strcmp(), which was unacceptably slow when dealing with
+BSON objects that have a lot of keys. We now use memcmp(), which means
+we don't have to traverse the sought for key all the time.
+
 * 0.0.2 - <2011-05-07 Sat>
 
 ** Replica set seeding support
