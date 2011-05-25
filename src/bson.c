@@ -19,6 +19,7 @@
  */
 
 #include <glib.h>
+#include <errno.h>
 #include <string.h>
 #include <stdarg.h>
 
@@ -583,6 +584,26 @@ bson_free (bson *b)
   if (b->data)
     g_byte_array_free (b->data, TRUE);
   g_free (b);
+}
+
+gboolean
+bson_validate_key (const gchar *key, gboolean forbid_dots,
+		   gboolean no_dollar)
+{
+  if (!key)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+  errno = 0;
+
+  if (no_dollar && key[0] == '$')
+    return FALSE;
+
+  if (forbid_dots && strchr (key, '.') != NULL)
+    return FALSE;
+
+  return TRUE;
 }
 
 /*

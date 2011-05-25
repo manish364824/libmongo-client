@@ -3,6 +3,7 @@ SUBDIRS		= libtap
 bson_unit_tests	= \
 		unit/bson/bson_new \
 		unit/bson/bson_empty \
+		unit/bson/bson_validate_key \
 		\
 		unit/bson/bson_append_string \
 		unit/bson/bson_append_double \
