@@ -258,7 +258,7 @@ bson_new_sized (gint32 size)
 {
   bson *b = g_new0 (bson, 1);
 
-  b->data = g_byte_array_sized_new (size + 1);
+  b->data = g_byte_array_sized_new (size + sizeof (gint32) + sizeof (guint8));
   _bson_append_int32 (b, 0);
 
   return b;
@@ -273,7 +273,7 @@ bson_new_from_data (const guint8 *data, gint32 size)
     return NULL;
 
   b = g_new0 (bson, 1);
-  b->data = g_byte_array_sized_new (size + 1);
+  b->data = g_byte_array_sized_new (size + sizeof (guint8));
   b->data = g_byte_array_append (b->data, data, size);
 
   return b;
@@ -877,9 +877,12 @@ bson_find (const bson *b, const gchar *name)
 {
   gint32 pos = sizeof (guint32), bs;
   const guint8 *d;
+  gint32 name_len;
 
   if (bson_size (b) == -1 || !name)
     return NULL;
+
+  name_len = strlen (name);
 
   d = bson_data (b);
 
@@ -887,9 +890,10 @@ bson_find (const bson *b, const gchar *name)
     {
       bson_type t = (bson_type) d[pos];
       const gchar *key = (gchar *) &d[pos + 1];
-      gint32 value_pos = pos + strlen (key) + 2;
+      gint32 key_len = strlen (key);
+      gint32 value_pos = pos + key_len + 2;
 
-      if (!strcmp (key, name))
+      if (!memcmp (key, name, (name_len <= key_len) ? name_len : key_len))
 	{
 	  bson_cursor *c;
 

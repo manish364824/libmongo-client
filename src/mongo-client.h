@@ -22,6 +22,8 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 /** @defgroup mongo_client Mongo Client
  *
  * @addtogroup mongo_client
@@ -79,5 +81,7 @@ mongo_packet *mongo_packet_recv (mongo_connection *conn);
 gint32 mongo_connection_get_requestid (const mongo_connection *conn);
 
 /** @} */
+
+G_END_DECLS
 
 #endif

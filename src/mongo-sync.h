@@ -21,11 +21,7 @@
 
 #include <glib.h>
 
-#if __GNUC__ >= 4
-#define GNUC_SENTINEL __attribute__((sentinel))
-#else
-#define GNUC_SENTINEL
-#endif
+G_BEGIN_DECLS
 
 /** Default maximum size for a single bulk insert.
  *
@@ -229,7 +225,7 @@ gboolean mongo_sync_cmd_update (mongo_sync_connection *conn,
  * @returns TRUE on success, FALSE otherwise.
  */
 gboolean mongo_sync_cmd_insert (mongo_sync_connection *conn,
-				const gchar *ns, ...) GNUC_SENTINEL;
+				const gchar *ns, ...) G_GNUC_NULL_TERMINATED;
 
 
 /** Send an insert command to MongoDB.
@@ -442,5 +438,7 @@ gboolean mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
 				      const gchar *pw);
 
 /** @} */
+
+G_END_DECLS
 
 #endif

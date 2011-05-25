@@ -18,3 +18,4 @@ missing
 tests/*.ok
 docs/
 b/
+.pc/
