@@ -261,6 +261,7 @@ void bson_free (bson *b);
  * closed by bson_finish() is considered an error.
  */
 gint32 bson_size (const bson *b);
+
 /** Return the raw bytestream form of the BSON object.
  *
  * @param b is the BSON object to retrieve data from.
@@ -272,6 +273,27 @@ gint32 bson_size (const bson *b);
  * considered an error.
  */
 const guint8 *bson_data (const bson *b);
+
+/* Validate a BSON key.
+ *
+ * Verifies that a given key is a valid BSON field name. Depending on
+ * context (togglable by the boolean flags) this means that the string
+ * must either be free of dots, or must not start with a dollar sign.
+ *
+ * @param key is the field name to validate.
+ * @param forbid_dots toggles whether to disallow dots in the name
+ * altogether.
+ * @param no_dollar toggles whether to forbid key names starting with
+ * a dollar sign.
+ *
+ * @returns TRUE if the field name is found to be valid, FALSE
+ * otherwise.
+ *
+ * @note This function does NOT do UTF-8 validation. That is left up
+ * to the application.
+ */
+gboolean bson_validate_key (const gchar *key, gboolean forbid_dots,
+			    gboolean no_dollar);
 
 /** @} */
 
