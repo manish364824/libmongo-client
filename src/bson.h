@@ -288,6 +288,9 @@ const guint8 *bson_data (const bson *b);
  *
  * @returns TRUE if the field name is found to be valid, FALSE
  * otherwise.
+ *
+ * @note This function does NOT do UTF-8 validation. That is left up
+ * to the application.
  */
 gboolean bson_validate_key (const gchar *key, gboolean forbid_dots,
 			    gboolean no_dollar);
