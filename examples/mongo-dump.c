@@ -40,42 +40,18 @@ typedef struct
 
 #define VLOG(...) { if (config->verbose) fprintf (stderr, __VA_ARGS__); }
 
-gdouble
-mongo_dump_packet (config_t *config, mongo_packet *p, gdouble pos, int fd)
-{
-  gint32 i;
-  mongo_reply_packet_header rh;
-
-  mongo_wire_reply_packet_get_header (p, &rh);
-
-  for (i = 1; i <= rh.returned; i++)
-    {
-      bson *b;
-
-      mongo_wire_reply_packet_get_nth_document (p, i, &b);
-      bson_finish (b);
-
-      write (fd, bson_data (b), bson_size (b));
-      bson_free (b);
-    }
-  VLOG("\r");
-
-  return pos + i - 1;
-}
-
-int
+void
 mongo_dump (config_t *config)
 {
   mongo_sync_connection *conn;
+  mongo_sync_cursor *cursor;
   bson *b;
   int fd;
 
   mongo_packet *p;
-  mongo_reply_packet_header rh;
-  gint64 cid;
   gdouble cnt, pos = 0;
 
-  gchar *error;
+  gchar *error = NULL;
   int e;
 
   VLOG ("Connecting to %s:%d/%s.%s...\n", config->host, config->port,
@@ -158,42 +134,38 @@ mongo_dump (config_t *config)
     }
   bson_free (b);
 
-  mongo_wire_reply_packet_get_header (p, &rh);
-  cid = rh.cursor_id;
-  pos = mongo_dump_packet (config, p, pos, fd);
-  mongo_wire_packet_free (p);
+  cursor = mongo_sync_cursor_new (conn, config->ns, p);
 
-  while (pos < cnt)
+  do
     {
-      gdouble pr = (pos + 10) / cnt;
+      bson *b = mongo_sync_cursor_get_data (cursor);
 
-      VLOG ("\rDumping... %03.2f%%", ((pr > 1) ? 1 : pr) * 100);
-      if (config->verbose)
-	fflush (stderr);
-
-      p = mongo_sync_cmd_get_more (conn, config->ns, 10, cid);
-      if (!p)
+      if (!b || !mongo_sync_cursor_next (cursor))
 	{
 	  e = errno;
-
-	  unlink (config->output);
-	  close (fd);
 
 	  mongo_sync_cmd_get_last_error (conn, config->db, &error);
 	  fprintf (stderr, "Error advancing the cursor: %s\n",
 		   (error) ? error : strerror (e));
-
 	  mongo_sync_disconnect (conn);
 	  exit (1);
 	}
-      pos = mongo_dump_packet (config, p, pos, fd);
-      mongo_wire_packet_free (p);
+
+      if ((int)pos % 10 == 0)
+	VLOG ("\rDumping... %03.2f%%", (pos / cnt) * 100);
+
+      write (fd, bson_data (b), bson_size (b));
+      bson_free (b);
+
+      pos++;
     }
+  while (pos < cnt);
+  VLOG ("\rDumping... %03.2f%%\n", (pos / cnt) * 100);
+
+  mongo_sync_cursor_free (cursor);
 
   close (fd);
   mongo_sync_disconnect (conn);
-
-  return 0;
 }
 
 int
@@ -242,5 +214,10 @@ main (int argc, char *argv[])
     }
 
   config.ns = g_strdup_printf ("%s.%s", config.db, config.coll);
-  return mongo_dump (&config);
+  mongo_dump (&config);
+
+  g_free (config.ns);
+  g_option_context_free (context);
+
+  return 0;
 }
