@@ -49,7 +49,7 @@ mongo_dump (config_t *config)
   int fd;
 
   mongo_packet *p;
-  gdouble cnt, pos = 0;
+  glong cnt, pos = 0;
 
   gchar *error = NULL;
   int e;
@@ -139,8 +139,9 @@ mongo_dump (config_t *config)
   do
     {
       bson *b = mongo_sync_cursor_get_data (cursor);
+      pos++;
 
-      if (!b || !mongo_sync_cursor_next (cursor))
+      if (!b || (!mongo_sync_cursor_next (cursor) && pos < cnt))
 	{
 	  e = errno;
 
@@ -151,16 +152,14 @@ mongo_dump (config_t *config)
 	  exit (1);
 	}
 
-      if ((int)pos % 10 == 0)
-	VLOG ("\rDumping... %03.2f%%", (pos / cnt) * 100);
+      if (pos % 10 == 0)
+	VLOG ("\rDumping... %03.2f%%", (pos * 1.0) / (cnt * 1.0) * 100);
 
       write (fd, bson_data (b), bson_size (b));
       bson_free (b);
-
-      pos++;
     }
   while (pos < cnt);
-  VLOG ("\rDumping... %03.2f%%\n", (pos / cnt) * 100);
+  VLOG ("\rDumping... %03.2f%%\n", (double)((pos / cnt) * 100));
 
   mongo_sync_cursor_free (cursor);
 
