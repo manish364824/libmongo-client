@@ -11,7 +11,6 @@ test_mongo_sync_cursor_next (void)
 {
   mongo_sync_connection *conn;
   mongo_packet *p;
-  mongo_packet_header h;
   mongo_sync_cursor *c;
 
   test_env_setup ();

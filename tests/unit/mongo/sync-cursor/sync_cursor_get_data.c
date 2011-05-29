@@ -11,7 +11,6 @@ test_mongo_sync_cursor_get_data (void)
 {
   mongo_sync_connection *conn;
   mongo_packet *p;
-  mongo_packet_header h;
   bson *b;
   mongo_sync_cursor *c;
 
