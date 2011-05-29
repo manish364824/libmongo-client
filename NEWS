@@ -13,6 +13,17 @@ of documents that the last query returned).
 
 Thanks to Federico Rodriguez <fed.rod@gmail.com> for the suggestion.
 
+** New function: bson_validate_key()
+With this new function, one can validate BSON keys: whether they can
+contain dots (allowed when using dot-notation, forbidden otherwise),
+or whether they start with a '$' sign.
+
+It is up to the application developer to decide when to validate a
+key, and what restrictions make sense in the given context.
+
+The function does NOT do UTF-8 validation, that is completely left up
+to the application developer.
+
 * 0.1.0 - <2011-05-25 Wed>
 
 ** Shared library
