@@ -126,6 +126,15 @@ mongo_sync_func_tests	= \
 		func/mongo/sync/f_sync_auto_reconnect \
 		func/mongo/sync/f_sync_oidtest
 
+mongo_sync_cursor_unit_tests	= \
+		unit/mongo/sync-cursor/sync_cursor_new \
+		unit/mongo/sync-cursor/sync_cursor_next \
+		unit/mongo/sync-cursor/sync_cursor_get_data \
+		unit/mongo/sync-cursor/sync_cursor_free
+
+mongo_sync_cursor_func_tests	= \
+		func/mongo/sync-cursor/f_sync_cursor_iterate
+
 mongo_sync_pool_unit_tests	= \
 		unit/mongo/sync-pool/sync_pool_new \
 		unit/mongo/sync-pool/sync_pool_free \
@@ -137,9 +146,10 @@ mongo_sync_pool_func_tests	= \
 
 UNIT_TESTS	= ${bson_unit_tests} ${mongo_utils_unit_tests} \
 		${mongo_wire_unit_tests} ${mongo_client_unit_tests} \
-		${mongo_sync_unit_tests} ${mongo_sync_pool_unit_tests}
+		${mongo_sync_unit_tests} ${mongo_sync_cursor_unit_tests} \
+		${mongo_sync_pool_unit_tests}
 FUNC_TESTS	= ${bson_func_tests} ${mongo_sync_func_tests} \
-		${mongo_sync_pool_func_tests}
+		${mongo_sync_cursor_func_tests} ${mongo_sync_pool_func_tests}
 PERF_TESTS	= ${bson_perf_tests}
 TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}
 

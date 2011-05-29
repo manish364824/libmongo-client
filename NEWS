@@ -1,5 +1,18 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.1.1 - <UNRELEASED>
+
+** Cursor-based query iterator API
+The new cursor-based query iterator API makes it possible to grab the
+results of a mongo_sync_cmd_query(), and conveniently iterate over the
+results, hiding the get_more() calls underneath.
+
+The implementation is clever enough to only query the database when it
+needs to, and when it does, query in bulk (asking for the same amount
+of documents that the last query returned).
+
+Thanks to Federico Rodriguez <fed.rod@gmail.com> for the suggestion.
+
 * 0.1.0 - <2011-05-25 Wed>
 
 ** Shared library

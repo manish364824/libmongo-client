@@ -19,6 +19,7 @@
 #include <mongo-client.h>
 #include <mongo-utils.h>
 #include <mongo-sync.h>
+#include <mongo-sync-cursor.h>
 #include <mongo-sync-pool.h>
 
 /** @mainpage libmongo-client
@@ -41,7 +42,10 @@
  *   - mongo-utils: Various miscellaneous utilities related to either
  *     BSON or MongoDB. @see mongo_util
  *   - mongo-sync: Wrappers around the wire commands, that talk to the
- *     network aswell, in a synchronous, blocking manner. @see mongo_sync.
+ *     network aswell, in a synchronous, blocking manner. @see
+ *     mongo_sync.
+ *   - mongo-sync-cursor: Cursor API on top of the synchronous
+ *     API. @see mongo_sync_cursor.
  *   - mongo-sync-pool: Simple connection pooling on top of
  *     mongo-sync, @see mongo_sync_pool_api.
  *

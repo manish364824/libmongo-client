@@ -61,6 +61,25 @@ struct _mongo_sync_connection
 			     smaller chunks. Used for bulk inserts. */
 };
 
+/** @internal MongoDB cursor object.
+ *
+ * The cursor object can be used to conveniently iterate over a query
+ * result set.
+ */
+struct _mongo_sync_cursor
+{
+  mongo_sync_connection *conn; /**< The connection associated with
+				  the cursor. Owned by the caller. */
+  gchar *ns; /**< The namespace of the cursor. */
+  mongo_packet *results; /**< The current result set, as a mongo
+			    packet. */
+
+  gint32 offset; /**< Offset of the cursor within the active result
+		    set. */
+  mongo_reply_packet_header ph; /**< The reply headers extracted from
+				   the active result set. */
+};
+
 /** @internal Synchronous pool connection object. */
 struct _mongo_sync_pool_connection
 {

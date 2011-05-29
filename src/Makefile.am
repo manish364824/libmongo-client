@@ -13,6 +13,7 @@ libmongo_client_la_SOURCES	= \
 	mongo-client.c mongo-client.h \
 	mongo-utils.c mongo-utils.h \
 	mongo-sync.c mongo-sync.h \
+	mongo-sync-cursor.c mongo-sync-cursor.h \
 	mongo-sync-pool.c mongo-sync-pool.h \
 	mongo.h \
 	libmongo-private.h libmongo-macros.h
