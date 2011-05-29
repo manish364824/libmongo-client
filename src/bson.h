@@ -274,7 +274,7 @@ gint32 bson_size (const bson *b);
  */
 const guint8 *bson_data (const bson *b);
 
-/* Validate a BSON key.
+/** Validate a BSON key.
  *
  * Verifies that a given key is a valid BSON field name. Depending on
  * context (togglable by the boolean flags) this means that the string
