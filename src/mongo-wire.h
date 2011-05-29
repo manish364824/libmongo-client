@@ -271,7 +271,7 @@ mongo_packet *mongo_wire_cmd_update (gint32 id, const gchar *ns,
  *
  * @param id is the sequence id.
  * @param ns is the namespace, the database and collection name
- * concatenaded, and separated with a single dot.
+ * concatenated, and separated with a single dot.
  * @tparam docs are the BSON documents to insert. One must close the
  * list with a NULL value.
  *
@@ -286,7 +286,7 @@ mongo_packet *mongo_wire_cmd_insert (gint32 id, const gchar *ns, ...)
  *
  * @param id is the sequence id.
  * @param ns is the namespace, the database and collection name
- * concatenaded, and separated with a single dot.
+ * concatenated, and separated with a single dot.
  * @param n is the number of documents to insert.
  * @param docs is the array containing the bson documents to insert.
  *
@@ -328,7 +328,7 @@ enum
  *
  * @param id is the sequence id.
  * @param ns is the namespace, the database and collection name
- * concatenaded, and separated with a single dot.
+ * concatenated, and separated with a single dot.
  * @param flags are the query options. Available flags are:
  * #MONGO_WIRE_FLAG_QUERY_TAILABLE_CURSOR,
  * #MONGO_WIRE_FLAG_QUERY_SLAVE_OK,
@@ -352,7 +352,7 @@ mongo_packet *mongo_wire_cmd_query (gint32 id, const gchar *ns, gint32 flags,
  *
  * @param id is the sequence id.
  * @param ns is the namespace, the database and collection name
- * concatenaded, and separated with a single dot.
+ * concatenated, and separated with a single dot.
  * @param ret is the number of documents to return.
  * @param cursor_id is the ID of the cursor to use.
  *
@@ -375,7 +375,7 @@ enum
  *
  * @param id is the sequence id.
  * @param ns is the namespace, the database and collection name
- * concatenaded, and separated with a single dot.
+ * concatenated, and separated with a single dot.
  * @param flags are the delete options. The only available flag is
  * MONGO_WIRE_FLAG_DELETE_SINGLE.
  * @param sel is the BSON object to use as a selector.

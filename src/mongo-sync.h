@@ -248,7 +248,7 @@ gboolean mongo_sync_cmd_insert_n (mongo_sync_connection *conn,
  *
  * @param conn is the connection to work with.
  * @param ns is the namespace, the database and collection name
- * concatenaded, and separated with a single dot.
+ * concatenated, and separated with a single dot.
  * @param flags are the query options. See mongo_wire_cmd_query().
  * @param skip is the number of documents to skip.
  * @param ret is the number of documents to return.
@@ -269,7 +269,7 @@ mongo_packet *mongo_sync_cmd_query (mongo_sync_connection *conn,
  *
  * @param conn is the connection to work with.
  * @param ns is the namespace, the database and collection name
- * concatenaded, and separated with a single dot.
+ * concatenated, and separated with a single dot.
  * @param ret is the number of documents to return.
  * @param cursor_id is the ID of the cursor to use.
  *
@@ -285,7 +285,7 @@ mongo_packet *mongo_sync_cmd_get_more (mongo_sync_connection *conn,
  *
  * @param conn is the connection to work with.
  * @param ns is the namespace, the database and collection name
- * concatenaded, and separated with a single dot.
+ * concatenated, and separated with a single dot.
  * @param flags are the delete options. See mongo_wire_cmd_delete().
  * @param sel is the BSON object to use as a selector.
  *
