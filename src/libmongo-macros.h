@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-/** @file src/libmongo-macros.h
- * @internal Various helper macros for internal libmongo-client use.
- */
-
 #ifndef LIBMONGO_MACROS_H
 #define LIBMONGO_MACROS_H 1
 
