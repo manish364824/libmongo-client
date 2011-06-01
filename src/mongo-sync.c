@@ -32,7 +32,7 @@
 #endif
 
 mongo_sync_connection *
-mongo_sync_connect (const gchar *host, int port,
+mongo_sync_connect (const gchar *host, gint port,
 		    gboolean slaveok)
 {
   mongo_sync_connection *s;
@@ -761,7 +761,7 @@ mongo_sync_cmd_insert_n (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_insert (mongo_sync_connection *conn,
-		       const char *ns, ...)
+		       const gchar *ns, ...)
 {
   gboolean b;
   bson **docs, *d;
