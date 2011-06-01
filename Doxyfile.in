@@ -16,7 +16,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = libmongo-client
-PROJECT_NUMBER         = 0
+PROJECT_NUMBER         = @VERSION@
 
 OUTPUT_DIRECTORY       = docs
 OUTPUT_LANGUAGE        = English
@@ -64,10 +64,10 @@ WARN_NO_PARAMDOC       = YES
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 
-INPUT                  = src/
+INPUT                  = @top_srcdir@/src/
 INPUT_ENCODING         = UTF-8
 
-EXAMPLE_PATH           = examples/
+EXAMPLE_PATH           = @top_srcdir@/examples/
 EXAMPLE_PATTERNS       = *.c
 
 #---------------------------------------------------------------------------

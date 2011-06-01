@@ -150,6 +150,7 @@ AC_DEFINE_UNQUOTED(ENABLE_AUTH, $d_enable_auth, [OpenSSL was detected, compiling
 AC_SUBST(openssl_pc)
 
 AC_OUTPUT(
+	Doxyfile
 	Makefile
 	examples/Makefile
 	src/Makefile
