@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-sync.h
+ * MongoDB synchronous wrapper API public header.
+ */
+
 #ifndef LIBMONGO_SYNC_H
 #define LIBMONGO_SYNC_H 1
 
@@ -59,8 +63,8 @@ typedef struct _mongo_sync_connection mongo_sync_connection;
  * error. It is the responsibility of the caller to close and free the
  * connection when appropriate.
  */
-mongo_sync_connection *mongo_sync_connect (const char *host,
-					   int port,
+mongo_sync_connection *mongo_sync_connect (const gchar *host,
+					   gint port,
 					   gboolean slaveok);
 
 /** Add a seed to an existing MongoDB connection.

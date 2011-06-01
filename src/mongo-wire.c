@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-wire.c
+ * Implementation of the MongoDB Wire Protocol.
+ */
+
 #include <glib.h>
 #include <string.h>
 #include <stdarg.h>
@@ -21,10 +25,6 @@
 
 #include "bson.h"
 #include "mongo-wire.h"
-
-/** @file src/mongo-wire.c
- * Implementation of the MongoDB Wire Protocol.
- */
 
 /** @internal Constant zero value. */
 static const gint32 zero = 0;

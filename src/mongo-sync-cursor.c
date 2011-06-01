@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-sync-cursor.c
+ * MongoDB Cursor API implementation.
+ */
+
 #include "config.h"
 #include "mongo.h"
 #include "libmongo-private.h"

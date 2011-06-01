@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/** @file src/mongo.h
+ * libmongo-client meta-header.
+ *
+ * This header includes all the rest, it is advised for applications
+ * to include this header, and this header only.
+ */
+
 #include <bson.h>
 #include <mongo-wire.h>
 #include <mongo-client.h>
