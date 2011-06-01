@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-sync-pool.c
+ * MongoDB connection pool API implementation.
+ */
+
 #include <errno.h>
 #include <string.h>
 #include <glib.h>

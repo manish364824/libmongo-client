@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-sync.c
+ * MongoDB synchronous wrapper API implementation.
+ */
+
 #include "config.h"
 #include "mongo.h"
 #include "libmongo-private.h"

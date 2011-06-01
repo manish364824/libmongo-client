@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-sync-cursor.h
+ * MongoDB cursor API public header.
+ */
+
 #ifndef LIBMONGO_SYNC_CURSOR_H
 #define LIBMONGO_SYNC_CURSOR_H 1
 

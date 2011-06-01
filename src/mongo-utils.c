@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-utils.c
+ * Implementation for various libmongo-client helper functions.
+ */
+
 #include <glib.h>
 
 #include <sys/types.h>

@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-wire.h
+ *  MongoDB Wire Protocol API public header.
+ */
+
 #ifndef LIBMONGO_CLIENT_MONGO_WIRE_H
 #define LIBMONGO_CLIENT_MONGO_WIRE_H 1
 

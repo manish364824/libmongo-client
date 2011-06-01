@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-sync.h
+ * MongoDB synchronous wrapper API public header.
+ */
+
 #ifndef LIBMONGO_SYNC_H
 #define LIBMONGO_SYNC_H 1
 

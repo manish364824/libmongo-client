@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-sync-pool.h
+ * MongoDB connection pool API public header.
+ */
+
 #ifndef LIBMONGO_POOL_H
 #define LIBMONGO_POOL_H 1
 

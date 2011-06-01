@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/bson.h
+ * The BSON API's public header.
+ */
+
 #ifndef LIBMONGO_CLIENT_BSON_H
 #define LIBMONGO_CLIENT_BSON_H 1
 
