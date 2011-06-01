@@ -13,5 +13,8 @@ override_dh_auto_clean:
 	rm -rf aclocal.m4 config.guess config.sub config.h.in configure \
 	       depcomp install-sh ltmain.sh m4 missing
 
+override_dh_makeshlibs:
+	dh_makeshlibs -V
+
 %:
 	dh $@ -Bbuild-tree --dbg-package=libmongo-client0-dbg
