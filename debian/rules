@@ -16,5 +16,8 @@ override_dh_auto_clean:
 override_dh_makeshlibs:
 	dh_makeshlibs -V
 
+override_dh_installdocs:
+	dh_installdocs --link-doc=libmongo-client0
+
 %:
 	dh $@ -Bbuild-tree --dbg-package=libmongo-client0-dbg
