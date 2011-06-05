@@ -65,11 +65,11 @@ WARN_NO_PARAMDOC       = YES
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 
-INPUT                  = @top_srcdir@/src/
+INPUT                  = @top_srcdir@/src/ @top_srcdir@/docs/ @top_srcdir@/docs/tutorial/
 INPUT_ENCODING         = UTF-8
 
-EXAMPLE_PATH           = @top_srcdir@/examples/
-EXAMPLE_PATTERNS       = *.c
+EXAMPLE_PATH           = @top_srcdir@/docs/tutorial/examples/
+EXAMPLE_PATTERNS       = *.c *.json
 
 #---------------------------------------------------------------------------
 # configuration options related to source browsing

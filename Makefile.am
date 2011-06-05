@@ -1,4 +1,4 @@
-SUBDIRS		= src tests examples
+SUBDIRS		= docs src tests examples
 
 ACLOCAL_AMFLAGS	= -I m4 --install
 EXTRA_DIST	= NEWS README.rst

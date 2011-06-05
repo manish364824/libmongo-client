@@ -16,6 +16,6 @@ ltmain.sh
 m4/
 missing
 tests/*.ok
-docs/
+docs/html/
 b/
 .pc/
