@@ -12,4 +12,5 @@
  *   - @subpage tut_bson
  *     - @ref tut_bson_build
  *     - @ref tut_bson_traverse
+ *   - @subpage tut_hl_client
  */
