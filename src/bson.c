@@ -898,9 +898,12 @@ bson_cursor_find_next (bson_cursor *c, const gchar *name)
 {
   const gchar *ckey;
   size_t cpos, cvalue_pos;
+  gint32 name_len;
 
   if (!c || !name)
     return FALSE;
+
+  name_len = strlen(name);
 
   ckey = c->key;
   cpos = c->pos;
@@ -908,7 +911,10 @@ bson_cursor_find_next (bson_cursor *c, const gchar *name)
 
   while (bson_cursor_next (c))
     {
-      if (strcmp (bson_cursor_key (c), name) == 0)
+      gint32 key_len = strlen (bson_cursor_key (c));
+
+      if (!memcmp (bson_cursor_key (c), name,
+		   (name_len <= key_len) ? name_len : key_len))
 	return TRUE;
     }
 
