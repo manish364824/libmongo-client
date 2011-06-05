@@ -17,5 +17,6 @@ m4/
 missing
 tests/*.ok
 docs/html/
+docs/tutorial/examples/tut/
 b/
 .pc/
