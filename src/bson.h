@@ -161,7 +161,7 @@ bson *bson_new_sized (gint32 size);
  * BSON data, which are terminated by a zero byte, specify the size as
  * one smaller than the original data stream.
  *
- * @note This is because bson_finis() will append a zero byte, thus
+ * @note This is because bson_finish() will append a zero byte, thus
  * one would end up with an invalid document if it had an extra one.
  *
  * @param data is the BSON byte stream to import.
