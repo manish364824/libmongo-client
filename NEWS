@@ -24,6 +24,13 @@ key, and what restrictions make sense in the given context.
 The function does NOT do UTF-8 validation, that is completely left up
 to the application developer.
 
+** New function: bson_cursor_find_next()
+When we know that key G always comes after key A, but we do not care
+how far apart they may be, and we do not want to use a separate cursor
+(due to, for example, performance reasons), this new function can
+help: unlike bson_find(), this will start scanning from the current
+cursor position.
+
 * 0.1.0 - <2011-05-25 Wed>
 
 ** Shared library
