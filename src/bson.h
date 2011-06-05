@@ -579,6 +579,19 @@ void bson_cursor_free (bson_cursor *c);
  */
 gboolean bson_cursor_next (bson_cursor *c);
 
+/** Move the cursor to a given key, past the current one.
+ *
+ * Scans the BSON object past the current key, in search for the
+ * specified one, and positions the cursor there if found, leaves it
+ * in place if not.
+ *
+ * @param c is the cursor to move forward.
+ * @param name is the key name to position to.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+gboolean bson_cursor_find_next (bson_cursor *c, const gchar *name);
+
 /** Determine the type of the current element.
  *
  * @param c is the cursor pointing at the appropriate element.

@@ -893,6 +893,38 @@ bson_cursor_next (bson_cursor *c)
   return TRUE;
 }
 
+gboolean
+bson_cursor_find_next (bson_cursor *c, const gchar *name)
+{
+  const gchar *ckey;
+  size_t cpos, cvalue_pos;
+  gint32 name_len;
+
+  if (!c || !name)
+    return FALSE;
+
+  name_len = strlen(name);
+
+  ckey = c->key;
+  cpos = c->pos;
+  cvalue_pos = c->value_pos;
+
+  while (bson_cursor_next (c))
+    {
+      gint32 key_len = strlen (bson_cursor_key (c));
+
+      if (!memcmp (bson_cursor_key (c), name,
+		   (name_len <= key_len) ? name_len : key_len))
+	return TRUE;
+    }
+
+  c->key = ckey;
+  c->pos = cpos;
+  c->value_pos = cvalue_pos;
+
+  return FALSE;
+}
+
 bson_cursor *
 bson_find (const bson *b, const gchar *name)
 {
