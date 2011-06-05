@@ -6,7 +6,7 @@
 int
 main (void)
 {
-  bson *b_new, *b_builder, b_builder_full;
+  bson *b_new, *b_builder, *b_builder_full;
   bson *page1, *page2, *pages;
 
   page1 = bson_new ();
