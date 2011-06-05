@@ -11,8 +11,10 @@ test_p_bson_find (void)
   bson *b;
   bson_cursor *c;
   gint i;
-  gchar *keys[MAX_KEYS];
+  gchar **keys;
   gboolean ret = TRUE;
+
+  keys = g_new(gchar *, MAX_KEYS);
 
   b = bson_new ();
   for (i = 0; i < MAX_KEYS; i++)
@@ -32,6 +34,7 @@ test_p_bson_find (void)
     }
 
   bson_free (b);
+  g_free (keys);
 
   ok (ret == TRUE,
       "bson_find() performance test ok");

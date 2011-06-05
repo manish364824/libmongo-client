@@ -161,7 +161,7 @@ bson *bson_new_sized (gint32 size);
  * BSON data, which are terminated by a zero byte, specify the size as
  * one smaller than the original data stream.
  *
- * @note This is because bson_finis() will append a zero byte, thus
+ * @note This is because bson_finish() will append a zero byte, thus
  * one would end up with an invalid document if it had an extra one.
  *
  * @param data is the BSON byte stream to import.
@@ -578,6 +578,19 @@ void bson_cursor_free (bson_cursor *c);
  * @returns TRUE on success, FALSE otherwise.
  */
 gboolean bson_cursor_next (bson_cursor *c);
+
+/** Move the cursor to a given key, past the current one.
+ *
+ * Scans the BSON object past the current key, in search for the
+ * specified one, and positions the cursor there if found, leaves it
+ * in place if not.
+ *
+ * @param c is the cursor to move forward.
+ * @param name is the key name to position to.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+gboolean bson_cursor_find_next (bson_cursor *c, const gchar *name);
 
 /** Determine the type of the current element.
  *
