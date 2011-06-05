@@ -76,6 +76,14 @@ main (void)
 
   printf ("Author: %s; inline: %s\n", v_str, (v_bool) ? "TRUE" : "FALSE");
 
+  c = bson_find (doc, "author");
+  bson_cursor_get_string (c, &v_str);
+  bson_cursor_find_next (c, "inline");
+  bson_cursor_get_boolean (c, &v_bool);
+  bson_cursor_free (c);
+
+  printf ("Author: %s; inline: %s\n", v_str, (v_bool) ? "TRUE" : "FALSE");
+
   c = bson_cursor_new (doc);
   while (bson_cursor_next (c))
     {

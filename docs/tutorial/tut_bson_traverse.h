@@ -84,6 +84,13 @@
  * every other case, where we have no idea about key ordering,
  * bson_find() is still there for us.
  *
+ * Even better, the library itself provides a function that does
+ * something similar: it takes a cursor and a key name, and attempts
+ * to find the key past the cursor's current position. So if we
+ * already have the author, we can use this function to find tine
+ * inline key aswell:
+ * @until printf
+ *
  * One thing we did not explore yet, is bson_cursor_new(): this will
  * create a new cursor, and point to to the very beginning of our BSON
  * object, just before the first key. Thus, the first
