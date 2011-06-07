@@ -698,7 +698,7 @@ mongo_sync_cmd_insert_n (mongo_sync_connection *conn,
 {
   mongo_packet *p;
   gint32 rid;
-  gint32 pos = 0, c = n, i = 0;
+  gint32 pos = 0, c, i = 0;
   gint32 size = 0;
 
   if (!conn)
