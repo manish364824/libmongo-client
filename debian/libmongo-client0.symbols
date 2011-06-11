@@ -1,0 +1,3 @@
+libmongo-client.so.0 #PACKAGE# #MINVER#
+ (symver)LMC_0.1.0 0.1.0
+ (symver)LMC_0.1.1 0.1.1
