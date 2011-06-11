@@ -25,6 +25,17 @@ AM_CONFIG_HEADER(config.h)
 AC_ARG_ENABLE(ssl,
               [  --enable-ssl    Enable OpenSSL support (for authentication).],,enable_ssl="auto")
 
+AC_ARG_WITH([versioned-symbols], AC_HELP_STRING([--with-versioned-symbols],[Use versioned symbols]),[dnl
+vsymldflags="-Wl,--version-script,\${srcdir}/libmongo-client.ver -Wl,-O1"
+],[vsymldflags=])
+AC_MSG_CHECKING([whether to enable symbol versioning])
+AC_SUBST(vsymldflags)
+if test -z "${vsymldflags}"; then
+   AC_MSG_RESULT([no])
+else
+   AC_MSG_RESULT([yes, ${vsymldflags}])
+fi
+
 dnl ***************************************************************************
 dnl Checks for programs.
 AC_PROG_CC
