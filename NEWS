@@ -31,6 +31,10 @@ how far apart they may be, and we do not want to use a separate cursor
 help: unlike bson_find(), this will start scanning from the current
 cursor position.
 
+** Symbol versioning
+The symbols of the library can now be versioned, if configured with
+the --with-versioned-symbols configure flag (not enabled by default).
+
 * 0.1.0 - <2011-05-25 Wed>
 
 ** Shared library

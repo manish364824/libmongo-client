@@ -60,6 +60,14 @@ test_mongo_sync_reconnect (void)
     }
   conn->rs.hosts = NULL;
 
+  l = conn->rs.seeds;
+  while (l)
+    {
+      g_free (l->data);
+      l = g_list_delete_link (l, l);
+    }
+  conn->rs.seeds = NULL;
+
   conn = mongo_sync_reconnect (conn, FALSE);
 
   ok (conn != o && conn == NULL,
