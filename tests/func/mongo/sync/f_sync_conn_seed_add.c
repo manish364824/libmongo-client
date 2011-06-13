@@ -12,6 +12,7 @@ test_func_mongo_sync_conn_seed_add (void)
   conn = mongo_sync_connect (config.primary_host, config.primary_port,
 			     FALSE);
   close (conn->super.fd);
+
   l = conn->rs.hosts;
   while (l)
     {
@@ -19,6 +20,14 @@ test_func_mongo_sync_conn_seed_add (void)
       l = g_list_delete_link (l, l);
     }
   conn->rs.hosts = NULL;
+
+  l = conn->rs.seeds;
+  while (l)
+    {
+      g_free (l->data);
+      l = g_list_delete_link (l, l);
+    }
+  conn->rs.seeds = NULL;
 
   conn = mongo_sync_reconnect (conn, TRUE);
   ok (conn == NULL,
