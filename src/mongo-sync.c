@@ -213,6 +213,28 @@ mongo_sync_reconnect (mongo_sync_connection *conn,
       return conn;
     }
 
+  /* And if that failed too, try the seeds. */
+
+  for (i = 0; i < g_list_length (conn->rs.seeds); i++)
+    {
+      gchar *addr = (gchar *)g_list_nth_data (conn->rs.seeds, i);
+      int e;
+
+      if (!mongo_util_parse_addr (addr, &host, &port))
+	continue;
+
+      nc = mongo_sync_connect (host, port, conn->slaveok);
+      g_free (host);
+      if (!nc)
+	continue;
+
+      nc = mongo_sync_reconnect (nc, force_master);
+      e = errno;
+      _mongo_sync_connect_replace (conn, nc);
+      errno = e;
+      return conn;
+    }
+
   errno = EHOSTUNREACH;
   return NULL;
 }
