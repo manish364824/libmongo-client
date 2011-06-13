@@ -59,7 +59,7 @@ do_query (mongo_sync_connection *conn)
     }
   bson_free (query);
 
-  do
+  while (mongo_sync_cursor_next (c))
     {
       bson *b = mongo_sync_cursor_get_data (c);
       bson_cursor *bc;
@@ -81,7 +81,7 @@ do_query (mongo_sync_connection *conn)
 
       bson_cursor_free (bc);
       bson_free (b);
-    } while (mongo_sync_cursor_next (c));
+    }
   printf ("\n");
 
   mongo_sync_cursor_free (c);

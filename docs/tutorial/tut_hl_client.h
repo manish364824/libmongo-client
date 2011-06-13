@@ -66,7 +66,7 @@
  *
  * And once we're done working with the BSON object, we free the
  * cursor, and the object, and continue the loop.
- * @until while
+ * @until }
  *
  * And in the end, we emit a newline, and free the cursor to wrap up
  * our query routine.
