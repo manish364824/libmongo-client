@@ -95,14 +95,6 @@ _mongo_sync_connect_replace (mongo_sync_connection *old,
     }
   old->rs.hosts = NULL;
 
-  /* Repopulate it with the seed list */
-  l = old->rs.seeds;
-  while (l)
-    {
-      old->rs.hosts = g_list_append (old->rs.hosts, g_strdup (l->data));
-      l = g_list_next (l);
-    }
-
   if (old->super.fd)
     close (old->super.fd);
 
