@@ -27,9 +27,14 @@ test_mongo_sync_cursor_get_data (void)
       "mongo_sync_cursor_get_data(NULL) should fail");
 
   b = mongo_sync_cursor_get_data (c);
+  ok (b == NULL,
+      "mongo_sync_cursor_get_data() should fail without _cursor_next()");
+
+  mongo_sync_cursor_next (c);
+  b = mongo_sync_cursor_get_data (c);
   ok (b != NULL,
       "mongo_sync_cursor_get_data() works");
-
+  
   c->offset = 5;
 
   errno = 0;
@@ -43,4 +48,4 @@ test_mongo_sync_cursor_get_data (void)
   test_env_free ();
 }
 
-RUN_TEST (3, mongo_sync_cursor_get_data);
+RUN_TEST (4, mongo_sync_cursor_get_data);
