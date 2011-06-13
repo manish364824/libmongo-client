@@ -48,7 +48,6 @@ mongo_dump (config_t *config)
   bson *b;
   int fd;
 
-  mongo_packet *p;
   glong cnt, pos = 0;
 
   gchar *error = NULL;
@@ -115,33 +114,18 @@ mongo_dump (config_t *config)
   VLOG ("Launching initial query...\n");
   b = bson_new ();
   bson_finish (b);
-  p = mongo_sync_cmd_query (conn, config->ns,
-			    MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT,
-			    0, 10, b, NULL);
-  if (!p)
-    {
-      e = errno;
-
-      bson_free (b);
-      unlink (config->output);
-      close (fd);
-
-      mongo_sync_cmd_get_last_error (conn, config->db, &error);
-      fprintf (stderr, "Error retrieving the cursor: %s\n",
-	       (error) ? error : strerror (e));
-      mongo_sync_disconnect (conn);
-      exit (1);
-    }
+  cursor = mongo_sync_cursor_new (conn, config->ns,
+				  mongo_sync_cmd_query (conn, config->ns,
+							MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT,
+							0, 10, b, NULL));
   bson_free (b);
 
-  cursor = mongo_sync_cursor_new (conn, config->ns, p);
-
-  do
+  while ((pos < cnt) && mongo_sync_cursor_next (cursor))
     {
       bson *b = mongo_sync_cursor_get_data (cursor);
       pos++;
 
-      if (!b || (!mongo_sync_cursor_next (cursor) && pos < cnt))
+      if (!b)
 	{
 	  e = errno;
 
@@ -158,7 +142,6 @@ mongo_dump (config_t *config)
       write (fd, bson_data (b), bson_size (b));
       bson_free (b);
     }
-  while (pos < cnt);
   VLOG ("\rDumping... %03.2f%%\n", (double)((pos / cnt) * 100));
 
   mongo_sync_cursor_free (cursor);

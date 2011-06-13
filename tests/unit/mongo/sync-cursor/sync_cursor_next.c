@@ -12,6 +12,8 @@ test_mongo_sync_cursor_next (void)
   mongo_sync_connection *conn;
   mongo_packet *p;
   mongo_sync_cursor *c;
+  gboolean r = TRUE;
+  gint i;
 
   test_env_setup ();
 
@@ -22,12 +24,17 @@ test_mongo_sync_cursor_next (void)
 
   ok (mongo_sync_cursor_next (NULL) == FALSE,
       "mongo_sync_cursor_next() should fail with a NULL cursor");
-  ok (mongo_sync_cursor_next (c) == TRUE,
+  for (i = 0; i < 2; i++)
+    r &= mongo_sync_cursor_next (c);
+  
+  ok (r == TRUE,
       "mongo_sync_cursor_next() works");
+  ok (mongo_sync_cursor_next (c) == FALSE,
+      "mongo_sync_cursor_next() should fail past the end of the resultset");
 
   mongo_sync_cursor_free (c);
   mongo_sync_disconnect (conn);
   test_env_free ();
 }
 
-RUN_TEST (2, mongo_sync_cursor_next);
+RUN_TEST (3, mongo_sync_cursor_next);

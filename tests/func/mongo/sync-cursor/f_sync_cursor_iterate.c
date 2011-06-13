@@ -12,7 +12,7 @@ test_func_mongo_sync_cursor_iterate (void)
   mongo_sync_cursor *sc;
   bson_cursor *c;
   gint i;
-  gint32 first_i32, last_i32, current_i32;
+  gint32 first_i32 = -1, last_i32, current_i32;
   gboolean early_break = FALSE, continous = TRUE;
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
@@ -41,17 +41,11 @@ test_func_mongo_sync_cursor_iterate (void)
       "mongo_sync_cursor_new() works");
 
   result = mongo_sync_cursor_get_data (sc);
-  ok (result != NULL,
-      "mongo_sync_cursor_get_data() works");
+  ok (result == NULL,
+      "mongo_sync_cursor_get_data() should fail without _cursor_next()");
 
-  i = 1;
-  c = bson_find (result, "i32");
-  bson_cursor_get_int32 (c, &first_i32);
-  bson_cursor_free (c);
-  bson_free (result);
-  last_i32 = first_i32;
-
-  while (mongo_sync_cursor_next (sc))
+  i = 0;
+  while (mongo_sync_cursor_next (sc) && i < 10)
     {
       result = mongo_sync_cursor_get_data (sc);
 
@@ -65,6 +59,12 @@ test_func_mongo_sync_cursor_iterate (void)
       bson_cursor_get_int32 (c, &current_i32);
       bson_cursor_free (c);
       bson_free (result);
+
+      if (first_i32 == -1)
+	{
+	  first_i32 = current_i32;
+	  last_i32 = first_i32 - 1;
+	}
 
       if (current_i32 != last_i32 + 1)
 	continous = FALSE;

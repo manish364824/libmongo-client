@@ -45,7 +45,7 @@ mongo_sync_cursor_new (mongo_sync_connection *conn, const gchar *ns,
   c->conn = conn;
   c->ns = g_strdup (ns);
   c->results = packet;
-  c->offset = 0;
+  c->offset = -1;
 
   mongo_wire_reply_packet_get_header (c->results, &c->ph);
 
