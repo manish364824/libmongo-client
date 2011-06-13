@@ -72,8 +72,6 @@ mongo_sync_conn_seed_add (mongo_sync_connection *conn,
 
   conn->rs.seeds = g_list_append (conn->rs.seeds,
 				  g_strdup_printf ("%s:%d", host, port));
-  conn->rs.hosts = g_list_prepend (conn->rs.hosts,
-				   g_strdup_printf ("%s:%d", host, port));
   return TRUE;
 }
 
