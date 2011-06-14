@@ -43,6 +43,7 @@ test_mongo_sync_cmd_delete_net_secondary (void)
   mongo_sync_conn_set_auto_reconnect (conn, TRUE);
 
   shutdown (conn->super.fd, SHUT_RDWR);
+
   l = conn->rs.hosts;
   while (l)
     {
@@ -50,6 +51,15 @@ test_mongo_sync_cmd_delete_net_secondary (void)
       l = g_list_delete_link (l, l);
     }
   conn->rs.hosts = NULL;
+
+  l = conn->rs.seeds;
+  while (l)
+    {
+      g_free (l->data);
+      l = g_list_delete_link (l, l);
+    }
+  conn->rs.seeds = NULL;
+
   sleep (3);
 
   ok (mongo_sync_cmd_delete (conn, config.ns, 0, b) == FALSE,
