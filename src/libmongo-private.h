@@ -150,7 +150,7 @@ _DOC_SIZE (const guint8 *doc, gint32 pos)
   gint32 size;
 
   memcpy (&size, doc + pos, sizeof (gint32));
-  return size;
+  return GINT32_FROM_LE (size);
 }
 
 #endif
