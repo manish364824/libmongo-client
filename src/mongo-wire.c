@@ -25,6 +25,7 @@
 
 #include "bson.h"
 #include "mongo-wire.h"
+#include "libmongo-private.h"
 
 /** @internal Constant zero value. */
 static const gint32 zero = 0;
@@ -601,10 +602,6 @@ mongo_wire_reply_packet_get_data (const mongo_packet *p,
   *data = d + sizeof (mongo_reply_packet_header);
   return TRUE;
 }
-
-/** @internal Reads out the 32-bit documents size from a bytestream.
- */
-#define _DOC_SIZE(doc,pos) GINT32_FROM_LE (*(gint32 *)(&doc[pos]))
 
 gboolean
 mongo_wire_reply_packet_get_nth_document (const mongo_packet *p,

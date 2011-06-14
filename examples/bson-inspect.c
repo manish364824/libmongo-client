@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define _DOC_SIZE(doc,pos) GINT32_FROM_LE (*(gint32 *)(&doc[pos]))
+#include "libmongo-private.h"
 
 static void
 _indent (gint level, gboolean verbose)
