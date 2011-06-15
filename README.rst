@@ -2,10 +2,11 @@ libmongo-client
 ===============
 
 This is an alternative C driver for `MongoDB`_, with slightly
-different goals than the official one.
+different goals than the official one:
 
-We're not so strict on dependencies (we're using `glib`_), and the API
-is very different too.
+libmongo-client is meant to be a stable (API, ABI and quality alike),
+clean, well documented and well tested shared library, that strives to
+make the most common use cases as convenient as possible.
 
 Features
 --------
@@ -13,17 +14,23 @@ Features
 The main purpose of this library is to provide a well maintained
 implementation, that suits a wider range of needs than the original:
 
+* Well documented, easy, clean and stable API.
+* Comprehensive test suite, with over 90% code coverage, and
+  increasing.
 * Ability to easily construct mongodb commands, to be sent at a later
   time (comes in handy when one is trying to write from a separate
   thread).
-* C-like error handling. No toying around with exceptions.
-* Comprehensive test suite, with over 90% code coverage, and
-  increasing.
-* Strict error handling.
 * ReplicaSet support, with support for automatic reconnecting and
   discovery.
+* Safe-mode support, to optionally enable extra safety checks on
+  writes, that make sure the server accepted the write.
+* Convenient APIs to work with BSON objects and MongoDB documents.
 * Connection pooling.
-* Well documented API.
+
+Apart from these, the library is meant to be used as a shared library,
+therefore API and ABI compatibility will be maintained, and only
+broken when absolutely neccessary - in which case, a sufficiently
+bumped version will be branched off.
 
 Requirements
 ------------
