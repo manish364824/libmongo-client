@@ -27,8 +27,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define _DOC_SIZE(doc,pos) GINT32_FROM_LE (*(gint32 *)(&doc[pos]))
-
 static void
 _indent (gint level, gboolean verbose)
 {
@@ -308,7 +306,7 @@ main (int argc, char *argv[])
   while (offs < st.st_size)
     {
       b = bson_new_from_data ((const guint8 *)(data + offs),
-			      _DOC_SIZE (data, offs) - 1);
+			      bson_stream_doc_size (data, offs) - 1);
       bson_finish (b);
       offs += bson_size (b);
 
