@@ -16,6 +16,9 @@
 
 /** @file src/mongo-sync-pool.h
  * MongoDB connection pool API public header.
+ *
+ * @addtogroup mongo_sync
+ * @{
  */
 
 #ifndef LIBMONGO_POOL_H
@@ -120,6 +123,8 @@ mongo_sync_pool_connection *mongo_sync_pool_pick (mongo_sync_pool *pool,
  */
 gboolean mongo_sync_pool_return (mongo_sync_pool *pool,
 				 mongo_sync_pool_connection *conn);
+
+/** @} */
 
 /** @} */
 
