@@ -62,6 +62,17 @@ test_mongo_utils_parse_addr (void)
   host = "deadbeef";
   port = 42;
 
+  ok (mongo_util_parse_addr ("::1", &host, &port),
+      "mongo_util_parse_addr() should silently misparse ambigous "
+      "IPv6 addresses");
+  isnt (host, "::1",
+	"Host is misparsed, as expected");
+  cmp_ok (port, "==", 1,
+	  "Port is misparsed, as expected");
+  g_free (host);
+  host = "deadbeef";
+  port = 42;
+
   ok (mongo_util_parse_addr (":27017", &host, &port) == FALSE,
       "mongo_util_parse_addr() should fail when no host is specified");
   is (host, NULL,
@@ -118,4 +129,4 @@ test_mongo_utils_parse_addr (void)
 	  "Failed parsing sets port to -1");
 }
 
-RUN_TEST (34, mongo_utils_parse_addr);
+RUN_TEST (37, mongo_utils_parse_addr);
