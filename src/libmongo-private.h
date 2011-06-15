@@ -23,7 +23,6 @@
 #define LIBMONGO_PRIVATE_H 1
 
 #include "mongo.h"
-#include <string.h>
 
 /** @internal BSON structure.
  */
@@ -141,16 +140,5 @@ mongo_wire_packet_get_header_raw (const mongo_packet *p,
 gboolean
 mongo_wire_packet_set_header_raw (mongo_packet *p,
 				  const mongo_packet_header *header);
-
-/** @internal Reads out the 32-bit documents size from a bytestream.
- */
-static inline gint32
-_DOC_SIZE (const guint8 *doc, gint32 pos)
-{
-  gint32 size;
-
-  memcpy (&size, doc + pos, sizeof (gint32));
-  return GINT32_FROM_LE (size);
-}
 
 #endif
