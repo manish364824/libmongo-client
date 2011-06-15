@@ -5,8 +5,6 @@
 #include <glib.h>
 #include <string.h>
 
-#include "libmongo-private.h"
-
 func_config_t config;
 
 bson *

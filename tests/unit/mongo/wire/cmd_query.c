@@ -49,7 +49,7 @@ test_mongo_wire_cmd_query (void)
   /* pos = zero + collection_name + NULL + skip + ret */
   pos = sizeof (gint32) + strlen ("test.ns") + 1 + sizeof (gint32) * 2;
   ok ((tmp = bson_new_from_data (data + pos,
-				 _DOC_SIZE (data, pos) - 1)) != NULL,
+				 bson_stream_doc_size (data, pos) - 1)) != NULL,
       "Packet contains a valid BSON query document");
   bson_finish (tmp);
 
@@ -88,7 +88,7 @@ test_mongo_wire_cmd_query (void)
   /* pos = zero + collection_name + NULL + skip + ret */
   pos = sizeof (gint32) + strlen ("test.ns") + 1 + sizeof (gint32) * 2;
   ok ((tmp = bson_new_from_data (data + pos,
-				 _DOC_SIZE (data, pos) - 1)) != NULL,
+				 bson_stream_doc_size (data, pos) - 1)) != NULL,
       "Packet contains a valid BSON query document");
   bson_finish (tmp);
   pos += bson_size (tmp);
@@ -97,7 +97,7 @@ test_mongo_wire_cmd_query (void)
   bson_free (s);
 
   ok ((s = bson_new_from_data (data + pos,
-			       _DOC_SIZE (data, pos) - 1)) != NULL,
+			       bson_stream_doc_size (data, pos) - 1)) != NULL,
       "Packet contains a valid BSON selector document");
   bson_finish (s);
 

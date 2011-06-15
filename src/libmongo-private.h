@@ -19,6 +19,9 @@
  * Private types and functions, for internal use in libmongo-client only.
  */
 
+#ifndef LIBMONGO_PRIVATE_H
+#define LIBMONGO_PRIVATE_H 1
+
 #include "mongo.h"
 
 /** @internal BSON structure.
@@ -137,3 +140,5 @@ mongo_wire_packet_get_header_raw (const mongo_packet *p,
 gboolean
 mongo_wire_packet_set_header_raw (mongo_packet *p,
 				  const mongo_packet_header *header);
+
+#endif

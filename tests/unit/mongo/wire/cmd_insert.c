@@ -49,7 +49,7 @@ test_mongo_wire_cmd_insert (void)
   /* pos = zero + collection_name + NULL */
   pos = sizeof (gint32) + strlen ("test.ns") + 1;
   ok ((ins = bson_new_from_data (data + pos,
-				 _DOC_SIZE (data, pos) - 1)) != NULL,
+				 bson_stream_doc_size (data, pos) - 1)) != NULL,
       "First document is included");
   bson_finish (ins);
 
@@ -69,7 +69,7 @@ test_mongo_wire_cmd_insert (void)
    */
   pos += bson_size (ins);
   ok ((tmp = bson_new_from_data (data + pos,
-				 _DOC_SIZE (data, pos) - 1)) != NULL,
+				 bson_stream_doc_size (data, pos) - 1)) != NULL,
       "Second document is included");
   bson_finish (tmp);
   cmp_ok (bson_size (tmp), "==", 5,

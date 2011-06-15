@@ -22,6 +22,7 @@
 #define LIBMONGO_CLIENT_BSON_H 1
 
 #include <glib.h>
+#include <string.h>
 
 G_BEGIN_DECLS
 
@@ -298,6 +299,29 @@ const guint8 *bson_data (const bson *b);
  */
 gboolean bson_validate_key (const gchar *key, gboolean forbid_dots,
 			    gboolean no_dollar);
+
+/** Reads out the 32-bit documents size from a BSON bytestream.
+ *
+ * This function can be used when reading data from a stream, and one
+ * wants to build a BSON object from the bytestream: for
+ * bson_new_from_data(), one needs the length. This function provides
+ * that.
+ *
+ * @param doc is the byte stream to check the size of.
+ * @param pos is the position in the bytestream to start reading at.
+ *
+ * @returns The size of the document at the appropriate position.
+ *
+ * @note The byte stream is expected to be in little-endian byte
+ * order.
+ */
+static __inline__ gint32 bson_stream_doc_size (const guint8 *doc, gint32 pos)
+{
+  gint32 size;
+
+  memcpy (&size, doc + pos, sizeof (gint32));
+  return GINT32_FROM_LE (size);
+}
 
 /** @} */
 
