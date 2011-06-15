@@ -16,6 +16,9 @@
 
 /** @file src/mongo-sync-pool.h
  * MongoDB connection pool API public header.
+ *
+ * @addtogroup mongo_sync
+ * @{
  */
 
 #ifndef LIBMONGO_POOL_H
@@ -99,7 +102,7 @@ void mongo_sync_pool_free (mongo_sync_pool *pool);
  * @returns A connection object from the pool.
  *
  * @note The returned object can be safely casted to
- * #mongo_sync_connection, and passed to any of the mongo_sync family
+ * mongo_sync_connection, and passed to any of the mongo_sync family
  * of commands. Do note however, that one shall not close or otherwise
  * free a connection object returned by this function.
  */
@@ -120,6 +123,8 @@ mongo_sync_pool_connection *mongo_sync_pool_pick (mongo_sync_pool *pool,
  */
 gboolean mongo_sync_pool_return (mongo_sync_pool *pool,
 				 mongo_sync_pool_connection *conn);
+
+/** @} */
 
 /** @} */
 

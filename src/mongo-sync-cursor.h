@@ -16,6 +16,9 @@
 
 /** @file src/mongo-sync-cursor.h
  * MongoDB cursor API public header.
+ *
+ * @addtogroup mongo_sync
+ * @{
  */
 
 #ifndef LIBMONGO_SYNC_CURSOR_H
@@ -26,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-/** @defgroup mongo_sync_cursor Mongo Cursor API
+/** @defgroup mongo_sync_cursor Mongo Sync Cursor API
  *
  * @addtogroup mongo_sync_cursor
  * @{
@@ -91,7 +94,9 @@ bson *mongo_sync_cursor_get_data (mongo_sync_cursor *cursor);
  */
 void mongo_sync_cursor_free (mongo_sync_cursor *cursor);
 
-/** @}*/
+/** @} */
+
+/** @} */
 
 G_END_DECLS
 

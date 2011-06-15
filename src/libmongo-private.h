@@ -49,13 +49,12 @@ struct _mongo_sync_connection
   gboolean safe_mode; /**< Safe-mode signal flag. */
   gboolean auto_reconnect; /**< Auto-reconnect flag. */
 
-  /** Replica Set properties. */
   struct
   {
     GList *seeds; /**< Replica set seeds, as a list of strings. */
     GList *hosts; /**< Replica set members, as a list of strings. */
     gchar *primary; /**< The replica master, if any. */
-  } rs;
+  } rs;  /**< Replica Set properties. */
 
   gchar *last_error; /**< The last error from the server, caught
 			during queries. */

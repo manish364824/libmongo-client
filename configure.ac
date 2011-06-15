@@ -163,6 +163,8 @@ AC_SUBST(openssl_pc)
 AC_OUTPUT(
 	Doxyfile
 	Makefile
+	docs/Makefile
+	docs/tutorial/Makefile
 	examples/Makefile
 	src/Makefile
 	src/libmongo-client.pc
