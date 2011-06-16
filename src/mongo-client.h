@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-client.h
+ * MongoDB client API public header.
+ */
+
 #ifndef LIBMONGO_CLIENT_H
 #define LIBMONGO_CLIENT_H 1
 

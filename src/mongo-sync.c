@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-sync.c
+ * MongoDB synchronous wrapper API implementation.
+ */
+
 #include "config.h"
 #include "mongo.h"
 #include "libmongo-private.h"
@@ -28,7 +32,7 @@
 #endif
 
 mongo_sync_connection *
-mongo_sync_connect (const gchar *host, int port,
+mongo_sync_connect (const gchar *host, gint port,
 		    gboolean slaveok)
 {
   mongo_sync_connection *s;
@@ -68,8 +72,6 @@ mongo_sync_conn_seed_add (mongo_sync_connection *conn,
 
   conn->rs.seeds = g_list_append (conn->rs.seeds,
 				  g_strdup_printf ("%s:%d", host, port));
-  conn->rs.hosts = g_list_prepend (conn->rs.hosts,
-				   g_strdup_printf ("%s:%d", host, port));
   return TRUE;
 }
 
@@ -92,14 +94,6 @@ _mongo_sync_connect_replace (mongo_sync_connection *old,
       l = g_list_delete_link (l, l);
     }
   old->rs.hosts = NULL;
-
-  /* Repopulate it with the seed list */
-  l = old->rs.seeds;
-  while (l)
-    {
-      old->rs.hosts = g_list_append (old->rs.hosts, g_strdup (l->data));
-      l = g_list_next (l);
-    }
 
   if (old->super.fd)
     close (old->super.fd);
@@ -192,6 +186,28 @@ mongo_sync_reconnect (mongo_sync_connection *conn,
   for (i = 0; i < g_list_length (conn->rs.hosts); i++)
     {
       gchar *addr = (gchar *)g_list_nth_data (conn->rs.hosts, i);
+      int e;
+
+      if (!mongo_util_parse_addr (addr, &host, &port))
+	continue;
+
+      nc = mongo_sync_connect (host, port, conn->slaveok);
+      g_free (host);
+      if (!nc)
+	continue;
+
+      nc = mongo_sync_reconnect (nc, force_master);
+      e = errno;
+      _mongo_sync_connect_replace (conn, nc);
+      errno = e;
+      return conn;
+    }
+
+  /* And if that failed too, try the seeds. */
+
+  for (i = 0; i < g_list_length (conn->rs.seeds); i++)
+    {
+      gchar *addr = (gchar *)g_list_nth_data (conn->rs.seeds, i);
       int e;
 
       if (!mongo_util_parse_addr (addr, &host, &port))
@@ -694,7 +710,7 @@ mongo_sync_cmd_insert_n (mongo_sync_connection *conn,
 {
   mongo_packet *p;
   gint32 rid;
-  gint32 pos = 0, c = n, i = 0;
+  gint32 pos = 0, c, i = 0;
   gint32 size = 0;
 
   if (!conn)
@@ -757,7 +773,7 @@ mongo_sync_cmd_insert_n (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_insert (mongo_sync_connection *conn,
-		       const char *ns, ...)
+		       const gchar *ns, ...)
 {
   gboolean b;
   bson **docs, *d;

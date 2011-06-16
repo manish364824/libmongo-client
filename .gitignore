@@ -16,7 +16,8 @@ ltmain.sh
 m4/
 missing
 tests/*.ok
-docs/
+docs/html/
+docs/tutorial/examples/tut/
 b/
 .pc/
 debian/patches

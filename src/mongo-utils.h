@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-utils.h
+ * Public header for various libmongo-client helper functions.
+ */
+
 #ifndef LIBMONGO_CLIENT_UTILS_H
 #define LIBMONGO_CLIENT_UTILS_H 1
 

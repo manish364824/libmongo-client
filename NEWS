@@ -1,5 +1,45 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.1.1 - <2011-06-16 Thu>
+
+** Cursor-based query iterator API
+The new cursor-based query iterator API makes it possible to grab the
+results of a mongo_sync_cmd_query(), and conveniently iterate over the
+results, hiding the get_more() calls underneath.
+
+The implementation is clever enough to only query the database when it
+needs to, and when it does, query in bulk (asking for the same amount
+of documents that the last query returned).
+
+Thanks to Federico Rodriguez <fed.rod@gmail.com> for the suggestion.
+
+** New function: bson_validate_key()
+With this new function, one can validate BSON keys: whether they can
+contain dots (allowed when using dot-notation, forbidden otherwise),
+or whether they start with a '$' sign.
+
+It is up to the application developer to decide when to validate a
+key, and what restrictions make sense in the given context.
+
+The function does NOT do UTF-8 validation, that is completely left up
+to the application developer.
+
+** New function: bson_cursor_find_next()
+When we know that key G always comes after key A, but we do not care
+how far apart they may be, and we do not want to use a separate cursor
+(due to, for example, performance reasons), this new function can
+help: unlike bson_find(), this will start scanning from the current
+cursor position.
+
+** New function: bson_stream_doc_size()
+A little helper function to help determine the size of a BSON document
+when it's only available as a bytestream. This is mostly for use with
+bson_new_from_data().
+
+** Symbol versioning
+The symbols of the library can now be versioned, if configured with
+the --with-versioned-symbols configure flag (not enabled by default).
+
 * 0.1.0 - <2011-05-25 Wed>
 
 ** Shared library

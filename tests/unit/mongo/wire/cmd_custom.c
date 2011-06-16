@@ -48,7 +48,7 @@ test_mongo_wire_cmd_custom (void)
   /* pos = zero + collection_name + NULL + skip + ret */
   pos = sizeof (gint32) + strlen ("test.$cmd") + 1 + sizeof (gint32) * 2;
   ok ((cmd = bson_new_from_data (data + pos,
-				 _DOC_SIZE (data, pos) - 1)) != NULL,
+				 bson_stream_doc_size (data, pos) - 1)) != NULL,
       "Packet contains a BSON document");
   bson_finish (cmd);
 

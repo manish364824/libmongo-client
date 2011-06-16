@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
+/** @file src/bson.h
+ * The BSON API's public header.
+ */
+
 #ifndef LIBMONGO_CLIENT_BSON_H
 #define LIBMONGO_CLIENT_BSON_H 1
 
 #include <glib.h>
+#include <string.h>
 
 G_BEGIN_DECLS
 
@@ -157,7 +162,7 @@ bson *bson_new_sized (gint32 size);
  * BSON data, which are terminated by a zero byte, specify the size as
  * one smaller than the original data stream.
  *
- * @note This is because bson_finis() will append a zero byte, thus
+ * @note This is because bson_finish() will append a zero byte, thus
  * one would end up with an invalid document if it had an extra one.
  *
  * @param data is the BSON byte stream to import.
@@ -261,6 +266,7 @@ void bson_free (bson *b);
  * closed by bson_finish() is considered an error.
  */
 gint32 bson_size (const bson *b);
+
 /** Return the raw bytestream form of the BSON object.
  *
  * @param b is the BSON object to retrieve data from.
@@ -272,6 +278,50 @@ gint32 bson_size (const bson *b);
  * considered an error.
  */
 const guint8 *bson_data (const bson *b);
+
+/** Validate a BSON key.
+ *
+ * Verifies that a given key is a valid BSON field name. Depending on
+ * context (togglable by the boolean flags) this means that the string
+ * must either be free of dots, or must not start with a dollar sign.
+ *
+ * @param key is the field name to validate.
+ * @param forbid_dots toggles whether to disallow dots in the name
+ * altogether.
+ * @param no_dollar toggles whether to forbid key names starting with
+ * a dollar sign.
+ *
+ * @returns TRUE if the field name is found to be valid, FALSE
+ * otherwise.
+ *
+ * @note This function does NOT do UTF-8 validation. That is left up
+ * to the application.
+ */
+gboolean bson_validate_key (const gchar *key, gboolean forbid_dots,
+			    gboolean no_dollar);
+
+/** Reads out the 32-bit documents size from a BSON bytestream.
+ *
+ * This function can be used when reading data from a stream, and one
+ * wants to build a BSON object from the bytestream: for
+ * bson_new_from_data(), one needs the length. This function provides
+ * that.
+ *
+ * @param doc is the byte stream to check the size of.
+ * @param pos is the position in the bytestream to start reading at.
+ *
+ * @returns The size of the document at the appropriate position.
+ *
+ * @note The byte stream is expected to be in little-endian byte
+ * order.
+ */
+static __inline__ gint32 bson_stream_doc_size (const guint8 *doc, gint32 pos)
+{
+  gint32 size;
+
+  memcpy (&size, doc + pos, sizeof (gint32));
+  return GINT32_FROM_LE (size);
+}
 
 /** @} */
 
@@ -552,6 +602,19 @@ void bson_cursor_free (bson_cursor *c);
  * @returns TRUE on success, FALSE otherwise.
  */
 gboolean bson_cursor_next (bson_cursor *c);
+
+/** Move the cursor to a given key, past the current one.
+ *
+ * Scans the BSON object past the current key, in search for the
+ * specified one, and positions the cursor there if found, leaves it
+ * in place if not.
+ *
+ * @param c is the cursor to move forward.
+ * @param name is the key name to position to.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+gboolean bson_cursor_find_next (bson_cursor *c, const gchar *name);
 
 /** Determine the type of the current element.
  *
