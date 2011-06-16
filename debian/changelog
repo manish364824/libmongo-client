@@ -1,3 +1,9 @@
+libmongo-client (0.1.1-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Gergely Nagy <algernon@madhouse-project.org>  Thu, 16 Jun 2011 12:25:16 +0200
+
 libmongo-client (0.1.0-1) unstable; urgency=low
 
   * Initial release (Closes: #626969)
