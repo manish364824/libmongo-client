@@ -20,8 +20,9 @@ libmongo_client_la_SOURCES	= \
 
 libmongo_client_includedir	= $(includedir)/mongo-client
 libmongo_client_include_HEADERS	= \
-	bson.h mongo-wire.h mongo-client.h \
-	mongo-utils.h mongo-sync.h mongo-sync-pool.h mongo.h
+	bson.h mongo-wire.h mongo-client.h mongo-utils.h \
+	mongo-sync.h mongo-sync-cursor.h mongo-sync-pool.h \
+	mongo.h
 
 pkgconfigdir			= $(libdir)/pkgconfig
 pkgconfig_DATA			= libmongo-client.pc
