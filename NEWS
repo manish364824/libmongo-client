@@ -1,6 +1,6 @@
 #+STARTUP: indent showall			-*- org -*-
 
-* 0.1.1 - <UNRELEASED>
+* 0.1.1 - <2011-06-16 Thu>
 
 ** Cursor-based query iterator API
 The new cursor-based query iterator API makes it possible to grab the
