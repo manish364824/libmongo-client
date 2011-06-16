@@ -91,6 +91,22 @@ struct _mongo_sync_pool_connection
   gboolean in_use; /**< Whether the object is in use or not. */
 };
 
+/** @internal GridFS object */
+struct _mongo_sync_gridfs
+{
+  mongo_sync_connection *conn; /**< Connection the object is
+				  associated to. */
+
+  struct
+  {
+    gchar *prefix; /**< The namespace prefix. */
+    gchar *files; /**< The file metadata namespace. */
+    gchar *chunks; /**< The chunk namespace. */
+  } ns; /**< Namespaces */
+
+  gint32 chunk_size; /**< The default chunk size. */
+};
+
 /** @internal Construct a kill cursors command, using a va_list.
  *
  * @param id is the sequence id.

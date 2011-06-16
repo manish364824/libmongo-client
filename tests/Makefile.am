@@ -145,10 +145,15 @@ mongo_sync_pool_unit_tests	= \
 mongo_sync_pool_func_tests	= \
 		func/mongo/sync-pool/f_sync_pool
 
+mongo_sync_gridfs_unit_tests	= \
+		unit/mongo/sync-gridfs/sync_gridfs_new \
+		unit/mongo/sync-gridfs/sync_gridfs_free \
+		unit/mongo/sync-gridfs/sync_gridfs_get_set_chunk_size
+
 UNIT_TESTS	= ${bson_unit_tests} ${mongo_utils_unit_tests} \
 		${mongo_wire_unit_tests} ${mongo_client_unit_tests} \
 		${mongo_sync_unit_tests} ${mongo_sync_cursor_unit_tests} \
-		${mongo_sync_pool_unit_tests}
+		${mongo_sync_pool_unit_tests} ${mongo_sync_gridfs_unit_tests}
 FUNC_TESTS	= ${bson_func_tests} ${mongo_sync_func_tests} \
 		${mongo_sync_cursor_func_tests} ${mongo_sync_pool_func_tests}
 PERF_TESTS	= ${bson_perf_tests}
