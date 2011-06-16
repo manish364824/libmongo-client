@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-client.c
+ * MongoDB client API implementation.
+ */
+
 #include "mongo-client.h"
 #include "bson.h"
 #include "mongo-wire.h"

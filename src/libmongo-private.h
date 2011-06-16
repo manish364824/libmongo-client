@@ -19,6 +19,9 @@
  * Private types and functions, for internal use in libmongo-client only.
  */
 
+#ifndef LIBMONGO_PRIVATE_H
+#define LIBMONGO_PRIVATE_H 1
+
 #include "mongo.h"
 
 /** @internal BSON structure.
@@ -46,19 +49,37 @@ struct _mongo_sync_connection
   gboolean safe_mode; /**< Safe-mode signal flag. */
   gboolean auto_reconnect; /**< Auto-reconnect flag. */
 
-  /** Replica Set properties. */
   struct
   {
     GList *seeds; /**< Replica set seeds, as a list of strings. */
     GList *hosts; /**< Replica set members, as a list of strings. */
     gchar *primary; /**< The replica master, if any. */
-  } rs;
+  } rs;  /**< Replica Set properties. */
 
   gchar *last_error; /**< The last error from the server, caught
 			during queries. */
   gint32 max_insert_size; /**< Maximum number of bytes an insert
 			     command can be before being split to
 			     smaller chunks. Used for bulk inserts. */
+};
+
+/** @internal MongoDB cursor object.
+ *
+ * The cursor object can be used to conveniently iterate over a query
+ * result set.
+ */
+struct _mongo_sync_cursor
+{
+  mongo_sync_connection *conn; /**< The connection associated with
+				  the cursor. Owned by the caller. */
+  gchar *ns; /**< The namespace of the cursor. */
+  mongo_packet *results; /**< The current result set, as a mongo
+			    packet. */
+
+  gint32 offset; /**< Offset of the cursor within the active result
+		    set. */
+  mongo_reply_packet_header ph; /**< The reply headers extracted from
+				   the active result set. */
 };
 
 /** @internal Synchronous pool connection object. */
@@ -118,3 +139,5 @@ mongo_wire_packet_get_header_raw (const mongo_packet *p,
 gboolean
 mongo_wire_packet_set_header_raw (mongo_packet *p,
 				  const mongo_packet_header *header);
+
+#endif

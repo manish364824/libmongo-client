@@ -13,7 +13,7 @@ test_func_mongo_sync_pool_secondary (void)
   gint i = 0;
   gboolean ret = TRUE;
 
-  skip (!config.secondary_host, 12,
+  skip (!config.secondary_host, 14,
 	"Secondary server not configured");
 
   ok (mongo_sync_pool_new (config.secondary_host,

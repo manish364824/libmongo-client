@@ -50,7 +50,7 @@ test_mongo_wire_cmd_delete (void)
   pos = sizeof (gint32) + strlen ("test.ns") + 1 + sizeof (gint32);
 
   ok ((s = bson_new_from_data (data + pos,
-			       _DOC_SIZE (data, pos) - 1)) != NULL,
+			       bson_stream_doc_size (data, pos) - 1)) != NULL,
       "Packet contains a valid BSON update document");
   bson_finish (s);
 

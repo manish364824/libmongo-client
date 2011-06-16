@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/** @file src/mongo-utils.c
+ * Implementation for various libmongo-client helper functions.
+ */
+
 #include <glib.h>
 
 #include <sys/types.h>
@@ -99,22 +103,45 @@ mongo_util_parse_addr (const gchar *addr, gchar **host, gint *port)
       return FALSE;
     }
 
-  /* Split up to host:port */
-  port_s = g_strrstr (addr, ":");
-  if (!port_s)
+  /* Check for IPv6 literal */
+  if (addr[0] == '[')
     {
-      *host = g_strdup (addr);
-      return TRUE;
+      /* Host is everything between [] */
+      port_s = strchr (addr + 1, ']');
+      if (!port_s || port_s - addr == 1)
+	{
+	  *host = NULL;
+	  *port = -1;
+	  errno = EINVAL;
+	  return FALSE;
+	}
+      *host = g_strndup (addr + 1, port_s - addr - 1);
+
+      port_s += 2;
+      if (port_s - addr >= (glong)strlen (addr))
+	return TRUE;
     }
-  if (port_s == addr)
+  else
     {
-      *host = NULL;
-      *port = -1;
-      errno = EINVAL;
-      return FALSE;
+      /* Dealing with something that's not an IPv6 literal */
+
+      /* Split up to host:port */
+      port_s = g_strrstr (addr, ":");
+      if (!port_s)
+	{
+	  *host = g_strdup (addr);
+	  return TRUE;
+	}
+      if (port_s == addr)
+	{
+	  *host = NULL;
+	  *port = -1;
+	  errno = EINVAL;
+	  return FALSE;
+	}
+      port_s++;
+      *host = g_strndup (addr, port_s - addr - 1);
     }
-  port_s++;
-  *host = g_strndup (addr, port_s - addr - 1);
 
   p = strtol (port_s, &ep, 10);
   if (p == LONG_MIN || p == LONG_MAX)

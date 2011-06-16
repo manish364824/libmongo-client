@@ -5,6 +5,7 @@
 #include "bson.h"
 #include "mongo-wire.h"
 #include "mongo-sync.h"
+#include "libmongo-private.h"
 
 #include <dlfcn.h>
 
@@ -32,8 +33,6 @@ extern func_config_t config;
       endskip;					\
       test_env_free();				\
     } while (0)
-
-#define _DOC_SIZE(doc,pos) GINT32_FROM_LE (*(gint32 *)(&doc[pos]))
 
 #define RUN_TEST(n, t) \
   int		       \

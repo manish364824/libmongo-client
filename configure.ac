@@ -7,7 +7,7 @@ dnl ***************************************************************************
 dnl definitions
 
 PACKAGE="libmongo-client"
-VERSION="0.1.0"
+VERSION="0.1.1"
 
 dnl ***************************************************************************
 dnl dependencies
@@ -24,6 +24,17 @@ AM_CONFIG_HEADER(config.h)
 
 AC_ARG_ENABLE(ssl,
               [  --enable-ssl    Enable OpenSSL support (for authentication).],,enable_ssl="auto")
+
+AC_ARG_WITH([versioned-symbols], AC_HELP_STRING([--with-versioned-symbols],[Use versioned symbols]),[dnl
+vsymldflags="-Wl,--version-script,\${srcdir}/libmongo-client.ver -Wl,-O1"
+],[vsymldflags=])
+AC_MSG_CHECKING([whether to enable symbol versioning])
+AC_SUBST(vsymldflags)
+if test -z "${vsymldflags}"; then
+   AC_MSG_RESULT([no])
+else
+   AC_MSG_RESULT([yes, ${vsymldflags}])
+fi
 
 dnl ***************************************************************************
 dnl Checks for programs.
@@ -150,7 +161,10 @@ AC_DEFINE_UNQUOTED(ENABLE_AUTH, $d_enable_auth, [OpenSSL was detected, compiling
 AC_SUBST(openssl_pc)
 
 AC_OUTPUT(
+	Doxyfile
 	Makefile
+	docs/Makefile
+	docs/tutorial/Makefile
 	examples/Makefile
 	src/Makefile
 	src/libmongo-client.pc

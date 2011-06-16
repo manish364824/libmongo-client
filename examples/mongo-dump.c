@@ -1,4 +1,20 @@
-#include "mongo.h"
+/* mongo-dump.c - MongoDB database dumper; example application.
+ * Copyright 2011 Gergely Nagy <algernon@balabit.hu>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include <mongo.h>
 
 #include <unistd.h>
 #include <stdio.h>
@@ -24,42 +40,17 @@ typedef struct
 
 #define VLOG(...) { if (config->verbose) fprintf (stderr, __VA_ARGS__); }
 
-gdouble
-mongo_dump_packet (config_t *config, mongo_packet *p, gdouble pos, int fd)
-{
-  gint32 i;
-  mongo_reply_packet_header rh;
-
-  mongo_wire_reply_packet_get_header (p, &rh);
-
-  for (i = 1; i <= rh.returned; i++)
-    {
-      bson *b;
-
-      mongo_wire_reply_packet_get_nth_document (p, i, &b);
-      bson_finish (b);
-
-      write (fd, bson_data (b), bson_size (b));
-      bson_free (b);
-    }
-  VLOG("\r");
-
-  return pos + i - 1;
-}
-
-int
+void
 mongo_dump (config_t *config)
 {
   mongo_sync_connection *conn;
+  mongo_sync_cursor *cursor;
   bson *b;
   int fd;
 
-  mongo_packet *p;
-  mongo_reply_packet_header rh;
-  gint64 cid;
-  gdouble cnt, pos = 0;
+  glong cnt, pos = 0;
 
-  gchar *error;
+  gchar *error = NULL;
   int e;
 
   VLOG ("Connecting to %s:%d/%s.%s...\n", config->host, config->port,
@@ -123,61 +114,40 @@ mongo_dump (config_t *config)
   VLOG ("Launching initial query...\n");
   b = bson_new ();
   bson_finish (b);
-  p = mongo_sync_cmd_query (conn, config->ns,
-			    MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT,
-			    0, 10, b, NULL);
-  if (!p)
-    {
-      e = errno;
-
-      bson_free (b);
-      unlink (config->output);
-      close (fd);
-
-      mongo_sync_cmd_get_last_error (conn, config->db, &error);
-      fprintf (stderr, "Error retrieving the cursor: %s\n",
-	       (error) ? error : strerror (e));
-      mongo_sync_disconnect (conn);
-      exit (1);
-    }
+  cursor = mongo_sync_cursor_new (conn, config->ns,
+				  mongo_sync_cmd_query (conn, config->ns,
+							MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT,
+							0, 10, b, NULL));
   bson_free (b);
 
-  mongo_wire_reply_packet_get_header (p, &rh);
-  cid = rh.cursor_id;
-  pos = mongo_dump_packet (config, p, pos, fd);
-  mongo_wire_packet_free (p);
-
-  while (pos < cnt)
+  while ((pos < cnt) && mongo_sync_cursor_next (cursor))
     {
-      gdouble pr = (pos + 10) / cnt;
+      bson *b = mongo_sync_cursor_get_data (cursor);
+      pos++;
 
-      VLOG ("\rDumping... %03.2f%%", ((pr > 1) ? 1 : pr) * 100);
-      if (config->verbose)
-	fflush (stderr);
-
-      p = mongo_sync_cmd_get_more (conn, config->ns, 10, cid);
-      if (!p)
+      if (!b)
 	{
 	  e = errno;
-
-	  unlink (config->output);
-	  close (fd);
 
 	  mongo_sync_cmd_get_last_error (conn, config->db, &error);
 	  fprintf (stderr, "Error advancing the cursor: %s\n",
 		   (error) ? error : strerror (e));
-
 	  mongo_sync_disconnect (conn);
 	  exit (1);
 	}
-      pos = mongo_dump_packet (config, p, pos, fd);
-      mongo_wire_packet_free (p);
+
+      if (pos % 10 == 0)
+	VLOG ("\rDumping... %03.2f%%", (pos * 1.0) / (cnt * 1.0) * 100);
+
+      write (fd, bson_data (b), bson_size (b));
+      bson_free (b);
     }
+  VLOG ("\rDumping... %03.2f%%\n", (double)((pos / cnt) * 100));
+
+  mongo_sync_cursor_free (cursor);
 
   close (fd);
   mongo_sync_disconnect (conn);
-
-  return 0;
 }
 
 int
@@ -226,5 +196,10 @@ main (int argc, char *argv[])
     }
 
   config.ns = g_strdup_printf ("%s.%s", config.db, config.coll);
-  return mongo_dump (&config);
+  mongo_dump (&config);
+
+  g_free (config.ns);
+  g_option_context_free (context);
+
+  return 0;
 }
