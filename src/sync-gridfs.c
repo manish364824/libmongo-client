@@ -108,7 +108,7 @@ mongo_sync_gridfs_file_free (mongo_sync_gridfs_file *gfile)
       errno = EINVAL;
       return;
     }
-  bson_free (gfile->meta);
+  bson_free (gfile->meta.metadata);
   g_free (gfile);
 
   errno = 0;
@@ -139,7 +139,7 @@ mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
   f = g_new0 (mongo_sync_gridfs_file, 1);
   f->gfs = gfs;
 
-  if (!mongo_wire_reply_packet_get_nth_document (p, 1, &f->meta))
+  if (!mongo_wire_reply_packet_get_nth_document (p, 1, &f->meta.metadata))
     {
       int e = errno;
 
@@ -147,33 +147,51 @@ mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
       errno = e;
       return NULL;
     }
-  bson_finish (f->meta);
+  bson_finish (f->meta.metadata);
 
-  c = bson_find (f->meta, "length");
-  bson_cursor_get_int32 (c, &f->length);
+  c = bson_find (f->meta.metadata, "length");
+  bson_cursor_get_int32 (c, &f->meta.length);
   bson_cursor_free (c);
 
-  c = bson_find (f->meta, "chunkSize");
-  bson_cursor_get_int32 (c, &f->chunk_size);
+  c = bson_find (f->meta.metadata, "chunkSize");
+  bson_cursor_get_int32 (c, &f->meta.chunk_size);
   bson_cursor_free (c);
 
-  if (f->length == 0 || f->chunk_size == 0)
+  if (f->meta.length == 0 || f->meta.chunk_size == 0)
     {
       mongo_sync_gridfs_file_free (f);
       errno = EPROTO;
       return NULL;
     }
 
-  c = bson_find (f->meta, "_id");
-  if (bson_cursor_type (c) != BSON_TYPE_OID)
+  c = bson_find (f->meta.metadata, "_id");
+  if (!bson_cursor_get_oid (c, &f->meta.oid))
     {
       mongo_sync_gridfs_file_free (f);
       bson_cursor_free (c);
       errno = EPROTO;
       return NULL;
     }
-  bson_cursor_get_oid (c, &f->oid);
   bson_cursor_free (c);
+
+  c = bson_find (f->meta.metadata, "uploadDate");
+  if (!bson_cursor_get_utc_datetime (c, &f->meta.date))
+    {
+      mongo_sync_gridfs_file_free (f);
+      bson_cursor_free (c);
+      errno = EPROTO;
+      return NULL;
+    }
+  bson_cursor_free (c);
+
+  c = bson_find (f->meta.metadata, "md5");
+  if (!bson_cursor_get_string (c, &f->meta.md5))
+    {
+      mongo_sync_gridfs_file_free (f);
+      bson_cursor_free (c);
+      errno = EPROTO;
+      return NULL;
+    }
 
   return f;
 }
@@ -198,7 +216,7 @@ mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile,
     }
 
   q = bson_new_sized (32);
-  bson_append_oid (q, "files_id", gfile->oid);
+  bson_append_oid (q, "files_id", gfile->meta.oid);
   bson_finish (q);
 
   p = mongo_sync_cmd_query (gfile->gfs->conn, gfile->gfs->ns.chunks, 0,
@@ -208,4 +226,118 @@ mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile,
   bson_free (q);
 
   return cursor;
+}
+
+guint8 *
+mongo_sync_gridfs_file_cursor_get_chunk (mongo_sync_cursor *cursor,
+					 gint32 *size)
+{
+  bson *b;
+  bson_cursor *c;
+  const guint8 *d;
+  guint8 *data;
+  gint32 s;
+  bson_binary_subtype sub;
+
+  if (!cursor)
+    {
+      errno = ENOTCONN;
+      return NULL;
+    }
+
+  b = mongo_sync_cursor_get_data (cursor);
+  c = bson_find (b, "data");
+  bson_cursor_get_binary (c, &sub, &d, &s);
+  bson_cursor_free (c);
+
+  data = g_malloc (s);
+  memcpy (data, d, s);
+
+  if (size)
+    *size = s;
+
+  bson_free (b);
+  return data;
+}
+
+const guint8 *
+mongo_sync_gridfs_file_get_id (mongo_sync_gridfs_file *gfile)
+{
+  if (!gfile)
+    {
+      errno = ENOTCONN;
+      return NULL;
+    }
+  return gfile->meta.oid;
+}
+
+gint32
+mongo_sync_gridfs_file_get_length (mongo_sync_gridfs_file *gfile)
+{
+  if (!gfile)
+    {
+      errno = ENOTCONN;
+      return -1;
+    }
+  return gfile->meta.length;
+}
+
+gint32
+mongo_sync_gridfs_file_get_chunk_size (mongo_sync_gridfs_file *gfile)
+{
+  if (!gfile)
+    {
+      errno = ENOTCONN;
+      return -1;
+    }
+  return gfile->meta.chunk_size;
+}
+
+const gchar *
+mongo_sync_gridfs_file_get_md5 (mongo_sync_gridfs_file *gfile)
+{
+  if (!gfile)
+    {
+      errno = ENOTCONN;
+      return NULL;
+    }
+  return gfile->meta.md5;
+}
+
+gint64
+mongo_sync_gridfs_file_get_date (mongo_sync_gridfs_file *gfile)
+{
+  if (!gfile)
+    {
+      errno = ENOTCONN;
+      return -1;
+    }
+  return gfile->meta.date;
+}
+
+const bson *
+mongo_sync_gridfs_file_get_metadata (mongo_sync_gridfs_file *gfile)
+{
+  if (!gfile)
+    {
+      errno = ENOTCONN;
+      return NULL;
+    }
+  return gfile->meta.metadata;
+}
+
+gint32
+mongo_sync_gridfs_file_get_chunk_count (mongo_sync_gridfs_file *gfile)
+{
+  double chunk_count;
+
+  if (!gfile)
+    {
+      errno = ENOTCONN;
+      return -1;
+    }
+
+  chunk_count = (double)gfile->meta.length / (double)gfile->meta.chunk_size;
+  return (chunk_count - (gint32)chunk_count > 0) ?
+    (gint32)(chunk_count + 1) : (gint32)(chunk_count);
 }

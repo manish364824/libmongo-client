@@ -111,11 +111,16 @@ struct _mongo_sync_gridfs_file
 {
   mongo_sync_gridfs *gfs;
 
-  bson *meta;
+  struct
+  {
+    bson *metadata;
 
-  const guint8 *oid;
-  gint32 length;
-  gint32 chunk_size;
+    const guint8 *oid;
+    gint32 length;
+    gint32 chunk_size;
+    gint64 date;
+    const gchar *md5;
+  } meta;
 };
 
 /** @internal Construct a kill cursors command, using a va_list.
