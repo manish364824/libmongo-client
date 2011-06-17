@@ -8,6 +8,10 @@ and returned whatever already arrived at the time of reading.
 
 This has been corrected, mongo_packet_recv() correctly blocks now.
 
+** Implemented support for passive secondaries.
+Support was added for passive secondaries, they're now automatically
+discovered too.
+
 * 0.1.1 - <2011-06-16 Thu>
 
 ** Cursor-based query iterator API

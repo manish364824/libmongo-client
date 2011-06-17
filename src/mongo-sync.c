@@ -1208,7 +1208,6 @@ mongo_sync_cmd_is_master (mongo_sync_connection *conn)
       return b;
     }
   bson_cursor_free (c);
-  bson_free (res);
   bson_finish (hosts);
 
   /* Delete the old host list. */
@@ -1231,6 +1230,25 @@ mongo_sync_cmd_is_master (mongo_sync_connection *conn)
   bson_cursor_free (c);
   bson_free (hosts);
 
+  c = bson_find (res, "passives");
+  if (bson_cursor_get_array (c, &hosts))
+    {
+      bson_cursor_free (c);
+      bson_finish (hosts);
+
+      c = bson_cursor_new (hosts);
+      while (bson_cursor_next (c))
+	{
+	  const gchar *s;
+
+	  if (bson_cursor_get_string (c, &s))
+	    conn->rs.hosts = g_list_append (conn->rs.hosts, g_strdup (s));
+	}
+      bson_free (hosts);
+    }
+  bson_cursor_free (c);
+
+  bson_free (res);
   errno = 0;
   return b;
 }
