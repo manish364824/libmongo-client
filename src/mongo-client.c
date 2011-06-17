@@ -197,8 +197,8 @@ mongo_packet_recv (mongo_connection *conn)
     }
 
   memset (&h, 0, sizeof (h));
-  if (recv (conn->fd, &h, sizeof (mongo_packet_header), MSG_NOSIGNAL) !=
-      sizeof (mongo_packet_header))
+  if (recv (conn->fd, &h, sizeof (mongo_packet_header),
+	    MSG_NOSIGNAL | MSG_WAITALL) != sizeof (mongo_packet_header))
     {
       return NULL;
     }
@@ -221,7 +221,7 @@ mongo_packet_recv (mongo_connection *conn)
 
   size = h.length - sizeof (mongo_packet_header);
   data = g_new0 (guint8, size);
-  if ((guint32)recv (conn->fd, data, size, MSG_NOSIGNAL) != size)
+  if ((guint32)recv (conn->fd, data, size, MSG_NOSIGNAL | MSG_WAITALL) != size)
     {
       int e = errno;
 
