@@ -197,7 +197,7 @@ mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
 }
 
 mongo_sync_cursor *
-mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile,
+mongo_sync_gridfs_file_cursor_new (mongo_sync_gridfs_file *gfile,
 				   gint start, gint num)
 {
   bson *q;
@@ -327,7 +327,7 @@ mongo_sync_gridfs_file_get_metadata (mongo_sync_gridfs_file *gfile)
 }
 
 gint32
-mongo_sync_gridfs_file_get_chunk_count (mongo_sync_gridfs_file *gfile)
+mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile)
 {
   double chunk_count;
 

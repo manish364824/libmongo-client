@@ -36,9 +36,9 @@ test_func_sync_gridfs (void)
 	mongo_sync_gridfs_file_get_chunk_size (f),
 	mongo_sync_gridfs_file_get_date (f),
 	mongo_sync_gridfs_file_get_md5 (f),
-	mongo_sync_gridfs_file_get_chunk_count (f));
+	mongo_sync_gridfs_file_get_chunks (f));
 
-  cursor = mongo_sync_gridfs_file_get_chunks (f, 0, 0);
+  cursor = mongo_sync_gridfs_file_cursor_new (f, 0, 0);
   while (mongo_sync_cursor_next (cursor))
     {
       gint32 size;

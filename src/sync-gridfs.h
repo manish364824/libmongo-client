@@ -108,10 +108,10 @@ const gchar *mongo_sync_gridfs_file_get_md5 (mongo_sync_gridfs_file *gfile);
 gint64 mongo_sync_gridfs_file_get_date (mongo_sync_gridfs_file *gfile);
 const bson *mongo_sync_gridfs_file_get_metadata (mongo_sync_gridfs_file *gfile);
 
-gint32 mongo_sync_gridfs_file_get_chunk_count (mongo_sync_gridfs_file *gfile);
+gint32 mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile);
 
 /* Data access */
-mongo_sync_cursor *mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile,
+mongo_sync_cursor *mongo_sync_gridfs_file_cursor_new (mongo_sync_gridfs_file *gfile,
 						      gint start, gint num);
 guint8 *mongo_sync_gridfs_file_cursor_get_chunk (mongo_sync_cursor *cursor,
 						 gint32 *size);
