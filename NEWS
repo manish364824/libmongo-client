@@ -1,5 +1,13 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.1.2 - <UNRELEASED>
+
+** Bugfix: mongo_packet_recv() waits for all data.
+Previously, mongo_packet_recv() did not wait for all data to arrive,
+and returned whatever already arrived at the time of reading.
+
+This has been corrected, mongo_packet_recv() correctly blocks now.
+
 * 0.1.1 - <2011-06-16 Thu>
 
 ** Cursor-based query iterator API
