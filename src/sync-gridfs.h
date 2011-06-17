@@ -25,6 +25,7 @@
 #define LIBMONGO_SYNC_GRIDFS_H 1
 
 #include <mongo-sync.h>
+#include <mongo-sync-cursor.h>
 #include <glib.h>
 
 G_BEGIN_DECLS
@@ -37,6 +38,9 @@ G_BEGIN_DECLS
 
 /** Opaque GridFS object. */
 typedef struct _mongo_sync_gridfs mongo_sync_gridfs;
+
+/** Opaque GridFS file object. */
+typedef struct _mongo_sync_gridfs_file mongo_sync_gridfs_file;
 
 /** Create a new GridFS object.
  *
@@ -75,6 +79,31 @@ gint32 mongo_sync_gridfs_get_chunk_size (mongo_sync_gridfs *gfs);
  */
 gboolean mongo_sync_gridfs_set_chunk_size (mongo_sync_gridfs *gfs,
 					   gint32 chunk_size);
+
+
+/** @defgroup mongo_sync_gridfs_fops Mongo GridFS File Operations
+ *
+ * @addtogroup mongo_sync_gridfs_fops
+ * @{
+ */
+
+mongo_sync_gridfs_file *mongo_sync_gridfs_find (mongo_sync_gridfs *gfs,
+						const bson *query);
+
+/** @} */
+
+/** @defgroup mongo_sync_gridfs_file Mongo GridFS file objects
+ *
+ * @addtogroup mongo_sync_gridfs_file
+ * @{
+*/
+
+mongo_sync_cursor *mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile,
+						      gint start, gint num);
+
+void mongo_sync_gridfs_file_free (mongo_sync_gridfs_file *gfile);
+
+/** @} */
 
 G_END_DECLS
 

@@ -99,3 +99,113 @@ mongo_sync_gridfs_set_chunk_size (mongo_sync_gridfs *gfs,
   gfs->chunk_size = chunk_size;
   return TRUE;
 }
+
+void
+mongo_sync_gridfs_file_free (mongo_sync_gridfs_file *gfile)
+{
+  if (!gfile)
+    {
+      errno = EINVAL;
+      return;
+    }
+  bson_free (gfile->meta);
+  g_free (gfile);
+
+  errno = 0;
+}
+
+mongo_sync_gridfs_file *
+mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
+{
+  mongo_sync_gridfs_file *f;
+  mongo_packet *p;
+  bson_cursor *c;
+
+  if (!gfs)
+    {
+      errno = ENOTCONN;
+      return NULL;
+    }
+  if (!query)
+    {
+      errno = EINVAL;
+      return NULL;
+    }
+
+  p = mongo_sync_cmd_query (gfs->conn, gfs->ns.files, 0, 0, 1, query, NULL);
+  if (!p)
+    return NULL;
+
+  f = g_new0 (mongo_sync_gridfs_file, 1);
+  f->gfs = gfs;
+
+  if (!mongo_wire_reply_packet_get_nth_document (p, 1, &f->meta))
+    {
+      int e = errno;
+
+      mongo_sync_gridfs_file_free (f);
+      errno = e;
+      return NULL;
+    }
+  bson_finish (f->meta);
+
+  c = bson_find (f->meta, "length");
+  bson_cursor_get_int32 (c, &f->length);
+  bson_cursor_free (c);
+
+  c = bson_find (f->meta, "chunkSize");
+  bson_cursor_get_int32 (c, &f->chunk_size);
+  bson_cursor_free (c);
+
+  if (f->length == 0 || f->chunk_size == 0)
+    {
+      mongo_sync_gridfs_file_free (f);
+      errno = EPROTO;
+      return NULL;
+    }
+
+  c = bson_find (f->meta, "_id");
+  if (bson_cursor_type (c) != BSON_TYPE_OID)
+    {
+      mongo_sync_gridfs_file_free (f);
+      bson_cursor_free (c);
+      errno = EPROTO;
+      return NULL;
+    }
+  bson_cursor_get_oid (c, &f->oid);
+  bson_cursor_free (c);
+
+  return f;
+}
+
+mongo_sync_cursor *
+mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile,
+				   gint start, gint num)
+{
+  bson *q;
+  mongo_sync_cursor *cursor;
+  mongo_packet *p;
+
+  if (!gfile)
+    {
+      errno = ENOTCONN;
+      return NULL;
+    }
+  if (start < 0 || num < 0)
+    {
+      errno = EINVAL;
+      return NULL;
+    }
+
+  q = bson_new_sized (32);
+  bson_append_oid (q, "files_id", gfile->oid);
+  bson_finish (q);
+
+  p = mongo_sync_cmd_query (gfile->gfs->conn, gfile->gfs->ns.chunks, 0,
+			    start, num, q, NULL);
+  cursor = mongo_sync_cursor_new (gfile->gfs->conn,
+				  gfile->gfs->ns.chunks, p);
+  bson_free (q);
+
+  return cursor;
+}

@@ -107,6 +107,17 @@ struct _mongo_sync_gridfs
   gint32 chunk_size; /**< The default chunk size. */
 };
 
+struct _mongo_sync_gridfs_file
+{
+  mongo_sync_gridfs *gfs;
+
+  bson *meta;
+
+  const guint8 *oid;
+  gint32 length;
+  gint32 chunk_size;
+};
+
 /** @internal Construct a kill cursors command, using a va_list.
  *
  * @param id is the sequence id.
