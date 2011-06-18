@@ -12,6 +12,9 @@ This has been corrected, mongo_packet_recv() correctly blocks now.
 Support was added for passive secondaries, they're now automatically
 discovered too.
 
+** New feature: Index handling functions
+Implemented some helper functions to create and delete indexes.
+
 * 0.1.1 - <2011-06-16 Thu>
 
 ** Cursor-based query iterator API
