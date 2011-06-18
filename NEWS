@@ -1,5 +1,20 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.1.2 - <UNRELEASED>
+
+** Bugfix: mongo_packet_recv() waits for all data.
+Previously, mongo_packet_recv() did not wait for all data to arrive,
+and returned whatever already arrived at the time of reading.
+
+This has been corrected, mongo_packet_recv() correctly blocks now.
+
+** Implemented support for passive secondaries.
+Support was added for passive secondaries, they're now automatically
+discovered too.
+
+** New feature: Index handling functions
+Implemented some helper functions to create and delete indexes.
+
 * 0.1.1 - <2011-06-16 Thu>
 
 ** Cursor-based query iterator API
