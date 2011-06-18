@@ -1649,6 +1649,7 @@ _mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
 {
   bson *cmd;
   gchar *db, *ns;
+  mongo_packet *p;
 
   if (!conn)
     {
@@ -1674,7 +1675,8 @@ _mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
   bson_finish (cmd);
 
   db = g_strndup (full_ns, ns - full_ns - 1);
-  if (!mongo_sync_cmd_custom (conn, db, cmd))
+  p = mongo_sync_cmd_custom (conn, db, cmd);
+  if (!p)
     {
       int e = errno;
 
@@ -1683,6 +1685,7 @@ _mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
       errno = e;
       return FALSE;
     }
+  mongo_wire_packet_free (p);
   g_free (db);
   bson_free (cmd);
 
