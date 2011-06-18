@@ -28,6 +28,7 @@ mongo_sync_gridfs_new (mongo_sync_connection *conn,
 		       const gchar *ns_prefix)
 {
   mongo_sync_gridfs *gfs;
+  bson *index;
 
   if (!conn)
     {
@@ -46,6 +47,22 @@ mongo_sync_gridfs_new (mongo_sync_connection *conn,
   gfs->ns.chunks = g_strconcat (gfs->ns.prefix, ".chunks", NULL);
 
   gfs->chunk_size = 256 * 1024;
+
+  index = bson_new_sized (256);
+  bson_append_int32 (index, "files_id", 1);
+  bson_append_int32 (index, "n", 1);
+  bson_finish (index);
+
+  if (!mongo_sync_cmd_index_create (conn, gfs->ns.chunks, index,
+				    MONGO_INDEX_UNIQUE))
+    {
+      bson_free (index);
+      mongo_sync_gridfs_free (gfs, FALSE);
+
+      errno = EPROTO;
+      return NULL;
+    }
+  bson_free (index);
 
   return gfs;
 }
