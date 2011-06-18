@@ -160,11 +160,13 @@ mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
     {
       int e = errno;
 
+      mongo_wire_packet_free (p);
       mongo_sync_gridfs_file_free (f);
       errno = e;
       return NULL;
     }
   bson_finish (f->meta.metadata);
+  mongo_wire_packet_free (p);
 
   c = bson_find (f->meta.metadata, "length");
   bson_cursor_get_int32 (c, &f->meta.length);
@@ -209,6 +211,7 @@ mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
       errno = EPROTO;
       return NULL;
     }
+  bson_cursor_free (c);
 
   return f;
 }
