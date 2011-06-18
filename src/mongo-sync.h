@@ -463,6 +463,28 @@ gboolean mongo_sync_cmd_index_create (mongo_sync_connection *conn,
 				      const bson *key,
 				      gint options);
 
+/** Drop an index.
+ *
+ * @param conn is the connection to work with.
+ * @param ns is the namespace to drop the index from.
+ * @param key is the index pattern to drop.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+gboolean mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
+				    const gchar *ns,
+				    const bson *key);
+
+/** Drop all indexes from a namespace.
+ *
+ * @param conn is the connection to work with.
+ * @param ns is the namespace whose indexes to drop.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+gboolean mongo_sync_cmd_index_drop_all (mongo_sync_connection *conn,
+					const gchar *ns);
+
 /** @} */
 
 G_END_DECLS

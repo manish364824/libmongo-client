@@ -122,7 +122,9 @@ mongo_sync_unit_tests	= \
 		unit/mongo/sync/sync_cmd_user_add \
 		unit/mongo/sync/sync_cmd_user_remove \
 		unit/mongo/sync/sync_cmd_authenticate \
-		unit/mongo/sync/sync_cmd_index_create
+		unit/mongo/sync/sync_cmd_index_create \
+		unit/mongo/sync/sync_cmd_index_drop \
+		unit/mongo/sync/sync_cmd_index_drop_all
 
 mongo_sync_func_tests	= \
 		func/mongo/sync/f_sync_max_insert_size \

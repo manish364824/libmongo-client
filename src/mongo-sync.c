@@ -1641,3 +1641,78 @@ mongo_sync_cmd_index_create (mongo_sync_connection *conn,
 
   return TRUE;
 }
+
+static gboolean
+_mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
+			    const gchar *full_ns,
+			    const gchar *index_name)
+{
+  bson *cmd;
+  gchar *db, *ns;
+
+  if (!conn)
+    {
+      errno = ENOTCONN;
+      return FALSE;
+    }
+  if (!full_ns || !index_name)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+  ns = strchr (full_ns, '.');
+  if (ns == NULL)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+  ns++;
+
+  cmd = bson_new_sized (256 + strlen (index_name));
+  bson_append_string (cmd, "deleteIndexes", ns, -1);
+  bson_append_string (cmd, "index", index_name, -1);
+  bson_finish (cmd);
+
+  db = g_strndup (full_ns, ns - full_ns - 1);
+  if (!mongo_sync_cmd_custom (conn, db, cmd))
+    {
+      int e = errno;
+
+      bson_free (cmd);
+      g_free (db);
+      errno = e;
+      return FALSE;
+    }
+  g_free (db);
+  bson_free (cmd);
+
+  return TRUE;
+}
+
+gboolean
+mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
+			   const gchar *ns,
+			   const bson *key)
+{
+  GString *name;
+  gboolean b;
+
+  if (!key)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  name = _mongo_index_gen_name (key);
+
+  b = _mongo_sync_cmd_index_drop (conn, ns, name->str);
+  g_string_free (name, TRUE);
+  return b;
+}
+
+gboolean
+mongo_sync_cmd_index_drop_all (mongo_sync_connection *conn,
+			       const gchar *ns)
+{
+  return _mongo_sync_cmd_index_drop (conn, ns, "*");
+}
