@@ -1555,8 +1555,50 @@ mongo_sync_cmd_index_create (mongo_sync_connection *conn,
   c = bson_cursor_new (key);
   while (bson_cursor_next (c))
     {
+      gint64 v = 0;
+
       g_string_append (name, bson_cursor_key (c));
       g_string_append_c (name, '_');
+
+      switch (bson_cursor_type (c))
+	{
+	case BSON_TYPE_BOOLEAN:
+	  {
+	    gboolean vb;
+
+	    bson_cursor_get_boolean (c, &vb);
+	    v = vb;
+	    break;
+	  }
+	case BSON_TYPE_INT32:
+	  {
+	    gint32 vi;
+
+	    bson_cursor_get_int32 (c, &vi);
+	    v = vi;
+	    break;
+	  }
+	case BSON_TYPE_INT64:
+	  {
+	    gint64 vl;
+
+	    bson_cursor_get_int64 (c, &vl);
+	    v = vl;
+	    break;
+	  }
+	case BSON_TYPE_DOUBLE:
+	  {
+	    gdouble vd;
+
+	    bson_cursor_get_double (c, &vd);
+	    v = (gint64)vd;
+	    break;
+	  }
+	default:
+	  break;
+	}
+      if (v != 0)
+	g_string_append_printf (name, "%" G_GINT64_FORMAT "_", v);
     }
   bson_cursor_free (c);
 

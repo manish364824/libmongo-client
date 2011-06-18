@@ -13,7 +13,9 @@ test_mongo_sync_cmd_index_create (void)
   c = test_make_fake_sync_conn (-1, FALSE);
   doc = test_bson_generate_full ();
   indexes = bson_build (BSON_TYPE_INT32, "sex", 1,
-			BSON_TYPE_INT32, "double", 1,
+			BSON_TYPE_DOUBLE, "double", 1.0,
+			BSON_TYPE_BOOLEAN, "TRUE", TRUE,
+			BSON_TYPE_INT64, "print", (gint64)-1,
 			BSON_TYPE_NONE);
   bson_finish (indexes);
 
