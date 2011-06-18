@@ -1523,3 +1523,196 @@ mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
   return FALSE;
 }
 #endif
+
+static GString *
+_mongo_index_gen_name (const bson *key)
+{
+  bson_cursor *c;
+  GString *name;
+
+  name = g_string_new ("_");
+  c = bson_cursor_new (key);
+  while (bson_cursor_next (c))
+    {
+      gint64 v = 0;
+
+      g_string_append (name, bson_cursor_key (c));
+      g_string_append_c (name, '_');
+
+      switch (bson_cursor_type (c))
+	{
+	case BSON_TYPE_BOOLEAN:
+	  {
+	    gboolean vb;
+
+	    bson_cursor_get_boolean (c, &vb);
+	    v = vb;
+	    break;
+	  }
+	case BSON_TYPE_INT32:
+	  {
+	    gint32 vi;
+
+	    bson_cursor_get_int32 (c, &vi);
+	    v = vi;
+	    break;
+	  }
+	case BSON_TYPE_INT64:
+	  {
+	    gint64 vl;
+
+	    bson_cursor_get_int64 (c, &vl);
+	    v = vl;
+	    break;
+	  }
+	case BSON_TYPE_DOUBLE:
+	  {
+	    gdouble vd;
+
+	    bson_cursor_get_double (c, &vd);
+	    v = (gint64)vd;
+	    break;
+	  }
+	default:
+	  break;
+	}
+      if (v != 0)
+	g_string_append_printf (name, "%" G_GINT64_FORMAT "_", v);
+    }
+  bson_cursor_free (c);
+
+  return name;
+}
+
+gboolean
+mongo_sync_cmd_index_create (mongo_sync_connection *conn,
+			     const gchar *ns,
+			     const bson *key,
+			     gint options)
+{
+  GString *name;
+  gchar *idxns;
+  bson *cmd;
+
+  if (!conn)
+    {
+      errno = ENOTCONN;
+      return FALSE;
+    }
+  if (!ns || !key)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+  if (strchr (ns, '.') == NULL)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  name = _mongo_index_gen_name (key);
+
+  cmd = bson_new_sized (bson_size (key) + name->len + 128);
+  bson_append_document (cmd, "key", key);
+  bson_append_string (cmd, "ns", ns, -1);
+  bson_append_string (cmd, "name", name->str, name->len);
+  if (options & MONGO_INDEX_UNIQUE)
+    bson_append_boolean (cmd, "unique", TRUE);
+  if (options & MONGO_INDEX_DROP_DUPS)
+    bson_append_boolean (cmd, "dropDups", TRUE);
+  bson_finish (cmd);
+  g_string_free (name, TRUE);
+
+  idxns = g_malloc (strlen (ns) + strlen (".system.indexes"));
+  strncpy (idxns, ns, strchr (ns, '.') - ns);
+  strcpy (idxns + strlen (idxns), ".system.indexes");
+
+  if (!mongo_sync_cmd_insert_n (conn, idxns, 1, (const bson **)&cmd))
+    {
+      int e = errno;
+
+      bson_free (cmd);
+      g_free (idxns);
+      errno = e;
+      return FALSE;
+    }
+  bson_free (cmd);
+  g_free (idxns);
+
+  return TRUE;
+}
+
+static gboolean
+_mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
+			    const gchar *full_ns,
+			    const gchar *index_name)
+{
+  bson *cmd;
+  gchar *db, *ns;
+
+  if (!conn)
+    {
+      errno = ENOTCONN;
+      return FALSE;
+    }
+  if (!full_ns || !index_name)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+  ns = strchr (full_ns, '.');
+  if (ns == NULL)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+  ns++;
+
+  cmd = bson_new_sized (256 + strlen (index_name));
+  bson_append_string (cmd, "deleteIndexes", ns, -1);
+  bson_append_string (cmd, "index", index_name, -1);
+  bson_finish (cmd);
+
+  db = g_strndup (full_ns, ns - full_ns - 1);
+  if (!mongo_sync_cmd_custom (conn, db, cmd))
+    {
+      int e = errno;
+
+      bson_free (cmd);
+      g_free (db);
+      errno = e;
+      return FALSE;
+    }
+  g_free (db);
+  bson_free (cmd);
+
+  return TRUE;
+}
+
+gboolean
+mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
+			   const gchar *ns,
+			   const bson *key)
+{
+  GString *name;
+  gboolean b;
+
+  if (!key)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  name = _mongo_index_gen_name (key);
+
+  b = _mongo_sync_cmd_index_drop (conn, ns, name->str);
+  g_string_free (name, TRUE);
+  return b;
+}
+
+gboolean
+mongo_sync_cmd_index_drop_all (mongo_sync_connection *conn,
+			       const gchar *ns)
+{
+  return _mongo_sync_cmd_index_drop (conn, ns, "*");
+}
