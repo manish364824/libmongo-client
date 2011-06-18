@@ -30,6 +30,8 @@ test_func_sync_gridfs (void)
 
   f = mongo_sync_gridfs_find (gfs, b);
 
+  bson_free (b);
+
   diag ("id = %s; length = %d; chunk_size = %d; date = %lu; md5 = %s; n = %d\n",
 	oid_to_string (mongo_sync_gridfs_file_get_id (f)),
 	mongo_sync_gridfs_file_get_length (f),
@@ -47,7 +49,10 @@ test_func_sync_gridfs (void)
       data = mongo_sync_gridfs_file_cursor_get_chunk (cursor, &size);
 
       diag ("size = %d\n", size);
+
+      g_free (data);
     }
+  mongo_sync_cursor_free (cursor);
 
   mongo_sync_gridfs_free (gfs, TRUE);
   mongo_sync_gridfs_file_free (f);
