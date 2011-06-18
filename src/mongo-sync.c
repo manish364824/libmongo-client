@@ -1524,32 +1524,11 @@ mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
 }
 #endif
 
-gboolean
-mongo_sync_cmd_index_create (mongo_sync_connection *conn,
-			     const gchar *ns,
-			     const bson *key,
-			     gint options)
+static GString *
+_mongo_index_gen_name (const bson *key)
 {
-  GString *name;
-  gchar *idxns;
   bson_cursor *c;
-  bson *cmd;
-
-  if (!conn)
-    {
-      errno = ENOTCONN;
-      return FALSE;
-    }
-  if (!ns || !key)
-    {
-      errno = EINVAL;
-      return FALSE;
-    }
-  if (strchr (ns, '.') == NULL)
-    {
-      errno = EINVAL;
-      return FALSE;
-    }
+  GString *name;
 
   name = g_string_new ("_");
   c = bson_cursor_new (key);
@@ -1601,6 +1580,37 @@ mongo_sync_cmd_index_create (mongo_sync_connection *conn,
 	g_string_append_printf (name, "%" G_GINT64_FORMAT "_", v);
     }
   bson_cursor_free (c);
+
+  return name;
+}
+
+gboolean
+mongo_sync_cmd_index_create (mongo_sync_connection *conn,
+			     const gchar *ns,
+			     const bson *key,
+			     gint options)
+{
+  GString *name;
+  gchar *idxns;
+  bson *cmd;
+
+  if (!conn)
+    {
+      errno = ENOTCONN;
+      return FALSE;
+    }
+  if (!ns || !key)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+  if (strchr (ns, '.') == NULL)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  name = _mongo_index_gen_name (key);
 
   cmd = bson_new_sized (bson_size (key) + name->len + 128);
   bson_append_document (cmd, "key", key);
