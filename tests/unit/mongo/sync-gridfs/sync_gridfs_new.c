@@ -20,6 +20,9 @@ test_mongo_sync_gridfs_new (void)
   ok (mongo_sync_gridfs_new (conn, NULL) == NULL,
       "mongo_sync_gridfs_new() should fail with a NULL ns prefix");
 
+  ok (mongo_sync_gridfs_new (conn, "bogus") == NULL,
+      "mongo_sync_gridfs_new() should fail with a bogus ns prefix");
+
   mongo_sync_disconnect (conn);
 
   begin_network_tests (4);
@@ -42,4 +45,4 @@ test_mongo_sync_gridfs_new (void)
   end_network_tests ();
 }
 
-RUN_TEST (7, mongo_sync_gridfs_new);
+RUN_TEST (8, mongo_sync_gridfs_new);
