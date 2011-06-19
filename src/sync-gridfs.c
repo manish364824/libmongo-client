@@ -29,22 +29,32 @@ mongo_sync_gridfs_new (mongo_sync_connection *conn,
 {
   mongo_sync_gridfs *gfs;
   bson *index;
+  gchar *db;
 
   if (!conn)
     {
       errno = ENOTCONN;
       return NULL;
     }
+  if (!ns_prefix)
+    {
+      errno = EINVAL;
+      return NULL;
+    }
+  db = strchr (ns_prefix, '.');
+  if (!db)
+    {
+      errno = EINVAL;
+      return NULL;
+    }
 
   gfs = g_new (mongo_sync_gridfs, 1);
   gfs->conn = conn;
-  if (ns_prefix)
-    gfs->ns.prefix = g_strdup (ns_prefix);
-  else
-    gfs->ns.prefix = g_strdup ("fs");
 
+  gfs->ns.prefix = g_strdup (ns_prefix);
   gfs->ns.files = g_strconcat (gfs->ns.prefix, ".files", NULL);
   gfs->ns.chunks = g_strconcat (gfs->ns.prefix, ".chunks", NULL);
+  gfs->ns.db = g_strndup (ns_prefix, db - ns_prefix);
 
   gfs->chunk_size = 256 * 1024;
 
@@ -79,6 +89,7 @@ mongo_sync_gridfs_free (mongo_sync_gridfs *gfs, gboolean disconnect)
   g_free (gfs->ns.prefix);
   g_free (gfs->ns.files);
   g_free (gfs->ns.chunks);
+  g_free (gfs->ns.db);
 
   if (disconnect)
     mongo_sync_disconnect (gfs->conn);

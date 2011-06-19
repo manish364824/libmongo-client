@@ -102,6 +102,8 @@ struct _mongo_sync_gridfs
     gchar *prefix; /**< The namespace prefix. */
     gchar *files; /**< The file metadata namespace. */
     gchar *chunks; /**< The chunk namespace. */
+
+    gchar *db; /**< The database part of the namespace. */
   } ns; /**< Namespaces */
 
   gint32 chunk_size; /**< The default chunk size. */
