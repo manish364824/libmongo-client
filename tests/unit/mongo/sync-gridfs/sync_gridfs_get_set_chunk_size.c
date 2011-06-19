@@ -15,7 +15,8 @@ test_mongo_sync_gridfs_get_set_chunk_size (void)
 
   gfs = mongo_sync_gridfs_new (mongo_sync_connect (config.primary_host,
 						   config.primary_port,
-						   FALSE), NULL);
+						   FALSE),
+			       config.gfs_prefix);
 
   ok (mongo_sync_gridfs_set_chunk_size (gfs, -1) == FALSE,
       "mongo_sync_gridfs_set_chunk_size() fails if the size is invalid");
