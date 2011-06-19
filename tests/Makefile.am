@@ -154,7 +154,13 @@ mongo_sync_pool_func_tests	= \
 mongo_sync_gridfs_unit_tests	= \
 		unit/mongo/sync-gridfs/sync_gridfs_new \
 		unit/mongo/sync-gridfs/sync_gridfs_free \
-		unit/mongo/sync-gridfs/sync_gridfs_get_set_chunk_size
+		unit/mongo/sync-gridfs/sync_gridfs_get_set_chunk_size \
+		unit/mongo/sync-gridfs/sync_gridfs_find \
+		unit/mongo/sync-gridfs/sync_gridfs_file_new_from_buffer \
+		unit/mongo/sync-gridfs/sync_gridfs_file_free \
+		unit/mongo/sync-gridfs/sync_gridfs_file_get_metadata \
+		unit/mongo/sync-gridfs/sync_gridfs_file_cursor_new \
+		unit/mongo/sync-gridfs/sync_gridfs_file_cursor_get_chunk
 
 mongo_sync_gridfs_func_tests	= \
 		func/mongo/sync-gridfs/f_sync_gridfs
@@ -168,7 +174,8 @@ FUNC_TESTS	= ${bson_func_tests} ${mongo_sync_func_tests} \
 		${mongo_sync_cursor_func_tests} ${mongo_sync_pool_func_tests} \
 		${mongo_sync_gridfs_func_tests}
 PERF_TESTS	= ${bson_perf_tests}
-TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}
+#TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}
+TESTCASES	= ${mongo_sync_gridfs_unit_tests} ${mongo_sync_gridfs_func_tests}
 
 check_PROGRAMS	= ${TESTCASES}
 noinst_PROGRAMS= test_cleanup
