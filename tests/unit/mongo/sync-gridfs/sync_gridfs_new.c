@@ -14,6 +14,15 @@ test_mongo_sync_gridfs_new (void)
   ok (mongo_sync_gridfs_new (NULL, "test.fs") == NULL,
       "mongo_sync_gridfs_new() should fail with a NULL connection");
 
+  ok (mongo_sync_gridfs_new (conn, "test.fs") == NULL,
+      "mongo_sync_gridfs_new() should fail with a bogus connection");
+
+  mongo_sync_disconnect (conn);
+
+  begin_network_tests (8);
+
+  conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
+
   gfs = mongo_sync_gridfs_new (conn, "test.fs");
   ok (gfs != NULL,
       "mongo_sync_gridfs_new() works");
@@ -37,6 +46,8 @@ test_mongo_sync_gridfs_new (void)
   mongo_sync_gridfs_free (gfs, FALSE);
 
   mongo_sync_disconnect (conn);
+
+  end_network_tests ();
 }
 
-RUN_TEST (9, mongo_sync_gridfs_new);
+RUN_TEST (10, mongo_sync_gridfs_new);
