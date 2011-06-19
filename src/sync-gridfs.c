@@ -392,8 +392,9 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
   bson_cursor *c;
   const gchar *md5_str = NULL;
   guint8 *oid;
-  gint64 pos = 0, chunk_n = 0;
+  gint64 pos = 0, chunk_n = 0, upload_date;
   mongo_packet *p;
+  GTimeVal tv;
 
   if (!gfs)
     {
@@ -472,9 +473,12 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
   c = bson_find (md5, "md5");
   bson_cursor_get_string (c, &md5_str);
 
+  g_get_current_time (&tv);
+  upload_date =  (((gint64) tv.tv_sec) * 1000) + (gint64)(tv.tv_usec / 1000);
+
   bson_append_int64 (meta, "length", size);
   bson_append_int32 (meta, "chunkSize", gfs->chunk_size);
-  bson_append_utc_datetime (meta, "uploadDate", 0);
+  bson_append_utc_datetime (meta, "uploadDate", upload_date);
   bson_append_string (meta, "md5", md5_str, -1);
   bson_append_oid (meta, "_id", oid);
   bson_finish (meta);
