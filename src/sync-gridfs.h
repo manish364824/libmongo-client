@@ -123,7 +123,7 @@ mongo_sync_gridfs_file *mongo_sync_gridfs_find (mongo_sync_gridfs *gfs,
 mongo_sync_gridfs_file *mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
 								const bson *metadata,
 								const guint8 *data,
-								gint32 size);
+								gint64 size);
 
 /** Free a GridFS File object.
  *
@@ -157,7 +157,7 @@ const guint8 *mongo_sync_gridfs_file_get_id (mongo_sync_gridfs_file *gfile);
  *
  * @returns The length of the file, or -1 on error.
  */
-gint32 mongo_sync_gridfs_file_get_length (mongo_sync_gridfs_file *gfile);
+gint64 mongo_sync_gridfs_file_get_length (mongo_sync_gridfs_file *gfile);
 
 /** Get the chunk size of a GridFS file.
  *
@@ -202,7 +202,7 @@ const bson *mongo_sync_gridfs_file_get_metadata (mongo_sync_gridfs_file *gfile);
  *
  * @returns The number of chunks in the GridFS file, or -1 on error.
  */
-gint32 mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile);
+gint64 mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile);
 
 /* Data access */
 

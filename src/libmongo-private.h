@@ -122,8 +122,8 @@ struct _mongo_sync_gridfs_file
 		       keys. */
 
     const guint8 *oid; /**< The ObjectID of the file. */
-    gint32 length; /**< Total length of the file. */
     gint32 chunk_size; /**< Maximum chunk size. */
+    gint64 length; /**< Total length of the file. */
     gint64 date; /**< The upload date. */
     const gchar *md5; /**< MD5 sum of the file. */
   } meta;

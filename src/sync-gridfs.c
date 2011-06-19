@@ -133,7 +133,7 @@ mongo_sync_gridfs_file_free (mongo_sync_gridfs_file *gfile)
 {
   if (!gfile)
     {
-      errno = EINVAL;
+      errno = ENOTCONN;
       return;
     }
   bson_free (gfile->meta.metadata);
@@ -180,8 +180,16 @@ mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
   mongo_wire_packet_free (p);
 
   c = bson_find (f->meta.metadata, "length");
-  bson_cursor_get_int32 (c, &f->meta.length);
+  bson_cursor_get_int64 (c, &f->meta.length);
   bson_cursor_free (c);
+  if (f->meta.length == 0)
+    {
+      gint32 i = 0;
+
+      c = bson_find (f->meta.metadata, "length");
+      bson_cursor_get_int32 (c, &i);
+      f->meta.length = i;
+    }
 
   c = bson_find (f->meta.metadata, "chunkSize");
   bson_cursor_get_int32 (c, &f->meta.chunk_size);
@@ -302,7 +310,7 @@ mongo_sync_gridfs_file_get_id (mongo_sync_gridfs_file *gfile)
   return gfile->meta.oid;
 }
 
-gint32
+gint64
 mongo_sync_gridfs_file_get_length (mongo_sync_gridfs_file *gfile)
 {
   if (!gfile)
@@ -357,7 +365,7 @@ mongo_sync_gridfs_file_get_metadata (mongo_sync_gridfs_file *gfile)
   return gfile->meta.metadata;
 }
 
-gint32
+gint64
 mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile)
 {
   double chunk_count;
@@ -369,15 +377,15 @@ mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile)
     }
 
   chunk_count = (double)gfile->meta.length / (double)gfile->meta.chunk_size;
-  return (chunk_count - (gint32)chunk_count > 0) ?
-    (gint32)(chunk_count + 1) : (gint32)(chunk_count);
+  return (chunk_count - (gint64)chunk_count > 0) ?
+    (gint64)(chunk_count + 1) : (gint64)(chunk_count);
 }
 
 mongo_sync_gridfs_file *
 mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
 					const bson *metadata,
 					const guint8 *data,
-					gint32 size)
+					gint64 size)
 {
   mongo_sync_gridfs_file *gfile;
   bson *meta, *cmd, *md5;
@@ -412,7 +420,7 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
 
       chunk = bson_new_sized (gfs->chunk_size + 128);
       bson_append_oid (chunk, "files_id", oid);
-      bson_append_int32 (chunk, "n", (gint32) chunk_n);
+      bson_append_int64 (chunk, "n", (gint64)chunk_n);
       bson_append_binary (chunk, "data", BSON_BINARY_SUBTYPE_GENERIC,
 			  data + pos, csize);
       bson_finish (chunk);
@@ -464,7 +472,7 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
   c = bson_find (md5, "md5");
   bson_cursor_get_string (c, &md5_str);
 
-  bson_append_int32 (meta, "length", size);
+  bson_append_int64 (meta, "length", size);
   bson_append_int32 (meta, "chunkSize", gfs->chunk_size);
   bson_append_utc_datetime (meta, "uploadDate", 0);
   bson_append_string (meta, "md5", md5_str, -1);
