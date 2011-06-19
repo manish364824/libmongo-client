@@ -20,6 +20,8 @@ typedef struct
   gchar *db;
   gchar *coll;
   gchar *ns;
+
+  gchar *gfs_prefix;
 } func_config_t;
 
 extern func_config_t config;

@@ -23,9 +23,10 @@ test_func_sync_gridfs_get (void)
   mongo_sync_gridfs_file *f;
   mongo_sync_cursor *cursor;
   bson *b;
+  gint64 n = 0;
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, TRUE);
-  gfs = mongo_sync_gridfs_new (conn, "test.fs");
+  gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
   b = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test", -1,
 		  BSON_TYPE_NONE);
   bson_finish (b);
@@ -50,7 +51,7 @@ test_func_sync_gridfs_get (void)
 
       data = mongo_sync_gridfs_file_cursor_get_chunk (cursor, &size);
 
-      diag ("size = %d\n", size);
+      diag ("n = %d; size = %d\n", n++, size);
 
       g_free (data);
     }
@@ -70,7 +71,7 @@ test_func_sync_gridfs_put (void)
   guint8 *data;
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
-  gfs = mongo_sync_gridfs_new (conn, "test.fs");
+  gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
   meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test", -1,
 		     BSON_TYPE_NONE);
   bson_finish (meta);
