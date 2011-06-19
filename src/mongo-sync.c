@@ -1591,7 +1591,7 @@ mongo_sync_cmd_index_create (mongo_sync_connection *conn,
 			     gint options)
 {
   GString *name;
-  gchar *idxns;
+  gchar *idxns, *t;
   bson *cmd;
 
   if (!conn)
@@ -1623,9 +1623,10 @@ mongo_sync_cmd_index_create (mongo_sync_connection *conn,
   bson_finish (cmd);
   g_string_free (name, TRUE);
 
-  idxns = g_malloc (strlen (ns) + strlen (".system.indexes"));
-  strncpy (idxns, ns, strchr (ns, '.') - ns);
-  strcpy (idxns + strlen (idxns), ".system.indexes");
+  t = g_strdup (ns);
+  *(strchr (t, '.')) = '\0';
+  idxns = g_strconcat (t, ".system.indexes", NULL);
+  g_free (t);
 
   if (!mongo_sync_cmd_insert_n (conn, idxns, 1, (const bson **)&cmd))
     {
@@ -1649,6 +1650,7 @@ _mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
 {
   bson *cmd;
   gchar *db, *ns;
+  mongo_packet *p;
 
   if (!conn)
     {
@@ -1674,7 +1676,8 @@ _mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
   bson_finish (cmd);
 
   db = g_strndup (full_ns, ns - full_ns - 1);
-  if (!mongo_sync_cmd_custom (conn, db, cmd))
+  p = mongo_sync_cmd_custom (conn, db, cmd);
+  if (!p)
     {
       int e = errno;
 
@@ -1683,6 +1686,7 @@ _mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
       errno = e;
       return FALSE;
     }
+  mongo_wire_packet_free (p);
   g_free (db);
   bson_free (cmd);
 
