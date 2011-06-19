@@ -109,19 +109,23 @@ struct _mongo_sync_gridfs
   gint32 chunk_size; /**< The default chunk size. */
 };
 
+/** @internal GridFS file object. */
 struct _mongo_sync_gridfs_file
 {
-  mongo_sync_gridfs *gfs;
+  mongo_sync_gridfs *gfs; /**< The GridFS the file is on. */
 
+  /** The file metadata.
+   */
   struct
   {
-    bson *metadata;
+    bson *metadata; /**< Full file metadata, including user-set
+		       keys. */
 
-    const guint8 *oid;
-    gint32 length;
-    gint32 chunk_size;
-    gint64 date;
-    const gchar *md5;
+    const guint8 *oid; /**< The ObjectID of the file. */
+    gint32 length; /**< Total length of the file. */
+    gint32 chunk_size; /**< Maximum chunk size. */
+    gint64 date; /**< The upload date. */
+    const gchar *md5; /**< MD5 sum of the file. */
   } meta;
 };
 

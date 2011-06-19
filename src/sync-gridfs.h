@@ -87,8 +87,49 @@ gboolean mongo_sync_gridfs_set_chunk_size (mongo_sync_gridfs *gfs,
  * @{
  */
 
+/** Find a file on GridFS.
+ *
+ * Finds a file on GridFS, based on a custom query.
+ *
+ * @param gfs is the GridFS to find the file in.
+ * @param query is the custom query based on which the file shall be
+ * sought.
+ *
+ * @returns A newly allocated file object, or NULL on error. It is the
+ * responsibility of the caller to free the returned object once it is
+ * no longer needed.
+ */
 mongo_sync_gridfs_file *mongo_sync_gridfs_find (mongo_sync_gridfs *gfs,
 						const bson *query);
+
+/** Upload a file to GridFS from a buffer.
+ *
+ * Create a new file on GridFS from a buffer, using custom meta-data.
+ *
+ * @param gfs is the GridFS to create the file on.
+ * @param metadata is the (optional) file metadata.
+ * @param data is the data to store on GridFS.
+ * @param size is the size of the data.
+ *
+ * @returns A newly allocated file object, or NULL on error. It is the
+ * responsibility of the caller to free the returned object once it is
+ * no longer needed.
+ *
+ * @note The metadata MUST NOT contain any of the required GridFS
+ * metadata fields (_id, length, chunkSize, uploadDate, md5),
+ * otherwise a conflict will occurr, against which the function does
+ * not guard by design.
+ */
+mongo_sync_gridfs_file *mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
+								const bson *metadata,
+								const guint8 *data,
+								gint32 size);
+
+/** Free a GridFS File object.
+ *
+ * @param gfile is the file object to free.
+ */
+void mongo_sync_gridfs_file_free (mongo_sync_gridfs_file *gfile);
 
 /** @} */
 
@@ -98,28 +139,106 @@ mongo_sync_gridfs_file *mongo_sync_gridfs_find (mongo_sync_gridfs *gfs,
  * @{
 */
 
-void mongo_sync_gridfs_file_free (mongo_sync_gridfs_file *gfile);
-
 /* Metadata */
+
+/** Get the file ID of a GridFS file.
+ *
+ * @param gfile is the GridFS file to work with.
+ *
+ * @returns The ObjectID of the file, or NULL on error. The returned
+ * pointer points to an internal area, and should not be modified or
+ * freed, and is only valid as long as the file object is valid.
+ */
 const guint8 *mongo_sync_gridfs_file_get_id (mongo_sync_gridfs_file *gfile);
+
+/** Get the length of a GridFS file.
+ *
+ * @param gfile is the GridFS file to work with.
+ *
+ * @returns The length of the file, or -1 on error.
+ */
 gint32 mongo_sync_gridfs_file_get_length (mongo_sync_gridfs_file *gfile);
+
+/** Get the chunk size of a GridFS file.
+ *
+ * @param gfile is the GridFS file to work with.
+ *
+ * @returns The maximum size of the chunks of the file, or -1 on error.
+ */
 gint32 mongo_sync_gridfs_file_get_chunk_size (mongo_sync_gridfs_file *gfile);
+
+/** Get the MD5 digest of a GridFS file.
+ *
+ * @param gfile is the GridFS file to work with.
+ *
+ * @returns The MD5 digest of the file, or NULL on error. The returned
+ * pointer points to an internal area, and should not be modified or
+ * freed, and is only valid as long as the file object is valid.
+ */
 const gchar *mongo_sync_gridfs_file_get_md5 (mongo_sync_gridfs_file *gfile);
+
+/** Get the upload date of a GridFS file.
+ *
+ * @param gfile is the GridFS file to work with.
+ *
+ * @returns The upload date of the file, or -1 on error.
+ */
 gint64 mongo_sync_gridfs_file_get_date (mongo_sync_gridfs_file *gfile);
+
+/** Get the full metadata of a GridFS file
+ *
+ * @param gfile is the GridFS file to work with.
+ *
+ * @returns A BSON object containing the full metadata, or NULL on
+ * error. The returned pointer points to an internal area, and should
+ * not be modified or freed, and is only valid as long as the file
+ * object is valid.
+ */
 const bson *mongo_sync_gridfs_file_get_metadata (mongo_sync_gridfs_file *gfile);
 
+/** Get the number of chunks in a GridFS file.
+ *
+ * @param gfile is the GridFS file to work with.
+ *
+ * @returns The number of chunks in the GridFS file, or -1 on error.
+ */
 gint32 mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile);
 
 /* Data access */
+
+/** Create a cursor for a GridFS file.
+ *
+ * The cursor can be used (via
+ * mongo_sync_gridfs_file_cursor_get_chunk()) to retrieve a GridFS
+ * file chunk by chunk.
+ *
+ * @param gfile is the GridFS file to work with.
+ * @param start is the starting chunk.
+ * @param num is the total number of chunks to make a cursor for.
+ *
+ * @returns A newly allocated cursor object, or NULL on error. It is
+ * the responsibility of the caller to free the cursor once it is no
+ * longer needed.
+ */
 mongo_sync_cursor *mongo_sync_gridfs_file_cursor_new (mongo_sync_gridfs_file *gfile,
 						      gint start, gint num);
+
+/** Get the data of a GridFS file chunk, via a cursor.
+ *
+ * Once we have a cursor, it can be iterated over with
+ * mongo_sync_cursor_next(), and its data can be conveniently accessed
+ * with this function.
+ *
+ * @param cursor is the cursor object to work with.
+ * @param size is a pointer to a variable where the chunk's actual
+ * size can be stored.
+ *
+ * @returns A pointer to newly allocated memory that holds the current
+ * chunk's data, or NULL on error. It is the responsibility of the
+ * caller to free this once it is no longer needed.
+ */
 guint8 *mongo_sync_gridfs_file_cursor_get_chunk (mongo_sync_cursor *cursor,
 						 gint32 *size);
-
-mongo_sync_gridfs_file *mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
-								const bson *metadata,
-								const guint8 *data,
-								gint32 size);
 
 /** @} */
 
