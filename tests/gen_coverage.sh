@@ -27,5 +27,6 @@ done
 
 rm -f coverage.src
 
-c=`(echo "scale=2"; echo -n "("; echo -n $(grep "Lines executed" coverage | cut -d: -f2 | cut -d "%" -f 1) | sed -e "s, , + ,g"; echo ") / " $(grep -c "Lines executed" coverage)) | bc -q`; \
-echo "Overall coverage: $c%" >>coverage
+coverage=`(echo "scale=2"; echo -n "("; echo -n $(grep "Lines executed" coverage | cut -d: -f2 | cut -d "%" -f 1) | sed -e "s, , + ,g"; echo ") / " $(grep -c "Lines executed" coverage)) | bc -q`
+lines=`(echo -n "("; echo -n $(grep "Lines executed" coverage | cut -d% -f2- | cut -d " " -f3-) | sed -e "s, , + ,g"; echo ")") | bc -q`
+echo "Overall coverage: $coverage% of $lines source lines" >>coverage
