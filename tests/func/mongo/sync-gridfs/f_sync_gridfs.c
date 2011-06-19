@@ -1,6 +1,8 @@
 #include "test.h"
 #include "mongo.h"
 
+#define FILE_SIZE 1024 * 1024 + 12345
+
 gchar *
 oid_to_string (const guint8* oid)
 {
@@ -14,7 +16,7 @@ oid_to_string (const guint8* oid)
 }
 
 void
-test_func_sync_gridfs (void)
+test_func_sync_gridfs_get (void)
 {
   mongo_sync_connection *conn;
   mongo_sync_gridfs *gfs;
@@ -24,7 +26,7 @@ test_func_sync_gridfs (void)
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, TRUE);
   gfs = mongo_sync_gridfs_new (conn, "test.fs");
-  b = bson_build (BSON_TYPE_STRING, "filename", "/bin/bash", -1,
+  b = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test", -1,
 		  BSON_TYPE_NONE);
   bson_finish (b);
 
@@ -56,6 +58,41 @@ test_func_sync_gridfs (void)
 
   mongo_sync_gridfs_free (gfs, TRUE);
   mongo_sync_gridfs_file_free (f);
+}
+
+void
+test_func_sync_gridfs_put (void)
+{
+  mongo_sync_connection *conn;
+  mongo_sync_gridfs *gfs;
+  mongo_sync_gridfs_file *gfile;
+  bson *meta;
+  guint8 *data;
+
+  conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
+  gfs = mongo_sync_gridfs_new (conn, "test.fs");
+  meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  data = g_malloc (FILE_SIZE);
+  memset (data, 'x', FILE_SIZE);
+
+  gfile = mongo_sync_gridfs_file_new_from_buffer (gfs, meta, data, FILE_SIZE);
+
+  g_free (data);
+  bson_free (meta);
+  mongo_sync_gridfs_free (gfs, TRUE);
+  mongo_sync_gridfs_file_free (gfile);
+}
+
+void
+test_func_sync_gridfs (void)
+{
+  mongo_util_oid_init (0);
+
+  test_func_sync_gridfs_put ();
+  test_func_sync_gridfs_get ();
 }
 
 RUN_NET_TEST (0, func_sync_gridfs);

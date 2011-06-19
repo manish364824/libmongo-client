@@ -372,3 +372,138 @@ mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile)
   return (chunk_count - (gint32)chunk_count > 0) ?
     (gint32)(chunk_count + 1) : (gint32)(chunk_count);
 }
+
+mongo_sync_gridfs_file *
+mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
+					const bson *metadata,
+					const guint8 *data,
+					gint32 size)
+{
+  mongo_sync_gridfs_file *gfile;
+  bson *meta, *cmd, *md5;
+  bson_cursor *c;
+  const gchar *md5_str = NULL;
+  guint8 *oid;
+  gint64 pos = 0, chunk_n = 0;
+  mongo_packet *p;
+
+  if (!gfs)
+    {
+      errno = ENOTCONN;
+      return NULL;
+    }
+  if (!data || size <= 0)
+    {
+      errno = EINVAL;
+      return NULL;
+    }
+
+  oid = mongo_util_oid_new
+    (mongo_connection_get_requestid ((mongo_connection *)gfs->conn));
+
+  /* Insert chunks first */
+  while (pos < size)
+    {
+      bson *chunk;
+      gint32 csize = gfs->chunk_size;
+
+      if (size - pos < csize)
+	csize = size - pos;
+
+      chunk = bson_new_sized (gfs->chunk_size + 128);
+      bson_append_oid (chunk, "files_id", oid);
+      bson_append_int32 (chunk, "n", (gint32) chunk_n);
+      bson_append_binary (chunk, "data", BSON_BINARY_SUBTYPE_GENERIC,
+			  data + pos, csize);
+      bson_finish (chunk);
+
+      if (!mongo_sync_cmd_insert (gfs->conn, gfs->ns.chunks, chunk, NULL))
+	{
+	  int e = errno;
+
+	  bson_free (chunk);
+	  g_free (oid);
+	  errno = e;
+	  return NULL;
+	}
+      bson_free (chunk);
+
+      pos += csize;
+      chunk_n++;
+    }
+
+  /* Calculate filemd5 */
+  cmd = bson_new_sized (128);
+  bson_append_oid (cmd, "filemd5", oid);
+  bson_append_string (cmd, "root", strchr (gfs->ns.prefix, '.') + 1, -1);
+  bson_finish (cmd);
+
+  p = mongo_sync_cmd_custom (gfs->conn, gfs->ns.db, cmd);
+  if (!p)
+    {
+      int e = errno;
+
+      bson_free (cmd);
+      g_free (oid);
+
+      errno = e;
+      return NULL;
+    }
+  bson_free (cmd);
+  mongo_wire_reply_packet_get_nth_document (p, 1, &md5);
+  bson_finish (md5);
+  mongo_wire_packet_free (p);
+
+  /* Insert metadata */
+  if (metadata)
+    meta = bson_new_from_data (bson_data (metadata),
+			       bson_size (metadata) - 1);
+  else
+    meta = bson_new_sized (128);
+
+  c = bson_find (md5, "md5");
+  bson_cursor_get_string (c, &md5_str);
+
+  bson_append_int32 (meta, "length", size);
+  bson_append_int32 (meta, "chunkSize", gfs->chunk_size);
+  bson_append_utc_datetime (meta, "uploadDate", 0);
+  bson_append_string (meta, "md5", md5_str, -1);
+  bson_append_oid (meta, "_id", oid);
+  bson_finish (meta);
+
+  bson_cursor_free (c);
+  bson_free (md5);
+
+  if (!mongo_sync_cmd_insert (gfs->conn, gfs->ns.files, meta, NULL))
+    {
+      int e = errno;
+
+      bson_free (meta);
+      g_free (oid);
+      errno = e;
+      return NULL;
+    }
+
+  /* Return the resulting gfile.
+   * No need to check cursor errors here, as we constructed the BSON
+   * just above, and all the fields exist and have the appropriate
+   * types.
+   */
+  gfile = g_new0 (mongo_sync_gridfs_file, 1);
+  gfile->gfs = gfs;
+
+  gfile->meta.metadata = meta;
+  gfile->meta.length = size;
+  gfile->meta.chunk_size = gfs->chunk_size;
+  gfile->meta.date = 0;
+
+  c = bson_find (meta, "_id");
+  bson_cursor_get_oid (c, &gfile->meta.oid);
+  bson_cursor_free (c);
+
+  c = bson_find (meta, "md5");
+  bson_cursor_get_string (c, &gfile->meta.md5);
+  bson_cursor_free (c);
+
+  return gfile;
+}

@@ -116,6 +116,11 @@ mongo_sync_cursor *mongo_sync_gridfs_file_cursor_new (mongo_sync_gridfs_file *gf
 guint8 *mongo_sync_gridfs_file_cursor_get_chunk (mongo_sync_cursor *cursor,
 						 gint32 *size);
 
+mongo_sync_gridfs_file *mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
+								const bson *metadata,
+								const guint8 *data,
+								gint32 size);
+
 /** @} */
 
 G_END_DECLS
