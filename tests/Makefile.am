@@ -174,8 +174,7 @@ FUNC_TESTS	= ${bson_func_tests} ${mongo_sync_func_tests} \
 		${mongo_sync_cursor_func_tests} ${mongo_sync_pool_func_tests} \
 		${mongo_sync_gridfs_func_tests}
 PERF_TESTS	= ${bson_perf_tests}
-#TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}
-TESTCASES	= ${mongo_sync_gridfs_unit_tests} ${mongo_sync_gridfs_func_tests}
+TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}
 
 check_PROGRAMS	= ${TESTCASES}
 noinst_PROGRAMS= test_cleanup
