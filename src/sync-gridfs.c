@@ -236,6 +236,41 @@ mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
 }
 
 mongo_sync_cursor *
+mongo_sync_gridfs_list (mongo_sync_gridfs *gfs,
+			const bson *query)
+{
+  mongo_sync_cursor *cursor;
+  bson *q = NULL;
+
+  if (!gfs)
+    {
+      errno = ENOTCONN;
+      return NULL;
+    }
+
+  if (!query)
+    {
+      q = bson_new ();
+      bson_finish (q);
+    }
+
+  cursor = mongo_sync_cursor_new
+    (gfs->conn, gfs->ns.files,
+     mongo_sync_cmd_query (gfs->conn, gfs->ns.files, 0, 0, 0,
+			   (q) ? q : query, NULL));
+  if (!cursor)
+    {
+      int e = errno;
+
+      bson_free (q);
+      errno = e;
+      return NULL;
+    }
+  bson_free (q);
+  return cursor;
+}
+
+mongo_sync_cursor *
 mongo_sync_gridfs_file_cursor_new (mongo_sync_gridfs_file *gfile,
 				   gint start, gint num)
 {

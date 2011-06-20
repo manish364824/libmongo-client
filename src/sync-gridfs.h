@@ -102,6 +102,22 @@ gboolean mongo_sync_gridfs_set_chunk_size (mongo_sync_gridfs *gfs,
 mongo_sync_gridfs_file *mongo_sync_gridfs_find (mongo_sync_gridfs *gfs,
 						const bson *query);
 
+/** List GridFS files matching a query.
+ *
+ * Finds all files on a GridFS, based on a custom query.
+ *
+ * @param gfs is the GridFS to list files from.
+ * @param query is the custom query based on which files shall be
+ * sought. Passing a NULL query will find all files, without
+ * restriction.
+ *
+ * @returns A newly allocated cursor object, or NULL on error. It is
+ * the responsibility of the caller to free the returned cursor once
+ * it is no longer needed.
+ */
+mongo_sync_cursor *mongo_sync_gridfs_list (mongo_sync_gridfs *gfs,
+					   const bson *query);
+
 /** Upload a file to GridFS from a buffer.
  *
  * Create a new file on GridFS from a buffer, using custom meta-data.

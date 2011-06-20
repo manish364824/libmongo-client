@@ -246,18 +246,14 @@ mongo_gridfs_list (config_t *config)
 {
   mongo_sync_connection *conn;
   mongo_sync_cursor *cursor;
-  bson *query;
-  gchar *ns;
+  mongo_sync_gridfs *gfs;
 
   conn = mongo_gridfs_connect (config);
-  ns = g_strconcat (config->ns, ".files", NULL);
+  gfs = mongo_sync_gridfs_new (conn, config->ns);
+  if (!gfs)
+    mongo_gridfs_error (conn, config, errno);
 
-  query = bson_new ();
-  bson_finish (query);
-  cursor = mongo_sync_cursor_new (conn, ns,
-				  mongo_sync_cmd_query (conn, ns, 0,
-							0, 0, query, NULL));
-  bson_free (query);
+  cursor = mongo_sync_gridfs_list (gfs, NULL);
 
   while (mongo_sync_cursor_next (cursor))
     {
@@ -334,8 +330,7 @@ mongo_gridfs_list (config_t *config)
 	}
     }
 
-  g_free (ns);
-  mongo_sync_disconnect (conn);
+  mongo_sync_gridfs_free (gfs, TRUE);
 }
 
 int

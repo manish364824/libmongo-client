@@ -128,12 +128,75 @@ test_func_sync_gridfs_get (void)
 }
 
 void
+test_func_sync_gridfs_list (void)
+{
+  mongo_sync_gridfs *gfs;
+  bson *query, *data;
+  mongo_sync_cursor *cursor;
+  bson_cursor *c;
+  const gchar *str;
+  gboolean found_named = FALSE, found_noname = FALSE;
+  const guint8 *oid;
+
+  gfs = mongo_sync_gridfs_new
+    (mongo_sync_connect (config.primary_host, config.primary_port, TRUE),
+     config.gfs_prefix);
+
+  /* Test list with a query */
+  query = bson_build (BSON_TYPE_OID, "_id", named_oid,
+		      BSON_TYPE_NONE);
+  bson_finish (query);
+
+  cursor = mongo_sync_gridfs_list (gfs, query);
+  ok (cursor != NULL,
+      "mongo_sync_gridfs_list() correctly finds files by query");
+
+  mongo_sync_cursor_next (cursor);
+  data = mongo_sync_cursor_get_data (cursor);
+  c = bson_find (data, "filename");
+  bson_cursor_get_string (c, &str);
+  bson_cursor_free (c);
+
+  is (str, "libmongo-test",
+      "The listed file is named correctly");
+  bson_free (data);
+  mongo_sync_cursor_free (cursor);
+
+  bson_free (query);
+
+  /* Test list without a query */
+  cursor = mongo_sync_gridfs_list (gfs, NULL);
+  while (mongo_sync_cursor_next (cursor))
+    {
+      data = mongo_sync_cursor_get_data (cursor);
+
+      c = bson_find (data, "_id");
+      bson_cursor_get_oid (c, (const guint8 **)&oid);
+      bson_cursor_free (c);
+
+      if (memcmp (oid, named_oid, 12) == 0)
+	found_named = TRUE;
+      if (memcmp (oid, noname_oid, 12) == 0)
+	found_noname = TRUE;
+
+      bson_free (data);
+    }
+  mongo_sync_cursor_free (cursor);
+
+  ok (found_named == TRUE && found_noname == TRUE,
+      "mongo_sync_gridfs_list() finds both uploaded files without a query");
+
+  mongo_sync_gridfs_free (gfs, TRUE);
+}
+
+void
 test_func_sync_gridfs (void)
 {
   mongo_util_oid_init (0);
 
   test_func_sync_gridfs_put ();
   test_func_sync_gridfs_get ();
+  test_func_sync_gridfs_list ();
 }
 
-RUN_NET_TEST (12, func_sync_gridfs);
+RUN_NET_TEST (15, func_sync_gridfs);
