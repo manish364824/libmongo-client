@@ -53,49 +53,43 @@ oid_to_string (const guint8* oid)
 }
 
 void
-mongo_gridfs_error (mongo_sync_connection *conn, config_t *config, int e)
+mongo_gridfs_error (int e)
 {
-  gchar *error = NULL;
-
-  if (!conn)
-    {
-      fprintf (stderr, "Error encountered: %s\n", strerror (errno));
-      exit (1);
-    }
-
-  mongo_sync_cmd_get_last_error (conn, config->db, &error);
-  fprintf (stderr, "Error encountered: %s\n", (error) ? error : strerror (e));
-  g_free (error);
+  fprintf (stderr, "Error encountered: %s\n", strerror (e));
   exit (1);
 }
 
-mongo_sync_connection *
+mongo_sync_gridfs *
 mongo_gridfs_connect (config_t *config)
 {
   mongo_sync_connection *conn;
+  mongo_sync_gridfs *gfs;
 
   VLOG ("Connecting to %s:%d/%s.%s...\n", config->host, config->port,
 	config->db, config->coll);
 
   conn = mongo_sync_connect (config->host, config->port, config->slaveok);
   if (!conn)
-    mongo_gridfs_error (conn, config, errno);
+    mongo_gridfs_error (errno);
 
   if (config->master_sync)
     {
       VLOG ("Syncing to master...\n");
       conn = mongo_sync_reconnect (conn, TRUE);
       if (!conn)
-	mongo_gridfs_error (conn, config, errno);
+	mongo_gridfs_error (errno);
     }
 
-  return conn;
+  gfs = mongo_sync_gridfs_new (conn, config->ns);
+  if (!gfs)
+    mongo_gridfs_error (errno);
+
+  return gfs;
 }
 
 void
 mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
 {
-  mongo_sync_connection *conn;
   mongo_sync_gridfs *gfs;
   mongo_sync_gridfs_file *gfile;
   mongo_sync_cursor *cursor;
@@ -114,10 +108,7 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
   gfn = argv[2];
   ofn = argv[3];
 
-  conn = mongo_gridfs_connect (config);
-  gfs = mongo_sync_gridfs_new (conn, config->ns);
-  if (!gfs)
-    mongo_gridfs_error (conn, config, errno);
+  gfs = mongo_gridfs_connect (config);
 
   VLOG ("Trying to find '%s'...\n", gfn);
 
@@ -126,7 +117,7 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
   bson_finish (query);
   gfile = mongo_sync_gridfs_find (gfs, query);
   if (!gfile)
-    mongo_gridfs_error (conn, config, errno);
+    mongo_gridfs_error (errno);
   bson_free (query);
 
   VLOG ("Opening output file '%s'...\n", ofn);
@@ -145,7 +136,7 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
 
   cursor = mongo_sync_gridfs_file_cursor_new (gfile, 0, 0);
   if (!cursor)
-    mongo_gridfs_error (conn, config, errno);
+    mongo_gridfs_error (errno);
 
   while (mongo_sync_cursor_next (cursor))
     {
@@ -156,7 +147,7 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
 
       data = mongo_sync_gridfs_file_cursor_get_chunk (cursor, &size);
       if (!data)
-	mongo_gridfs_error (conn, config, errno);
+	mongo_gridfs_error (errno);
 
       write (fd, data, size);
       g_free (data);
@@ -173,7 +164,6 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
 void
 mongo_gridfs_put (config_t *config, gint argc, gchar *argv[])
 {
-  mongo_sync_connection *conn;
   mongo_sync_gridfs *gfs;
   mongo_sync_gridfs_file *gfile;
   bson *meta;
@@ -194,10 +184,7 @@ mongo_gridfs_put (config_t *config, gint argc, gchar *argv[])
 
   mongo_util_oid_init (0);
 
-  conn = mongo_gridfs_connect (config);
-  gfs = mongo_sync_gridfs_new (conn, config->ns);
-  if (!gfs)
-    mongo_gridfs_error (conn, config, errno);
+  gfs = mongo_gridfs_connect (config);
 
   VLOG ("Opening input file: '%s'...\n", ifn);
   fd = open (ifn, O_RDONLY);
@@ -229,7 +216,7 @@ mongo_gridfs_put (config_t *config, gint argc, gchar *argv[])
 
   gfile = mongo_sync_gridfs_file_new_from_buffer (gfs, meta, data, st.st_size);
   if (!gfile)
-    mongo_gridfs_error (conn, config, errno);
+    mongo_gridfs_error (errno);
   bson_free (meta);
   munmap (data, st.st_size);
 
@@ -244,14 +231,10 @@ mongo_gridfs_put (config_t *config, gint argc, gchar *argv[])
 void
 mongo_gridfs_list (config_t *config)
 {
-  mongo_sync_connection *conn;
   mongo_sync_cursor *cursor;
   mongo_sync_gridfs *gfs;
 
-  conn = mongo_gridfs_connect (config);
-  gfs = mongo_sync_gridfs_new (conn, config->ns);
-  if (!gfs)
-    mongo_gridfs_error (conn, config, errno);
+  gfs = mongo_gridfs_connect (config);
 
   cursor = mongo_sync_gridfs_list (gfs, NULL);
 
@@ -266,14 +249,14 @@ mongo_gridfs_list (config_t *config)
 
       c = bson_find (meta, "_id");
       if (!bson_cursor_get_oid (c, (const guint8 **)&oid))
-	mongo_gridfs_error (conn, config, errno);
+	mongo_gridfs_error (errno);
       bson_cursor_free (c);
 
       c = bson_find (meta, "length");
       if (!bson_cursor_get_int32 (c, &i32))
 	{
 	  if (!bson_cursor_get_int64 (c, &length))
-	    mongo_gridfs_error (conn, config, errno);
+	    mongo_gridfs_error (errno);
 	}
       else
 	length = i32;
@@ -281,17 +264,17 @@ mongo_gridfs_list (config_t *config)
 
       c = bson_find (meta, "chunkSize");
       if (!bson_cursor_get_int32 (c, &chunk_size))
-	mongo_gridfs_error (conn, config, errno);
+	mongo_gridfs_error (errno);
       bson_cursor_free (c);
 
       c = bson_find (meta, "uploadDate");
       if (!bson_cursor_get_utc_datetime (c, &date))
-	mongo_gridfs_error (conn, config, errno);
+	mongo_gridfs_error (errno);
       bson_cursor_free (c);
 
       c = bson_find (meta, "md5");
       if (!bson_cursor_get_string (c, &md5))
-	mongo_gridfs_error (conn, config, errno);
+	mongo_gridfs_error (errno);
       bson_cursor_free (c);
 
       c = bson_find (meta, "filename");
