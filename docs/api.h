@@ -4,7 +4,7 @@
  *
  * @section Structure
  *
- * The library can be split into four major parts:
+ * The library can be split into these major parts:
  *   - bson: The low-level BSON implementation. @see bson_mod
  *   - mongo-wire: Functions to construct packets that can be sent
  *     later. @see mongo_wire
@@ -19,6 +19,8 @@
  *     API. @see mongo_sync_cursor.
  *   - mongo-sync-pool: Simple connection pooling on top of
  *     mongo-sync, @see mongo_sync_pool_api.
+ *   - sync-gridfs: Synchronous GridFS API. @see
+ *     mongo_sync_gridfs_api.
  *
  * The intended way to use the library to work with MongoDB is to
  * first construct the BSON objects, then construct the packets, and
