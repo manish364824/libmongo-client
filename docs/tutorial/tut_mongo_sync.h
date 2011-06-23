@@ -7,4 +7,7 @@
  *
  * Contents:
  *  - @subpage tut_mongo_sync_connect
+ *  - @subpage tut_mongo_sync_insert
+ *  - @subpage tut_mongo_sync_query
+ *  - @subpage tut_mongo_sync_query_complex
  */

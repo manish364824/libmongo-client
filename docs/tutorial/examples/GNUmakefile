@@ -6,7 +6,7 @@
 
 TUTORIAL_PROGRAMS	= tut/bson_build \
 			  tut/bson_traverse \
-			  tut/mongo_sync_connect \
+			  tut/mongo_sync \
 			  tut/hl_client
 
 LMC_CFLAGS		= $(shell pkg-config --cflags libmongo-client)

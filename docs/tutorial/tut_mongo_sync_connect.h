@@ -3,15 +3,12 @@
  * The next step in our journey is to connect to MongoDB: to a single
  * server and to a replicaset alike.
  *
- * @dontinclude tut_mongo_sync_connect.c
- *
- * As usual, we first include the headers we need:
- * @until stdlib.h
- *
- * Then, our first task is to connect to a MongoDB server, listening
+ * Our first task is to connect to a MongoDB server, listening
  * on localhost's 27017 port. And we don't care whether it is a master
  * or a secondary, so we set the slave_ok argument to TRUE:
  *
+ * @dontinclude tut_mongo_sync.c
+ * @skip void
  * @until mongo_sync_disconnect
  * @until }
  *
@@ -47,10 +44,6 @@
  * @until }
  * @until }
  *
- * And that's about it! We wrap up our function...
- * @until }
- *
- * And just proceed to call both in the main() function of our example
- * program:
+ * And that's about it! We wrap up our function, and we're done!
  * @until }
  */
