@@ -27,24 +27,24 @@ tut_sync_connect_replica (void)
   if (!conn)
     {
       perror ("mongo_sync_connect()");
-      exit (1);
+      return;
     }
 
   if (!mongo_sync_conn_set_auto_reconnect (conn, TRUE))
     {
       perror ("mongo_sync_conn_set_auto_reconnect()");
-      exit (1);
+      return;
     }
 
   if (!mongo_sync_conn_seed_add (conn, "mongo-replica", 27017))
     {
       perror ("mongo_sync_conn_seed_add()");
-      exit (1);
+      return;
     }
   if (!mongo_sync_conn_seed_add (conn, "mongo-replica-2", 27017))
     {
       perror ("mongo_sync_conn_seed_add()");
-      exit (1);
+      return;
     }
 
   mongo_sync_disconnect (conn);
