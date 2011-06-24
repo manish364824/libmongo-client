@@ -1,36 +1,27 @@
-This work was packaged for Debian by:
+Format: http://anonscm.debian.org/viewvc/dep/web/deps/dep5.mdwn?revision=174&view=co&pathrev=174
+Upstream-Name: libmongo-client
+Upstream-Contact: Gergely Nagy <algernon@balabit.hu>
+Source: git://git.madhouse-project.org/projects/libmongo-client.git
+Copyright: Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
+License: Apache-2.0
 
-    Gergely Nagy <algernon@madhouse-project.org> on Sun, 08 May 2011 21:07:52 +0200
+Files: *
+Copyright: Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
+License: Apache-2.0
 
-It was downloaded from:
+Files: debian/*
+Copyright: Copyright (C) 2011 Gergely Nagy <algernon@madhouse-project.org>
+License: Apache-2.0
 
-    http://git.madhouse-project.org/projects/libmongo-client/refs/
-
-Upstream Author:
-
-    Gergely Nagy <algernon@balabit.hu>
-
-Copyright:
-
-    Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
-
-License:
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-    
-The Debian packaging is:
-
-    Copyright (C) 2011 Gergely Nagy <algernon@madhouse-project.org>
-
-and is licensed under the same terms, see
-"/usr/share/common-licenses/Apache-2.0".
+License: Apache-2.0
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ .
+     http://www.apache.org/licenses/LICENSE-2.0
+ .
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
