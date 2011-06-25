@@ -1,0 +1,6 @@
+<map id="structs" name="structs">
+<area shape="rect" id="node1" href="$group__bson__object__access.html" title="Functions that operate on whole BSON objects." alt="" coords="128,5,240,35"/>
+<area shape="rect" id="node2" href="$group__bson__cursor.html" title="This section documents the cursors, and the data retrieval functions." alt="" coords="116,59,252,88"/>
+<area shape="rect" id="node3" href="$group__bson__append.html" title="Functions to append various kinds of elements to existing BSON objects." alt="" coords="139,112,229,141"/>
+<area shape="rect" id="node4" href="$group__bson__types.html" title="Types" alt="" coords="156,165,212,195"/>
+</map>

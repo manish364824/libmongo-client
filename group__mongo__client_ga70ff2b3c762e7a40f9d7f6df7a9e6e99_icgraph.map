@@ -1,0 +1,11 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__mongo__sync.html#ga342218b37c0b0d4beafd7071b530ee1f" title="Send a delete command to MongoDB." alt="" coords="309,5,493,35"/>
+<area shape="rect" id="node5" href="$group__mongo__sync.html#ga4748ae0caf5b361929580d42ff369815" title="Send a get more command to MongoDB." alt="" coords="299,59,504,88"/>
+<area shape="rect" id="node9" href="$group__mongo__sync.html#ga60b1dea6c43b120d84f6d424e773f52b" title="Send an insert command to MongoDB." alt="" coords="304,112,499,141"/>
+<area shape="rect" id="node13" href="$group__mongo__sync.html#ga96a2018a7b4f04e73e19da2eadf8d3e4" title="Send a kill_cursors command to MongoDB." alt="" coords="295,165,508,195"/>
+<area shape="rect" id="node17" href="$group__mongo__sync.html#ga0349cd2e80d82f52544dbafe1dcb8cdd" title="Send a query command to MongoDB." alt="" coords="311,219,492,248"/>
+<area shape="rect" id="node19" href="$group__mongo__sync.html#gae299d207c5afabc9f114bab874454c12" title="Send an update command to MongoDB." alt="" coords="307,272,496,301"/>
+<area shape="rect" id="node7" href="$group__mongo__sync__cursor.html#ga321b3b8a39de8b5afd3accd9b9310d22" title="Iterate a MongoDB cursor." alt="" coords="559,59,743,88"/>
+<area shape="rect" id="node11" href="$group__mongo__sync.html#ga3a2312f2c0a7e6c9a4c8d0eb57051f65" title="Send an insert command to MongoDB." alt="" coords="560,112,741,141"/>
+<area shape="rect" id="node15" href="$group__mongo__sync__cursor.html#gad7ceca60dfd310b3205d9776b4ae566e" title="Free a MongoDB cursor." alt="" coords="560,165,741,195"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__bson__object__access.html#gae017cba3a7c5a49981aae92ff26d1ed8" title="Build a BSON object in one go." alt="" coords="211,5,301,35"/>
+<area shape="rect" id="node5" href="$group__bson__object__access.html#ga5bec2a5276b310191f94ba193a024fcb" title="Build a BSON object in one go, with full control." alt="" coords="199,59,313,88"/>
+<area shape="rect" id="node7" href="$group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18" title="Send a count() command to MongoDB." alt="" coords="165,112,347,141"/>
+<area shape="rect" id="node9" href="$group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378" title="Send a drop() command to MongoDB." alt="" coords="169,165,343,195"/>
+<area shape="rect" id="node11" href="$group__mongo__sync.html#gaf58b4929296fa55335f209dbbe7370e2" title="Get the last error from MongoDB." alt="" coords="139,219,373,248"/>
+<area shape="rect" id="node13" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="152,272,360,301"/>
+<area shape="rect" id="node20" href="$group__mongo__sync.html#gadbc79fc4f323ba7df77fe54f669ebfb0" title="Send a PING command to MongoDB." alt="" coords="171,325,341,355"/>
+<area shape="rect" id="node23" href="$group__mongo__sync.html#ga46b67cfe6443950b6083b5d668e9f37e" title="Reset the last error variable in MongoDB." alt="" coords="148,379,364,408"/>
+<area shape="rect" id="node25" href="$group__mongo__wire__cmd.html#ga7c7b378c3675d90d4da766b65b3ccef5" title="Construct a custom command." alt="" coords="161,432,351,461"/>
+<area shape="rect" id="node15" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="425,248,593,277"/>
+<area shape="rect" id="node17" href="$group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d" title="Attempt to connect to another member of a replica set." alt="" coords="423,325,596,355"/>
+</map>

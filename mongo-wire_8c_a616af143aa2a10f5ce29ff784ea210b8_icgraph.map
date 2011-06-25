@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__mongo__sync.html#ga96a2018a7b4f04e73e19da2eadf8d3e4" title="Send a kill_cursors command to MongoDB." alt="" coords="289,5,503,35"/>
+<area shape="rect" id="node7" href="$group__mongo__wire__cmd.html#ga5529f4f78c0ea8a5d7e90ca1371de745" title="Construct a kill cursors command." alt="" coords="291,59,501,88"/>
+<area shape="rect" id="node5" href="$group__mongo__sync__cursor.html#gad7ceca60dfd310b3205d9776b4ae566e" title="Free a MongoDB cursor." alt="" coords="553,5,735,35"/>
+</map>

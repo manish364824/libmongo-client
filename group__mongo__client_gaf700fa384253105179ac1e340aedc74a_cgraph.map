@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet." alt="" coords="244,5,425,35"/>
+<area shape="rect" id="node5" href="$group__mongo__wire__packet.html#gab4bd96fe8aa6e3b7b9d49636766e481c" title="Create an empty packet." alt="" coords="244,59,425,88"/>
+<area shape="rect" id="node7" href="$group__mongo__wire__packet.html#gafff19ef5ed92d56ac0b15788d4e0b5e6" title="Set the data part of a packet." alt="" coords="229,112,440,141"/>
+<area shape="rect" id="node9" href="$libmongo-private_8h.html#a68768e6585858bfac4fa5d1ac3750fcd" title="mongo_wire_packet_set_header_raw" alt="" coords="207,165,463,195"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$mongo_8h.html" title="libmongo&#45;client meta&#45;header." alt="" coords="440,237,541,267"/>
+<area shape="rect" id="node9" href="$mongo-client_8c.html" title="MongoDB client API implementation." alt="" coords="5,392,144,421"/>
+<area shape="rect" id="node23" href="$mongo-sync_8h.html" title="MongoDB synchronous wrapper API public header." alt="" coords="296,83,432,112"/>
+<area shape="rect" id="node5" href="$libmongo-private_8h.html" title="Private types and functions, for internal use in libmongo&#45;client only." alt="" coords="408,315,573,344"/>
+<area shape="rect" id="node11" href="$mongo-sync-cursor_8c.html" title="MongoDB Cursor API implementation." alt="" coords="779,392,957,421"/>
+<area shape="rect" id="node13" href="$mongo-sync-pool_8c.html" title="MongoDB connection pool API implementation." alt="" coords="168,392,333,421"/>
+<area shape="rect" id="node15" href="$mongo-sync_8c.html" title="MongoDB synchronous wrapper API implementation." alt="" coords="621,392,755,421"/>
+<area shape="rect" id="node7" href="$bson_8c.html" title="Implementation of the BSON API." alt="" coords="512,392,597,421"/>
+<area shape="rect" id="node17" href="$mongo-wire_8c.html" title="Implementation of the MongoDB Wire Protocol." alt="" coords="357,392,488,421"/>
+<area shape="rect" id="node26" href="$mongo-sync-cursor_8h.html" title="MongoDB cursor API public header." alt="" coords="401,160,580,189"/>
+<area shape="rect" id="node29" href="$mongo-sync-pool_8h.html" title="MongoDB connection pool API public header." alt="" coords="159,160,327,189"/>
+</map>

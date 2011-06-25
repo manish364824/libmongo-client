@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__mongo__wire__packet.html#ga5350d54b0a6800ecd7df81d5c2b80c6b" title="Get the data part of a packet." alt="" coords="231,5,444,35"/>
+<area shape="rect" id="node5" href="$libmongo-private_8h.html#a8c81866b00556dec8ae33c867511a8f8" title="mongo_wire_packet_get_header_raw" alt="" coords="208,59,467,88"/>
+</map>
