@@ -16,14 +16,18 @@ Description: Alternate C driver for the MongoDB document-oriented datastore
  MongoDB is a high-performance, open source, schema-free
  document-oriented data store.
  .
- This library provides an alternative C language driver, focusing more
- on ease of use.
+ This library provides an alternative C language driver, focusing on
+ stability, ease of use, striving to make the most common use cases as
+ convenient as possible.
  .
  Among its features are:
  .
+   * Well documented, easy, clean and stable API.
    * Support for asynchronous operation.
-   * C-like error handling.
-   * ReplicaSet support.
+   * ReplicaSet support, with support for automatic reconnecting and
+   discovery.
+   * Safe-mode support, to optionally enable extra safety checks on
+   writes.
 
 Package: libmongo-client-dev
 Section: libdevel
