@@ -12,7 +12,7 @@
  * First, we define a couple of variables: a connection, a packet, a
  * cursor, a BSON object and a counter:
  *
- * @until bson
+ * @until gint i
  *
  * We'll use the packet as an intermediate step between querying and
  * making a cursor. We'll see why later. The query will be used to
@@ -57,6 +57,8 @@
  *
  * Once that's done, we free the resources we used, and continue along
  * the loop, until our cursor signals the end of the query.
+ *
+ * @until printf
  *
  * @until }
  *

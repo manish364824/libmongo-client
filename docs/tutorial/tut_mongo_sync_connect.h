@@ -19,7 +19,7 @@
  *
  * Next up, is connecting to a replicaset:
  *
- * @until exit (1)
+ * @until return;
  * @until }
  *
  * Wait a minute! Does this look familiar? Isn't it @b exactly the
