@@ -179,29 +179,6 @@ mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
   bson_finish (f->meta.metadata);
   mongo_wire_packet_free (p);
 
-  c = bson_find (f->meta.metadata, "length");
-  bson_cursor_get_int64 (c, &f->meta.length);
-  bson_cursor_free (c);
-  if (f->meta.length == 0)
-    {
-      gint32 i = 0;
-
-      c = bson_find (f->meta.metadata, "length");
-      bson_cursor_get_int32 (c, &i);
-      f->meta.length = i;
-    }
-
-  c = bson_find (f->meta.metadata, "chunkSize");
-  bson_cursor_get_int32 (c, &f->meta.chunk_size);
-  bson_cursor_free (c);
-
-  if (f->meta.length == 0 || f->meta.chunk_size == 0)
-    {
-      mongo_sync_gridfs_file_free (f);
-      errno = EPROTO;
-      return NULL;
-    }
-
   c = bson_find (f->meta.metadata, "_id");
   if (!bson_cursor_get_oid (c, &f->meta.oid))
     {
@@ -210,9 +187,30 @@ mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
       errno = EPROTO;
       return NULL;
     }
-  bson_cursor_free (c);
 
-  c = bson_find (f->meta.metadata, "uploadDate");
+  bson_cursor_find (c, "length");
+  bson_cursor_get_int64 (c, &f->meta.length);
+
+  if (f->meta.length == 0)
+    {
+      gint32 i = 0;
+
+      bson_cursor_get_int32 (c, &i);
+      f->meta.length = i;
+    }
+
+  bson_cursor_find (c, "chunkSize");
+  bson_cursor_get_int32 (c, &f->meta.chunk_size);
+
+  if (f->meta.length == 0 || f->meta.chunk_size == 0)
+    {
+      bson_cursor_free (c);
+      mongo_sync_gridfs_file_free (f);
+      errno = EPROTO;
+      return NULL;
+    }
+
+  bson_cursor_find (c, "uploadDate");
   if (!bson_cursor_get_utc_datetime (c, &f->meta.date))
     {
       mongo_sync_gridfs_file_free (f);
@@ -220,9 +218,8 @@ mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
       errno = EPROTO;
       return NULL;
     }
-  bson_cursor_free (c);
 
-  c = bson_find (f->meta.metadata, "md5");
+  bson_cursor_find (c, "md5");
   if (!bson_cursor_get_string (c, &f->meta.md5))
     {
       mongo_sync_gridfs_file_free (f);
@@ -546,9 +543,8 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
 
   c = bson_find (meta, "_id");
   bson_cursor_get_oid (c, &gfile->meta.oid);
-  bson_cursor_free (c);
 
-  c = bson_find (meta, "md5");
+  bson_cursor_find (c, "md5");
   bson_cursor_get_string (c, &gfile->meta.md5);
   bson_cursor_free (c);
 

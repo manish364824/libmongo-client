@@ -250,9 +250,8 @@ mongo_gridfs_list (config_t *config)
       c = bson_find (meta, "_id");
       if (!bson_cursor_get_oid (c, (const guint8 **)&oid))
 	mongo_gridfs_error (errno);
-      bson_cursor_free (c);
 
-      c = bson_find (meta, "length");
+      bson_cursor_find (c, "length");
       if (!bson_cursor_get_int32 (c, &i32))
 	{
 	  if (!bson_cursor_get_int64 (c, &length))
@@ -260,25 +259,22 @@ mongo_gridfs_list (config_t *config)
 	}
       else
 	length = i32;
-      bson_cursor_free (c);
 
-      c = bson_find (meta, "chunkSize");
+      bson_cursor_find (c, "chunkSize");
       if (!bson_cursor_get_int32 (c, &chunk_size))
 	mongo_gridfs_error (errno);
-      bson_cursor_free (c);
 
-      c = bson_find (meta, "uploadDate");
+      bson_cursor_find (c, "uploadDate");
       if (!bson_cursor_get_utc_datetime (c, &date))
 	mongo_gridfs_error (errno);
-      bson_cursor_free (c);
 
-      c = bson_find (meta, "md5");
+      bson_cursor_find (c, "md5");
       if (!bson_cursor_get_string (c, &md5))
 	mongo_gridfs_error (errno);
-      bson_cursor_free (c);
 
-      c = bson_find (meta, "filename");
+      bson_cursor_find (c, "filename");
       bson_cursor_get_string (c, &filename);
+
       bson_cursor_free (c);
 
       printf ("{ _id: ObjectID(\"%s\"), length: %" G_GINT64_FORMAT
