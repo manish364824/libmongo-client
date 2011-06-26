@@ -15,6 +15,11 @@ discovered too.
 ** New feature: Index handling functions
 Implemented some helper functions to create and delete indexes.
 
+** New function: bson_cursor_find()
+Combining the powers of bson_find() and bson_cursor_find_next(), this
+new function can find a key anywhere in a BSON object, yet, maintains
+the ability to continue a previous scan.
+
 * 0.1.1 - <2011-06-16 Thu>
 
 ** Cursor-based query iterator API

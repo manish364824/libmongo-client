@@ -87,8 +87,33 @@
  * Even better, the library itself provides a function that does
  * something similar: it takes a cursor and a key name, and attempts
  * to find the key past the cursor's current position. So if we
- * already have the author, we can use this function to find tine
+ * already have the author, we can use this function to find the next
  * inline key aswell:
+ * @until printf
+ *
+ * However, if we suspect that a key might come after the current
+ * position, but we're not sure, and still want to find the key with
+ * as little code as possible, we shall not despair! The
+ * bson_cursor_find() function does just that: it will try to find the
+ * key starting from the current position, and wrap over once if it
+ * can't.
+ *
+ * Lets see how it works! First, we find a key in the middle:
+ * @until bson_find
+ *
+ * Now that we have a key in the middle, lets find a key after it:
+ * @until get_boolean
+ *
+ * And once we have that - and we're at the end of our BSON object -,
+ * lets try finding the author key aswell:
+ * @until get_string
+ *
+ * That works, just like that! To verify, we go ahead and print the
+ * results, which should be the same as it was in the previous
+ * examples:
+ *
+ * @until cursor_free
+ *
  * @until printf
  *
  * One thing we did not explore yet, is bson_cursor_new(): this will
