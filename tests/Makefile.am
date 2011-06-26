@@ -34,6 +34,7 @@ bson_unit_tests	= \
 		unit/bson/bson_find \
 		unit/bson/bson_cursor_next \
 		unit/bson/bson_cursor_find_next \
+		unit/bson/bson_cursor_find \
 		unit/bson/bson_cursor_type \
 		unit/bson/bson_cursor_type_as_string \
 		unit/bson/bson_cursor_key \
