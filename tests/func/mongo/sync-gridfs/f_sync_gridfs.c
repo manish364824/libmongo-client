@@ -150,6 +150,7 @@ validate_file (mongo_sync_gridfs *gfs, const bson *query, guint8 *oid)
   mongo_sync_gridfs_file *f;
   mongo_sync_cursor *cursor;
   gint64 n = 0, tsize = 0;
+  const bson *meta;
 
   f = mongo_sync_gridfs_find (gfs, query);
 
@@ -168,6 +169,9 @@ validate_file (mongo_sync_gridfs *gfs, const bson *query, guint8 *oid)
 	mongo_sync_gridfs_file_get_date (f),
 	mongo_sync_gridfs_file_get_md5 (f),
 	mongo_sync_gridfs_file_get_chunks (f));
+  meta = mongo_sync_gridfs_file_get_metadata (f);
+  ok (meta != NULL,
+      "mongo_sync_gridfs_file_get_metadata() works");
 
   cursor = mongo_sync_gridfs_file_cursor_new (f, 0, 0);
   while (mongo_sync_cursor_next (cursor))
@@ -349,4 +353,4 @@ test_func_sync_gridfs (void)
   test_func_sync_gridfs_get_invalid ();
 }
 
-RUN_NET_TEST (23, func_sync_gridfs);
+RUN_NET_TEST (24, func_sync_gridfs);
