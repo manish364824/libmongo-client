@@ -233,6 +233,9 @@ test_func_sync_gridfs_get_invalid (void)
 {
   mongo_sync_connection *conn;
   mongo_sync_gridfs *gfs;
+  mongo_sync_cursor *cursor;
+  bson *query;
+  gchar *ns;
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, TRUE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
@@ -258,6 +261,20 @@ test_func_sync_gridfs_get_invalid (void)
   test_get_invalid (gfs, "invalid-md5",
 		    "mongo_sync_gridfs_find() should fail if md5 is of "
 		    "inappropriate type");
+
+  ns = g_strconcat (config.gfs_prefix, ".files", NULL);
+  query = bson_build (BSON_TYPE_STRING, "my-id", "id-only", -1,
+		      BSON_TYPE_NONE);
+  bson_finish (query);
+
+  cursor = mongo_sync_cursor_new (conn, ns,
+				  mongo_sync_cmd_query (conn, ns, 0, 0, 0,
+							query, NULL));
+  bson_free (query);
+  mongo_sync_cursor_next (cursor);
+  ok (mongo_sync_gridfs_file_cursor_get_chunk (cursor, NULL) == NULL,
+      "mongo_sync_gridfs_file_cursor_get_chunk() should fail with "
+      "invalid data");
 
   mongo_sync_gridfs_free (gfs, TRUE);
 }
@@ -349,4 +366,4 @@ test_func_sync_gridfs (void)
   test_func_sync_gridfs_get_invalid ();
 }
 
-RUN_NET_TEST (24, func_sync_gridfs);
+RUN_NET_TEST (26, func_sync_gridfs);
