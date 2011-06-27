@@ -60,19 +60,15 @@ test_func_sync_gridfs_put_invalid (void)
 {
   mongo_sync_connection *conn;
   bson *meta;
-  guint8 *oid;
   gchar *ns;
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   ns = g_strconcat (config.gfs_prefix, ".files", NULL);
 
   /* Insert metadata without any of the required fields but ID. */
-  oid = mongo_util_oid_new (1);
-  meta = bson_build (BSON_TYPE_OID, "_id", oid,
-		     BSON_TYPE_STRING, "my-id", "id-only", -1,
+  meta = bson_build (BSON_TYPE_STRING, "my-id", "id-only", -1,
 		     BSON_TYPE_NONE);
   bson_finish (meta);
-  g_free (oid);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
   bson_free (meta);
