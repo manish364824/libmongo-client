@@ -56,6 +56,95 @@ test_func_sync_gridfs_put (void)
 }
 
 void
+test_func_sync_gridfs_put_invalid (void)
+{
+  mongo_sync_connection *conn;
+  bson *meta;
+  guint8 *oid;
+  gchar *ns;
+
+  conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
+  ns = g_strconcat (config.gfs_prefix, ".files", NULL);
+
+  /* Insert metadata without any of the required fields but ID. */
+  oid = mongo_util_oid_new (1);
+  meta = bson_build (BSON_TYPE_OID, "_id", oid,
+		     BSON_TYPE_STRING, "my-id", "id-only", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+  g_free (oid);
+
+  mongo_sync_cmd_insert (conn, ns, meta, NULL);
+  bson_free (meta);
+
+  /* Insert metadata with an ID that's not an ObjectID. */
+  meta = bson_build (BSON_TYPE_STRING, "_id", "I'm a teapot", -1,
+		     BSON_TYPE_STRING, "my-id", "string-id", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  mongo_sync_cmd_insert (conn, ns, meta, NULL);
+  bson_free (meta);
+
+  /* Insert metadata with invalid length type. */
+  meta = bson_build (BSON_TYPE_DOUBLE, "length", 1.0,
+		     BSON_TYPE_STRING, "my-id", "invalid-length", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  mongo_sync_cmd_insert (conn, ns, meta, NULL);
+  bson_free (meta);
+
+  /* Insert metadata with invalid chunkSize type. */
+  meta = bson_build (BSON_TYPE_INT32, "length", 10,
+		     BSON_TYPE_DOUBLE, "chunkSize", 12.5,
+		     BSON_TYPE_STRING, "my-id", "invalid-chunkSize", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  mongo_sync_cmd_insert (conn, ns, meta, NULL);
+  bson_free (meta);
+
+  /* Insert metadata with invalid uploadDate type. */
+  meta = bson_build (BSON_TYPE_INT32, "length", 10,
+		     BSON_TYPE_INT32, "chunkSize", 12,
+		     BSON_TYPE_STRING, "my-id", "invalid-date", -1,
+		     BSON_TYPE_INT32, "uploadDate", 1234,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  mongo_sync_cmd_insert (conn, ns, meta, NULL);
+  bson_free (meta);
+
+  /* Insert metadata with invalid md5 type. */
+  meta = bson_build (BSON_TYPE_INT32, "length", 32,
+		     BSON_TYPE_INT32, "chunkSize", 12,
+		     BSON_TYPE_UTC_DATETIME, "uploadDate", (gint64)1234,
+		     BSON_TYPE_INT32, "md5", 0,
+		     BSON_TYPE_STRING, "my-id", "invalid-md5", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  mongo_sync_cmd_insert (conn, ns, meta, NULL);
+  bson_free (meta);
+
+  /* Insert a valid metadata, without chunks. */
+  meta = bson_build (BSON_TYPE_INT32, "length", 32,
+		     BSON_TYPE_INT32, "chunkSize", 12,
+		     BSON_TYPE_UTC_DATETIME, "uploadDate", (gint64)1234,
+		     BSON_TYPE_STRING, "md5", "deadbeef", -1,
+		     BSON_TYPE_STRING, "my-id", "no-chunks", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  mongo_sync_cmd_insert (conn, ns, meta, NULL);
+  bson_free (meta);
+
+  g_free (ns);
+  mongo_sync_disconnect (conn);
+}
+
+void
 validate_file (mongo_sync_gridfs *gfs, const bson *query, guint8 *oid)
 {
   mongo_sync_gridfs_file *f;
@@ -128,6 +217,52 @@ test_func_sync_gridfs_get (void)
 }
 
 void
+test_get_invalid (mongo_sync_gridfs *gfs, gchar *name, gchar *msg)
+{
+  bson *query;
+
+  query = bson_build (BSON_TYPE_STRING, "my-id", name, -1,
+		      BSON_TYPE_NONE);
+  bson_finish (query);
+  ok (mongo_sync_gridfs_find (gfs, query) == NULL, msg);
+  bson_free (query);
+}
+
+void
+test_func_sync_gridfs_get_invalid (void)
+{
+  mongo_sync_connection *conn;
+  mongo_sync_gridfs *gfs;
+
+  conn = mongo_sync_connect (config.primary_host, config.primary_port, TRUE);
+  gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
+
+  test_get_invalid (gfs, "unknown",
+		    "mongo_sync_gridfs_find() should fail when no file "
+		    "is found");
+  test_get_invalid (gfs, "id-only",
+		    "mongo_sync_gridfs_find() should fail if the metadata "
+		    "is incomplete");
+  test_get_invalid (gfs, "string-id",
+		    "mongo_sync_gridfs_find() should fail if the _id is "
+		    "not an ObjectID");
+  test_get_invalid (gfs, "invalid-length",
+		    "mongo_sync_gridfs_find() should fail if length is "
+		    "of inappropriate type");
+  test_get_invalid (gfs, "invalid-chunkSize",
+		    "mongo_sync_gridfs_find() should fail if chunkSize is "
+		    "of inappropriate type");
+  test_get_invalid (gfs, "invalid-date",
+		    "mongo_sync_gridfs_find() should fail if uploadDate is "
+		    "of inappropriate type");
+  test_get_invalid (gfs, "invalid-md5",
+		    "mongo_sync_gridfs_find() should fail if md5 is of "
+		    "inappropriate type");
+
+  mongo_sync_gridfs_free (gfs, TRUE);
+}
+
+void
 test_func_sync_gridfs_list (void)
 {
   mongo_sync_gridfs *gfs;
@@ -141,6 +276,18 @@ test_func_sync_gridfs_list (void)
   gfs = mongo_sync_gridfs_new
     (mongo_sync_connect (config.primary_host, config.primary_port, TRUE),
      config.gfs_prefix);
+
+  /* Test list with an invalid query */
+  query = bson_build (BSON_TYPE_STRING, "no-such-field",
+		      "You're not seeing this field.", -1,
+		      BSON_TYPE_NONE);
+  bson_finish (query);
+
+  cursor = mongo_sync_gridfs_list (gfs, query);
+  ok (cursor == NULL,
+      "mongo_sync_gridfs_list() should fail if there query "
+      "does not match anything");
+  bson_free (query);
 
   /* Test list with a query */
   query = bson_build (BSON_TYPE_OID, "_id", named_oid,
@@ -197,6 +344,9 @@ test_func_sync_gridfs (void)
   test_func_sync_gridfs_put ();
   test_func_sync_gridfs_get ();
   test_func_sync_gridfs_list ();
+
+  test_func_sync_gridfs_put_invalid ();
+  test_func_sync_gridfs_get_invalid ();
 }
 
-RUN_NET_TEST (15, func_sync_gridfs);
+RUN_NET_TEST (23, func_sync_gridfs);
