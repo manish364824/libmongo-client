@@ -167,15 +167,7 @@ mongo_sync_gridfs_find (mongo_sync_gridfs *gfs, const bson *query)
   f = g_new0 (mongo_sync_gridfs_file, 1);
   f->gfs = gfs;
 
-  if (!mongo_wire_reply_packet_get_nth_document (p, 1, &f->meta.metadata))
-    {
-      int e = errno;
-
-      mongo_wire_packet_free (p);
-      mongo_sync_gridfs_file_free (f);
-      errno = e;
-      return NULL;
-    }
+  mongo_wire_reply_packet_get_nth_document (p, 1, &f->meta.metadata);
   bson_finish (f->meta.metadata);
   mongo_wire_packet_free (p);
 
