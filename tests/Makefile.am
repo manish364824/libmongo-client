@@ -190,6 +190,7 @@ check:
 	@${MAKE} ${AM_MAKEFLAGS} check-HARNESS
 
 check-HARNESS: ${TESTS} ${noinst_PROGRAMS}
+	@${builddir}/test_cleanup
 	$(AM_V_GEN)srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
 	@${builddir}/test_cleanup
 
