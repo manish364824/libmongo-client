@@ -318,7 +318,12 @@ mongo_sync_gridfs_file_cursor_get_chunk (mongo_sync_cursor *cursor,
 
   b = mongo_sync_cursor_get_data (cursor);
   c = bson_find (b, "data");
-  bson_cursor_get_binary (c, &sub, &d, &s);
+  if (!bson_cursor_get_binary (c, &sub, &d, &s))
+    {
+      bson_cursor_free (c);
+      errno = EPROTO;
+      return NULL;
+    }
   bson_cursor_free (c);
 
   data = g_malloc (s);
