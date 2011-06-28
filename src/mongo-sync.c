@@ -27,10 +27,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#if ENABLE_AUTH
-#include <openssl/md5.h>
-#endif
-
 mongo_sync_connection *
 mongo_sync_connect (const gchar *host, gint port,
 		    gboolean slaveok)
@@ -1279,36 +1275,20 @@ mongo_sync_cmd_ping (mongo_sync_connection *conn)
   return TRUE;
 }
 
-#if ENABLE_AUTH
-static void
-digest2hex (guint8 digest[16], guint8 hex_digest[33])
+static gchar *
+_pass_digest (const gchar *user, const gchar *pw)
 {
-  static const char hex[16] =
-    {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-     'a', 'b', 'c', 'd', 'e', 'f'};
-  int i;
+  GChecksum *chk;
+  gchar *digest;
 
-  for (i = 0; i < 16; i++)
-    {
-      hex_digest[2 * i] = hex[(digest[i] & 0xf0) >> 4];
-      hex_digest[2 * i + 1] = hex[digest[i] & 0x0f];
-    }
-  hex_digest[32] = '\0';
-}
+  chk = g_checksum_new (G_CHECKSUM_MD5);
+  g_checksum_update (chk, (const guchar *)user, -1);
+  g_checksum_update (chk, (const guchar *)":mongo:", 7);
+  g_checksum_update (chk, (const guchar *)pw, -1);
+  digest = g_strdup (g_checksum_get_string (chk));
+  g_checksum_free (chk);
 
-static void
-_pass_digest (const gchar *user, const gchar *pw,
-	      guint8 hex_digest[33])
-{
-  MD5_CTX mc;
-  guint8 digest[16];
-
-  MD5_Init (&mc);
-  MD5_Update (&mc, (const void *)user, strlen (user));
-  MD5_Update (&mc, (const void *)":mongo:", 7);
-  MD5_Update (&mc, (const void *)pw, strlen (pw));
-  MD5_Final (digest, &mc);
-  digest2hex (digest, hex_digest);
+  return digest;
 }
 
 gboolean
@@ -1319,7 +1299,7 @@ mongo_sync_cmd_user_add (mongo_sync_connection *conn,
 {
   bson *s, *u;
   gchar *userns;
-  guint8 hex_digest[33];
+  gchar *hex_digest;
 
   if (!db || !user || !pw)
     {
@@ -1329,7 +1309,7 @@ mongo_sync_cmd_user_add (mongo_sync_connection *conn,
 
   userns = g_strconcat (db, ".system.users", NULL);
 
-  _pass_digest (user, pw, hex_digest);
+  hex_digest = _pass_digest (user, pw);
 
   s = bson_build (BSON_TYPE_STRING, "user", user, -1,
 		  BSON_TYPE_NONE);
@@ -1339,6 +1319,7 @@ mongo_sync_cmd_user_add (mongo_sync_connection *conn,
 				   BSON_TYPE_NONE),
 		       BSON_TYPE_NONE);
   bson_finish (u);
+  g_free (hex_digest);
 
   if (!mongo_sync_cmd_update (conn, userns, MONGO_WIRE_FLAG_UPDATE_UPSERT,
 			      s, u))
@@ -1405,9 +1386,9 @@ mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
   gchar *nonce;
   bson_cursor *c;
 
-  MD5_CTX mc;
-  guint8 digest[16];
-  guint8 hex_digest[33];
+  GChecksum *chk;
+  gchar *hex_digest;
+  const gchar *digest;
 
   if (!db || !user || !pw)
     {
@@ -1460,24 +1441,26 @@ mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
   bson_free (b);
 
   /* Generate the password digest. */
-  _pass_digest (user, pw, hex_digest);
+  hex_digest = _pass_digest (user, pw);
 
   /* Generate the key */
-  MD5_Init (&mc);
-  MD5_Update (&mc, (const void *)nonce, strlen (nonce));
-  MD5_Update (&mc, (const void *)user, strlen (user));
-  MD5_Update (&mc, (const void *)hex_digest, 32);
-  MD5_Final (digest, &mc);
-  digest2hex (digest, hex_digest);
+  chk = g_checksum_new (G_CHECKSUM_MD5);
+  g_checksum_update (chk, (const guchar *)nonce, -1);
+  g_checksum_update (chk, (const guchar *)user, -1);
+  g_checksum_update (chk, (const guchar *)hex_digest, -1);
+  g_free (hex_digest);
+
+  digest = g_checksum_get_string (chk);
 
   /* Run the authenticate command. */
   b = bson_build (BSON_TYPE_INT32, "authenticate", 1,
 		  BSON_TYPE_STRING, "user", user, -1,
 		  BSON_TYPE_STRING, "nonce", nonce, -1,
-		  BSON_TYPE_STRING, "key", hex_digest, -1,
+		  BSON_TYPE_STRING, "key", digest, -1,
 		  BSON_TYPE_NONE);
   bson_finish (b);
   g_free (nonce);
+  g_checksum_free (chk);
 
   p = mongo_sync_cmd_custom (conn, db, b);
   if (!p)
@@ -1493,36 +1476,6 @@ mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
 
   return TRUE;
 }
-#else
-gboolean
-mongo_sync_cmd_user_add (mongo_sync_connection *conn,
-			 const gchar *db,
-			 const gchar *user,
-			 const gchar *pw)
-{
-  errno = ENOTSUP;
-  return FALSE;
-}
-
-gboolean
-mongo_sync_cmd_user_remove (mongo_sync_connection *conn,
-			    const gchar *db,
-			    const gchar *user)
-{
-  errno = ENOTSUP;
-  return FALSE;
-}
-
-gboolean
-mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
-			     const gchar *db,
-			     const gchar *user,
-			     const gchar *pw)
-{
-  errno = ENOTSUP;
-  return FALSE;
-}
-#endif
 
 static GString *
 _mongo_index_gen_name (const bson *key)
