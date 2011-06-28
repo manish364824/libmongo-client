@@ -417,13 +417,12 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
 					gint64 size)
 {
   mongo_sync_gridfs_file *gfile;
-  bson *meta, *cmd, *md5;
+  bson *meta;
   bson_cursor *c;
-  const gchar *md5_str = NULL;
   guint8 *oid;
   gint64 pos = 0, chunk_n = 0, upload_date;
-  mongo_packet *p;
   GTimeVal tv;
+  GChecksum *chk;
 
   if (!gfs)
     {
@@ -438,6 +437,8 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
 
   oid = mongo_util_oid_new
     (mongo_connection_get_requestid ((mongo_connection *)gfs->conn));
+
+  chk = g_checksum_new (G_CHECKSUM_MD5);
 
   /* Insert chunks first */
   while (pos < size)
@@ -455,6 +456,8 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
 			  data + pos, csize);
       bson_finish (chunk);
 
+      g_checksum_update (chk, data + pos, csize);
+
       if (!mongo_sync_cmd_insert (gfs->conn, gfs->ns.chunks, chunk, NULL))
 	{
 	  int e = errno;
@@ -470,28 +473,6 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
       chunk_n++;
     }
 
-  /* Calculate filemd5 */
-  cmd = bson_new_sized (128);
-  bson_append_oid (cmd, "filemd5", oid);
-  bson_append_string (cmd, "root", strchr (gfs->ns.prefix, '.') + 1, -1);
-  bson_finish (cmd);
-
-  p = mongo_sync_cmd_custom (gfs->conn, gfs->ns.db, cmd);
-  if (!p)
-    {
-      int e = errno;
-
-      bson_free (cmd);
-      g_free (oid);
-
-      errno = e;
-      return NULL;
-    }
-  bson_free (cmd);
-  mongo_wire_reply_packet_get_nth_document (p, 1, &md5);
-  bson_finish (md5);
-  mongo_wire_packet_free (p);
-
   /* Insert metadata */
   if (metadata)
     meta = bson_new_from_data (bson_data (metadata),
@@ -499,21 +480,17 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
   else
     meta = bson_new_sized (128);
 
-  c = bson_find (md5, "md5");
-  bson_cursor_get_string (c, &md5_str);
-
   g_get_current_time (&tv);
   upload_date =  (((gint64) tv.tv_sec) * 1000) + (gint64)(tv.tv_usec / 1000);
 
   bson_append_int64 (meta, "length", size);
   bson_append_int32 (meta, "chunkSize", gfs->chunk_size);
   bson_append_utc_datetime (meta, "uploadDate", upload_date);
-  bson_append_string (meta, "md5", md5_str, -1);
+  bson_append_string (meta, "md5", g_checksum_get_string (chk), -1);
   bson_append_oid (meta, "_id", oid);
   bson_finish (meta);
 
-  bson_cursor_free (c);
-  bson_free (md5);
+  g_checksum_free (chk);
 
   if (!mongo_sync_cmd_insert (gfs->conn, gfs->ns.files, meta, NULL))
     {
