@@ -437,6 +437,11 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
 
   oid = mongo_util_oid_new
     (mongo_connection_get_requestid ((mongo_connection *)gfs->conn));
+  if (!oid)
+    {
+      errno = EFAULT;
+      return NULL;
+    }
 
   chk = g_checksum_new (G_CHECKSUM_MD5);
 
