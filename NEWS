@@ -20,6 +20,11 @@ Combining the powers of bson_find() and bson_cursor_find_next(), this
 new function can find a key anywhere in a BSON object, yet, maintains
 the ability to continue a previous scan.
 
+** Removed dependency on OpenSSL
+Instead of using OpenSSL's MD5 functions, use the checksum
+capabilities of glib 2.16 and newer. This halves the dependencies of
+the library!
+
 * 0.1.1 - <2011-06-16 Thu>
 
 ** Cursor-based query iterator API

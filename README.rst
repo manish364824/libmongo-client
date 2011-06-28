@@ -36,9 +36,8 @@ Requirements
 ------------
 
 Apart from `glib`_, there are no other hard dependencies. Though, one
-will need `OpenSSL`_ for authentication support, and `Perl`_ (with a
-suitable version of Test::Harness, along with the prove utility) to
-run the test suite.
+`Perl`_ (with a suitable version of Test::Harness, along with the
+prove utility) to run the test suite.
 
 To build the documentation, `Doxygen`_ will be needed too.
 
@@ -63,6 +62,5 @@ LICENSE).
 
 .. _MongoDB: http://www.mongodb.org/
 .. _glib: http://developer.gnome.org/glib/
-.. _OpenSSL: http://www.openssl.org/
 .. _Perl: http://www.perl.org/
 .. _Doxygen: http://www.stack.nl/~dimitri/doxygen/
