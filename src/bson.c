@@ -892,18 +892,15 @@ bson_cursor_next (bson_cursor *c)
 
 static inline gboolean
 _bson_cursor_find (const bson *b, const gchar *name, size_t start_pos,
-		   gboolean wrap_over, bson_cursor *dest_c)
+		   gint32 end_pos, gboolean wrap_over, bson_cursor *dest_c)
 {
-  gint32 pos = start_pos, bs, end_pos = bson_size (b) - 1;
+  gint32 pos = start_pos, bs;
   const guint8 *d;
   gint32 name_len;
-  gboolean wrapped = FALSE;
 
   name_len = strlen (name);
 
   d = bson_data (b);
-
- find_start:
 
   while (pos < end_pos)
     {
@@ -927,13 +924,9 @@ _bson_cursor_find (const bson *b, const gchar *name, size_t start_pos,
       pos = value_pos + bs;
     }
 
-  if (!wrapped && wrap_over)
-    {
-      pos = sizeof (gint32);
-      end_pos = start_pos;
-      wrapped = TRUE;
-      goto find_start;
-    }
+  if (wrap_over)
+    return _bson_cursor_find (b, name, sizeof (gint32), start_pos,
+			      FALSE, dest_c);
 
   return FALSE;
 }
@@ -944,7 +937,8 @@ bson_cursor_find (bson_cursor *c, const gchar *name)
   if (!c || !name)
     return FALSE;
 
-  return _bson_cursor_find (c->obj, name, c->pos, TRUE, c);
+  return _bson_cursor_find (c->obj, name, c->pos, bson_size (c->obj) - 1,
+			    TRUE, c);
 }
 
 gboolean
@@ -953,7 +947,8 @@ bson_cursor_find_next (bson_cursor *c, const gchar *name)
   if (!c || !name)
     return FALSE;
 
-  return _bson_cursor_find (c->obj, name, c->pos, FALSE, c);
+  return _bson_cursor_find (c->obj, name, c->pos, bson_size (c->obj) - 1,
+			    FALSE, c);
 }
 
 bson_cursor *
@@ -965,7 +960,8 @@ bson_find (const bson *b, const gchar *name)
     return NULL;
 
   c = bson_cursor_new (b);
-  if (_bson_cursor_find (b, name, sizeof (gint32), FALSE, c))
+  if (_bson_cursor_find (b, name, sizeof (gint32), bson_size (c->obj) - 1,
+			 FALSE, c))
     return c;
   bson_cursor_free (c);
   return NULL;
