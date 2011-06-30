@@ -36,8 +36,8 @@ Requirements
 ------------
 
 Apart from `glib`_, there are no other hard dependencies. Though, one
-`Perl`_ (with a suitable version of Test::Harness, along with the
-prove utility) to run the test suite.
+will need `Perl`_ (with a suitable version of Test::Harness, along
+with the prove utility) to run the test suite.
 
 To build the documentation, `Doxygen`_ will be needed too.
 
