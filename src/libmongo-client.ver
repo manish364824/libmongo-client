@@ -17,6 +17,7 @@ LMC_0.1.1 {
 
 LMC_0.1.2 {
  bson_cursor_find;
+ mongo_connection_set_timeout;
  mongo_sync_cmd_index_*;
  mongo_sync_gridfs_*;
 } LMC_0.1.1;

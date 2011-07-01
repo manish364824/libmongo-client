@@ -1,6 +1,6 @@
 #+STARTUP: indent showall			-*- org -*-
 
-* 0.1.2 - <UNRELEASED>
+* 0.1.2 - <2011-07-01 Fri>
 
 ** Bugfix: mongo_packet_recv() waits for all data.
 Previously, mongo_packet_recv() did not wait for all data to arrive,
@@ -19,6 +19,14 @@ Implemented some helper functions to create and delete indexes.
 Combining the powers of bson_find() and bson_cursor_find_next(), this
 new function can find a key anywhere in a BSON object, yet, maintains
 the ability to continue a previous scan.
+
+** New function: mongo_connection_set_timeout()
+On systems that support it (most modern systems should), sets a
+timeout for send and receive operations. Setting the timeout to zero
+clears the timeout, and these calls will block forever.
+
+The timeout is not preserved accross reconnects, if using the Sync
+API, however.
 
 ** Removed dependency on OpenSSL
 Instead of using OpenSSL's MD5 functions, use the checksum

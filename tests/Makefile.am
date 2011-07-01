@@ -92,6 +92,7 @@ mongo_client_unit_tests	= \
 		unit/mongo/client/disconnect \
 		unit/mongo/client/packet_send \
 		unit/mongo/client/packet_recv \
+		unit/mongo/client/connection_set_timeout \
 		unit/mongo/client/connection_get_requestid
 
 mongo_client_func_tests = \
