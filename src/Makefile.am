@@ -31,8 +31,12 @@ pkgconfig_DATA			= libmongo-client.pc
 
 CLEANFILES			= coverage *.gcda *.gcno *.gcov
 
+EXTRA_DIST			= coverage.sh \
+				tools/coverage-report-entry.pl tools/coverage-report.pl \
+				tools/coverage-report.xsl
+
 coverage:
 	$(AM_V_GEN)
-	$(AM_V_at) SOURCES="$(SOURCES)" builddir="$(builddir)" srcdir="$(srcdir)" $(top_srcdir)/tests/gen_coverage.sh
+	$(AM_V_at) SOURCES="$(SOURCES)" builddir="$(builddir)" srcdir="$(srcdir)" top_srcdir="$(top_srcdir)" $(top_srcdir)/tests/coverage.sh
 
 .PHONY: coverage
