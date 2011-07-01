@@ -14,3 +14,9 @@ LMC_0.1.1 {
  bson_stream_doc_size;
  mongo_sync_cursor_*;
 } LMC_0.1.0;
+
+LMC_0.1.2 {
+ bson_cursor_find;
+ mongo_connection_set_timeout;
+ mongo_sync_cmd_index_*;
+} LMC_0.1.1;

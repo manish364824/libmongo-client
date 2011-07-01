@@ -7,13 +7,12 @@ dnl ***************************************************************************
 dnl definitions
 
 PACKAGE="libmongo-client"
-VERSION="0.1.1"
+VERSION="0.1.2"
 
 dnl ***************************************************************************
 dnl dependencies
 
-GLIB_MIN_VERSION="2.12.0"
-OPENSSL_MIN_VERSION="0.9.8"
+GLIB_MIN_VERSION="2.16.0"
 
 dnl ***************************************************************************
 dnl Initial setup
@@ -21,9 +20,6 @@ dnl Initial setup
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_CONFIG_HEADER(config.h)
-
-AC_ARG_ENABLE(ssl,
-              [  --enable-ssl    Enable OpenSSL support (for authentication).],,enable_ssl="auto")
 
 AC_ARG_WITH([versioned-symbols], AC_HELP_STRING([--with-versioned-symbols],[Use versioned symbols]),[dnl
 vsymldflags="-Wl,--version-script,\${srcdir}/libmongo-client.ver -Wl,-O1"
@@ -112,26 +108,6 @@ if test "x$blb_cv_glib_sane" = "xno"; then
 fi
 
 dnl ***************************************************************************
-dnl OpenSSL headers/libraries
-dnl ***************************************************************************
-
-# openssl is needed for:
-#  * authentication support
-
-if test "x$enable_ssl" = "xauto" || test "x$enable_ssl" = "xyes"; then
-	PKG_CHECK_MODULES(OPENSSL, openssl >= $OPENSSL_MIN_VERSION,, OPENSSL_LIBS="")
-
-	if test "x$OPENSSL_LIBS" != "x"; then
-        	if test "x$enable_ssl" = "xauto"; then
-	        	enable_ssl="yes"
-		fi
-	fi
-	if test "x$OPENSSL_LIBS" = "x" && test "x$enable_ssl" = "xyes"; then
-		AC_ERROR([OpenSSL not found!])
-	fi
-fi
-
-dnl ***************************************************************************
 dnl misc features to be enabled
 dnl ***************************************************************************
 AC_C_INLINE
@@ -147,18 +123,6 @@ fi
 
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [package name])
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [version number])
-
-if test "x$enable_ssl" = "xyes"; then
-	d_enable_auth=1
-	openssl_pc="openssl"
-else
-	openssl_pc=""
-	d_enable_auth=0
-fi
-
-AC_DEFINE_UNQUOTED(ENABLE_AUTH, $d_enable_auth, [OpenSSL was detected, compiling with auth support])
-
-AC_SUBST(openssl_pc)
 
 AC_OUTPUT(
 	Doxyfile
