@@ -197,8 +197,8 @@ mongo_packet_recv (mongo_connection *conn)
     }
 
   memset (&h, 0, sizeof (h));
-  if (recv (conn->fd, &h, sizeof (mongo_packet_header), MSG_NOSIGNAL) !=
-      sizeof (mongo_packet_header))
+  if (recv (conn->fd, &h, sizeof (mongo_packet_header),
+	    MSG_NOSIGNAL | MSG_WAITALL) != sizeof (mongo_packet_header))
     {
       return NULL;
     }
@@ -221,7 +221,7 @@ mongo_packet_recv (mongo_connection *conn)
 
   size = h.length - sizeof (mongo_packet_header);
   data = g_new0 (guint8, size);
-  if ((guint32)recv (conn->fd, data, size, MSG_NOSIGNAL) != size)
+  if ((guint32)recv (conn->fd, data, size, MSG_NOSIGNAL | MSG_WAITALL) != size)
     {
       int e = errno;
 
@@ -256,4 +256,30 @@ mongo_connection_get_requestid (const mongo_connection *conn)
     }
 
   return conn->request_id;
+}
+
+gboolean
+mongo_connection_set_timeout (mongo_connection *conn, gint timeout)
+{
+  struct timeval tv;
+
+  if (!conn)
+    {
+      errno = ENOTCONN;
+      return FALSE;
+    }
+  if (timeout < 0)
+    {
+      errno = ERANGE;
+      return FALSE;
+    }
+
+  tv.tv_sec = timeout / 1000;
+  tv.tv_usec = (timeout % 1000) * 1000;
+
+  if (setsockopt (conn->fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof (tv)) == -1)
+    return FALSE;
+  if (setsockopt (conn->fd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof (tv)) == -1)
+    return FALSE;
+  return TRUE;
 }

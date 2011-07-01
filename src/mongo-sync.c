@@ -27,10 +27,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#if ENABLE_AUTH
-#include <openssl/md5.h>
-#endif
-
 mongo_sync_connection *
 mongo_sync_connect (const gchar *host, gint port,
 		    gboolean slaveok)
@@ -1208,7 +1204,6 @@ mongo_sync_cmd_is_master (mongo_sync_connection *conn)
       return b;
     }
   bson_cursor_free (c);
-  bson_free (res);
   bson_finish (hosts);
 
   /* Delete the old host list. */
@@ -1231,6 +1226,25 @@ mongo_sync_cmd_is_master (mongo_sync_connection *conn)
   bson_cursor_free (c);
   bson_free (hosts);
 
+  c = bson_find (res, "passives");
+  if (bson_cursor_get_array (c, &hosts))
+    {
+      bson_cursor_free (c);
+      bson_finish (hosts);
+
+      c = bson_cursor_new (hosts);
+      while (bson_cursor_next (c))
+	{
+	  const gchar *s;
+
+	  if (bson_cursor_get_string (c, &s))
+	    conn->rs.hosts = g_list_append (conn->rs.hosts, g_strdup (s));
+	}
+      bson_free (hosts);
+    }
+  bson_cursor_free (c);
+
+  bson_free (res);
   errno = 0;
   return b;
 }
@@ -1261,36 +1275,20 @@ mongo_sync_cmd_ping (mongo_sync_connection *conn)
   return TRUE;
 }
 
-#if ENABLE_AUTH
-static void
-digest2hex (guint8 digest[16], guint8 hex_digest[33])
+static gchar *
+_pass_digest (const gchar *user, const gchar *pw)
 {
-  static const char hex[16] =
-    {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-     'a', 'b', 'c', 'd', 'e', 'f'};
-  int i;
+  GChecksum *chk;
+  gchar *digest;
 
-  for (i = 0; i < 16; i++)
-    {
-      hex_digest[2 * i] = hex[(digest[i] & 0xf0) >> 4];
-      hex_digest[2 * i + 1] = hex[digest[i] & 0x0f];
-    }
-  hex_digest[32] = '\0';
-}
+  chk = g_checksum_new (G_CHECKSUM_MD5);
+  g_checksum_update (chk, (const guchar *)user, -1);
+  g_checksum_update (chk, (const guchar *)":mongo:", 7);
+  g_checksum_update (chk, (const guchar *)pw, -1);
+  digest = g_strdup (g_checksum_get_string (chk));
+  g_checksum_free (chk);
 
-static void
-_pass_digest (const gchar *user, const gchar *pw,
-	      guint8 hex_digest[33])
-{
-  MD5_CTX mc;
-  guint8 digest[16];
-
-  MD5_Init (&mc);
-  MD5_Update (&mc, (const void *)user, strlen (user));
-  MD5_Update (&mc, (const void *)":mongo:", 7);
-  MD5_Update (&mc, (const void *)pw, strlen (pw));
-  MD5_Final (digest, &mc);
-  digest2hex (digest, hex_digest);
+  return digest;
 }
 
 gboolean
@@ -1301,7 +1299,7 @@ mongo_sync_cmd_user_add (mongo_sync_connection *conn,
 {
   bson *s, *u;
   gchar *userns;
-  guint8 hex_digest[33];
+  gchar *hex_digest;
 
   if (!db || !user || !pw)
     {
@@ -1311,7 +1309,7 @@ mongo_sync_cmd_user_add (mongo_sync_connection *conn,
 
   userns = g_strconcat (db, ".system.users", NULL);
 
-  _pass_digest (user, pw, hex_digest);
+  hex_digest = _pass_digest (user, pw);
 
   s = bson_build (BSON_TYPE_STRING, "user", user, -1,
 		  BSON_TYPE_NONE);
@@ -1321,6 +1319,7 @@ mongo_sync_cmd_user_add (mongo_sync_connection *conn,
 				   BSON_TYPE_NONE),
 		       BSON_TYPE_NONE);
   bson_finish (u);
+  g_free (hex_digest);
 
   if (!mongo_sync_cmd_update (conn, userns, MONGO_WIRE_FLAG_UPDATE_UPSERT,
 			      s, u))
@@ -1387,9 +1386,9 @@ mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
   gchar *nonce;
   bson_cursor *c;
 
-  MD5_CTX mc;
-  guint8 digest[16];
-  guint8 hex_digest[33];
+  GChecksum *chk;
+  gchar *hex_digest;
+  const gchar *digest;
 
   if (!db || !user || !pw)
     {
@@ -1442,24 +1441,26 @@ mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
   bson_free (b);
 
   /* Generate the password digest. */
-  _pass_digest (user, pw, hex_digest);
+  hex_digest = _pass_digest (user, pw);
 
   /* Generate the key */
-  MD5_Init (&mc);
-  MD5_Update (&mc, (const void *)nonce, strlen (nonce));
-  MD5_Update (&mc, (const void *)user, strlen (user));
-  MD5_Update (&mc, (const void *)hex_digest, 32);
-  MD5_Final (digest, &mc);
-  digest2hex (digest, hex_digest);
+  chk = g_checksum_new (G_CHECKSUM_MD5);
+  g_checksum_update (chk, (const guchar *)nonce, -1);
+  g_checksum_update (chk, (const guchar *)user, -1);
+  g_checksum_update (chk, (const guchar *)hex_digest, -1);
+  g_free (hex_digest);
+
+  digest = g_checksum_get_string (chk);
 
   /* Run the authenticate command. */
   b = bson_build (BSON_TYPE_INT32, "authenticate", 1,
 		  BSON_TYPE_STRING, "user", user, -1,
 		  BSON_TYPE_STRING, "nonce", nonce, -1,
-		  BSON_TYPE_STRING, "key", hex_digest, -1,
+		  BSON_TYPE_STRING, "key", digest, -1,
 		  BSON_TYPE_NONE);
   bson_finish (b);
   g_free (nonce);
+  g_checksum_free (chk);
 
   p = mongo_sync_cmd_custom (conn, db, b);
   if (!p)
@@ -1475,33 +1476,200 @@ mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
 
   return TRUE;
 }
-#else
-gboolean
-mongo_sync_cmd_user_add (mongo_sync_connection *conn,
-			 const gchar *db,
-			 const gchar *user,
-			 const gchar *pw)
+
+static GString *
+_mongo_index_gen_name (const bson *key)
 {
-  errno = ENOTSUP;
-  return FALSE;
+  bson_cursor *c;
+  GString *name;
+
+  name = g_string_new ("_");
+  c = bson_cursor_new (key);
+  while (bson_cursor_next (c))
+    {
+      gint64 v = 0;
+
+      g_string_append (name, bson_cursor_key (c));
+      g_string_append_c (name, '_');
+
+      switch (bson_cursor_type (c))
+	{
+	case BSON_TYPE_BOOLEAN:
+	  {
+	    gboolean vb;
+
+	    bson_cursor_get_boolean (c, &vb);
+	    v = vb;
+	    break;
+	  }
+	case BSON_TYPE_INT32:
+	  {
+	    gint32 vi;
+
+	    bson_cursor_get_int32 (c, &vi);
+	    v = vi;
+	    break;
+	  }
+	case BSON_TYPE_INT64:
+	  {
+	    gint64 vl;
+
+	    bson_cursor_get_int64 (c, &vl);
+	    v = vl;
+	    break;
+	  }
+	case BSON_TYPE_DOUBLE:
+	  {
+	    gdouble vd;
+
+	    bson_cursor_get_double (c, &vd);
+	    v = (gint64)vd;
+	    break;
+	  }
+	default:
+	  break;
+	}
+      if (v != 0)
+	g_string_append_printf (name, "%" G_GINT64_FORMAT "_", v);
+    }
+  bson_cursor_free (c);
+
+  return name;
 }
 
 gboolean
-mongo_sync_cmd_user_remove (mongo_sync_connection *conn,
-			    const gchar *db,
-			    const gchar *user)
+mongo_sync_cmd_index_create (mongo_sync_connection *conn,
+			     const gchar *ns,
+			     const bson *key,
+			     gint options)
 {
-  errno = ENOTSUP;
-  return FALSE;
+  GString *name;
+  gchar *idxns, *t;
+  bson *cmd;
+
+  if (!conn)
+    {
+      errno = ENOTCONN;
+      return FALSE;
+    }
+  if (!ns || !key)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+  if (strchr (ns, '.') == NULL)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  name = _mongo_index_gen_name (key);
+
+  cmd = bson_new_sized (bson_size (key) + name->len + 128);
+  bson_append_document (cmd, "key", key);
+  bson_append_string (cmd, "ns", ns, -1);
+  bson_append_string (cmd, "name", name->str, name->len);
+  if (options & MONGO_INDEX_UNIQUE)
+    bson_append_boolean (cmd, "unique", TRUE);
+  if (options & MONGO_INDEX_DROP_DUPS)
+    bson_append_boolean (cmd, "dropDups", TRUE);
+  bson_finish (cmd);
+  g_string_free (name, TRUE);
+
+  t = g_strdup (ns);
+  *(strchr (t, '.')) = '\0';
+  idxns = g_strconcat (t, ".system.indexes", NULL);
+  g_free (t);
+
+  if (!mongo_sync_cmd_insert_n (conn, idxns, 1, (const bson **)&cmd))
+    {
+      int e = errno;
+
+      bson_free (cmd);
+      g_free (idxns);
+      errno = e;
+      return FALSE;
+    }
+  bson_free (cmd);
+  g_free (idxns);
+
+  return TRUE;
+}
+
+static gboolean
+_mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
+			    const gchar *full_ns,
+			    const gchar *index_name)
+{
+  bson *cmd;
+  gchar *db, *ns;
+  mongo_packet *p;
+
+  if (!conn)
+    {
+      errno = ENOTCONN;
+      return FALSE;
+    }
+  if (!full_ns || !index_name)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+  ns = strchr (full_ns, '.');
+  if (ns == NULL)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+  ns++;
+
+  cmd = bson_new_sized (256 + strlen (index_name));
+  bson_append_string (cmd, "deleteIndexes", ns, -1);
+  bson_append_string (cmd, "index", index_name, -1);
+  bson_finish (cmd);
+
+  db = g_strndup (full_ns, ns - full_ns - 1);
+  p = mongo_sync_cmd_custom (conn, db, cmd);
+  if (!p)
+    {
+      int e = errno;
+
+      bson_free (cmd);
+      g_free (db);
+      errno = e;
+      return FALSE;
+    }
+  mongo_wire_packet_free (p);
+  g_free (db);
+  bson_free (cmd);
+
+  return TRUE;
 }
 
 gboolean
-mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
-			     const gchar *db,
-			     const gchar *user,
-			     const gchar *pw)
+mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
+			   const gchar *ns,
+			   const bson *key)
 {
-  errno = ENOTSUP;
-  return FALSE;
+  GString *name;
+  gboolean b;
+
+  if (!key)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  name = _mongo_index_gen_name (key);
+
+  b = _mongo_sync_cmd_index_drop (conn, ns, name->str);
+  g_string_free (name, TRUE);
+  return b;
 }
-#endif
+
+gboolean
+mongo_sync_cmd_index_drop_all (mongo_sync_connection *conn,
+			       const gchar *ns)
+{
+  return _mongo_sync_cmd_index_drop (conn, ns, "*");
+}

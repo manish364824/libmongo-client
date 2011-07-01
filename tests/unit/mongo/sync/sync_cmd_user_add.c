@@ -6,7 +6,6 @@
 #include <sys/socket.h>
 #include "libmongo-private.h"
 
-#if ENABLE_AUTH
 void
 test_mongo_sync_cmd_user_add_net_secondary (void)
 {
@@ -94,18 +93,3 @@ test_mongo_sync_cmd_user_add (void)
 }
 
 RUN_TEST (12, mongo_sync_cmd_user_add);
-#else
-void
-test_mongo_sync_cmd_user_add  (void)
-{
-  errno = 0;
-  if (mongo_sync_cmd_user_add (NULL, NULL, NULL, NULL) != FALSE)
-    fail ("mongo_sync_user_add() with NULLs should fail");
-  else
-    ok (errno == ENOTSUP,
-	"mongo_sync_user_add() should fail with ENOTSUP when authentication "
-	"is not compiled in");
-}
-
-RUN_TEST (1, mongo_sync_cmd_user_add);
-#endif

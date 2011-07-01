@@ -34,6 +34,7 @@ bson_unit_tests	= \
 		unit/bson/bson_find \
 		unit/bson/bson_cursor_next \
 		unit/bson/bson_cursor_find_next \
+		unit/bson/bson_cursor_find \
 		unit/bson/bson_cursor_type \
 		unit/bson/bson_cursor_type_as_string \
 		unit/bson/bson_cursor_key \
@@ -91,7 +92,11 @@ mongo_client_unit_tests	= \
 		unit/mongo/client/disconnect \
 		unit/mongo/client/packet_send \
 		unit/mongo/client/packet_recv \
+		unit/mongo/client/connection_set_timeout \
 		unit/mongo/client/connection_get_requestid
+
+mongo_client_func_tests = \
+		func/mongo/client/f_client_big_packet
 
 mongo_sync_unit_tests	= \
 		unit/mongo/sync/sync_connect \
@@ -118,7 +123,10 @@ mongo_sync_unit_tests	= \
 		unit/mongo/sync/sync_cmd_ping \
 		unit/mongo/sync/sync_cmd_user_add \
 		unit/mongo/sync/sync_cmd_user_remove \
-		unit/mongo/sync/sync_cmd_authenticate
+		unit/mongo/sync/sync_cmd_authenticate \
+		unit/mongo/sync/sync_cmd_index_create \
+		unit/mongo/sync/sync_cmd_index_drop \
+		unit/mongo/sync/sync_cmd_index_drop_all
 
 mongo_sync_func_tests	= \
 		func/mongo/sync/f_sync_max_insert_size \
@@ -150,6 +158,7 @@ UNIT_TESTS	= ${bson_unit_tests} ${mongo_utils_unit_tests} \
 		${mongo_sync_unit_tests} ${mongo_sync_cursor_unit_tests} \
 		${mongo_sync_pool_unit_tests}
 FUNC_TESTS	= ${bson_func_tests} ${mongo_sync_func_tests} \
+		${mongo_client_func_tests} \
 		${mongo_sync_cursor_func_tests} ${mongo_sync_pool_func_tests}
 PERF_TESTS	= ${bson_perf_tests}
 TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}

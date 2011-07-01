@@ -1,10 +1,10 @@
-LMC_CURRENT			= 1
+LMC_CURRENT			= 2
 LMC_REVISION			= 0
-LMC_AGE				= 1
+LMC_AGE				= 2
 
 lib_LTLIBRARIES			= libmongo-client.la
-libmongo_client_la_LIBADD	= @GLIB_LIBS@ @OPENSSL_LIBS@
-libmongo_client_la_CFLAGS	= @GLIB_CFLAGS@ @OPENSSL_CFLAGS@
+libmongo_client_la_LIBADD	= @GLIB_LIBS@
+libmongo_client_la_CFLAGS	= @GLIB_CFLAGS@
 libmongo_client_la_LDFLAGS	= -version-info ${LMC_CURRENT}:${LMC_REVISION}:${LMC_AGE} @vsymldflags@
 
 libmongo_client_la_SOURCES	= \
@@ -31,17 +31,6 @@ CLEANFILES			= coverage *.gcda *.gcno *.gcov
 
 coverage:
 	$(AM_V_GEN)
-	rm -f "coverage"
-	@for src in $(SOURCES); do \
-		case "$$src" in \
-			*.c) \
-				obj=`echo $$src | sed 's|\.c|.o|'`; \
-				if test -f "$(builddir)/.libs/libmongo_client_la-$$obj"; then objdir=$(builddir)/.libs; else objdir=$(builddir); fi; \
-				gcov $(srcdir)/$$src -o $$objdir/libmongo_client_la-$$obj >>coverage; \
-				;;\
-		esac \
-	done
-	@c=`(echo "scale=2"; echo -n "("; echo -n $$(grep "Lines executed" coverage | cut -d: -f2 | cut -d "%" -f 1) | sed -e "s, , + ,g"; echo ") / " $$(grep -c "Lines executed" coverage)) | bc -q`; \
-	 echo -n "Overall coverage: $$c%" >>coverage
+	$(AM_V_at) SOURCES="$(SOURCES)" builddir="$(builddir)" srcdir="$(srcdir)" $(top_srcdir)/tests/gen_coverage.sh
 
 .PHONY: coverage

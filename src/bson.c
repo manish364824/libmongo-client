@@ -890,53 +890,19 @@ bson_cursor_next (bson_cursor *c)
   return TRUE;
 }
 
-gboolean
-bson_cursor_find_next (bson_cursor *c, const gchar *name)
+static inline gboolean
+_bson_cursor_find (const bson *b, const gchar *name, size_t start_pos,
+		   gint32 end_pos, gboolean wrap_over, bson_cursor *dest_c)
 {
-  const gchar *ckey;
-  size_t cpos, cvalue_pos;
-  gint32 name_len;
-
-  if (!c || !name)
-    return FALSE;
-
-  name_len = strlen(name);
-
-  ckey = c->key;
-  cpos = c->pos;
-  cvalue_pos = c->value_pos;
-
-  while (bson_cursor_next (c))
-    {
-      gint32 key_len = strlen (bson_cursor_key (c));
-
-      if (!memcmp (bson_cursor_key (c), name,
-		   (name_len <= key_len) ? name_len : key_len))
-	return TRUE;
-    }
-
-  c->key = ckey;
-  c->pos = cpos;
-  c->value_pos = cvalue_pos;
-
-  return FALSE;
-}
-
-bson_cursor *
-bson_find (const bson *b, const gchar *name)
-{
-  gint32 pos = sizeof (guint32), bs;
+  gint32 pos = start_pos, bs;
   const guint8 *d;
   gint32 name_len;
-
-  if (bson_size (b) == -1 || !name)
-    return NULL;
 
   name_len = strlen (name);
 
   d = bson_data (b);
 
-  while (pos < bson_size (b) - 1)
+  while (pos < end_pos)
     {
       bson_type t = (bson_type) d[pos];
       const gchar *key = (gchar *) &d[pos + 1];
@@ -945,23 +911,59 @@ bson_find (const bson *b, const gchar *name)
 
       if (!memcmp (key, name, (name_len <= key_len) ? name_len : key_len))
 	{
-	  bson_cursor *c;
+	  dest_c->obj = b;
+	  dest_c->key = key;
+	  dest_c->pos = pos;
+	  dest_c->value_pos = value_pos;
 
-	  c = (bson_cursor *)g_new0 (bson_cursor, 1);
-
-	  c->obj = b;
-	  c->key = key;
-	  c->pos = pos;
-	  c->value_pos = value_pos;
-
-	  return c;
+	  return TRUE;
 	}
       bs = _bson_get_block_size (t, &d[value_pos]);
       if (bs == -1)
-	return NULL;
+	return FALSE;
       pos = value_pos + bs;
     }
 
+  if (wrap_over)
+    return _bson_cursor_find (b, name, sizeof (gint32), start_pos,
+			      FALSE, dest_c);
+
+  return FALSE;
+}
+
+gboolean
+bson_cursor_find (bson_cursor *c, const gchar *name)
+{
+  if (!c || !name)
+    return FALSE;
+
+  return _bson_cursor_find (c->obj, name, c->pos, bson_size (c->obj) - 1,
+			    TRUE, c);
+}
+
+gboolean
+bson_cursor_find_next (bson_cursor *c, const gchar *name)
+{
+  if (!c || !name)
+    return FALSE;
+
+  return _bson_cursor_find (c->obj, name, c->pos, bson_size (c->obj) - 1,
+			    FALSE, c);
+}
+
+bson_cursor *
+bson_find (const bson *b, const gchar *name)
+{
+  bson_cursor *c;
+
+  if (bson_size (b) == -1 || !name)
+    return NULL;
+
+  c = bson_cursor_new (b);
+  if (_bson_cursor_find (b, name, sizeof (gint32), bson_size (c->obj) - 1,
+			 FALSE, c))
+    return c;
+  bson_cursor_free (c);
   return NULL;
 }
 

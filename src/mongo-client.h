@@ -84,6 +84,22 @@ mongo_packet *mongo_packet_recv (mongo_connection *conn);
  */
 gint32 mongo_connection_get_requestid (const mongo_connection *conn);
 
+/** Set a timeout for read/write operations on a connection
+ *
+ * On systems that support it, set a timeout for read/write operations
+ * on a socket.
+ *
+ * @param conn is the connection to set a timeout on.
+ * @param timeout is the timeout to set, in milliseconds.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ *
+ * @note The timeout is not preserved accross reconnects, if using the
+ * Sync API, however. It only applies to the active connection, and
+ * nothing else.
+ */
+gboolean mongo_connection_set_timeout (mongo_connection *conn, gint timeout);
+
 /** @} */
 
 G_END_DECLS

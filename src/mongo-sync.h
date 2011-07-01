@@ -441,6 +441,50 @@ gboolean mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
 				      const gchar *user,
 				      const gchar *pw);
 
+/** Flags that can be set at index creation. */
+enum
+  {
+    MONGO_INDEX_UNIQUE = 0x01, /**< Create a unique index. */
+    MONGO_INDEX_DROP_DUPS = 0x02, /**< Drop duplicate entries when
+				     creating the indexes. */
+  };
+
+/** Create an index.
+ *
+ * @param conn is the connection to work with.
+ * @param ns is the namespace to create indexes for.
+ * @param key is the key pattern to base indexes on.
+ * @param options are the index options.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+gboolean mongo_sync_cmd_index_create (mongo_sync_connection *conn,
+				      const gchar *ns,
+				      const bson *key,
+				      gint options);
+
+/** Drop an index.
+ *
+ * @param conn is the connection to work with.
+ * @param ns is the namespace to drop the index from.
+ * @param key is the index pattern to drop.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+gboolean mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
+				    const gchar *ns,
+				    const bson *key);
+
+/** Drop all indexes from a namespace.
+ *
+ * @param conn is the connection to work with.
+ * @param ns is the namespace whose indexes to drop.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+gboolean mongo_sync_cmd_index_drop_all (mongo_sync_connection *conn,
+					const gchar *ns);
+
 /** @} */
 
 G_END_DECLS
