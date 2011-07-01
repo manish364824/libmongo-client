@@ -127,10 +127,11 @@ main (<span class="keywordtype">void</span>)
   <a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean.">bson_cursor_get_boolean</a> (c, &amp;v_bool);
   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
 
-  printf (<span class="stringliteral">&quot;Author: %s; inline: %s\n&quot;</span>, v_str, (v_bool) ? <span class="stringliteral">&quot;TRUE&quot;</span> : <span class="stringliteral">&quot;FALSE&quot;</span>);
+  printf (<span class="stringliteral">&quot;Author: %s; inline: %s; (bson_find)\n&quot;</span>,
 </pre></div></p>
 <p>Now, the downside of this, is that we ran through the BSON object twice. Well, once and a little, since the "author" key was the first. But using <a class="el" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find()</a> this way has the potential of traversing through a document multiple times.</p>
-<p>Now, if we know the one key always comes after another, then we can use <a class="el" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next()</a> to help us find it, without having to restart from the beginning. We do this by extracting the key name from the cursor, and comparing it to whatever we're searching for: <div class="fragment"><pre class="fragment">
+<p>Now, if we know the one key always comes after another, then we can use <a class="el" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next()</a> to help us find it, without having to restart from the beginning. We do this by extracting the key name from the cursor, and comparing it to whatever we're searching for: <div class="fragment"><pre class="fragment">          v_str, (v_bool) ? <span class="stringliteral">&quot;TRUE&quot;</span> : <span class="stringliteral">&quot;FALSE&quot;</span>);
+
   c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (doc, <span class="stringliteral">&quot;author&quot;</span>);
   <a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (c, &amp;v_str);
   <span class="keywordflow">while</span> (<a class="code" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next</a> (c))
@@ -143,19 +144,38 @@ main (<span class="keywordtype">void</span>)
     }
   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
 
-  printf (<span class="stringliteral">&quot;Author: %s; inline: %s\n&quot;</span>, v_str, (v_bool) ? <span class="stringliteral">&quot;TRUE&quot;</span> : <span class="stringliteral">&quot;FALSE&quot;</span>);
+  printf (<span class="stringliteral">&quot;Author: %s; inline: %s; (bson_cursor_next)\n&quot;</span>,
 </pre></div></p>
 <p>Now the above is still picky about key order, but it's at least more flexible: we can put any number of keys between author and inline, and it will work. In most cases, that's good enough. In every other case, where we have no idea about key ordering, <a class="el" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find()</a> is still there for us.</p>
-<p>Even better, the library itself provides a function that does something similar: it takes a cursor and a key name, and attempts to find the key past the cursor's current position. So if we already have the author, we can use this function to find tine inline key aswell: <div class="fragment"><pre class="fragment">
+<p>Even better, the library itself provides a function that does something similar: it takes a cursor and a key name, and attempts to find the key past the cursor's current position. So if we already have the author, we can use this function to find the next inline key aswell: <div class="fragment"><pre class="fragment">          v_str, (v_bool) ? <span class="stringliteral">&quot;TRUE&quot;</span> : <span class="stringliteral">&quot;FALSE&quot;</span>);
+
   c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (doc, <span class="stringliteral">&quot;author&quot;</span>);
   <a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (c, &amp;v_str);
   <a class="code" href="group__bson__cursor.html#ga1655fa3c1116657f42e4cf76ec8ca129" title="Move the cursor to a given key, past the current one.">bson_cursor_find_next</a> (c, <span class="stringliteral">&quot;inline&quot;</span>);
   <a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean.">bson_cursor_get_boolean</a> (c, &amp;v_bool);
   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
 
-  printf (<span class="stringliteral">&quot;Author: %s; inline: %s\n&quot;</span>, v_str, (v_bool) ? <span class="stringliteral">&quot;TRUE&quot;</span> : <span class="stringliteral">&quot;FALSE&quot;</span>);
+  printf (<span class="stringliteral">&quot;Author: %s; inline: %s; (bson_cursor_find_next)\n&quot;</span>,
 </pre></div></p>
-<p>One thing we did not explore yet, is <a class="el" href="group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor.">bson_cursor_new()</a>: this will create a new cursor, and point to to the very beginning of our BSON object, just before the first key. Thus, the first <a class="el" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next()</a> done afterwards will yield the first key. <div class="fragment"><pre class="fragment">
+<p>However, if we suspect that a key might come after the current position, but we're not sure, and still want to find the key with as little code as possible, we shall not despair! The <a class="el" href="group__bson__cursor.html#gab9c63d49d46c04b2e5ffbdd9d9ee12d9" title="Move the cursor to a given key.">bson_cursor_find()</a> function does just that: it will try to find the key starting from the current position, and wrap over once if it can't.</p>
+<p>Lets see how it works! First, we find a key in the middle: <div class="fragment"><pre class="fragment">          v_str, (v_bool) ? <span class="stringliteral">&quot;TRUE&quot;</span> : <span class="stringliteral">&quot;FALSE&quot;</span>);
+
+  c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (doc, <span class="stringliteral">&quot;pages&quot;</span>);
+</pre></div></p>
+<p>Now that we have a key in the middle, lets find a key after it: <div class="fragment"><pre class="fragment">  <a class="code" href="group__bson__cursor.html#gab9c63d49d46c04b2e5ffbdd9d9ee12d9" title="Move the cursor to a given key.">bson_cursor_find</a> (c, <span class="stringliteral">&quot;inline&quot;</span>);
+  <a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean.">bson_cursor_get_boolean</a> (c, &amp;v_bool);
+</pre></div></p>
+<p>And once we have that - and we're at the end of our BSON object -, lets try finding the author key aswell: <div class="fragment"><pre class="fragment">  <a class="code" href="group__bson__cursor.html#gab9c63d49d46c04b2e5ffbdd9d9ee12d9" title="Move the cursor to a given key.">bson_cursor_find</a> (c, <span class="stringliteral">&quot;author&quot;</span>);
+  <a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (c, &amp;v_str);
+</pre></div></p>
+<p>That works, just like that! To verify, we go ahead and print the results, which should be the same as it was in the previous examples:</p>
+<p><div class="fragment"><pre class="fragment">  <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+</pre></div></p>
+<p><div class="fragment"><pre class="fragment">
+  printf (<span class="stringliteral">&quot;Author: %s; inline: %s; (bson_cursor_find)\n&quot;</span>,
+</pre></div></p>
+<p>One thing we did not explore yet, is <a class="el" href="group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor.">bson_cursor_new()</a>: this will create a new cursor, and point to to the very beginning of our BSON object, just before the first key. Thus, the first <a class="el" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next()</a> done afterwards will yield the first key. <div class="fragment"><pre class="fragment">          v_str, (v_bool) ? <span class="stringliteral">&quot;TRUE&quot;</span> : <span class="stringliteral">&quot;FALSE&quot;</span>);
+
   c = <a class="code" href="group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor.">bson_cursor_new</a> (doc);
   <span class="keywordflow">while</span> (<a class="code" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next</a> (c))
     {
@@ -199,7 +219,7 @@ main (<span class="keywordtype">void</span>)
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

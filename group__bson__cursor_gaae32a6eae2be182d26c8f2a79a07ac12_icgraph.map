@@ -1,6 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18" title="Send a count() command to MongoDB." alt="" coords="200,5,381,35"/>
-<area shape="rect" id="node5" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="187,59,395,88"/>
-<area shape="rect" id="node7" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="447,20,615,49"/>
-<area shape="rect" id="node9" href="$group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d" title="Attempt to connect to another member of a replica set." alt="" coords="444,97,617,127"/>
+<area shape="rect" id="node3" href="$group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key." alt="" coords="187,51,269,80"/>
+<area shape="rect" id="node5" href="$group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59" title="Authenticate a user with MongoDB." alt="" coords="317,5,544,35"/>
+<area shape="rect" id="node7" href="$group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18" title="Send a count() command to MongoDB." alt="" coords="340,64,521,93"/>
+<area shape="rect" id="node9" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="327,129,535,159"/>
+<area shape="rect" id="node11" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="596,91,764,120"/>
+<area shape="rect" id="node13" href="$group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d" title="Attempt to connect to another member of a replica set." alt="" coords="593,168,767,197"/>
 </map>

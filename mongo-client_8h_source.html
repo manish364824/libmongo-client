@@ -87,9 +87,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00078"></a>00078 
 <a name="l00085"></a>00085 gint32 <a class="code" href="group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99" title="Get the last requestID from a connection object.">mongo_connection_get_requestid</a> (<span class="keyword">const</span> mongo_connection *conn);
 <a name="l00086"></a>00086 
-<a name="l00089"></a>00089 G_END_DECLS
-<a name="l00090"></a>00090 
-<a name="l00091"></a>00091 <span class="preprocessor">#endif</span>
+<a name="l00101"></a>00101 gboolean <a class="code" href="group__mongo__client.html#ga4b63193d2b779e23d5135bf3801df6e2" title="Set a timeout for read/write operations on a connection.">mongo_connection_set_timeout</a> (mongo_connection *conn, gint timeout);
+<a name="l00102"></a>00102 
+<a name="l00105"></a>00105 G_END_DECLS
+<a name="l00106"></a>00106 
+<a name="l00107"></a>00107 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -106,7 +108,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:10 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

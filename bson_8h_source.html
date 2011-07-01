@@ -196,50 +196,52 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00605"></a>00605 
 <a name="l00617"></a>00617 gboolean <a class="code" href="group__bson__cursor.html#ga1655fa3c1116657f42e4cf76ec8ca129" title="Move the cursor to a given key, past the current one.">bson_cursor_find_next</a> (bson_cursor *c, <span class="keyword">const</span> gchar *name);
 <a name="l00618"></a>00618 
-<a name="l00625"></a>00625 <a class="code" href="group__bson__types.html#gadac27a93ef69dbe56a6409c68395e5cb" title="Supported BSON object types.">bson_type</a> <a class="code" href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3" title="Determine the type of the current element.">bson_cursor_type</a> (<span class="keyword">const</span> bson_cursor *c);
-<a name="l00626"></a>00626 
-<a name="l00636"></a>00636 <span class="keyword">const</span> gchar *<a class="code" href="group__bson__cursor.html#ga7ec76513b2377a122ed2a95ffa1042c4" title="Retrieve the type of the current element, as string.">bson_cursor_type_as_string</a> (<span class="keyword">const</span> bson_cursor *c);
-<a name="l00637"></a>00637 
-<a name="l00647"></a>00647 <span class="keyword">const</span> gchar *<a class="code" href="group__bson__cursor.html#ga8de19693c54fca2eb6c8a4f5a30eb637" title="Determine the name of the current elements key.">bson_cursor_key</a> (<span class="keyword">const</span> bson_cursor *c);
-<a name="l00648"></a>00648 
-<a name="l00660"></a>00660 gboolean <a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest);
+<a name="l00630"></a>00630 gboolean <a class="code" href="group__bson__cursor.html#gab9c63d49d46c04b2e5ffbdd9d9ee12d9" title="Move the cursor to a given key.">bson_cursor_find</a> (bson_cursor *c, <span class="keyword">const</span> gchar *name);
+<a name="l00631"></a>00631 
+<a name="l00638"></a>00638 <a class="code" href="group__bson__types.html#gadac27a93ef69dbe56a6409c68395e5cb" title="Supported BSON object types.">bson_type</a> <a class="code" href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3" title="Determine the type of the current element.">bson_cursor_type</a> (<span class="keyword">const</span> bson_cursor *c);
+<a name="l00639"></a>00639 
+<a name="l00649"></a>00649 <span class="keyword">const</span> gchar *<a class="code" href="group__bson__cursor.html#ga7ec76513b2377a122ed2a95ffa1042c4" title="Retrieve the type of the current element, as string.">bson_cursor_type_as_string</a> (<span class="keyword">const</span> bson_cursor *c);
+<a name="l00650"></a>00650 
+<a name="l00660"></a>00660 <span class="keyword">const</span> gchar *<a class="code" href="group__bson__cursor.html#ga8de19693c54fca2eb6c8a4f5a30eb637" title="Determine the name of the current elements key.">bson_cursor_key</a> (<span class="keyword">const</span> bson_cursor *c);
 <a name="l00661"></a>00661 
-<a name="l00670"></a>00670 gboolean <a class="code" href="group__bson__cursor.html#ga10e9c6f2686c407daa77d46e8c5d88b4" title="Get the value stored at the cursor, as a double.">bson_cursor_get_double</a> (<span class="keyword">const</span> bson_cursor *c, gdouble *dest);
-<a name="l00671"></a>00671 
-<a name="l00683"></a>00683 gboolean <a class="code" href="group__bson__cursor.html#ga6f8c5f012e5236e18d677142b49262fb" title="Get the value stored at the cursor, as a BSON document.">bson_cursor_get_document</a> (<span class="keyword">const</span> bson_cursor *c, bson **dest);
+<a name="l00673"></a>00673 gboolean <a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest);
+<a name="l00674"></a>00674 
+<a name="l00683"></a>00683 gboolean <a class="code" href="group__bson__cursor.html#ga10e9c6f2686c407daa77d46e8c5d88b4" title="Get the value stored at the cursor, as a double.">bson_cursor_get_double</a> (<span class="keyword">const</span> bson_cursor *c, gdouble *dest);
 <a name="l00684"></a>00684 
-<a name="l00696"></a>00696 gboolean <a class="code" href="group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array.">bson_cursor_get_array</a> (<span class="keyword">const</span> bson_cursor *c, bson **dest);
+<a name="l00696"></a>00696 gboolean <a class="code" href="group__bson__cursor.html#ga6f8c5f012e5236e18d677142b49262fb" title="Get the value stored at the cursor, as a BSON document.">bson_cursor_get_document</a> (<span class="keyword">const</span> bson_cursor *c, bson **dest);
 <a name="l00697"></a>00697 
-<a name="l00710"></a>00710 gboolean <a class="code" href="group__bson__cursor.html#gaa8c658d1cfef6e87cbda80879ee551b7" title="Get the value stored at the cursor, as binary data.">bson_cursor_get_binary</a> (<span class="keyword">const</span> bson_cursor *c,
-<a name="l00711"></a>00711                                  <a class="code" href="group__bson__types.html#gab69c9ec1c9cdabbb2db338e58a6e55fe" title="Supported BSON binary subtypes.">bson_binary_subtype</a> *subtype,
-<a name="l00712"></a>00712                                  <span class="keyword">const</span> guint8 **data, gint32 *size);
-<a name="l00713"></a>00713 
-<a name="l00725"></a>00725 gboolean <a class="code" href="group__bson__cursor.html#ga45e3ec430a9b23b9512d5119b63f4c23" title="Get the value stored at the cursor, as an ObjectID.">bson_cursor_get_oid</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> guint8 **dest);
+<a name="l00709"></a>00709 gboolean <a class="code" href="group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array.">bson_cursor_get_array</a> (<span class="keyword">const</span> bson_cursor *c, bson **dest);
+<a name="l00710"></a>00710 
+<a name="l00723"></a>00723 gboolean <a class="code" href="group__bson__cursor.html#gaa8c658d1cfef6e87cbda80879ee551b7" title="Get the value stored at the cursor, as binary data.">bson_cursor_get_binary</a> (<span class="keyword">const</span> bson_cursor *c,
+<a name="l00724"></a>00724                                  <a class="code" href="group__bson__types.html#gab69c9ec1c9cdabbb2db338e58a6e55fe" title="Supported BSON binary subtypes.">bson_binary_subtype</a> *subtype,
+<a name="l00725"></a>00725                                  <span class="keyword">const</span> guint8 **data, gint32 *size);
 <a name="l00726"></a>00726 
-<a name="l00735"></a>00735 gboolean <a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean.">bson_cursor_get_boolean</a> (<span class="keyword">const</span> bson_cursor *c, gboolean *dest);
-<a name="l00736"></a>00736 
-<a name="l00745"></a>00745 gboolean <a class="code" href="group__bson__cursor.html#gafb2e3e6476a62b44cf6ec3e41c990fab" title="Get the value stored at the cursor, as an UTC datetime.">bson_cursor_get_utc_datetime</a> (<span class="keyword">const</span> bson_cursor *c, gint64 *dest);
-<a name="l00746"></a>00746 
-<a name="l00761"></a>00761 gboolean <a class="code" href="group__bson__cursor.html#ga755aa068895ce73e6badef392831812d" title="Get the value stored at the cursor, as a regexp.">bson_cursor_get_regex</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **regex,
-<a name="l00762"></a>00762                                 <span class="keyword">const</span> gchar **options);
-<a name="l00763"></a>00763 
-<a name="l00775"></a>00775 gboolean <a class="code" href="group__bson__cursor.html#ga4e0dd9fdca4a05410b68b38bea3fc9ff" title="Get the value stored at the cursor, as javascript code.">bson_cursor_get_javascript</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest);
+<a name="l00738"></a>00738 gboolean <a class="code" href="group__bson__cursor.html#ga45e3ec430a9b23b9512d5119b63f4c23" title="Get the value stored at the cursor, as an ObjectID.">bson_cursor_get_oid</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> guint8 **dest);
+<a name="l00739"></a>00739 
+<a name="l00748"></a>00748 gboolean <a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean.">bson_cursor_get_boolean</a> (<span class="keyword">const</span> bson_cursor *c, gboolean *dest);
+<a name="l00749"></a>00749 
+<a name="l00758"></a>00758 gboolean <a class="code" href="group__bson__cursor.html#gafb2e3e6476a62b44cf6ec3e41c990fab" title="Get the value stored at the cursor, as an UTC datetime.">bson_cursor_get_utc_datetime</a> (<span class="keyword">const</span> bson_cursor *c, gint64 *dest);
+<a name="l00759"></a>00759 
+<a name="l00774"></a>00774 gboolean <a class="code" href="group__bson__cursor.html#ga755aa068895ce73e6badef392831812d" title="Get the value stored at the cursor, as a regexp.">bson_cursor_get_regex</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **regex,
+<a name="l00775"></a>00775                                 <span class="keyword">const</span> gchar **options);
 <a name="l00776"></a>00776 
-<a name="l00788"></a>00788 gboolean <a class="code" href="group__bson__cursor.html#ga4f67ba736cfa34a91db3efb3f25c1c07" title="Get the value stored at the cursor, as a symbol.">bson_cursor_get_symbol</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest);
+<a name="l00788"></a>00788 gboolean <a class="code" href="group__bson__cursor.html#ga4e0dd9fdca4a05410b68b38bea3fc9ff" title="Get the value stored at the cursor, as javascript code.">bson_cursor_get_javascript</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest);
 <a name="l00789"></a>00789 
-<a name="l00803"></a>00803 gboolean <a class="code" href="group__bson__cursor.html#ga795172cdba462973cb35a6c94014219b" title="Get the value stored at the cursor, as javascript code w/ scope.">bson_cursor_get_javascript_w_scope</a> (<span class="keyword">const</span> bson_cursor *c,
-<a name="l00804"></a>00804                                              <span class="keyword">const</span> gchar **js,
-<a name="l00805"></a>00805                                              bson **scope);
-<a name="l00806"></a>00806 
-<a name="l00815"></a>00815 gboolean <a class="code" href="group__bson__cursor.html#ga869b17014b3863a8ae0cda9eb82bb5ac" title="Get the value stored at the cursor, as a 32-bit integer.">bson_cursor_get_int32</a> (<span class="keyword">const</span> bson_cursor *c, gint32 *dest);
-<a name="l00816"></a>00816 
-<a name="l00825"></a>00825 gboolean <a class="code" href="group__bson__cursor.html#ga96da14b748df5b6e564b193e0363e0fd" title="Get the value stored at the cursor, as a timestamp.">bson_cursor_get_timestamp</a> (<span class="keyword">const</span> bson_cursor *c, gint64 *dest);
-<a name="l00826"></a>00826 
-<a name="l00835"></a>00835 gboolean <a class="code" href="group__bson__cursor.html#ga50f3858c3ce2d30a15544cf46887be50" title="Get the value stored at the cursor, as a 64-bit integer.">bson_cursor_get_int64</a> (<span class="keyword">const</span> bson_cursor *c, gint64 *dest);
-<a name="l00836"></a>00836 
-<a name="l00841"></a>00841 G_END_DECLS
-<a name="l00842"></a>00842 
-<a name="l00843"></a>00843 <span class="preprocessor">#endif</span>
+<a name="l00801"></a>00801 gboolean <a class="code" href="group__bson__cursor.html#ga4f67ba736cfa34a91db3efb3f25c1c07" title="Get the value stored at the cursor, as a symbol.">bson_cursor_get_symbol</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest);
+<a name="l00802"></a>00802 
+<a name="l00816"></a>00816 gboolean <a class="code" href="group__bson__cursor.html#ga795172cdba462973cb35a6c94014219b" title="Get the value stored at the cursor, as javascript code w/ scope.">bson_cursor_get_javascript_w_scope</a> (<span class="keyword">const</span> bson_cursor *c,
+<a name="l00817"></a>00817                                              <span class="keyword">const</span> gchar **js,
+<a name="l00818"></a>00818                                              bson **scope);
+<a name="l00819"></a>00819 
+<a name="l00828"></a>00828 gboolean <a class="code" href="group__bson__cursor.html#ga869b17014b3863a8ae0cda9eb82bb5ac" title="Get the value stored at the cursor, as a 32-bit integer.">bson_cursor_get_int32</a> (<span class="keyword">const</span> bson_cursor *c, gint32 *dest);
+<a name="l00829"></a>00829 
+<a name="l00838"></a>00838 gboolean <a class="code" href="group__bson__cursor.html#ga96da14b748df5b6e564b193e0363e0fd" title="Get the value stored at the cursor, as a timestamp.">bson_cursor_get_timestamp</a> (<span class="keyword">const</span> bson_cursor *c, gint64 *dest);
+<a name="l00839"></a>00839 
+<a name="l00848"></a>00848 gboolean <a class="code" href="group__bson__cursor.html#ga50f3858c3ce2d30a15544cf46887be50" title="Get the value stored at the cursor, as a 64-bit integer.">bson_cursor_get_int64</a> (<span class="keyword">const</span> bson_cursor *c, gint64 *dest);
+<a name="l00849"></a>00849 
+<a name="l00854"></a>00854 G_END_DECLS
+<a name="l00855"></a>00855 
+<a name="l00856"></a>00856 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -256,7 +258,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:10 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

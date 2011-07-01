@@ -1,6 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$group__bson__cursor.html#ga1655fa3c1116657f42e4cf76ec8ca129" title="Move the cursor to a given key, past the current one." alt="" coords="211,5,376,35"/>
-<area shape="rect" id="node5" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="189,59,397,88"/>
-<area shape="rect" id="node7" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="449,20,617,49"/>
-<area shape="rect" id="node9" href="$group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d" title="Attempt to connect to another member of a replica set." alt="" coords="447,97,620,127"/>
+<area shape="rect" id="node3" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="189,44,397,73"/>
+<area shape="rect" id="node5" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="449,5,617,35"/>
+<area shape="rect" id="node7" href="$group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d" title="Attempt to connect to another member of a replica set." alt="" coords="447,83,620,112"/>
 </map>

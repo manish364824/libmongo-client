@@ -74,26 +74,36 @@ Here is a list of all documented functions, variables, defines, enums, and typed
 : <a class="el" href="group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99">mongo-client.h</a>
 , <a class="el" href="group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99">mongo-client.c</a>
 </li>
+<li>mongo_connection_set_timeout()
+: <a class="el" href="group__mongo__client.html#ga4b63193d2b779e23d5135bf3801df6e2">mongo-client.c</a>
+, <a class="el" href="group__mongo__client.html#ga4b63193d2b779e23d5135bf3801df6e2">mongo-client.h</a>
+</li>
 <li>mongo_disconnect()
-: <a class="el" href="group__mongo__client.html#ga3c100e2c251cc609e872096d5a68089b">mongo-client.c</a>
-, <a class="el" href="group__mongo__client.html#ga3c100e2c251cc609e872096d5a68089b">mongo-client.h</a>
+: <a class="el" href="group__mongo__client.html#ga3c100e2c251cc609e872096d5a68089b">mongo-client.h</a>
+, <a class="el" href="group__mongo__client.html#ga3c100e2c251cc609e872096d5a68089b">mongo-client.c</a>
+</li>
+<li>MONGO_INDEX_DROP_DUPS
+: <a class="el" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a1f17ac23aa3790516427b30a976490b5">mongo-sync.h</a>
+</li>
+<li>MONGO_INDEX_UNIQUE
+: <a class="el" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a9bba6324f54c9c4be4526a75de4f069d">mongo-sync.h</a>
 </li>
 <li>mongo_packet_recv()
-: <a class="el" href="group__mongo__client.html#gaf700fa384253105179ac1e340aedc74a">mongo-client.h</a>
-, <a class="el" href="group__mongo__client.html#gaf700fa384253105179ac1e340aedc74a">mongo-client.c</a>
+: <a class="el" href="group__mongo__client.html#gaf700fa384253105179ac1e340aedc74a">mongo-client.c</a>
+, <a class="el" href="group__mongo__client.html#gaf700fa384253105179ac1e340aedc74a">mongo-client.h</a>
 </li>
 <li>mongo_packet_send()
 : <a class="el" href="group__mongo__client.html#gaf3b678feed1988cd31cf7f00267ba531">mongo-client.c</a>
 , <a class="el" href="group__mongo__client.html#gaf3b678feed1988cd31cf7f00267ba531">mongo-client.h</a>
 </li>
 <li>MONGO_REPLY_FLAG_AWAITCAPABLE
-: <a class="el" href="group__mongo__wire__reply.html#ggadf764cbdea00d65edcd07bb9953ad2b7ae5a6961ae5f12632a21fcc37a5304abb">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5ae5a6961ae5f12632a21fcc37a5304abb">mongo-wire.h</a>
 </li>
 <li>MONGO_REPLY_FLAG_NO_CURSOR
-: <a class="el" href="group__mongo__wire__reply.html#ggadf764cbdea00d65edcd07bb9953ad2b7a451db5f21c7c43f9cca3b875b0e35750">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5a451db5f21c7c43f9cca3b875b0e35750">mongo-wire.h</a>
 </li>
 <li>MONGO_REPLY_FLAG_QUERY_FAIL
-: <a class="el" href="group__mongo__wire__reply.html#ggadf764cbdea00d65edcd07bb9953ad2b7a199b2f5de60a6e97c9e434ab6d8fcdf7">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5a199b2f5de60a6e97c9e434ab6d8fcdf7">mongo-wire.h</a>
 </li>
 <li>mongo_sync_cmd_authenticate()
 : <a class="el" href="group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59">mongo-sync.c</a>
@@ -122,6 +132,18 @@ Here is a list of all documented functions, variables, defines, enums, and typed
 <li>mongo_sync_cmd_get_more()
 : <a class="el" href="group__mongo__sync.html#ga4748ae0caf5b361929580d42ff369815">mongo-sync.c</a>
 , <a class="el" href="group__mongo__sync.html#ga4748ae0caf5b361929580d42ff369815">mongo-sync.h</a>
+</li>
+<li>mongo_sync_cmd_index_create()
+: <a class="el" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c">mongo-sync.c</a>
+, <a class="el" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c">mongo-sync.h</a>
+</li>
+<li>mongo_sync_cmd_index_drop()
+: <a class="el" href="group__mongo__sync.html#ga1e45a4ca4c933a909a9b4b1b04a6dfa2">mongo-sync.c</a>
+, <a class="el" href="group__mongo__sync.html#ga1e45a4ca4c933a909a9b4b1b04a6dfa2">mongo-sync.h</a>
+</li>
+<li>mongo_sync_cmd_index_drop_all()
+: <a class="el" href="group__mongo__sync.html#ga9f693b6c98b6d042c1fda2b8cd41da87">mongo-sync.c</a>
+, <a class="el" href="group__mongo__sync.html#ga9f693b6c98b6d042c1fda2b8cd41da87">mongo-sync.h</a>
 </li>
 <li>mongo_sync_cmd_insert()
 : <a class="el" href="group__mongo__sync.html#ga3a2312f2c0a7e6c9a4c8d0eb57051f65">mongo-sync.c</a>
@@ -243,28 +265,28 @@ Here is a list of all documented functions, variables, defines, enums, and typed
 , <a class="el" href="group__mongo__sync__pool__api.html#gad44cce8437e2d7f9caa487c4a0f1688d">mongo-sync-pool.h</a>
 </li>
 <li>mongo_sync_reconnect()
-: <a class="el" href="group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d">mongo-sync.h</a>
-, <a class="el" href="group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d">mongo-sync.c</a>
+: <a class="el" href="group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d">mongo-sync.c</a>
+, <a class="el" href="group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d">mongo-sync.h</a>
 </li>
 <li>mongo_util_oid_init()
 : <a class="el" href="group__mongo__util.html#ga67177db7fd9bc32b687198a575e6efda">mongo-utils.c</a>
 , <a class="el" href="group__mongo__util.html#ga67177db7fd9bc32b687198a575e6efda">mongo-utils.h</a>
 </li>
 <li>mongo_util_oid_new()
-: <a class="el" href="group__mongo__util.html#ga692cc07bb07d2eb6a0026325e2fc13c8">mongo-utils.h</a>
-, <a class="el" href="group__mongo__util.html#ga692cc07bb07d2eb6a0026325e2fc13c8">mongo-utils.c</a>
+: <a class="el" href="group__mongo__util.html#ga692cc07bb07d2eb6a0026325e2fc13c8">mongo-utils.c</a>
+, <a class="el" href="group__mongo__util.html#ga692cc07bb07d2eb6a0026325e2fc13c8">mongo-utils.h</a>
 </li>
 <li>mongo_util_oid_new_with_time()
-: <a class="el" href="group__mongo__util.html#ga1f3b0421ba55bc6b63d172b29f710a57">mongo-utils.c</a>
-, <a class="el" href="group__mongo__util.html#ga1f3b0421ba55bc6b63d172b29f710a57">mongo-utils.h</a>
+: <a class="el" href="group__mongo__util.html#ga1f3b0421ba55bc6b63d172b29f710a57">mongo-utils.h</a>
+, <a class="el" href="group__mongo__util.html#ga1f3b0421ba55bc6b63d172b29f710a57">mongo-utils.c</a>
 </li>
 <li>mongo_util_parse_addr()
-: <a class="el" href="group__mongo__util.html#ga322ea87ec69f5964eea7e8da40288579">mongo-utils.h</a>
-, <a class="el" href="group__mongo__util.html#ga322ea87ec69f5964eea7e8da40288579">mongo-utils.c</a>
+: <a class="el" href="group__mongo__util.html#ga322ea87ec69f5964eea7e8da40288579">mongo-utils.c</a>
+, <a class="el" href="group__mongo__util.html#ga322ea87ec69f5964eea7e8da40288579">mongo-utils.h</a>
 </li>
 <li>mongo_wire_cmd_custom()
-: <a class="el" href="group__mongo__wire__cmd.html#ga7c7b378c3675d90d4da766b65b3ccef5">mongo-wire.c</a>
-, <a class="el" href="group__mongo__wire__cmd.html#ga7c7b378c3675d90d4da766b65b3ccef5">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#ga7c7b378c3675d90d4da766b65b3ccef5">mongo-wire.h</a>
+, <a class="el" href="group__mongo__wire__cmd.html#ga7c7b378c3675d90d4da766b65b3ccef5">mongo-wire.c</a>
 </li>
 <li>mongo_wire_cmd_delete()
 : <a class="el" href="group__mongo__wire__cmd.html#ga485e6a565866a9fa2ec4251e052ac060">mongo-wire.c</a>
@@ -275,55 +297,55 @@ Here is a list of all documented functions, variables, defines, enums, and typed
 , <a class="el" href="group__mongo__wire__cmd.html#ga9ee20dc3832cf1a950e545d4891ed7bf">mongo-wire.h</a>
 </li>
 <li>mongo_wire_cmd_insert()
-: <a class="el" href="group__mongo__wire__cmd.html#gaae093fbc8193dff191d678390254e257">mongo-wire.c</a>
-, <a class="el" href="group__mongo__wire__cmd.html#gaae093fbc8193dff191d678390254e257">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#gaae093fbc8193dff191d678390254e257">mongo-wire.h</a>
+, <a class="el" href="group__mongo__wire__cmd.html#gaae093fbc8193dff191d678390254e257">mongo-wire.c</a>
 </li>
 <li>mongo_wire_cmd_insert_n()
 : <a class="el" href="group__mongo__wire__cmd.html#ga96457147e0540ea46503ca61f87c566b">mongo-wire.c</a>
 , <a class="el" href="group__mongo__wire__cmd.html#ga96457147e0540ea46503ca61f87c566b">mongo-wire.h</a>
 </li>
 <li>mongo_wire_cmd_kill_cursors()
-: <a class="el" href="group__mongo__wire__cmd.html#ga5529f4f78c0ea8a5d7e90ca1371de745">mongo-wire.c</a>
-, <a class="el" href="group__mongo__wire__cmd.html#ga5529f4f78c0ea8a5d7e90ca1371de745">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#ga5529f4f78c0ea8a5d7e90ca1371de745">mongo-wire.h</a>
+, <a class="el" href="group__mongo__wire__cmd.html#ga5529f4f78c0ea8a5d7e90ca1371de745">mongo-wire.c</a>
 </li>
 <li>mongo_wire_cmd_kill_cursors_va()
-: <a class="el" href="mongo-wire_8c.html#a616af143aa2a10f5ce29ff784ea210b8">mongo-wire.c</a>
-, <a class="el" href="libmongo-private_8h.html#a616af143aa2a10f5ce29ff784ea210b8">libmongo-private.h</a>
+: <a class="el" href="libmongo-private_8h.html#a616af143aa2a10f5ce29ff784ea210b8">libmongo-private.h</a>
+, <a class="el" href="mongo-wire_8c.html#a616af143aa2a10f5ce29ff784ea210b8">mongo-wire.c</a>
 </li>
 <li>mongo_wire_cmd_query()
 : <a class="el" href="group__mongo__wire__cmd.html#ga07c82c11f2e103a79b88f22bdb586472">mongo-wire.c</a>
 , <a class="el" href="group__mongo__wire__cmd.html#ga07c82c11f2e103a79b88f22bdb586472">mongo-wire.h</a>
 </li>
 <li>mongo_wire_cmd_update()
-: <a class="el" href="group__mongo__wire__cmd.html#ga660ca5f7389ca48d4739d885a18e78a6">mongo-wire.h</a>
-, <a class="el" href="group__mongo__wire__cmd.html#ga660ca5f7389ca48d4739d885a18e78a6">mongo-wire.c</a>
+: <a class="el" href="group__mongo__wire__cmd.html#ga660ca5f7389ca48d4739d885a18e78a6">mongo-wire.c</a>
+, <a class="el" href="group__mongo__wire__cmd.html#ga660ca5f7389ca48d4739d885a18e78a6">mongo-wire.h</a>
 </li>
 <li>MONGO_WIRE_FLAG_DELETE_SINGLE
-: <a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca12352814d851fba7a1a178ca97e5a10b">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#gga61dadd085c1777f559549e05962b2c9ea12352814d851fba7a1a178ca97e5a10b">mongo-wire.h</a>
 </li>
 <li>MONGO_WIRE_FLAG_QUERY_AWAIT_DATA
-: <a class="el" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aa7d3068d6f7c54a81c30cc12a0806517">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06caa7d3068d6f7c54a81c30cc12a0806517">mongo-wire.h</a>
 </li>
 <li>MONGO_WIRE_FLAG_QUERY_EXHAUST
-: <a class="el" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a2789e480d7582afb41a9471ce0c602eb">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca2789e480d7582afb41a9471ce0c602eb">mongo-wire.h</a>
 </li>
 <li>MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT
-: <a class="el" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a61f4eec7d66626b4b3dd8cfd4637a61c">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca61f4eec7d66626b4b3dd8cfd4637a61c">mongo-wire.h</a>
 </li>
 <li>MONGO_WIRE_FLAG_QUERY_PARTIAL_RESULTS
-: <a class="el" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a52fcba0c02713c5353b2300d311551e0">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca52fcba0c02713c5353b2300d311551e0">mongo-wire.h</a>
 </li>
 <li>MONGO_WIRE_FLAG_QUERY_SLAVE_OK
-: <a class="el" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a041055bcf40f8d3cc4543f6ada3fc53e">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca041055bcf40f8d3cc4543f6ada3fc53e">mongo-wire.h</a>
 </li>
 <li>MONGO_WIRE_FLAG_QUERY_TAILABLE_CURSOR
-: <a class="el" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a371353ae287a99e7f43902ec00472798">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca371353ae287a99e7f43902ec00472798">mongo-wire.h</a>
 </li>
 <li>MONGO_WIRE_FLAG_UPDATE_MULTI
-: <a class="el" href="group__mongo__wire__cmd.html#gga99fb83031ce9923c84392b4e92f956b5aac446cd2b1a1e2b5cb77350d2ff203bb">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aac446cd2b1a1e2b5cb77350d2ff203bb">mongo-wire.h</a>
 </li>
 <li>MONGO_WIRE_FLAG_UPDATE_UPSERT
-: <a class="el" href="group__mongo__wire__cmd.html#gga99fb83031ce9923c84392b4e92f956b5aa73d76d928ff95cc8dc903247148f54d">mongo-wire.h</a>
+: <a class="el" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aa73d76d928ff95cc8dc903247148f54d">mongo-wire.h</a>
 </li>
 <li>mongo_wire_opcode
 : <a class="el" href="mongo-wire_8c.html#ac2715e938663ce9454cb9eeb1b6fdade">mongo-wire.c</a>
@@ -341,16 +363,16 @@ Here is a list of all documented functions, variables, defines, enums, and typed
 , <a class="el" href="group__mongo__wire__packet.html#ga3ee2d2e54085ca1ec738ea5f750e763d">mongo-wire.h</a>
 </li>
 <li>mongo_wire_packet_get_header_raw()
-: <a class="el" href="libmongo-private_8h.html#a8c81866b00556dec8ae33c867511a8f8">libmongo-private.h</a>
-, <a class="el" href="mongo-wire_8c.html#a8c81866b00556dec8ae33c867511a8f8">mongo-wire.c</a>
+: <a class="el" href="mongo-wire_8c.html#a8c81866b00556dec8ae33c867511a8f8">mongo-wire.c</a>
+, <a class="el" href="libmongo-private_8h.html#a8c81866b00556dec8ae33c867511a8f8">libmongo-private.h</a>
 </li>
 <li>mongo_wire_packet_new()
 : <a class="el" href="group__mongo__wire__packet.html#gab4bd96fe8aa6e3b7b9d49636766e481c">mongo-wire.c</a>
 , <a class="el" href="group__mongo__wire__packet.html#gab4bd96fe8aa6e3b7b9d49636766e481c">mongo-wire.h</a>
 </li>
 <li>mongo_wire_packet_set_data()
-: <a class="el" href="group__mongo__wire__packet.html#gafff19ef5ed92d56ac0b15788d4e0b5e6">mongo-wire.h</a>
-, <a class="el" href="group__mongo__wire__packet.html#gafff19ef5ed92d56ac0b15788d4e0b5e6">mongo-wire.c</a>
+: <a class="el" href="group__mongo__wire__packet.html#gafff19ef5ed92d56ac0b15788d4e0b5e6">mongo-wire.c</a>
+, <a class="el" href="group__mongo__wire__packet.html#gafff19ef5ed92d56ac0b15788d4e0b5e6">mongo-wire.h</a>
 </li>
 <li>mongo_wire_packet_set_header()
 : <a class="el" href="group__mongo__wire__packet.html#ga440609598a8cf1ab58f47d7da5a6b8b0">mongo-wire.c</a>
@@ -388,7 +410,7 @@ Here is a list of all documented functions, variables, defines, enums, and typed
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

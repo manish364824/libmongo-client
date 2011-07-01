@@ -173,9 +173,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00441"></a>00441                                       const gchar *user,
 <a name="l00442"></a>00442                                       const gchar *pw);
 <a name="l00443"></a>00443 
-<a name="l00446"></a>00446 G_END_DECLS
-<a name="l00447"></a>00447 
-<a name="l00448"></a>00448 <span class="preprocessor">#endif</span>
+<a name="l00445"></a>00445 enum
+<a name="l00446"></a>00446   {
+<a name="l00447"></a><a class="code" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a9bba6324f54c9c4be4526a75de4f069d">00447</a>     <a class="code" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a9bba6324f54c9c4be4526a75de4f069d" title="Create a unique index.">MONGO_INDEX_UNIQUE</a> = 0x01, 
+<a name="l00448"></a><a class="code" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a1f17ac23aa3790516427b30a976490b5">00448</a>     <a class="code" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a1f17ac23aa3790516427b30a976490b5" title="Drop duplicate entries when creating the indexes.">MONGO_INDEX_DROP_DUPS</a> = 0x02, 
+<a name="l00450"></a>00450   };
+<a name="l00451"></a>00451 
+<a name="l00461"></a>00461 gboolean <a class="code" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index.">mongo_sync_cmd_index_create</a> (mongo_sync_connection *conn,
+<a name="l00462"></a>00462                                       <span class="keyword">const</span> gchar *ns,
+<a name="l00463"></a>00463                                       <span class="keyword">const</span> bson *key,
+<a name="l00464"></a>00464                                       gint options);
+<a name="l00465"></a>00465 
+<a name="l00474"></a>00474 gboolean <a class="code" href="group__mongo__sync.html#ga1e45a4ca4c933a909a9b4b1b04a6dfa2" title="Drop an index.">mongo_sync_cmd_index_drop</a> (mongo_sync_connection *conn,
+<a name="l00475"></a>00475                                     <span class="keyword">const</span> gchar *ns,
+<a name="l00476"></a>00476                                     <span class="keyword">const</span> bson *key);
+<a name="l00477"></a>00477 
+<a name="l00485"></a>00485 gboolean <a class="code" href="group__mongo__sync.html#ga9f693b6c98b6d042c1fda2b8cd41da87" title="Drop all indexes from a namespace.">mongo_sync_cmd_index_drop_all</a> (mongo_sync_connection *conn,
+<a name="l00486"></a>00486                                         <span class="keyword">const</span> gchar *ns);
+<a name="l00487"></a>00487 
+<a name="l00490"></a>00490 G_END_DECLS
+<a name="l00491"></a>00491 
+<a name="l00492"></a>00492 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -192,7 +210,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:10 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

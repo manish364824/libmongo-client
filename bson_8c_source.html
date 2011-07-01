@@ -835,358 +835,360 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00890"></a>00890   <span class="keywordflow">return</span> TRUE;
 <a name="l00891"></a>00891 }
 <a name="l00892"></a>00892 
-<a name="l00893"></a>00893 gboolean
-<a name="l00894"></a><a class="code" href="group__bson__cursor.html#ga1655fa3c1116657f42e4cf76ec8ca129">00894</a> <a class="code" href="group__bson__cursor.html#ga1655fa3c1116657f42e4cf76ec8ca129" title="Move the cursor to a given key, past the current one.">bson_cursor_find_next</a> (bson_cursor *c, <span class="keyword">const</span> gchar *name)
-<a name="l00895"></a>00895 {
-<a name="l00896"></a>00896   <span class="keyword">const</span> gchar *ckey;
-<a name="l00897"></a>00897   <span class="keywordtype">size_t</span> cpos, cvalue_pos;
-<a name="l00898"></a>00898   gint32 name_len;
-<a name="l00899"></a>00899 
-<a name="l00900"></a>00900   <span class="keywordflow">if</span> (!c || !name)
-<a name="l00901"></a>00901     <span class="keywordflow">return</span> FALSE;
+<a name="l00893"></a>00893 <span class="keyword">static</span> <span class="keyword">inline</span> gboolean
+<a name="l00894"></a>00894 _bson_cursor_find (<span class="keyword">const</span> bson *b, <span class="keyword">const</span> gchar *name, <span class="keywordtype">size_t</span> start_pos,
+<a name="l00895"></a>00895                    gint32 end_pos, gboolean wrap_over, bson_cursor *dest_c)
+<a name="l00896"></a>00896 {
+<a name="l00897"></a>00897   gint32 pos = start_pos, bs;
+<a name="l00898"></a>00898   <span class="keyword">const</span> guint8 *d;
+<a name="l00899"></a>00899   gint32 name_len;
+<a name="l00900"></a>00900 
+<a name="l00901"></a>00901   name_len = strlen (name);
 <a name="l00902"></a>00902 
-<a name="l00903"></a>00903   name_len = strlen(name);
+<a name="l00903"></a>00903   d = <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (b);
 <a name="l00904"></a>00904 
-<a name="l00905"></a>00905   ckey = c-&gt;key;
-<a name="l00906"></a>00906   cpos = c-&gt;pos;
-<a name="l00907"></a>00907   cvalue_pos = c-&gt;value_pos;
-<a name="l00908"></a>00908 
-<a name="l00909"></a>00909   <span class="keywordflow">while</span> (<a class="code" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next</a> (c))
-<a name="l00910"></a>00910     {
-<a name="l00911"></a>00911       gint32 key_len = strlen (<a class="code" href="group__bson__cursor.html#ga8de19693c54fca2eb6c8a4f5a30eb637" title="Determine the name of the current elements key.">bson_cursor_key</a> (c));
-<a name="l00912"></a>00912 
-<a name="l00913"></a>00913       <span class="keywordflow">if</span> (!memcmp (<a class="code" href="group__bson__cursor.html#ga8de19693c54fca2eb6c8a4f5a30eb637" title="Determine the name of the current elements key.">bson_cursor_key</a> (c), name,
-<a name="l00914"></a>00914                    (name_len &lt;= key_len) ? name_len : key_len))
-<a name="l00915"></a>00915         <span class="keywordflow">return</span> TRUE;
-<a name="l00916"></a>00916     }
-<a name="l00917"></a>00917 
-<a name="l00918"></a>00918   c-&gt;key = ckey;
-<a name="l00919"></a>00919   c-&gt;pos = cpos;
-<a name="l00920"></a>00920   c-&gt;value_pos = cvalue_pos;
-<a name="l00921"></a>00921 
-<a name="l00922"></a>00922   <span class="keywordflow">return</span> FALSE;
-<a name="l00923"></a>00923 }
-<a name="l00924"></a>00924 
-<a name="l00925"></a>00925 bson_cursor *
-<a name="l00926"></a><a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb">00926</a> <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (<span class="keyword">const</span> bson *b, <span class="keyword">const</span> gchar *name)
-<a name="l00927"></a>00927 {
-<a name="l00928"></a>00928   gint32 pos = <span class="keyword">sizeof</span> (guint32), bs;
-<a name="l00929"></a>00929   <span class="keyword">const</span> guint8 *d;
-<a name="l00930"></a>00930   gint32 name_len;
-<a name="l00931"></a>00931 
-<a name="l00932"></a>00932   <span class="keywordflow">if</span> (<a class="code" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object.">bson_size</a> (b) == -1 || !name)
-<a name="l00933"></a>00933     <span class="keywordflow">return</span> NULL;
-<a name="l00934"></a>00934 
-<a name="l00935"></a>00935   name_len = strlen (name);
-<a name="l00936"></a>00936 
-<a name="l00937"></a>00937   d = <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (b);
-<a name="l00938"></a>00938 
-<a name="l00939"></a>00939   <span class="keywordflow">while</span> (pos &lt; <a class="code" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object.">bson_size</a> (b) - 1)
-<a name="l00940"></a>00940     {
-<a name="l00941"></a>00941       <a class="code" href="group__bson__types.html#gadac27a93ef69dbe56a6409c68395e5cb" title="Supported BSON object types.">bson_type</a> t = (bson_type) d[pos];
-<a name="l00942"></a>00942       <span class="keyword">const</span> gchar *key = (gchar *) &amp;d[pos + 1];
-<a name="l00943"></a>00943       gint32 key_len = strlen (key);
-<a name="l00944"></a>00944       gint32 value_pos = pos + key_len + 2;
-<a name="l00945"></a>00945 
-<a name="l00946"></a>00946       <span class="keywordflow">if</span> (!memcmp (key, name, (name_len &lt;= key_len) ? name_len : key_len))
-<a name="l00947"></a>00947         {
-<a name="l00948"></a>00948           bson_cursor *c;
+<a name="l00905"></a>00905   <span class="keywordflow">while</span> (pos &lt; end_pos)
+<a name="l00906"></a>00906     {
+<a name="l00907"></a>00907       <a class="code" href="group__bson__types.html#gadac27a93ef69dbe56a6409c68395e5cb" title="Supported BSON object types.">bson_type</a> t = (bson_type) d[pos];
+<a name="l00908"></a>00908       <span class="keyword">const</span> gchar *key = (gchar *) &amp;d[pos + 1];
+<a name="l00909"></a>00909       gint32 key_len = strlen (key);
+<a name="l00910"></a>00910       gint32 value_pos = pos + key_len + 2;
+<a name="l00911"></a>00911 
+<a name="l00912"></a>00912       <span class="keywordflow">if</span> (!memcmp (key, name, (name_len &lt;= key_len) ? name_len : key_len))
+<a name="l00913"></a>00913         {
+<a name="l00914"></a>00914           dest_c-&gt;obj = b;
+<a name="l00915"></a>00915           dest_c-&gt;key = key;
+<a name="l00916"></a>00916           dest_c-&gt;pos = pos;
+<a name="l00917"></a>00917           dest_c-&gt;value_pos = value_pos;
+<a name="l00918"></a>00918 
+<a name="l00919"></a>00919           <span class="keywordflow">return</span> TRUE;
+<a name="l00920"></a>00920         }
+<a name="l00921"></a>00921       bs = _bson_get_block_size (t, &amp;d[value_pos]);
+<a name="l00922"></a>00922       <span class="keywordflow">if</span> (bs == -1)
+<a name="l00923"></a>00923         <span class="keywordflow">return</span> FALSE;
+<a name="l00924"></a>00924       pos = value_pos + bs;
+<a name="l00925"></a>00925     }
+<a name="l00926"></a>00926 
+<a name="l00927"></a>00927   <span class="keywordflow">if</span> (wrap_over)
+<a name="l00928"></a>00928     <span class="keywordflow">return</span> _bson_cursor_find (b, name, <span class="keyword">sizeof</span> (gint32), start_pos,
+<a name="l00929"></a>00929                               FALSE, dest_c);
+<a name="l00930"></a>00930 
+<a name="l00931"></a>00931   <span class="keywordflow">return</span> FALSE;
+<a name="l00932"></a>00932 }
+<a name="l00933"></a>00933 
+<a name="l00934"></a>00934 gboolean
+<a name="l00935"></a><a class="code" href="group__bson__cursor.html#gab9c63d49d46c04b2e5ffbdd9d9ee12d9">00935</a> <a class="code" href="group__bson__cursor.html#gab9c63d49d46c04b2e5ffbdd9d9ee12d9" title="Move the cursor to a given key.">bson_cursor_find</a> (bson_cursor *c, <span class="keyword">const</span> gchar *name)
+<a name="l00936"></a>00936 {
+<a name="l00937"></a>00937   <span class="keywordflow">if</span> (!c || !name)
+<a name="l00938"></a>00938     <span class="keywordflow">return</span> FALSE;
+<a name="l00939"></a>00939 
+<a name="l00940"></a>00940   <span class="keywordflow">return</span> _bson_cursor_find (c-&gt;obj, name, c-&gt;pos, <a class="code" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object.">bson_size</a> (c-&gt;obj) - 1,
+<a name="l00941"></a>00941                             TRUE, c);
+<a name="l00942"></a>00942 }
+<a name="l00943"></a>00943 
+<a name="l00944"></a>00944 gboolean
+<a name="l00945"></a><a class="code" href="group__bson__cursor.html#ga1655fa3c1116657f42e4cf76ec8ca129">00945</a> <a class="code" href="group__bson__cursor.html#ga1655fa3c1116657f42e4cf76ec8ca129" title="Move the cursor to a given key, past the current one.">bson_cursor_find_next</a> (bson_cursor *c, <span class="keyword">const</span> gchar *name)
+<a name="l00946"></a>00946 {
+<a name="l00947"></a>00947   <span class="keywordflow">if</span> (!c || !name)
+<a name="l00948"></a>00948     <span class="keywordflow">return</span> FALSE;
 <a name="l00949"></a>00949 
-<a name="l00950"></a>00950           c = (bson_cursor *)g_new0 (bson_cursor, 1);
-<a name="l00951"></a>00951 
-<a name="l00952"></a>00952           c-&gt;obj = b;
-<a name="l00953"></a>00953           c-&gt;key = key;
-<a name="l00954"></a>00954           c-&gt;pos = pos;
-<a name="l00955"></a>00955           c-&gt;value_pos = value_pos;
-<a name="l00956"></a>00956 
-<a name="l00957"></a>00957           <span class="keywordflow">return</span> c;
-<a name="l00958"></a>00958         }
-<a name="l00959"></a>00959       bs = _bson_get_block_size (t, &amp;d[value_pos]);
-<a name="l00960"></a>00960       <span class="keywordflow">if</span> (bs == -1)
-<a name="l00961"></a>00961         <span class="keywordflow">return</span> NULL;
-<a name="l00962"></a>00962       pos = value_pos + bs;
-<a name="l00963"></a>00963     }
-<a name="l00964"></a>00964 
-<a name="l00965"></a>00965   <span class="keywordflow">return</span> NULL;
-<a name="l00966"></a>00966 }
-<a name="l00967"></a>00967 
-<a name="l00968"></a>00968 <a class="code" href="group__bson__types.html#gadac27a93ef69dbe56a6409c68395e5cb" title="Supported BSON object types.">bson_type</a>
-<a name="l00969"></a><a class="code" href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3">00969</a> <a class="code" href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3" title="Determine the type of the current element.">bson_cursor_type</a> (<span class="keyword">const</span> bson_cursor *c)
-<a name="l00970"></a>00970 {
-<a name="l00971"></a>00971   <span class="keywordflow">if</span> (!c || c-&gt;pos &lt; sizeof (gint32))
-<a name="l00972"></a>00972     <span class="keywordflow">return</span> BSON_TYPE_NONE;
-<a name="l00973"></a>00973 
-<a name="l00974"></a>00974   <span class="keywordflow">return</span> (<a class="code" href="group__bson__types.html#gadac27a93ef69dbe56a6409c68395e5cb" title="Supported BSON object types.">bson_type</a>)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj)[c-&gt;pos]);
-<a name="l00975"></a>00975 }
-<a name="l00976"></a>00976 
-<a name="l00977"></a>00977 <span class="keyword">const</span> gchar *
-<a name="l00978"></a><a class="code" href="group__bson__cursor.html#ga7ec76513b2377a122ed2a95ffa1042c4">00978</a> <a class="code" href="group__bson__cursor.html#ga7ec76513b2377a122ed2a95ffa1042c4" title="Retrieve the type of the current element, as string.">bson_cursor_type_as_string</a> (<span class="keyword">const</span> bson_cursor *c)
-<a name="l00979"></a>00979 {
-<a name="l00980"></a>00980   <span class="keywordflow">if</span> (!c || c-&gt;pos &lt; sizeof (gint32))
-<a name="l00981"></a>00981     <span class="keywordflow">return</span> NULL;
-<a name="l00982"></a>00982 
-<a name="l00983"></a>00983   <span class="keywordflow">return</span> <a class="code" href="group__bson__types.html#ga9b20c4997794324865f54f606a984c58" title="Return a type&amp;#39;s stringified name.">bson_type_as_string</a> (<a class="code" href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3" title="Determine the type of the current element.">bson_cursor_type</a> (c));
-<a name="l00984"></a>00984 }
-<a name="l00985"></a>00985 
-<a name="l00986"></a>00986 <span class="keyword">const</span> gchar *
-<a name="l00987"></a><a class="code" href="group__bson__cursor.html#ga8de19693c54fca2eb6c8a4f5a30eb637">00987</a> <a class="code" href="group__bson__cursor.html#ga8de19693c54fca2eb6c8a4f5a30eb637" title="Determine the name of the current elements key.">bson_cursor_key</a> (<span class="keyword">const</span> bson_cursor *c)
-<a name="l00988"></a>00988 {
-<a name="l00989"></a>00989   <span class="keywordflow">if</span> (!c)
-<a name="l00990"></a>00990     <span class="keywordflow">return</span> NULL;
-<a name="l00991"></a>00991 
-<a name="l00992"></a>00992   <span class="keywordflow">return</span> c-&gt;key;
-<a name="l00993"></a>00993 }
-<a name="l00994"></a>00994 
-<a name="l01000"></a><a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">01000</a> <span class="preprocessor">#define BSON_CURSOR_CHECK_TYPE(c,type)          \</span>
-<a name="l01001"></a>01001 <span class="preprocessor">  if (bson_cursor_type(c) != type)              \</span>
-<a name="l01002"></a>01002 <span class="preprocessor">    return FALSE;</span>
-<a name="l01003"></a>01003 <span class="preprocessor"></span>
-<a name="l01004"></a>01004 gboolean
-<a name="l01005"></a><a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d">01005</a> <a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest)
-<a name="l01006"></a>01006 {
-<a name="l01007"></a>01007   <span class="keywordflow">if</span> (!dest)
-<a name="l01008"></a>01008     <span class="keywordflow">return</span> FALSE;
-<a name="l01009"></a>01009 
-<a name="l01010"></a>01010   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>);
+<a name="l00950"></a>00950   <span class="keywordflow">return</span> _bson_cursor_find (c-&gt;obj, name, c-&gt;pos, <a class="code" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object.">bson_size</a> (c-&gt;obj) - 1,
+<a name="l00951"></a>00951                             FALSE, c);
+<a name="l00952"></a>00952 }
+<a name="l00953"></a>00953 
+<a name="l00954"></a>00954 bson_cursor *
+<a name="l00955"></a><a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb">00955</a> <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (<span class="keyword">const</span> bson *b, <span class="keyword">const</span> gchar *name)
+<a name="l00956"></a>00956 {
+<a name="l00957"></a>00957   bson_cursor *c;
+<a name="l00958"></a>00958 
+<a name="l00959"></a>00959   <span class="keywordflow">if</span> (<a class="code" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object.">bson_size</a> (b) == -1 || !name)
+<a name="l00960"></a>00960     <span class="keywordflow">return</span> NULL;
+<a name="l00961"></a>00961 
+<a name="l00962"></a>00962   c = <a class="code" href="group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor.">bson_cursor_new</a> (b);
+<a name="l00963"></a>00963   <span class="keywordflow">if</span> (_bson_cursor_find (b, name, <span class="keyword">sizeof</span> (gint32), <a class="code" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object.">bson_size</a> (c-&gt;obj) - 1,
+<a name="l00964"></a>00964                          FALSE, c))
+<a name="l00965"></a>00965     <span class="keywordflow">return</span> c;
+<a name="l00966"></a>00966   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l00967"></a>00967   <span class="keywordflow">return</span> NULL;
+<a name="l00968"></a>00968 }
+<a name="l00969"></a>00969 
+<a name="l00970"></a>00970 <a class="code" href="group__bson__types.html#gadac27a93ef69dbe56a6409c68395e5cb" title="Supported BSON object types.">bson_type</a>
+<a name="l00971"></a><a class="code" href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3">00971</a> <a class="code" href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3" title="Determine the type of the current element.">bson_cursor_type</a> (<span class="keyword">const</span> bson_cursor *c)
+<a name="l00972"></a>00972 {
+<a name="l00973"></a>00973   <span class="keywordflow">if</span> (!c || c-&gt;pos &lt; sizeof (gint32))
+<a name="l00974"></a>00974     <span class="keywordflow">return</span> BSON_TYPE_NONE;
+<a name="l00975"></a>00975 
+<a name="l00976"></a>00976   <span class="keywordflow">return</span> (<a class="code" href="group__bson__types.html#gadac27a93ef69dbe56a6409c68395e5cb" title="Supported BSON object types.">bson_type</a>)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj)[c-&gt;pos]);
+<a name="l00977"></a>00977 }
+<a name="l00978"></a>00978 
+<a name="l00979"></a>00979 <span class="keyword">const</span> gchar *
+<a name="l00980"></a><a class="code" href="group__bson__cursor.html#ga7ec76513b2377a122ed2a95ffa1042c4">00980</a> <a class="code" href="group__bson__cursor.html#ga7ec76513b2377a122ed2a95ffa1042c4" title="Retrieve the type of the current element, as string.">bson_cursor_type_as_string</a> (<span class="keyword">const</span> bson_cursor *c)
+<a name="l00981"></a>00981 {
+<a name="l00982"></a>00982   <span class="keywordflow">if</span> (!c || c-&gt;pos &lt; sizeof (gint32))
+<a name="l00983"></a>00983     <span class="keywordflow">return</span> NULL;
+<a name="l00984"></a>00984 
+<a name="l00985"></a>00985   <span class="keywordflow">return</span> <a class="code" href="group__bson__types.html#ga9b20c4997794324865f54f606a984c58" title="Return a type&amp;#39;s stringified name.">bson_type_as_string</a> (<a class="code" href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3" title="Determine the type of the current element.">bson_cursor_type</a> (c));
+<a name="l00986"></a>00986 }
+<a name="l00987"></a>00987 
+<a name="l00988"></a>00988 <span class="keyword">const</span> gchar *
+<a name="l00989"></a><a class="code" href="group__bson__cursor.html#ga8de19693c54fca2eb6c8a4f5a30eb637">00989</a> <a class="code" href="group__bson__cursor.html#ga8de19693c54fca2eb6c8a4f5a30eb637" title="Determine the name of the current elements key.">bson_cursor_key</a> (<span class="keyword">const</span> bson_cursor *c)
+<a name="l00990"></a>00990 {
+<a name="l00991"></a>00991   <span class="keywordflow">if</span> (!c)
+<a name="l00992"></a>00992     <span class="keywordflow">return</span> NULL;
+<a name="l00993"></a>00993 
+<a name="l00994"></a>00994   <span class="keywordflow">return</span> c-&gt;key;
+<a name="l00995"></a>00995 }
+<a name="l00996"></a>00996 
+<a name="l01002"></a><a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">01002</a> <span class="preprocessor">#define BSON_CURSOR_CHECK_TYPE(c,type)          \</span>
+<a name="l01003"></a>01003 <span class="preprocessor">  if (bson_cursor_type(c) != type)              \</span>
+<a name="l01004"></a>01004 <span class="preprocessor">    return FALSE;</span>
+<a name="l01005"></a>01005 <span class="preprocessor"></span>
+<a name="l01006"></a>01006 gboolean
+<a name="l01007"></a><a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d">01007</a> <a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest)
+<a name="l01008"></a>01008 {
+<a name="l01009"></a>01009   <span class="keywordflow">if</span> (!dest)
+<a name="l01010"></a>01010     <span class="keywordflow">return</span> FALSE;
 <a name="l01011"></a>01011 
-<a name="l01012"></a>01012   *dest = (gchar *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + <span class="keyword">sizeof</span> (gint32));
+<a name="l01012"></a>01012   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>);
 <a name="l01013"></a>01013 
-<a name="l01014"></a>01014   <span class="keywordflow">return</span> TRUE;
-<a name="l01015"></a>01015 }
-<a name="l01016"></a>01016 
-<a name="l01017"></a>01017 gboolean
-<a name="l01018"></a><a class="code" href="group__bson__cursor.html#ga10e9c6f2686c407daa77d46e8c5d88b4">01018</a> <a class="code" href="group__bson__cursor.html#ga10e9c6f2686c407daa77d46e8c5d88b4" title="Get the value stored at the cursor, as a double.">bson_cursor_get_double</a> (<span class="keyword">const</span> bson_cursor *c, gdouble *dest)
-<a name="l01019"></a>01019 {
-<a name="l01020"></a>01020   <span class="keywordflow">if</span> (!dest)
-<a name="l01021"></a>01021     <span class="keywordflow">return</span> FALSE;
-<a name="l01022"></a>01022 
-<a name="l01023"></a>01023   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbabfcfb85257205dfad1148f88e7675950" title="8byte double">BSON_TYPE_DOUBLE</a>);
+<a name="l01014"></a>01014   *dest = (gchar *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + <span class="keyword">sizeof</span> (gint32));
+<a name="l01015"></a>01015 
+<a name="l01016"></a>01016   <span class="keywordflow">return</span> TRUE;
+<a name="l01017"></a>01017 }
+<a name="l01018"></a>01018 
+<a name="l01019"></a>01019 gboolean
+<a name="l01020"></a><a class="code" href="group__bson__cursor.html#ga10e9c6f2686c407daa77d46e8c5d88b4">01020</a> <a class="code" href="group__bson__cursor.html#ga10e9c6f2686c407daa77d46e8c5d88b4" title="Get the value stored at the cursor, as a double.">bson_cursor_get_double</a> (<span class="keyword">const</span> bson_cursor *c, gdouble *dest)
+<a name="l01021"></a>01021 {
+<a name="l01022"></a>01022   <span class="keywordflow">if</span> (!dest)
+<a name="l01023"></a>01023     <span class="keywordflow">return</span> FALSE;
 <a name="l01024"></a>01024 
-<a name="l01025"></a>01025   memcpy (dest, <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos, sizeof (gdouble));
-<a name="l01026"></a>01026   *dest = GDOUBLE_FROM_LE (*dest);
-<a name="l01027"></a>01027 
-<a name="l01028"></a>01028   <span class="keywordflow">return</span> TRUE;
-<a name="l01029"></a>01029 }
-<a name="l01030"></a>01030 
-<a name="l01031"></a>01031 gboolean
-<a name="l01032"></a><a class="code" href="group__bson__cursor.html#ga6f8c5f012e5236e18d677142b49262fb">01032</a> <a class="code" href="group__bson__cursor.html#ga6f8c5f012e5236e18d677142b49262fb" title="Get the value stored at the cursor, as a BSON document.">bson_cursor_get_document</a> (<span class="keyword">const</span> bson_cursor *c, bson **dest)
-<a name="l01033"></a>01033 {
-<a name="l01034"></a>01034   bson *b;
-<a name="l01035"></a>01035   gint32 size;
-<a name="l01036"></a>01036 
-<a name="l01037"></a>01037   <span class="keywordflow">if</span> (!dest)
-<a name="l01038"></a>01038     <span class="keywordflow">return</span> FALSE;
-<a name="l01039"></a>01039 
-<a name="l01040"></a>01040   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba0d25e0e5ffcd3b598ed1893bb2581234" title="4byte length + NULL terminated document">BSON_TYPE_DOCUMENT</a>);
+<a name="l01025"></a>01025   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbabfcfb85257205dfad1148f88e7675950" title="8byte double">BSON_TYPE_DOUBLE</a>);
+<a name="l01026"></a>01026 
+<a name="l01027"></a>01027   memcpy (dest, <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos, sizeof (gdouble));
+<a name="l01028"></a>01028   *dest = GDOUBLE_FROM_LE (*dest);
+<a name="l01029"></a>01029 
+<a name="l01030"></a>01030   <span class="keywordflow">return</span> TRUE;
+<a name="l01031"></a>01031 }
+<a name="l01032"></a>01032 
+<a name="l01033"></a>01033 gboolean
+<a name="l01034"></a><a class="code" href="group__bson__cursor.html#ga6f8c5f012e5236e18d677142b49262fb">01034</a> <a class="code" href="group__bson__cursor.html#ga6f8c5f012e5236e18d677142b49262fb" title="Get the value stored at the cursor, as a BSON document.">bson_cursor_get_document</a> (<span class="keyword">const</span> bson_cursor *c, bson **dest)
+<a name="l01035"></a>01035 {
+<a name="l01036"></a>01036   bson *b;
+<a name="l01037"></a>01037   gint32 size;
+<a name="l01038"></a>01038 
+<a name="l01039"></a>01039   <span class="keywordflow">if</span> (!dest)
+<a name="l01040"></a>01040     <span class="keywordflow">return</span> FALSE;
 <a name="l01041"></a>01041 
-<a name="l01042"></a>01042   size = bson_stream_doc_size (<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a>(c-&gt;obj), c-&gt;value_pos) -
-<a name="l01043"></a>01043     <span class="keyword">sizeof</span> (gint32) - 1;
-<a name="l01044"></a>01044   b = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (size);
-<a name="l01045"></a>01045   b-&gt;data = g_byte_array_append (b-&gt;data,
-<a name="l01046"></a>01046                                  <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos +
-<a name="l01047"></a>01047                                  sizeof (gint32), size);
-<a name="l01048"></a>01048   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
-<a name="l01049"></a>01049 
-<a name="l01050"></a>01050   *dest = b;
+<a name="l01042"></a>01042   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba0d25e0e5ffcd3b598ed1893bb2581234" title="4byte length + NULL terminated document">BSON_TYPE_DOCUMENT</a>);
+<a name="l01043"></a>01043 
+<a name="l01044"></a>01044   size = bson_stream_doc_size (<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a>(c-&gt;obj), c-&gt;value_pos) -
+<a name="l01045"></a>01045     <span class="keyword">sizeof</span> (gint32) - 1;
+<a name="l01046"></a>01046   b = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (size);
+<a name="l01047"></a>01047   b-&gt;data = g_byte_array_append (b-&gt;data,
+<a name="l01048"></a>01048                                  <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos +
+<a name="l01049"></a>01049                                  sizeof (gint32), size);
+<a name="l01050"></a>01050   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
 <a name="l01051"></a>01051 
-<a name="l01052"></a>01052   <span class="keywordflow">return</span> TRUE;
-<a name="l01053"></a>01053 }
-<a name="l01054"></a>01054 
-<a name="l01055"></a>01055 gboolean
-<a name="l01056"></a><a class="code" href="group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343">01056</a> <a class="code" href="group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array.">bson_cursor_get_array</a> (<span class="keyword">const</span> bson_cursor *c, bson **dest)
-<a name="l01057"></a>01057 {
-<a name="l01058"></a>01058   bson *b;
-<a name="l01059"></a>01059   gint32 size;
-<a name="l01060"></a>01060 
-<a name="l01061"></a>01061   <span class="keywordflow">if</span> (!dest)
-<a name="l01062"></a>01062     <span class="keywordflow">return</span> FALSE;
-<a name="l01063"></a>01063 
-<a name="l01064"></a>01064   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba248510c62bbfddd812265ef599d15fd7" title="4byte length + NULL terminated document">BSON_TYPE_ARRAY</a>);
+<a name="l01052"></a>01052   *dest = b;
+<a name="l01053"></a>01053 
+<a name="l01054"></a>01054   <span class="keywordflow">return</span> TRUE;
+<a name="l01055"></a>01055 }
+<a name="l01056"></a>01056 
+<a name="l01057"></a>01057 gboolean
+<a name="l01058"></a><a class="code" href="group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343">01058</a> <a class="code" href="group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array.">bson_cursor_get_array</a> (<span class="keyword">const</span> bson_cursor *c, bson **dest)
+<a name="l01059"></a>01059 {
+<a name="l01060"></a>01060   bson *b;
+<a name="l01061"></a>01061   gint32 size;
+<a name="l01062"></a>01062 
+<a name="l01063"></a>01063   <span class="keywordflow">if</span> (!dest)
+<a name="l01064"></a>01064     <span class="keywordflow">return</span> FALSE;
 <a name="l01065"></a>01065 
-<a name="l01066"></a>01066   size = bson_stream_doc_size (<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a>(c-&gt;obj), c-&gt;value_pos) -
-<a name="l01067"></a>01067     <span class="keyword">sizeof</span> (gint32) - 1;
-<a name="l01068"></a>01068   b = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (size);
-<a name="l01069"></a>01069   b-&gt;data = g_byte_array_append (b-&gt;data,
-<a name="l01070"></a>01070                                  <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos +
-<a name="l01071"></a>01071                                  sizeof (gint32), size);
-<a name="l01072"></a>01072   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
-<a name="l01073"></a>01073 
-<a name="l01074"></a>01074   *dest = b;
+<a name="l01066"></a>01066   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba248510c62bbfddd812265ef599d15fd7" title="4byte length + NULL terminated document">BSON_TYPE_ARRAY</a>);
+<a name="l01067"></a>01067 
+<a name="l01068"></a>01068   size = bson_stream_doc_size (<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a>(c-&gt;obj), c-&gt;value_pos) -
+<a name="l01069"></a>01069     <span class="keyword">sizeof</span> (gint32) - 1;
+<a name="l01070"></a>01070   b = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (size);
+<a name="l01071"></a>01071   b-&gt;data = g_byte_array_append (b-&gt;data,
+<a name="l01072"></a>01072                                  <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos +
+<a name="l01073"></a>01073                                  sizeof (gint32), size);
+<a name="l01074"></a>01074   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
 <a name="l01075"></a>01075 
-<a name="l01076"></a>01076   <span class="keywordflow">return</span> TRUE;
-<a name="l01077"></a>01077 }
-<a name="l01078"></a>01078 
-<a name="l01079"></a>01079 gboolean
-<a name="l01080"></a><a class="code" href="group__bson__cursor.html#gaa8c658d1cfef6e87cbda80879ee551b7">01080</a> <a class="code" href="group__bson__cursor.html#gaa8c658d1cfef6e87cbda80879ee551b7" title="Get the value stored at the cursor, as binary data.">bson_cursor_get_binary</a> (<span class="keyword">const</span> bson_cursor *c,
-<a name="l01081"></a>01081                         <a class="code" href="group__bson__types.html#gab69c9ec1c9cdabbb2db338e58a6e55fe" title="Supported BSON binary subtypes.">bson_binary_subtype</a> *subtype,
-<a name="l01082"></a>01082                         <span class="keyword">const</span> guint8 **data, gint32 *size)
-<a name="l01083"></a>01083 {
-<a name="l01084"></a>01084   <span class="keywordflow">if</span> (!subtype || !size || !data)
-<a name="l01085"></a>01085     <span class="keywordflow">return</span> FALSE;
-<a name="l01086"></a>01086 
-<a name="l01087"></a>01087   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbabc097480fa57844a0f908e5eb414d686" title="4byte length + 1byte subtype + data">BSON_TYPE_BINARY</a>);
+<a name="l01076"></a>01076   *dest = b;
+<a name="l01077"></a>01077 
+<a name="l01078"></a>01078   <span class="keywordflow">return</span> TRUE;
+<a name="l01079"></a>01079 }
+<a name="l01080"></a>01080 
+<a name="l01081"></a>01081 gboolean
+<a name="l01082"></a><a class="code" href="group__bson__cursor.html#gaa8c658d1cfef6e87cbda80879ee551b7">01082</a> <a class="code" href="group__bson__cursor.html#gaa8c658d1cfef6e87cbda80879ee551b7" title="Get the value stored at the cursor, as binary data.">bson_cursor_get_binary</a> (<span class="keyword">const</span> bson_cursor *c,
+<a name="l01083"></a>01083                         <a class="code" href="group__bson__types.html#gab69c9ec1c9cdabbb2db338e58a6e55fe" title="Supported BSON binary subtypes.">bson_binary_subtype</a> *subtype,
+<a name="l01084"></a>01084                         <span class="keyword">const</span> guint8 **data, gint32 *size)
+<a name="l01085"></a>01085 {
+<a name="l01086"></a>01086   <span class="keywordflow">if</span> (!subtype || !size || !data)
+<a name="l01087"></a>01087     <span class="keywordflow">return</span> FALSE;
 <a name="l01088"></a>01088 
-<a name="l01089"></a>01089   *size = bson_stream_doc_size (<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a>(c-&gt;obj), c-&gt;value_pos);
-<a name="l01090"></a>01090   *subtype = (bson_binary_subtype)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj)[c-&gt;value_pos +
-<a name="l01091"></a>01091                                                       <span class="keyword">sizeof</span> (gint32)]);
-<a name="l01092"></a>01092   *data = (guint8 *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + <span class="keyword">sizeof</span> (gint32) + 1);
-<a name="l01093"></a>01093 
-<a name="l01094"></a>01094   <span class="keywordflow">return</span> TRUE;
-<a name="l01095"></a>01095 }
-<a name="l01096"></a>01096 
-<a name="l01097"></a>01097 gboolean
-<a name="l01098"></a><a class="code" href="group__bson__cursor.html#ga45e3ec430a9b23b9512d5119b63f4c23">01098</a> <a class="code" href="group__bson__cursor.html#ga45e3ec430a9b23b9512d5119b63f4c23" title="Get the value stored at the cursor, as an ObjectID.">bson_cursor_get_oid</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> guint8 **dest)
-<a name="l01099"></a>01099 {
-<a name="l01100"></a>01100   <span class="keywordflow">if</span> (!dest)
-<a name="l01101"></a>01101     <span class="keywordflow">return</span> FALSE;
-<a name="l01102"></a>01102 
-<a name="l01103"></a>01103   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbaf242d5a8c4b0e9c4af705e0f8f6a8058" title="12byte ObjectID">BSON_TYPE_OID</a>);
+<a name="l01089"></a>01089   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbabc097480fa57844a0f908e5eb414d686" title="4byte length + 1byte subtype + data">BSON_TYPE_BINARY</a>);
+<a name="l01090"></a>01090 
+<a name="l01091"></a>01091   *size = bson_stream_doc_size (<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a>(c-&gt;obj), c-&gt;value_pos);
+<a name="l01092"></a>01092   *subtype = (bson_binary_subtype)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj)[c-&gt;value_pos +
+<a name="l01093"></a>01093                                                       <span class="keyword">sizeof</span> (gint32)]);
+<a name="l01094"></a>01094   *data = (guint8 *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + <span class="keyword">sizeof</span> (gint32) + 1);
+<a name="l01095"></a>01095 
+<a name="l01096"></a>01096   <span class="keywordflow">return</span> TRUE;
+<a name="l01097"></a>01097 }
+<a name="l01098"></a>01098 
+<a name="l01099"></a>01099 gboolean
+<a name="l01100"></a><a class="code" href="group__bson__cursor.html#ga45e3ec430a9b23b9512d5119b63f4c23">01100</a> <a class="code" href="group__bson__cursor.html#ga45e3ec430a9b23b9512d5119b63f4c23" title="Get the value stored at the cursor, as an ObjectID.">bson_cursor_get_oid</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> guint8 **dest)
+<a name="l01101"></a>01101 {
+<a name="l01102"></a>01102   <span class="keywordflow">if</span> (!dest)
+<a name="l01103"></a>01103     <span class="keywordflow">return</span> FALSE;
 <a name="l01104"></a>01104 
-<a name="l01105"></a>01105   *dest = (guint8 *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos);
+<a name="l01105"></a>01105   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbaf242d5a8c4b0e9c4af705e0f8f6a8058" title="12byte ObjectID">BSON_TYPE_OID</a>);
 <a name="l01106"></a>01106 
-<a name="l01107"></a>01107   <span class="keywordflow">return</span> TRUE;
-<a name="l01108"></a>01108 }
-<a name="l01109"></a>01109 
-<a name="l01110"></a>01110 gboolean
-<a name="l01111"></a><a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e">01111</a> <a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean.">bson_cursor_get_boolean</a> (<span class="keyword">const</span> bson_cursor *c, gboolean *dest)
-<a name="l01112"></a>01112 {
-<a name="l01113"></a>01113   <span class="keywordflow">if</span> (!dest)
-<a name="l01114"></a>01114     <span class="keywordflow">return</span> FALSE;
-<a name="l01115"></a>01115 
-<a name="l01116"></a>01116   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbad60fbf033900d76f926b09790318c4f6" title="1byte boolean value">BSON_TYPE_BOOLEAN</a>);
+<a name="l01107"></a>01107   *dest = (guint8 *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos);
+<a name="l01108"></a>01108 
+<a name="l01109"></a>01109   <span class="keywordflow">return</span> TRUE;
+<a name="l01110"></a>01110 }
+<a name="l01111"></a>01111 
+<a name="l01112"></a>01112 gboolean
+<a name="l01113"></a><a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e">01113</a> <a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean.">bson_cursor_get_boolean</a> (<span class="keyword">const</span> bson_cursor *c, gboolean *dest)
+<a name="l01114"></a>01114 {
+<a name="l01115"></a>01115   <span class="keywordflow">if</span> (!dest)
+<a name="l01116"></a>01116     <span class="keywordflow">return</span> FALSE;
 <a name="l01117"></a>01117 
-<a name="l01118"></a>01118   *dest = (gboolean)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos)[0];
+<a name="l01118"></a>01118   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbad60fbf033900d76f926b09790318c4f6" title="1byte boolean value">BSON_TYPE_BOOLEAN</a>);
 <a name="l01119"></a>01119 
-<a name="l01120"></a>01120   <span class="keywordflow">return</span> TRUE;
-<a name="l01121"></a>01121 }
-<a name="l01122"></a>01122 
-<a name="l01123"></a>01123 gboolean
-<a name="l01124"></a><a class="code" href="group__bson__cursor.html#gafb2e3e6476a62b44cf6ec3e41c990fab">01124</a> <a class="code" href="group__bson__cursor.html#gafb2e3e6476a62b44cf6ec3e41c990fab" title="Get the value stored at the cursor, as an UTC datetime.">bson_cursor_get_utc_datetime</a> (<span class="keyword">const</span> bson_cursor *c,
-<a name="l01125"></a>01125                               gint64 *dest)
-<a name="l01126"></a>01126 {
-<a name="l01127"></a>01127   <span class="keywordflow">if</span> (!dest)
-<a name="l01128"></a>01128     <span class="keywordflow">return</span> FALSE;
-<a name="l01129"></a>01129 
-<a name="l01130"></a>01130   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba5229039391877464056b121754bed8c0" title="8byte timestamp; milliseconds since Unix epoch">BSON_TYPE_UTC_DATETIME</a>);
+<a name="l01120"></a>01120   *dest = (gboolean)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos)[0];
+<a name="l01121"></a>01121 
+<a name="l01122"></a>01122   <span class="keywordflow">return</span> TRUE;
+<a name="l01123"></a>01123 }
+<a name="l01124"></a>01124 
+<a name="l01125"></a>01125 gboolean
+<a name="l01126"></a><a class="code" href="group__bson__cursor.html#gafb2e3e6476a62b44cf6ec3e41c990fab">01126</a> <a class="code" href="group__bson__cursor.html#gafb2e3e6476a62b44cf6ec3e41c990fab" title="Get the value stored at the cursor, as an UTC datetime.">bson_cursor_get_utc_datetime</a> (<span class="keyword">const</span> bson_cursor *c,
+<a name="l01127"></a>01127                               gint64 *dest)
+<a name="l01128"></a>01128 {
+<a name="l01129"></a>01129   <span class="keywordflow">if</span> (!dest)
+<a name="l01130"></a>01130     <span class="keywordflow">return</span> FALSE;
 <a name="l01131"></a>01131 
-<a name="l01132"></a>01132   memcpy (dest, <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos, sizeof (gint64));
-<a name="l01133"></a>01133   *dest = GINT64_FROM_LE (*dest);
-<a name="l01134"></a>01134 
-<a name="l01135"></a>01135   <span class="keywordflow">return</span> TRUE;
-<a name="l01136"></a>01136 }
-<a name="l01137"></a>01137 
-<a name="l01138"></a>01138 gboolean
-<a name="l01139"></a><a class="code" href="group__bson__cursor.html#ga755aa068895ce73e6badef392831812d">01139</a> <a class="code" href="group__bson__cursor.html#ga755aa068895ce73e6badef392831812d" title="Get the value stored at the cursor, as a regexp.">bson_cursor_get_regex</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **regex,
-<a name="l01140"></a>01140                        <span class="keyword">const</span> gchar **options)
-<a name="l01141"></a>01141 {
-<a name="l01142"></a>01142   <span class="keywordflow">if</span> (!regex || !options)
-<a name="l01143"></a>01143     <span class="keywordflow">return</span> FALSE;
-<a name="l01144"></a>01144 
-<a name="l01145"></a>01145   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba4e3775634b70b3a0ec5fef38f1f1e9e8" title="Two NULL terminated C strings, the regex itself, and the options.">BSON_TYPE_REGEXP</a>);
+<a name="l01132"></a>01132   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba5229039391877464056b121754bed8c0" title="8byte timestamp; milliseconds since Unix epoch">BSON_TYPE_UTC_DATETIME</a>);
+<a name="l01133"></a>01133 
+<a name="l01134"></a>01134   memcpy (dest, <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos, sizeof (gint64));
+<a name="l01135"></a>01135   *dest = GINT64_FROM_LE (*dest);
+<a name="l01136"></a>01136 
+<a name="l01137"></a>01137   <span class="keywordflow">return</span> TRUE;
+<a name="l01138"></a>01138 }
+<a name="l01139"></a>01139 
+<a name="l01140"></a>01140 gboolean
+<a name="l01141"></a><a class="code" href="group__bson__cursor.html#ga755aa068895ce73e6badef392831812d">01141</a> <a class="code" href="group__bson__cursor.html#ga755aa068895ce73e6badef392831812d" title="Get the value stored at the cursor, as a regexp.">bson_cursor_get_regex</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **regex,
+<a name="l01142"></a>01142                        <span class="keyword">const</span> gchar **options)
+<a name="l01143"></a>01143 {
+<a name="l01144"></a>01144   <span class="keywordflow">if</span> (!regex || !options)
+<a name="l01145"></a>01145     <span class="keywordflow">return</span> FALSE;
 <a name="l01146"></a>01146 
-<a name="l01147"></a>01147   *regex = (gchar *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos);
-<a name="l01148"></a>01148   *options = (gchar *)(*regex + strlen(*regex) + 1);
-<a name="l01149"></a>01149 
-<a name="l01150"></a>01150   <span class="keywordflow">return</span> TRUE;
-<a name="l01151"></a>01151 }
-<a name="l01152"></a>01152 
-<a name="l01153"></a>01153 gboolean
-<a name="l01154"></a><a class="code" href="group__bson__cursor.html#ga4e0dd9fdca4a05410b68b38bea3fc9ff">01154</a> <a class="code" href="group__bson__cursor.html#ga4e0dd9fdca4a05410b68b38bea3fc9ff" title="Get the value stored at the cursor, as javascript code.">bson_cursor_get_javascript</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest)
-<a name="l01155"></a>01155 {
-<a name="l01156"></a>01156   <span class="keywordflow">if</span> (!dest)
-<a name="l01157"></a>01157     <span class="keywordflow">return</span> FALSE;
-<a name="l01158"></a>01158 
-<a name="l01159"></a>01159   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba94545a425087d843971a13c8d1f63512" title="4byte length + NULL terminated string">BSON_TYPE_JS_CODE</a>);
+<a name="l01147"></a>01147   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba4e3775634b70b3a0ec5fef38f1f1e9e8" title="Two NULL terminated C strings, the regex itself, and the options.">BSON_TYPE_REGEXP</a>);
+<a name="l01148"></a>01148 
+<a name="l01149"></a>01149   *regex = (gchar *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos);
+<a name="l01150"></a>01150   *options = (gchar *)(*regex + strlen(*regex) + 1);
+<a name="l01151"></a>01151 
+<a name="l01152"></a>01152   <span class="keywordflow">return</span> TRUE;
+<a name="l01153"></a>01153 }
+<a name="l01154"></a>01154 
+<a name="l01155"></a>01155 gboolean
+<a name="l01156"></a><a class="code" href="group__bson__cursor.html#ga4e0dd9fdca4a05410b68b38bea3fc9ff">01156</a> <a class="code" href="group__bson__cursor.html#ga4e0dd9fdca4a05410b68b38bea3fc9ff" title="Get the value stored at the cursor, as javascript code.">bson_cursor_get_javascript</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest)
+<a name="l01157"></a>01157 {
+<a name="l01158"></a>01158   <span class="keywordflow">if</span> (!dest)
+<a name="l01159"></a>01159     <span class="keywordflow">return</span> FALSE;
 <a name="l01160"></a>01160 
-<a name="l01161"></a>01161   *dest = (gchar *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + <span class="keyword">sizeof</span> (gint32));
+<a name="l01161"></a>01161   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba94545a425087d843971a13c8d1f63512" title="4byte length + NULL terminated string">BSON_TYPE_JS_CODE</a>);
 <a name="l01162"></a>01162 
-<a name="l01163"></a>01163   <span class="keywordflow">return</span> TRUE;
-<a name="l01164"></a>01164 }
-<a name="l01165"></a>01165 
-<a name="l01166"></a>01166 gboolean
-<a name="l01167"></a><a class="code" href="group__bson__cursor.html#ga4f67ba736cfa34a91db3efb3f25c1c07">01167</a> <a class="code" href="group__bson__cursor.html#ga4f67ba736cfa34a91db3efb3f25c1c07" title="Get the value stored at the cursor, as a symbol.">bson_cursor_get_symbol</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest)
-<a name="l01168"></a>01168 {
-<a name="l01169"></a>01169   <span class="keywordflow">if</span> (!dest)
-<a name="l01170"></a>01170     <span class="keywordflow">return</span> FALSE;
-<a name="l01171"></a>01171 
-<a name="l01172"></a>01172   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbabba6c8564eaef06ede1595bc786cccaa" title="4byte length + NULL terminated string">BSON_TYPE_SYMBOL</a>);
+<a name="l01163"></a>01163   *dest = (gchar *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + <span class="keyword">sizeof</span> (gint32));
+<a name="l01164"></a>01164 
+<a name="l01165"></a>01165   <span class="keywordflow">return</span> TRUE;
+<a name="l01166"></a>01166 }
+<a name="l01167"></a>01167 
+<a name="l01168"></a>01168 gboolean
+<a name="l01169"></a><a class="code" href="group__bson__cursor.html#ga4f67ba736cfa34a91db3efb3f25c1c07">01169</a> <a class="code" href="group__bson__cursor.html#ga4f67ba736cfa34a91db3efb3f25c1c07" title="Get the value stored at the cursor, as a symbol.">bson_cursor_get_symbol</a> (<span class="keyword">const</span> bson_cursor *c, <span class="keyword">const</span> gchar **dest)
+<a name="l01170"></a>01170 {
+<a name="l01171"></a>01171   <span class="keywordflow">if</span> (!dest)
+<a name="l01172"></a>01172     <span class="keywordflow">return</span> FALSE;
 <a name="l01173"></a>01173 
-<a name="l01174"></a>01174   *dest = (gchar *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + <span class="keyword">sizeof</span> (gint32));
+<a name="l01174"></a>01174   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbabba6c8564eaef06ede1595bc786cccaa" title="4byte length + NULL terminated string">BSON_TYPE_SYMBOL</a>);
 <a name="l01175"></a>01175 
-<a name="l01176"></a>01176   <span class="keywordflow">return</span> TRUE;
-<a name="l01177"></a>01177 }
-<a name="l01178"></a>01178 
-<a name="l01179"></a>01179 gboolean
-<a name="l01180"></a><a class="code" href="group__bson__cursor.html#ga795172cdba462973cb35a6c94014219b">01180</a> <a class="code" href="group__bson__cursor.html#ga795172cdba462973cb35a6c94014219b" title="Get the value stored at the cursor, as javascript code w/ scope.">bson_cursor_get_javascript_w_scope</a> (<span class="keyword">const</span> bson_cursor *c,
-<a name="l01181"></a>01181                                     <span class="keyword">const</span> gchar **js,
-<a name="l01182"></a>01182                                     bson **scope)
-<a name="l01183"></a>01183 {
-<a name="l01184"></a>01184   bson *b;
-<a name="l01185"></a>01185   gint32 size, docpos;
-<a name="l01186"></a>01186 
-<a name="l01187"></a>01187   <span class="keywordflow">if</span> (!js || !scope)
-<a name="l01188"></a>01188     <span class="keywordflow">return</span> FALSE;
-<a name="l01189"></a>01189 
-<a name="l01190"></a>01190   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba7aaedeb9d2d9ad06dac973afbdaf9aef" title="4byte length, followed by a string and a document">BSON_TYPE_JS_CODE_W_SCOPE</a>);
+<a name="l01176"></a>01176   *dest = (gchar *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + <span class="keyword">sizeof</span> (gint32));
+<a name="l01177"></a>01177 
+<a name="l01178"></a>01178   <span class="keywordflow">return</span> TRUE;
+<a name="l01179"></a>01179 }
+<a name="l01180"></a>01180 
+<a name="l01181"></a>01181 gboolean
+<a name="l01182"></a><a class="code" href="group__bson__cursor.html#ga795172cdba462973cb35a6c94014219b">01182</a> <a class="code" href="group__bson__cursor.html#ga795172cdba462973cb35a6c94014219b" title="Get the value stored at the cursor, as javascript code w/ scope.">bson_cursor_get_javascript_w_scope</a> (<span class="keyword">const</span> bson_cursor *c,
+<a name="l01183"></a>01183                                     <span class="keyword">const</span> gchar **js,
+<a name="l01184"></a>01184                                     bson **scope)
+<a name="l01185"></a>01185 {
+<a name="l01186"></a>01186   bson *b;
+<a name="l01187"></a>01187   gint32 size, docpos;
+<a name="l01188"></a>01188 
+<a name="l01189"></a>01189   <span class="keywordflow">if</span> (!js || !scope)
+<a name="l01190"></a>01190     <span class="keywordflow">return</span> FALSE;
 <a name="l01191"></a>01191 
-<a name="l01192"></a>01192   docpos = bson_stream_doc_size (<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj),
-<a name="l01193"></a>01193                                   c-&gt;value_pos + sizeof (gint32)) +
-<a name="l01194"></a>01194     <span class="keyword">sizeof</span> (gint32) * 2;
-<a name="l01195"></a>01195   size = bson_stream_doc_size (<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj), c-&gt;value_pos + docpos) -
-<a name="l01196"></a>01196     <span class="keyword">sizeof</span> (gint32) - 1;
-<a name="l01197"></a>01197   b = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (size);
-<a name="l01198"></a>01198   b-&gt;data = g_byte_array_append (b-&gt;data,
-<a name="l01199"></a>01199                                  <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + docpos +
-<a name="l01200"></a>01200                                  sizeof (gint32), size);
-<a name="l01201"></a>01201   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
-<a name="l01202"></a>01202 
-<a name="l01203"></a>01203   *scope = b;
-<a name="l01204"></a>01204   *js = (gchar *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + <span class="keyword">sizeof</span> (gint32) * 2);
-<a name="l01205"></a>01205 
-<a name="l01206"></a>01206   <span class="keywordflow">return</span> TRUE;
-<a name="l01207"></a>01207 }
-<a name="l01208"></a>01208 
-<a name="l01209"></a>01209 gboolean
-<a name="l01210"></a><a class="code" href="group__bson__cursor.html#ga869b17014b3863a8ae0cda9eb82bb5ac">01210</a> <a class="code" href="group__bson__cursor.html#ga869b17014b3863a8ae0cda9eb82bb5ac" title="Get the value stored at the cursor, as a 32-bit integer.">bson_cursor_get_int32</a> (<span class="keyword">const</span> bson_cursor *c, gint32 *dest)
-<a name="l01211"></a>01211 {
-<a name="l01212"></a>01212   <span class="keywordflow">if</span> (!dest)
-<a name="l01213"></a>01213     <span class="keywordflow">return</span> FALSE;
-<a name="l01214"></a>01214 
-<a name="l01215"></a>01215   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba9a106beacbbedfec723680af06b44bbc" title="4byte integer">BSON_TYPE_INT32</a>);
+<a name="l01192"></a>01192   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba7aaedeb9d2d9ad06dac973afbdaf9aef" title="4byte length, followed by a string and a document">BSON_TYPE_JS_CODE_W_SCOPE</a>);
+<a name="l01193"></a>01193 
+<a name="l01194"></a>01194   docpos = bson_stream_doc_size (<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj),
+<a name="l01195"></a>01195                                   c-&gt;value_pos + sizeof (gint32)) +
+<a name="l01196"></a>01196     <span class="keyword">sizeof</span> (gint32) * 2;
+<a name="l01197"></a>01197   size = bson_stream_doc_size (<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj), c-&gt;value_pos + docpos) -
+<a name="l01198"></a>01198     <span class="keyword">sizeof</span> (gint32) - 1;
+<a name="l01199"></a>01199   b = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (size);
+<a name="l01200"></a>01200   b-&gt;data = g_byte_array_append (b-&gt;data,
+<a name="l01201"></a>01201                                  <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + docpos +
+<a name="l01202"></a>01202                                  sizeof (gint32), size);
+<a name="l01203"></a>01203   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
+<a name="l01204"></a>01204 
+<a name="l01205"></a>01205   *scope = b;
+<a name="l01206"></a>01206   *js = (gchar *)(<a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos + <span class="keyword">sizeof</span> (gint32) * 2);
+<a name="l01207"></a>01207 
+<a name="l01208"></a>01208   <span class="keywordflow">return</span> TRUE;
+<a name="l01209"></a>01209 }
+<a name="l01210"></a>01210 
+<a name="l01211"></a>01211 gboolean
+<a name="l01212"></a><a class="code" href="group__bson__cursor.html#ga869b17014b3863a8ae0cda9eb82bb5ac">01212</a> <a class="code" href="group__bson__cursor.html#ga869b17014b3863a8ae0cda9eb82bb5ac" title="Get the value stored at the cursor, as a 32-bit integer.">bson_cursor_get_int32</a> (<span class="keyword">const</span> bson_cursor *c, gint32 *dest)
+<a name="l01213"></a>01213 {
+<a name="l01214"></a>01214   <span class="keywordflow">if</span> (!dest)
+<a name="l01215"></a>01215     <span class="keywordflow">return</span> FALSE;
 <a name="l01216"></a>01216 
-<a name="l01217"></a>01217   memcpy (dest, <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos, sizeof (gint32));
-<a name="l01218"></a>01218   *dest = GINT32_FROM_LE (*dest);
-<a name="l01219"></a>01219 
-<a name="l01220"></a>01220   <span class="keywordflow">return</span> TRUE;
-<a name="l01221"></a>01221 }
-<a name="l01222"></a>01222 
-<a name="l01223"></a>01223 gboolean
-<a name="l01224"></a><a class="code" href="group__bson__cursor.html#ga96da14b748df5b6e564b193e0363e0fd">01224</a> <a class="code" href="group__bson__cursor.html#ga96da14b748df5b6e564b193e0363e0fd" title="Get the value stored at the cursor, as a timestamp.">bson_cursor_get_timestamp</a> (<span class="keyword">const</span> bson_cursor *c, gint64 *dest)
-<a name="l01225"></a>01225 {
-<a name="l01226"></a>01226   <span class="keywordflow">if</span> (!dest)
-<a name="l01227"></a>01227     <span class="keywordflow">return</span> FALSE;
-<a name="l01228"></a>01228 
-<a name="l01229"></a>01229   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbacc716c98c77b99500dd296a9d3857b11" title="4bytes increment + 4bytes timestamp">BSON_TYPE_TIMESTAMP</a>);
+<a name="l01217"></a>01217   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba9a106beacbbedfec723680af06b44bbc" title="4byte integer">BSON_TYPE_INT32</a>);
+<a name="l01218"></a>01218 
+<a name="l01219"></a>01219   memcpy (dest, <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos, sizeof (gint32));
+<a name="l01220"></a>01220   *dest = GINT32_FROM_LE (*dest);
+<a name="l01221"></a>01221 
+<a name="l01222"></a>01222   <span class="keywordflow">return</span> TRUE;
+<a name="l01223"></a>01223 }
+<a name="l01224"></a>01224 
+<a name="l01225"></a>01225 gboolean
+<a name="l01226"></a><a class="code" href="group__bson__cursor.html#ga96da14b748df5b6e564b193e0363e0fd">01226</a> <a class="code" href="group__bson__cursor.html#ga96da14b748df5b6e564b193e0363e0fd" title="Get the value stored at the cursor, as a timestamp.">bson_cursor_get_timestamp</a> (<span class="keyword">const</span> bson_cursor *c, gint64 *dest)
+<a name="l01227"></a>01227 {
+<a name="l01228"></a>01228   <span class="keywordflow">if</span> (!dest)
+<a name="l01229"></a>01229     <span class="keywordflow">return</span> FALSE;
 <a name="l01230"></a>01230 
-<a name="l01231"></a>01231   memcpy (dest, <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos, sizeof (gint64));
-<a name="l01232"></a>01232   *dest = GINT64_FROM_LE (*dest);
-<a name="l01233"></a>01233 
-<a name="l01234"></a>01234   <span class="keywordflow">return</span> TRUE;
-<a name="l01235"></a>01235 }
-<a name="l01236"></a>01236 
-<a name="l01237"></a>01237 gboolean
-<a name="l01238"></a><a class="code" href="group__bson__cursor.html#ga50f3858c3ce2d30a15544cf46887be50">01238</a> <a class="code" href="group__bson__cursor.html#ga50f3858c3ce2d30a15544cf46887be50" title="Get the value stored at the cursor, as a 64-bit integer.">bson_cursor_get_int64</a> (<span class="keyword">const</span> bson_cursor *c, gint64 *dest)
-<a name="l01239"></a>01239 {
-<a name="l01240"></a>01240   <span class="keywordflow">if</span> (!dest)
-<a name="l01241"></a>01241     <span class="keywordflow">return</span> FALSE;
-<a name="l01242"></a>01242 
-<a name="l01243"></a>01243   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba7e84b17ee5c60cf8bf32e308aa23b611" title="8byte integer">BSON_TYPE_INT64</a>);
+<a name="l01231"></a>01231   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbacc716c98c77b99500dd296a9d3857b11" title="4bytes increment + 4bytes timestamp">BSON_TYPE_TIMESTAMP</a>);
+<a name="l01232"></a>01232 
+<a name="l01233"></a>01233   memcpy (dest, <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos, sizeof (gint64));
+<a name="l01234"></a>01234   *dest = GINT64_FROM_LE (*dest);
+<a name="l01235"></a>01235 
+<a name="l01236"></a>01236   <span class="keywordflow">return</span> TRUE;
+<a name="l01237"></a>01237 }
+<a name="l01238"></a>01238 
+<a name="l01239"></a>01239 gboolean
+<a name="l01240"></a><a class="code" href="group__bson__cursor.html#ga50f3858c3ce2d30a15544cf46887be50">01240</a> <a class="code" href="group__bson__cursor.html#ga50f3858c3ce2d30a15544cf46887be50" title="Get the value stored at the cursor, as a 64-bit integer.">bson_cursor_get_int64</a> (<span class="keyword">const</span> bson_cursor *c, gint64 *dest)
+<a name="l01241"></a>01241 {
+<a name="l01242"></a>01242   <span class="keywordflow">if</span> (!dest)
+<a name="l01243"></a>01243     <span class="keywordflow">return</span> FALSE;
 <a name="l01244"></a>01244 
-<a name="l01245"></a>01245   memcpy (dest, <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos, sizeof (gint64));
-<a name="l01246"></a>01246   *dest = GINT64_FROM_LE (*dest);
-<a name="l01247"></a>01247 
-<a name="l01248"></a>01248   <span class="keywordflow">return</span> TRUE;
-<a name="l01249"></a>01249 }
+<a name="l01245"></a>01245   <a class="code" href="bson_8c.html#a11cb01b30ac922b6988801ee11ebcf67">BSON_CURSOR_CHECK_TYPE</a> (c, <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba7e84b17ee5c60cf8bf32e308aa23b611" title="8byte integer">BSON_TYPE_INT64</a>);
+<a name="l01246"></a>01246 
+<a name="l01247"></a>01247   memcpy (dest, <a class="code" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object.">bson_data</a> (c-&gt;obj) + c-&gt;value_pos, sizeof (gint64));
+<a name="l01248"></a>01248   *dest = GINT64_FROM_LE (*dest);
+<a name="l01249"></a>01249 
+<a name="l01250"></a>01250   <span class="keywordflow">return</span> TRUE;
+<a name="l01251"></a>01251 }
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -1203,7 +1205,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:10 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

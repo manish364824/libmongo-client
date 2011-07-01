@@ -59,6 +59,8 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Receive a packet from MongoDB.  <a href="#gaf700fa384253105179ac1e340aedc74a"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gint32&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99">mongo_connection_get_requestid</a> (const mongo_connection *conn)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the last requestID from a connection object.  <a href="#ga70ff2b3c762e7a40f9d7f6df7a9e6e99"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__client.html#ga4b63193d2b779e23d5135bf3801df6e2">mongo_connection_set_timeout</a> (mongo_connection *conn, gint timeout)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set a timeout for read/write operations on a connection.  <a href="#ga4b63193d2b779e23d5135bf3801df6e2"></a><br/></td></tr>
 </table>
 <hr/><h2>Function Documentation</h2>
 <a class="anchor" id="ga52e0af929ba8a7a2ff0f4ec4b3006e93"></a><!-- doxytag: member="mongo&#45;client.h::mongo_connect" ref="ga52e0af929ba8a7a2ff0f4ec4b3006e93" args="(const char *host, int port)" -->
@@ -142,9 +144,50 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__mongo__client_ga70ff2b3c762e7a40f9d7f6df7a9e6e99_icgraph.png" border="0" usemap="#group__mongo__client_ga70ff2b3c762e7a40f9d7f6df7a9e6e99_icgraph" alt=""/></div>
 <map name="group__mongo__client_ga70ff2b3c762e7a40f9d7f6df7a9e6e99_icgraph" id="group__mongo__client_ga70ff2b3c762e7a40f9d7f6df7a9e6e99_icgraph">
-<area shape="rect" id="node3" href="group__mongo__sync.html#ga342218b37c0b0d4beafd7071b530ee1f" title="Send a delete command to MongoDB." alt="" coords="309,5,493,35"/><area shape="rect" id="node5" href="group__mongo__sync.html#ga4748ae0caf5b361929580d42ff369815" title="Send a get more command to MongoDB." alt="" coords="299,59,504,88"/><area shape="rect" id="node9" href="group__mongo__sync.html#ga60b1dea6c43b120d84f6d424e773f52b" title="Send an insert command to MongoDB." alt="" coords="304,112,499,141"/><area shape="rect" id="node13" href="group__mongo__sync.html#ga96a2018a7b4f04e73e19da2eadf8d3e4" title="Send a kill_cursors command to MongoDB." alt="" coords="295,165,508,195"/><area shape="rect" id="node17" href="group__mongo__sync.html#ga0349cd2e80d82f52544dbafe1dcb8cdd" title="Send a query command to MongoDB." alt="" coords="311,219,492,248"/><area shape="rect" id="node19" href="group__mongo__sync.html#gae299d207c5afabc9f114bab874454c12" title="Send an update command to MongoDB." alt="" coords="307,272,496,301"/><area shape="rect" id="node7" href="group__mongo__sync__cursor.html#ga321b3b8a39de8b5afd3accd9b9310d22" title="Iterate a MongoDB cursor." alt="" coords="559,59,743,88"/><area shape="rect" id="node11" href="group__mongo__sync.html#ga3a2312f2c0a7e6c9a4c8d0eb57051f65" title="Send an insert command to MongoDB." alt="" coords="560,112,741,141"/><area shape="rect" id="node15" href="group__mongo__sync__cursor.html#gad7ceca60dfd310b3205d9776b4ae566e" title="Free a MongoDB cursor." alt="" coords="560,165,741,195"/></map>
+<area shape="rect" id="node3" href="group__mongo__sync.html#ga342218b37c0b0d4beafd7071b530ee1f" title="Send a delete command to MongoDB." alt="" coords="309,5,493,35"/><area shape="rect" id="node7" href="group__mongo__sync.html#ga4748ae0caf5b361929580d42ff369815" title="Send a get more command to MongoDB." alt="" coords="299,59,504,88"/><area shape="rect" id="node11" href="group__mongo__sync.html#ga60b1dea6c43b120d84f6d424e773f52b" title="Send an insert command to MongoDB." alt="" coords="304,112,499,141"/><area shape="rect" id="node17" href="group__mongo__sync.html#ga96a2018a7b4f04e73e19da2eadf8d3e4" title="Send a kill_cursors command to MongoDB." alt="" coords="295,165,508,195"/><area shape="rect" id="node21" href="group__mongo__sync.html#ga0349cd2e80d82f52544dbafe1dcb8cdd" title="Send a query command to MongoDB." alt="" coords="311,219,492,248"/><area shape="rect" id="node23" href="group__mongo__sync.html#gae299d207c5afabc9f114bab874454c12" title="Send an update command to MongoDB." alt="" coords="307,272,496,301"/><area shape="rect" id="node5" href="group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c" title="Remove a user from MongoDB." alt="" coords="557,5,787,35"/><area shape="rect" id="node9" href="group__mongo__sync__cursor.html#ga321b3b8a39de8b5afd3accd9b9310d22" title="Iterate a MongoDB cursor." alt="" coords="580,59,764,88"/><area shape="rect" id="node13" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index." alt="" coords="559,112,785,141"/><area shape="rect" id="node15" href="group__mongo__sync.html#ga3a2312f2c0a7e6c9a4c8d0eb57051f65" title="Send an insert command to MongoDB." alt="" coords="581,165,763,195"/><area shape="rect" id="node19" href="group__mongo__sync__cursor.html#gad7ceca60dfd310b3205d9776b4ae566e" title="Free a MongoDB cursor." alt="" coords="581,219,763,248"/><area shape="rect" id="node25" href="group__mongo__sync.html#ga7864f55710c0bdec14f75a936209b56e" title="Add a user to MongoDB." alt="" coords="571,272,773,301"/></map>
 </div>
 </p>
+
+</div>
+</div>
+<a class="anchor" id="ga4b63193d2b779e23d5135bf3801df6e2"></a><!-- doxytag: member="mongo&#45;client.h::mongo_connection_set_timeout" ref="ga4b63193d2b779e23d5135bf3801df6e2" args="(mongo_connection *conn, gint timeout)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean mongo_connection_set_timeout </td>
+          <td>(</td>
+          <td class="paramtype">mongo_connection *&nbsp;</td>
+          <td class="paramname"> <em>conn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&nbsp;</td>
+          <td class="paramname"> <em>timeout</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Set a timeout for read/write operations on a connection. </p>
+<p>On systems that support it, set a timeout for read/write operations on a socket.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>conn</em>&nbsp;</td><td>is the connection to set a timeout on. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>timeout</em>&nbsp;</td><td>is the timeout to set, in milliseconds.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>TRUE on success, FALSE otherwise.</dd></dl>
+<dl class="note"><dt><b>Note:</b></dt><dd>The timeout is not preserved accross reconnects, if using the Sync API, however. It only applies to the active connection, and nothing else. </dd></dl>
+
+<p>Definition at line <a class="el" href="mongo-client_8c_source.html#l00262">262</a> of file <a class="el" href="mongo-client_8c_source.html">mongo-client.c</a>.</p>
 
 </div>
 </div>
@@ -287,7 +330,7 @@ Here is the call graph for this function:</div>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

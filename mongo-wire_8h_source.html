@@ -101,9 +101,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00147"></a>00147 
 <a name="l00157"></a>00157 <span class="keyword">enum</span>
 <a name="l00158"></a>00158   {
-<a name="l00160"></a><a class="code" href="group__mongo__wire__reply.html#ggadf764cbdea00d65edcd07bb9953ad2b7a451db5f21c7c43f9cca3b875b0e35750">00160</a>     <a class="code" href="group__mongo__wire__reply.html#ggadf764cbdea00d65edcd07bb9953ad2b7a451db5f21c7c43f9cca3b875b0e35750" title="Set when get_more is called but the cursor id is invalid.">MONGO_REPLY_FLAG_NO_CURSOR</a> = 0x1,
-<a name="l00162"></a><a class="code" href="group__mongo__wire__reply.html#ggadf764cbdea00d65edcd07bb9953ad2b7a199b2f5de60a6e97c9e434ab6d8fcdf7">00162</a>     <a class="code" href="group__mongo__wire__reply.html#ggadf764cbdea00d65edcd07bb9953ad2b7a199b2f5de60a6e97c9e434ab6d8fcdf7" title="Set when the query failed.">MONGO_REPLY_FLAG_QUERY_FAIL</a> = 0x2,
-<a name="l00168"></a><a class="code" href="group__mongo__wire__reply.html#ggadf764cbdea00d65edcd07bb9953ad2b7ae5a6961ae5f12632a21fcc37a5304abb">00168</a>     <a class="code" href="group__mongo__wire__reply.html#ggadf764cbdea00d65edcd07bb9953ad2b7ae5a6961ae5f12632a21fcc37a5304abb" title="Set when the server suppots the AwaitData query option.">MONGO_REPLY_FLAG_AWAITCAPABLE</a> = 0x8,
+<a name="l00160"></a><a class="code" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5a451db5f21c7c43f9cca3b875b0e35750">00160</a>     <a class="code" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5a451db5f21c7c43f9cca3b875b0e35750" title="Set when get_more is called but the cursor id is invalid.">MONGO_REPLY_FLAG_NO_CURSOR</a> = 0x1,
+<a name="l00162"></a><a class="code" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5a199b2f5de60a6e97c9e434ab6d8fcdf7">00162</a>     <a class="code" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5a199b2f5de60a6e97c9e434ab6d8fcdf7" title="Set when the query failed.">MONGO_REPLY_FLAG_QUERY_FAIL</a> = 0x2,
+<a name="l00168"></a><a class="code" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5ae5a6961ae5f12632a21fcc37a5304abb">00168</a>     <a class="code" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5ae5a6961ae5f12632a21fcc37a5304abb" title="Set when the server suppots the AwaitData query option.">MONGO_REPLY_FLAG_AWAITCAPABLE</a> = 0x8,
 <a name="l00169"></a>00169   };
 <a name="l00170"></a>00170 
 <a name="l00173"></a>00173 <span class="preprocessor">#pragma pack(1)</span>
@@ -128,8 +128,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00230"></a>00230 
 <a name="l00246"></a>00246 <span class="keyword">enum</span>
 <a name="l00247"></a>00247   {
-<a name="l00249"></a><a class="code" href="group__mongo__wire__cmd.html#gga99fb83031ce9923c84392b4e92f956b5aa73d76d928ff95cc8dc903247148f54d">00249</a>     <a class="code" href="group__mongo__wire__cmd.html#gga99fb83031ce9923c84392b4e92f956b5aa73d76d928ff95cc8dc903247148f54d" title="When set, inserts if no matching document was found.">MONGO_WIRE_FLAG_UPDATE_UPSERT</a> = 0x1,
-<a name="l00252"></a><a class="code" href="group__mongo__wire__cmd.html#gga99fb83031ce9923c84392b4e92f956b5aac446cd2b1a1e2b5cb77350d2ff203bb">00252</a>     <a class="code" href="group__mongo__wire__cmd.html#gga99fb83031ce9923c84392b4e92f956b5aac446cd2b1a1e2b5cb77350d2ff203bb" title="When set, all matching documents will be updated, not just the first.">MONGO_WIRE_FLAG_UPDATE_MULTI</a> = 0x2,
+<a name="l00249"></a><a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aa73d76d928ff95cc8dc903247148f54d">00249</a>     <a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aa73d76d928ff95cc8dc903247148f54d" title="When set, inserts if no matching document was found.">MONGO_WIRE_FLAG_UPDATE_UPSERT</a> = 0x1,
+<a name="l00252"></a><a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aac446cd2b1a1e2b5cb77350d2ff203bb">00252</a>     <a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aac446cd2b1a1e2b5cb77350d2ff203bb" title="When set, all matching documents will be updated, not just the first.">MONGO_WIRE_FLAG_UPDATE_MULTI</a> = 0x2,
 <a name="l00253"></a>00253   };
 <a name="l00254"></a>00254 
 <a name="l00270"></a>00270 mongo_packet *<a class="code" href="group__mongo__wire__cmd.html#ga660ca5f7389ca48d4739d885a18e78a6" title="Construct an update command.">mongo_wire_cmd_update</a> (gint32 <span class="keywordtype">id</span>, <span class="keyword">const</span> gchar *ns,
@@ -144,12 +144,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00303"></a>00303 
 <a name="l00307"></a>00307 enum
 <a name="l00308"></a>00308   {
-<a name="l00310"></a><a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a371353ae287a99e7f43902ec00472798">00310</a>     <a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a371353ae287a99e7f43902ec00472798" title="Set the TailableCursor flag on the query.">MONGO_WIRE_FLAG_QUERY_TAILABLE_CURSOR</a> = 1 &lt;&lt; 1,
-<a name="l00312"></a><a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a041055bcf40f8d3cc4543f6ada3fc53e">00312</a>     <a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a041055bcf40f8d3cc4543f6ada3fc53e" title="Allow queries made against a replica slave.">MONGO_WIRE_FLAG_QUERY_SLAVE_OK</a> = 1 &lt;&lt; 2,
-<a name="l00314"></a><a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a61f4eec7d66626b4b3dd8cfd4637a61c">00314</a>     <a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a61f4eec7d66626b4b3dd8cfd4637a61c" title="Disable cursor timeout.">MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT</a> = 1 &lt;&lt; 4,
-<a name="l00318"></a><a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aa7d3068d6f7c54a81c30cc12a0806517">00318</a>     <a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aa7d3068d6f7c54a81c30cc12a0806517" title="Block if at the end of the data block, awaiting data.">MONGO_WIRE_FLAG_QUERY_AWAIT_DATA</a> = 1 &lt;&lt; 5,
-<a name="l00323"></a><a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a2789e480d7582afb41a9471ce0c602eb">00323</a>     <a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a2789e480d7582afb41a9471ce0c602eb" title="Stream the data down full blast in multiple packages.">MONGO_WIRE_FLAG_QUERY_EXHAUST</a> = 1 &lt;&lt; 6,
-<a name="l00328"></a><a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a52fcba0c02713c5353b2300d311551e0">00328</a>     <a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04a52fcba0c02713c5353b2300d311551e0" title="Allow partial results in a sharded environment.">MONGO_WIRE_FLAG_QUERY_PARTIAL_RESULTS</a> = 1 &lt;&lt; 7
+<a name="l00310"></a><a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca371353ae287a99e7f43902ec00472798">00310</a>     <a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca371353ae287a99e7f43902ec00472798" title="Set the TailableCursor flag on the query.">MONGO_WIRE_FLAG_QUERY_TAILABLE_CURSOR</a> = 1 &lt;&lt; 1,
+<a name="l00312"></a><a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca041055bcf40f8d3cc4543f6ada3fc53e">00312</a>     <a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca041055bcf40f8d3cc4543f6ada3fc53e" title="Allow queries made against a replica slave.">MONGO_WIRE_FLAG_QUERY_SLAVE_OK</a> = 1 &lt;&lt; 2,
+<a name="l00314"></a><a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca61f4eec7d66626b4b3dd8cfd4637a61c">00314</a>     <a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca61f4eec7d66626b4b3dd8cfd4637a61c" title="Disable cursor timeout.">MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT</a> = 1 &lt;&lt; 4,
+<a name="l00318"></a><a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06caa7d3068d6f7c54a81c30cc12a0806517">00318</a>     <a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06caa7d3068d6f7c54a81c30cc12a0806517" title="Block if at the end of the data block, awaiting data.">MONGO_WIRE_FLAG_QUERY_AWAIT_DATA</a> = 1 &lt;&lt; 5,
+<a name="l00323"></a><a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca2789e480d7582afb41a9471ce0c602eb">00323</a>     <a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca2789e480d7582afb41a9471ce0c602eb" title="Stream the data down full blast in multiple packages.">MONGO_WIRE_FLAG_QUERY_EXHAUST</a> = 1 &lt;&lt; 6,
+<a name="l00328"></a><a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca52fcba0c02713c5353b2300d311551e0">00328</a>     <a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca52fcba0c02713c5353b2300d311551e0" title="Allow partial results in a sharded environment.">MONGO_WIRE_FLAG_QUERY_PARTIAL_RESULTS</a> = 1 &lt;&lt; 7
 <a name="l00329"></a>00329   };
 <a name="l00330"></a>00330 
 <a name="l00351"></a>00351 mongo_packet *<a class="code" href="group__mongo__wire__cmd.html#ga07c82c11f2e103a79b88f22bdb586472" title="Construct a query command.">mongo_wire_cmd_query</a> (gint32 <span class="keywordtype">id</span>, <span class="keyword">const</span> gchar *ns, gint32 flags,
@@ -161,7 +161,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00369"></a>00369 
 <a name="l00372"></a>00372 <span class="keyword">enum</span>
 <a name="l00373"></a>00373   {
-<a name="l00375"></a><a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca12352814d851fba7a1a178ca97e5a10b">00375</a>     <a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca12352814d851fba7a1a178ca97e5a10b" title="Only remove the first match.">MONGO_WIRE_FLAG_DELETE_SINGLE</a> = 0x1
+<a name="l00375"></a><a class="code" href="group__mongo__wire__cmd.html#gga61dadd085c1777f559549e05962b2c9ea12352814d851fba7a1a178ca97e5a10b">00375</a>     <a class="code" href="group__mongo__wire__cmd.html#gga61dadd085c1777f559549e05962b2c9ea12352814d851fba7a1a178ca97e5a10b" title="Only remove the first match.">MONGO_WIRE_FLAG_DELETE_SINGLE</a> = 0x1
 <a name="l00376"></a>00376   };
 <a name="l00377"></a>00377 
 <a name="l00391"></a>00391 mongo_packet *<a class="code" href="group__mongo__wire__cmd.html#ga485e6a565866a9fa2ec4251e052ac060" title="Construct a delete command.">mongo_wire_cmd_delete</a> (gint32 <span class="keywordtype">id</span>, <span class="keyword">const</span> gchar *ns,
@@ -192,7 +192,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:10 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

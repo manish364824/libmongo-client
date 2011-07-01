@@ -1,26 +1,26 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="224,397,432,427"/>
-<area shape="rect" id="node55" href="$group__mongo__sync.html#gab5fa65825c2bc29fdea7d925237556d5" title="Close and free a synchronous MongoDB connection." alt="" coords="239,583,417,612"/>
-<area shape="rect" id="node59" href="$group__mongo__util.html#ga322ea87ec69f5964eea7e8da40288579" title="Parse a HOST:IP pair." alt="" coords="243,636,413,665"/>
-<area shape="rect" id="node5" href="$group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32&#45;bit integer to a BSON object." alt="" coords="564,112,711,141"/>
-<area shape="rect" id="node7" href="$group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it." alt="" coords="572,165,703,195"/>
-<area shape="rect" id="node9" href="$group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array." alt="" coords="553,269,721,299"/>
-<area shape="rect" id="node13" href="$group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object." alt="" coords="929,212,1023,241"/>
-<area shape="rect" id="node15" href="$group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space." alt="" coords="913,316,1039,345"/>
-<area shape="rect" id="node17" href="$group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean." alt="" coords="883,369,1069,399"/>
-<area shape="rect" id="node20" href="$group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string." alt="" coords="891,423,1061,452"/>
-<area shape="rect" id="node23" href="$group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor." alt="" coords="572,528,703,557"/>
-<area shape="rect" id="node27" href="$group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key." alt="" coords="571,475,704,504"/>
-<area shape="rect" id="node34" href="$group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key." alt="" coords="596,581,679,611"/>
-<area shape="rect" id="node39" href="$group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object." alt="" coords="595,635,680,664"/>
-<area shape="rect" id="node42" href="$group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet." alt="" coords="547,688,728,717"/>
-<area shape="rect" id="node44" href="$group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet." alt="" coords="480,59,795,88"/>
-<area shape="rect" id="node11" href="$group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object." alt="" coords="1220,449,1308,479"/>
-<area shape="rect" id="node25" href="$group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object." alt="" coords="933,580,1019,609"/>
-<area shape="rect" id="node29" href="$group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3" title="Determine the type of the current element." alt="" coords="909,527,1043,556"/>
-<area shape="rect" id="node46" href="$group__bson__object__access.html#gad456a97b9a887b96373b8e519d76ecff" title="Create a BSON object from existing data." alt="" coords="897,5,1055,35"/>
-<area shape="rect" id="node48" href="$group__mongo__wire__reply.html#gad4378c89fad2dc0834eb0e709d6124b2" title="Get the full data part of a reply packet." alt="" coords="851,59,1101,88"/>
-<area shape="rect" id="node52" href="$group__mongo__wire__reply.html#ga5d207b5b89cfee839f2129251aab5261" title="Get the header of a reply packet." alt="" coords="843,112,1109,141"/>
-<area shape="rect" id="node50" href="$group__mongo__wire__packet.html#ga5350d54b0a6800ecd7df81d5c2b80c6b" title="Get the data part of a packet." alt="" coords="1157,85,1371,115"/>
-<area shape="rect" id="node57" href="$group__mongo__client.html#ga3c100e2c251cc609e872096d5a68089b" title="Disconnect from a MongoDB server." alt="" coords="567,741,708,771"/>
+<area shape="rect" id="node3" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="224,453,432,483"/>
+<area shape="rect" id="node56" href="$group__mongo__sync.html#gab5fa65825c2bc29fdea7d925237556d5" title="Close and free a synchronous MongoDB connection." alt="" coords="239,636,417,665"/>
+<area shape="rect" id="node60" href="$group__mongo__util.html#ga322ea87ec69f5964eea7e8da40288579" title="Parse a HOST:IP pair." alt="" coords="243,689,413,719"/>
+<area shape="rect" id="node5" href="$group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32&#45;bit integer to a BSON object." alt="" coords="564,165,711,195"/>
+<area shape="rect" id="node7" href="$group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it." alt="" coords="911,165,1041,195"/>
+<area shape="rect" id="node9" href="$group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array." alt="" coords="553,581,721,611"/>
+<area shape="rect" id="node13" href="$group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object." alt="" coords="929,581,1023,611"/>
+<area shape="rect" id="node15" href="$group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space." alt="" coords="913,685,1039,715"/>
+<area shape="rect" id="node17" href="$group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean." alt="" coords="883,528,1069,557"/>
+<area shape="rect" id="node20" href="$group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string." alt="" coords="552,427,723,456"/>
+<area shape="rect" id="node23" href="$group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor." alt="" coords="911,269,1041,299"/>
+<area shape="rect" id="node27" href="$group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key." alt="" coords="571,373,704,403"/>
+<area shape="rect" id="node34" href="$group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key." alt="" coords="596,269,679,299"/>
+<area shape="rect" id="node40" href="$group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object." alt="" coords="595,685,680,715"/>
+<area shape="rect" id="node43" href="$group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet." alt="" coords="547,739,728,768"/>
+<area shape="rect" id="node45" href="$group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet." alt="" coords="480,85,795,115"/>
+<area shape="rect" id="node11" href="$group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object." alt="" coords="1220,476,1308,505"/>
+<area shape="rect" id="node25" href="$group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object." alt="" coords="1221,269,1307,299"/>
+<area shape="rect" id="node29" href="$group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3" title="Determine the type of the current element." alt="" coords="909,424,1043,453"/>
+<area shape="rect" id="node47" href="$group__bson__object__access.html#gad456a97b9a887b96373b8e519d76ecff" title="Create a BSON object from existing data." alt="" coords="897,112,1055,141"/>
+<area shape="rect" id="node49" href="$group__mongo__wire__reply.html#gad4378c89fad2dc0834eb0e709d6124b2" title="Get the full data part of a reply packet." alt="" coords="851,5,1101,35"/>
+<area shape="rect" id="node53" href="$group__mongo__wire__reply.html#ga5d207b5b89cfee839f2129251aab5261" title="Get the header of a reply packet." alt="" coords="843,59,1109,88"/>
+<area shape="rect" id="node51" href="$group__mongo__wire__packet.html#ga5350d54b0a6800ecd7df81d5c2b80c6b" title="Get the data part of a packet." alt="" coords="1157,32,1371,61"/>
+<area shape="rect" id="node58" href="$group__mongo__client.html#ga3c100e2c251cc609e872096d5a68089b" title="Disconnect from a MongoDB server." alt="" coords="567,792,708,821"/>
 </map>

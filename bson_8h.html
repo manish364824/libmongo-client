@@ -62,8 +62,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Include dependency graph for bson.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="bson_8h__incl.png" border="0" usemap="#src_2bson_8h" alt=""/></div>
-<map name="src_2bson_8h" id="src_2bson_8h">
-</map>
 </div>
 <div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -188,6 +186,8 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Position the cursor to the next key.  <a href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__bson__cursor.html#ga1655fa3c1116657f42e4cf76ec8ca129">bson_cursor_find_next</a> (bson_cursor *c, const gchar *name)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Move the cursor to a given key, past the current one.  <a href="group__bson__cursor.html#ga1655fa3c1116657f42e4cf76ec8ca129"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__bson__cursor.html#gab9c63d49d46c04b2e5ffbdd9d9ee12d9">bson_cursor_find</a> (bson_cursor *c, const gchar *name)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Move the cursor to a given key.  <a href="group__bson__cursor.html#gab9c63d49d46c04b2e5ffbdd9d9ee12d9"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__bson__types.html#gadac27a93ef69dbe56a6409c68395e5cb">bson_type</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3">bson_cursor_type</a> (const bson_cursor *c)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Determine the type of the current element.  <a href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__bson__cursor.html#ga7ec76513b2377a122ed2a95ffa1042c4">bson_cursor_type_as_string</a> (const bson_cursor *c)</td></tr>
@@ -244,7 +244,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

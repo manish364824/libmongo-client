@@ -1,9 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet." alt="" coords="213,85,528,115"/>
-<area shape="rect" id="node5" href="$group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18" title="Send a count() command to MongoDB." alt="" coords="603,5,784,35"/>
-<area shape="rect" id="node7" href="$group__mongo__sync.html#gaf58b4929296fa55335f209dbbe7370e2" title="Get the last error from MongoDB." alt="" coords="576,59,811,88"/>
-<area shape="rect" id="node9" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="589,112,797,141"/>
-<area shape="rect" id="node16" href="$group__mongo__sync__cursor.html#gae40a3a8297fccd66baa5ac4bf82a92bb" title="Retrieve the BSON document at the cursor&#39;s position." alt="" coords="587,165,800,195"/>
-<area shape="rect" id="node11" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="863,73,1031,103"/>
-<area shape="rect" id="node13" href="$group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d" title="Attempt to connect to another member of a replica set." alt="" coords="860,151,1033,180"/>
+<area shape="rect" id="node3" href="$group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet." alt="" coords="213,112,528,141"/>
+<area shape="rect" id="node5" href="$group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59" title="Authenticate a user with MongoDB." alt="" coords="580,5,807,35"/>
+<area shape="rect" id="node7" href="$group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18" title="Send a count() command to MongoDB." alt="" coords="603,59,784,88"/>
+<area shape="rect" id="node9" href="$group__mongo__sync.html#gaf58b4929296fa55335f209dbbe7370e2" title="Get the last error from MongoDB." alt="" coords="576,112,811,141"/>
+<area shape="rect" id="node11" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="589,165,797,195"/>
+<area shape="rect" id="node18" href="$group__mongo__sync__cursor.html#gae40a3a8297fccd66baa5ac4bf82a92bb" title="Retrieve the BSON document at the cursor&#39;s position." alt="" coords="587,219,800,248"/>
+<area shape="rect" id="node13" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="863,127,1031,156"/>
+<area shape="rect" id="node15" href="$group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d" title="Attempt to connect to another member of a replica set." alt="" coords="860,204,1033,233"/>
 </map>

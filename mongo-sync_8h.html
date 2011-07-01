@@ -48,6 +48,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#define-members">Defines</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <h1>src/mongo-sync.h File Reference</h1>  </div>
@@ -79,6 +80,13 @@ This graph shows which files directly or indirectly include this file:</div>
 Defines</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mongo-sync_8h.html#af57330f433a9c078a5446a2b17c1825b">MONGO_SYNC_DEFAULT_MAX_INSERT_SIZE</a>&nbsp;&nbsp;&nbsp;4 * 1000 * 1000</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Default maximum size for a single bulk insert.  <a href="#af57330f433a9c078a5446a2b17c1825b"></a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a9bba6324f54c9c4be4526a75de4f069d">MONGO_INDEX_UNIQUE</a> =  0x01, 
+<a class="el" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a1f17ac23aa3790516427b30a976490b5">MONGO_INDEX_DROP_DUPS</a> =  0x02
+ }</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><p>Flags that can be set at index creation. </p>
+ <a href="group__mongo__sync.html#gadf764cbdea00d65edcd07bb9953ad2b7">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">mongo_sync_connection *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga731774e2a0026cda4467193a83b6f64a">mongo_sync_connect</a> (const gchar *host, gint port, gboolean slaveok)</td></tr>
@@ -139,6 +147,12 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove a user from MongoDB.  <a href="group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59">mongo_sync_cmd_authenticate</a> (mongo_sync_connection *conn, const gchar *db, const gchar *user, const gchar *pw)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Authenticate a user with MongoDB.  <a href="group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c">mongo_sync_cmd_index_create</a> (mongo_sync_connection *conn, const gchar *ns, const bson *key, gint options)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create an index.  <a href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga1e45a4ca4c933a909a9b4b1b04a6dfa2">mongo_sync_cmd_index_drop</a> (mongo_sync_connection *conn, const gchar *ns, const bson *key)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Drop an index.  <a href="group__mongo__sync.html#ga1e45a4ca4c933a909a9b4b1b04a6dfa2"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga9f693b6c98b6d042c1fda2b8cd41da87">mongo_sync_cmd_index_drop_all</a> (mongo_sync_connection *conn, const gchar *ns)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Drop all indexes from a namespace.  <a href="group__mongo__sync.html#ga9f693b6c98b6d042c1fda2b8cd41da87"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>MongoDB synchronous wrapper API public header. </p>
@@ -178,7 +192,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

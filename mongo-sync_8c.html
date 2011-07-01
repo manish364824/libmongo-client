@@ -137,6 +137,12 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove a user from MongoDB.  <a href="group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59">mongo_sync_cmd_authenticate</a> (mongo_sync_connection *conn, const gchar *db, const gchar *user, const gchar *pw)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Authenticate a user with MongoDB.  <a href="group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c">mongo_sync_cmd_index_create</a> (mongo_sync_connection *conn, const gchar *ns, const bson *key, gint options)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create an index.  <a href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga1e45a4ca4c933a909a9b4b1b04a6dfa2">mongo_sync_cmd_index_drop</a> (mongo_sync_connection *conn, const gchar *ns, const bson *key)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Drop an index.  <a href="group__mongo__sync.html#ga1e45a4ca4c933a909a9b4b1b04a6dfa2"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga9f693b6c98b6d042c1fda2b8cd41da87">mongo_sync_cmd_index_drop_all</a> (mongo_sync_connection *conn, const gchar *ns)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Drop all indexes from a namespace.  <a href="group__mongo__sync.html#ga9f693b6c98b6d042c1fda2b8cd41da87"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>MongoDB synchronous wrapper API implementation. </p>
@@ -157,7 +163,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

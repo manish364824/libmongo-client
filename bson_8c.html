@@ -146,6 +146,8 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Delete a cursor, and free up all resources used by it.  <a href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c">bson_cursor_next</a> (bson_cursor *c)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Position the cursor to the next key.  <a href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__bson__cursor.html#gab9c63d49d46c04b2e5ffbdd9d9ee12d9">bson_cursor_find</a> (bson_cursor *c, const gchar *name)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Move the cursor to a given key.  <a href="group__bson__cursor.html#gab9c63d49d46c04b2e5ffbdd9d9ee12d9"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__bson__cursor.html#ga1655fa3c1116657f42e4cf76ec8ca129">bson_cursor_find_next</a> (bson_cursor *c, const gchar *name)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Move the cursor to a given key, past the current one.  <a href="group__bson__cursor.html#ga1655fa3c1116657f42e4cf76ec8ca129"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bson_cursor *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb">bson_find</a> (const bson *b, const gchar *name)</td></tr>
@@ -283,7 +285,7 @@ Functions</h2></td></tr>
 <p>Convenience macro to verify a cursor's type.</p>
 <p>Verifies that the cursor's type is the same as the type requested by the caller, and returns FALSE if there is a mismatch. </p>
 
-<p>Definition at line <a class="el" href="bson_8c_source.html#l01000">1000</a> of file <a class="el" href="bson_8c_source.html">bson.c</a>.</p>
+<p>Definition at line <a class="el" href="bson_8c_source.html#l01002">1002</a> of file <a class="el" href="bson_8c_source.html">bson.c</a>.</p>
 
 </div>
 </div>
@@ -302,7 +304,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 12:15:48 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

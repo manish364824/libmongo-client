@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__bson__object__access.html#gae017cba3a7c5a49981aae92ff26d1ed8" title="Build a BSON object in one go." alt="" coords="331,57,421,87"/>
+<area shape="rect" id="node5" href="$group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object." alt="" coords="595,5,680,35"/>
+<area shape="rect" id="node11" href="$group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object." alt="" coords="329,111,423,140"/>
+<area shape="rect" id="node14" href="$group__mongo__sync.html#ga342218b37c0b0d4beafd7071b530ee1f" title="Send a delete command to MongoDB." alt="" coords="284,164,468,193"/>
+<area shape="rect" id="node7" href="$group__bson__object__access.html#ga357437f58074c2dee668a0cae2595b8b" title="Create a new BSON object." alt="" coords="595,59,680,88"/>
+<area shape="rect" id="node9" href="$group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space." alt="" coords="805,59,931,88"/>
+<area shape="rect" id="node16" href="$group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99" title="Get the last requestID from a connection object." alt="" coords="519,137,756,167"/>
+<area shape="rect" id="node18" href="$group__mongo__wire__cmd.html#ga485e6a565866a9fa2ec4251e052ac060" title="Construct a delete command." alt="" coords="547,191,728,220"/>
+<area shape="rect" id="node20" href="$group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object." alt="" coords="824,164,912,193"/>
+<area shape="rect" id="node22" href="$group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object." alt="" coords="825,217,911,247"/>
+</map>
