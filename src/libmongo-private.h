@@ -145,6 +145,16 @@ struct _mongo_sync_gridfs_stream
     gint32 buffer_offset; /**< Offset we're into the buffer. */
   } state;
 
+  /** Chunk state for the reader.
+   */
+  struct
+  {
+    bson *bson;
+    const guint8 *data;
+    gint32 size;
+    gint32 offset;
+  } chunk;
+
   gboolean write_stream; /**< Flag whether the stream is read- or
 			    write-only. */
   GChecksum *checksum; /**< Checksum of a file upload. */

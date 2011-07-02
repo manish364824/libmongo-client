@@ -184,11 +184,73 @@ mongo_sync_gridfs_stream_new (mongo_sync_gridfs *gfs,
   return stream;
 }
 
+static inline gboolean
+_stream_seek_chunk (mongo_sync_gridfs_stream *stream,
+		    gint64 chunk)
+{
+  bson *b;
+  mongo_packet *p;
+  bson_cursor *c;
+  bson_binary_subtype subt;
+
+  b = bson_new_sized (32);
+  bson_append_oid (b, "files_id", stream->super.meta.oid);
+  bson_append_int64 (b, "n", chunk);
+  bson_finish (b);
+
+  p = mongo_sync_cmd_query (stream->super.gfs->conn,
+			    stream->super.gfs->ns.chunks, 0,
+			    0, 1, b, NULL);
+  if (!p)
+    {
+      int e = errno;
+
+      bson_free (b);
+      errno = e;
+      return FALSE;
+    }
+  bson_free (b);
+
+  bson_free (stream->chunk.bson);
+  stream->chunk.bson = NULL;
+  stream->chunk.data = NULL;
+
+  if (!mongo_wire_reply_packet_get_nth_document (p, 1, &stream->chunk.bson))
+    {
+      int e = errno;
+
+      mongo_wire_packet_free (p);
+      errno = e;
+      return FALSE;
+    }
+  mongo_wire_packet_free (p);
+  bson_finish (stream->chunk.bson);
+
+  c = bson_find (stream->chunk.bson, "data");
+  if (!bson_cursor_get_binary (c, &subt, &stream->chunk.data,
+			       &stream->chunk.size))
+    {
+      bson_cursor_free (c);
+      bson_free (stream->chunk.bson);
+      stream->chunk.bson = NULL;
+      stream->chunk.data = NULL;
+
+      errno = EPROTO;
+      return FALSE;
+    }
+  bson_cursor_free (c);
+
+  stream->chunk.offset = 0;
+  return TRUE;
+}
+
 gint64
 mongo_sync_gridfs_stream_read (mongo_sync_gridfs_stream *stream,
 			       guint8 *buffer,
 			       gint64 size)
 {
+  gint64 pos = 0;
+
   if (!stream)
     {
       errno = ENOENT;
@@ -200,11 +262,36 @@ mongo_sync_gridfs_stream_read (mongo_sync_gridfs_stream *stream,
       return -1;
     }
 
-  /* Copy available buffer to buffer */
-  /* Get more chunks until neccessary, and copy them to buffer */
-  /* set up cache variables */
+  if (!stream->chunk.data)
+    {
+      if (!_stream_seek_chunk (stream, 0))
+	return -1;
+    }
 
-  return -1;
+  while (pos < size && stream->state.file_offset < stream->super.meta.length)
+    {
+      gint32 csize = stream->chunk.size - stream->chunk.offset;
+
+      if (size - pos < csize)
+	csize = size - pos;
+
+      memcpy (buffer + pos, stream->chunk.data + stream->chunk.offset,
+	      csize);
+
+      stream->chunk.offset += csize;
+      stream->state.file_offset += csize;
+      pos += csize;
+
+      if (stream->chunk.offset >= stream->chunk.size &&
+	  stream->state.file_offset < stream->super.meta.length)
+	{
+	  stream->state.current_chunk++;
+	  if (!_stream_seek_chunk (stream, stream->state.current_chunk))
+	    return -1;
+	}
+    }
+
+  return pos;
 }
 
 static gboolean
@@ -401,6 +488,7 @@ mongo_sync_gridfs_stream_close (mongo_sync_gridfs_stream *stream)
 
   g_checksum_free (stream->checksum);
   g_free (stream->state.buffer);
+  bson_free (stream->chunk.bson);
   mongo_sync_gridfs_file_free ((mongo_sync_gridfs_file *)stream);
   return TRUE;
 }
