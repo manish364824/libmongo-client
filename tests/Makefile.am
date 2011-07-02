@@ -169,14 +169,28 @@ mongo_sync_gridfs_unit_tests	= \
 mongo_sync_gridfs_func_tests	= \
 		func/mongo/sync-gridfs/f_sync_gridfs
 
+mongo_sync_gridfs_stream_unit_tests = \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_from_file \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_find \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_new \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_read \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_write \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_seek \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_close
+
+mongo_sync_gridfs_stream_func_tests = \
+		func/mongo/sync-gridfs-stream/f_sync_gridfs_stream
+
 UNIT_TESTS	= ${bson_unit_tests} ${mongo_utils_unit_tests} \
 		${mongo_wire_unit_tests} ${mongo_client_unit_tests} \
 		${mongo_sync_unit_tests} ${mongo_sync_cursor_unit_tests} \
-		${mongo_sync_pool_unit_tests} ${mongo_sync_gridfs_unit_tests}
+		${mongo_sync_pool_unit_tests} ${mongo_sync_gridfs_unit_tests} \
+		${mongo_sync_gridfs_stream_unit_tests}
 FUNC_TESTS	= ${bson_func_tests} ${mongo_sync_func_tests} \
 		${mongo_client_func_tests} \
 		${mongo_sync_cursor_func_tests} ${mongo_sync_pool_func_tests} \
-		${mongo_sync_gridfs_func_tests}
+		${mongo_sync_gridfs_func_tests} \
+		${mongo_sync_gridfs_stream_func_tests}
 PERF_TESTS	= ${bson_perf_tests}
 TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}
 

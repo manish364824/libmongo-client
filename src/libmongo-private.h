@@ -129,6 +129,27 @@ struct _mongo_sync_gridfs_file
   } meta;
 };
 
+/** @internal GridFS file stream object. */
+struct _mongo_sync_gridfs_stream
+{
+  mongo_sync_gridfs_file super; /**< The parent GridFS file object. */
+
+  /** File state.
+   */
+  struct
+  {
+    gint64 file_offset; /**< Offset we're into the file. */
+    gint64 current_chunk; /**< The current chunk number in the
+			     file. */
+    guint8 *buffer; /**< I/O buffer, holding temporary output data. */
+    gint32 buffer_offset; /**< Offset we're into the buffer. */
+  } state;
+
+  gboolean write_stream; /**< Flag whether the stream is read- or
+			    write-only. */
+  GChecksum *checksum; /**< Checksum of a file upload. */
+};
+
 /** @internal Construct a kill cursors command, using a va_list.
  *
  * @param id is the sequence id.
