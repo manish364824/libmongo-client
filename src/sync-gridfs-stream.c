@@ -378,6 +378,8 @@ mongo_sync_gridfs_stream_seek (mongo_sync_gridfs_stream *stream,
 			       gint whence)
 {
   gint64 real_pos = 0;
+  gint64 chunk;
+  gint32 offs;
 
   if (!stream)
     {
@@ -427,8 +429,17 @@ mongo_sync_gridfs_stream_seek (mongo_sync_gridfs_stream *stream,
       return FALSE;
     }
 
-  errno = ENOSYS;
-  return FALSE;
+  chunk = real_pos / stream->super.meta.chunk_size;
+  offs = real_pos % stream->super.meta.chunk_size;
+
+  if (!_stream_seek_chunk (stream, chunk))
+    return FALSE;
+
+  stream->chunk.offset = offs;
+  stream->state.current_chunk = chunk;
+  stream->state.file_offset = real_pos;
+
+  return TRUE;
 }
 
 gboolean
