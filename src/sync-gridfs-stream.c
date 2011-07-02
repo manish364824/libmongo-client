@@ -393,6 +393,8 @@ mongo_sync_gridfs_stream_seek (mongo_sync_gridfs_stream *stream,
   switch (whence)
     {
     case SEEK_SET:
+      if (pos == stream->state.file_offset)
+	return TRUE;
       if (pos < 0 || pos > stream->super.meta.length)
 	{
 	  errno = ERANGE;
