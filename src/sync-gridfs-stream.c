@@ -28,6 +28,8 @@ mongo_sync_gridfs_stream *
 mongo_sync_gridfs_stream_from_file (const mongo_sync_gridfs_file *gfile)
 {
   mongo_sync_gridfs_stream *stream;
+  bson_cursor *c;
+  mongo_sync_gridfs_file *f;
 
   if (!gfile)
     {
@@ -38,19 +40,70 @@ mongo_sync_gridfs_stream_from_file (const mongo_sync_gridfs_file *gfile)
   stream = g_new0 (mongo_sync_gridfs_stream, 1);
 
   stream->super.gfs = gfile->gfs;
-  stream->super.meta.metadata = gfile->meta.metadata;
-  stream->super.meta.oid = gfile->meta.oid;
-  stream->super.meta.chunk_size = gfile->meta.chunk_size;
-  stream->super.meta.length = gfile->meta.length;
-  stream->super.meta.date = gfile->meta.date;
-  stream->super.meta.md5 = gfile->meta.md5;
+  stream->super.meta.metadata = bson_new_from_data
+    (bson_data (gfile->meta.metadata),
+     bson_size (gfile->meta.metadata) - 1);
+  bson_finish (stream->super.meta.metadata);
+
+  f = (mongo_sync_gridfs_file *)stream;
+
+  /* Copy metadata from the new file object */
+  c = bson_find (f->meta.metadata, "_id");
+  if (!bson_cursor_get_oid (c, &f->meta.oid))
+    {
+      mongo_sync_gridfs_file_free (f);
+      bson_cursor_free (c);
+      errno = EPROTO;
+      return NULL;
+    }
+
+  bson_cursor_find (c, "length");
+  bson_cursor_get_int64 (c, &f->meta.length);
+
+  if (f->meta.length == 0)
+    {
+      gint32 i = 0;
+
+      bson_cursor_get_int32 (c, &i);
+      f->meta.length = i;
+    }
+
+  bson_cursor_find (c, "chunkSize");
+  bson_cursor_get_int32 (c, &f->meta.chunk_size);
+
+  if (f->meta.length == 0 || f->meta.chunk_size == 0)
+    {
+      bson_cursor_free (c);
+      mongo_sync_gridfs_file_free (f);
+      errno = EPROTO;
+      return NULL;
+    }
+
+  bson_cursor_find (c, "uploadDate");
+  if (!bson_cursor_get_utc_datetime (c, &f->meta.date))
+    {
+      mongo_sync_gridfs_file_free (f);
+      bson_cursor_free (c);
+      errno = EPROTO;
+      return NULL;
+    }
+
+  bson_cursor_find (c, "md5");
+  if (!bson_cursor_get_string (c, &f->meta.md5))
+    {
+      mongo_sync_gridfs_file_free (f);
+      bson_cursor_free (c);
+      errno = EPROTO;
+      return NULL;
+    }
+  bson_cursor_free (c);
 
   stream->write_stream = FALSE;
 
-  stream->state.buffer = g_malloc (stream->super.meta.chunk_size);
-  stream->state.buffer_offset = -1;
-  stream->state.file_offset = -1;
-  stream->state.current_chunk = -1;
+  stream->state.buffer = NULL;
+  stream->state.buffer_offset = 0;
+  stream->state.file_offset = 0;
+  stream->state.current_chunk = 0;
 
   return stream;
 }
@@ -116,6 +169,10 @@ mongo_sync_gridfs_stream_new (mongo_sync_gridfs *gfs,
     }
   bson_cursor_free (c);
   bson_finish (stream->super.meta.metadata);
+
+  c = bson_find (stream->super.meta.metadata, "_id");
+  bson_cursor_get_oid (c, &stream->super.meta.oid);
+  bson_cursor_free (c);
 
   stream->state.buffer = g_malloc (stream->super.meta.chunk_size);
   stream->state.buffer_offset = 0;
