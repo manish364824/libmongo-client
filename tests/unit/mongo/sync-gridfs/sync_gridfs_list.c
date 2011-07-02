@@ -11,7 +11,7 @@ test_mongo_sync_gridfs_list (void)
 		      BSON_TYPE_NONE);
   bson_finish (query);
 
-  ok (mongo_sync_gridfs_list (NULL, NULL) == FALSE,
+  ok (mongo_sync_gridfs_list (NULL, NULL) == NULL,
       "mongo_sync_gridfs_list() fails with a NULL GridFS");
 
   begin_network_tests (1);
@@ -20,7 +20,7 @@ test_mongo_sync_gridfs_list (void)
     (mongo_sync_connect (config.primary_host, config.primary_port, FALSE),
      config.gfs_prefix);
 
-  ok (mongo_sync_gridfs_list (gfs, query) == FALSE,
+  ok (mongo_sync_gridfs_list (gfs, query) == NULL,
       "mongo_sync_gridfs_list() fails with a query that does not match "
       "anything");
 
