@@ -21,6 +21,7 @@
 #include "sync-gridfs-stream.h"
 #include "libmongo-private.h"
 
+#include <unistd.h>
 #include <errno.h>
 
 mongo_sync_gridfs_stream *
@@ -232,14 +233,58 @@ mongo_sync_gridfs_stream_seek (mongo_sync_gridfs_stream *stream,
 			       gint64 pos,
 			       gint whence)
 {
+  gint64 real_pos = 0;
+
   if (!stream)
     {
       errno = ENOENT;
       return FALSE;
     }
-  if (pos == 0 || whence == 0)
-    return FALSE;
-  return TRUE;
+  if (stream->write_stream)
+    {
+      errno = EOPNOTSUPP;
+      return FALSE;
+    }
+
+  switch (whence)
+    {
+    case SEEK_SET:
+      if (pos < 0 || pos > stream->super.meta.length)
+	{
+	  errno = ERANGE;
+	  return FALSE;
+	}
+      real_pos = pos;
+      break;
+    case SEEK_CUR:
+      if (pos + stream->state.file_offset < 0 ||
+	  pos + stream->state.file_offset > stream->super.meta.length)
+	{
+	  errno = ERANGE;
+	  return FALSE;
+	}
+      if (pos == 0)
+	return TRUE;
+      real_pos = pos + stream->state.file_offset;
+      break;
+    case SEEK_END:
+      if (pos > 0 ||
+	  pos + stream->super.meta.length < 0)
+	{
+	  errno = ERANGE;
+	  return FALSE;
+	}
+      if (pos == 0)
+	return TRUE;
+      real_pos = pos + stream->super.meta.length;
+      break;
+    default:
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  errno = ENOSYS;
+  return FALSE;
 }
 
 gboolean

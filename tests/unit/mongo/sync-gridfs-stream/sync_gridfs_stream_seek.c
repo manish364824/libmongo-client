@@ -17,7 +17,7 @@ test_mongo_sync_gridfs_stream_seek (void)
   ok (mongo_sync_gridfs_stream_seek (NULL, 0, SEEK_SET) == FALSE,
       "mongo_sync_gridfs_stream_seek() fails with a NULL stream");
 
-  begin_network_tests (7);
+  begin_network_tests (8);
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
@@ -53,10 +53,13 @@ test_mongo_sync_gridfs_stream_seek (void)
       "mongo_sync_gridfs_stream_seek() fails with SEEK_END and a position "
       "before the start");
 
+  ok (mongo_sync_gridfs_stream_seek (stream, 0, 42) == FALSE,
+      "mongo_sync_gridfs_stream_seek() fails with an invalid whence");
+
   mongo_sync_gridfs_stream_close (stream);
   mongo_sync_gridfs_free (gfs, TRUE);
 
   end_network_tests ();
 }
 
-RUN_TEST (8, mongo_sync_gridfs_stream_seek);
+RUN_TEST (9, mongo_sync_gridfs_stream_seek);
