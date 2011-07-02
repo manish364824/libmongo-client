@@ -418,8 +418,6 @@ mongo_sync_gridfs_stream_seek (mongo_sync_gridfs_stream *stream,
 	  errno = ERANGE;
 	  return FALSE;
 	}
-      if (pos == 0)
-	return TRUE;
       real_pos = pos + stream->super.meta.length;
       break;
     default:
