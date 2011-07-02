@@ -256,6 +256,11 @@ mongo_sync_gridfs_stream_read (mongo_sync_gridfs_stream *stream,
       errno = ENOENT;
       return -1;
     }
+  if (stream->write_stream)
+    {
+      errno = EOPNOTSUPP;
+      return -1;
+    }
   if (!buffer || size <= 0)
     {
       errno = EINVAL;
@@ -331,6 +336,11 @@ mongo_sync_gridfs_stream_write (mongo_sync_gridfs_stream *stream,
   if (!stream)
     {
       errno = ENOENT;
+      return FALSE;
+    }
+  if (!stream->write_stream)
+    {
+      errno = EOPNOTSUPP;
       return FALSE;
     }
   if (!buffer || size <= 0)

@@ -1,6 +1,8 @@
 #include "test.h"
 #include "mongo.h"
 
+#include "libmongo-private.h"
+
 void
 test_mongo_sync_gridfs_stream_write (void)
 {
@@ -19,7 +21,7 @@ test_mongo_sync_gridfs_stream_write (void)
   ok (mongo_sync_gridfs_stream_write (NULL, buffer, sizeof (buffer)) == FALSE,
       "mongo_sync_gridfs_stream_write() should fail with a NULL connection");
 
-  begin_network_tests (3);
+  begin_network_tests (4);
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
@@ -33,6 +35,10 @@ test_mongo_sync_gridfs_stream_write (void)
   ok (mongo_sync_gridfs_stream_write (stream, buffer, sizeof (buffer)) == TRUE,
       "mongo_sync_gridfs_stream_write() works");
 
+  stream->write_stream = FALSE;
+  ok (mongo_sync_gridfs_stream_write (stream, buffer, sizeof (buffer)) == FALSE,
+      "mongo_sync_gridfs_stream_write() should fail with a read stream");
+
   mongo_sync_gridfs_stream_close (stream);
   mongo_sync_gridfs_free (gfs, TRUE);
 
@@ -41,4 +47,4 @@ test_mongo_sync_gridfs_stream_write (void)
   bson_free (meta);
 }
 
-RUN_TEST (4, mongo_sync_gridfs_stream_write);
+RUN_TEST (5, mongo_sync_gridfs_stream_write);
