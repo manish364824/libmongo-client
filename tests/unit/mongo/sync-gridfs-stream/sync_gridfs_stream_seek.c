@@ -12,6 +12,8 @@ test_mongo_sync_gridfs_stream_seek (void)
   mongo_sync_gridfs *gfs;
   mongo_sync_gridfs_stream *stream;
 
+  mongo_util_oid_init (0);
+
   ok (mongo_sync_gridfs_stream_seek (NULL, 0, SEEK_SET) == FALSE,
       "mongo_sync_gridfs_stream_seek() fails with a NULL stream");
 

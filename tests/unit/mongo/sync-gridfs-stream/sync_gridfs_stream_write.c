@@ -10,6 +10,8 @@ test_mongo_sync_gridfs_stream_write (void)
   bson *meta;
   guint8 buffer[4096];
 
+  mongo_util_oid_init (0);
+
   meta = bson_build (BSON_TYPE_STRING, "my-id", "sync_gridfs_stream_write", -1,
 		     BSON_TYPE_NONE);
   bson_finish (meta);

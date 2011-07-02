@@ -8,6 +8,8 @@ test_mongo_sync_gridfs_stream_close (void)
   mongo_sync_gridfs *gfs;
   mongo_sync_gridfs_stream *stream;
 
+  mongo_util_oid_init (0);
+
   ok (mongo_sync_gridfs_stream_close (NULL) == FALSE,
       "mongo_sync_gridfs_stream_close() fails with a NULL stream");
 

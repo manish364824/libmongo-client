@@ -11,6 +11,8 @@ test_mongo_sync_gridfs_stream_read (void)
   mongo_sync_gridfs_stream *stream;
   guint8 buffer[4096];
 
+  mongo_util_oid_init (0);
+
   ok (mongo_sync_gridfs_stream_read (NULL, buffer, sizeof (buffer)) == -1,
       "mongo_sync_gridfs_stream_read() should fail with a NULL connection");
 
