@@ -118,6 +118,22 @@ mongo_sync_gridfs_file *mongo_sync_gridfs_find (mongo_sync_gridfs *gfs,
 mongo_sync_cursor *mongo_sync_gridfs_list (mongo_sync_gridfs *gfs,
 					   const bson *query);
 
+/** Delete files matching a query from GridFS.
+ *
+ * Finds all files on a GridFS, based on a custom query, and removes
+ * them.
+ *
+ * @param gfs is the GridFS to delete files from.
+ * @param query is the custom query based on which files shall be
+ * sought. Passing a NULL query will find all files, without
+ * restriction.
+ *
+ * @returns TRUE if all files were deleted successfully, FALSE
+ * otherwise.
+ */
+gboolean mongo_sync_gridfs_remove (mongo_sync_gridfs *gfs,
+				   const bson *query);
+
 /** Upload a file to GridFS from a buffer.
  *
  * Create a new file on GridFS from a buffer, using custom meta-data.

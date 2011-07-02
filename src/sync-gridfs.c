@@ -529,3 +529,67 @@ mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
 
   return gfile;
 }
+
+gboolean
+mongo_sync_gridfs_remove (mongo_sync_gridfs *gfs,
+			  const bson *query)
+{
+  mongo_sync_cursor *fc;
+
+  fc = mongo_sync_gridfs_list (gfs, query);
+  if (!fc)
+    {
+      if (errno != ENOTCONN)
+	errno = ENOENT;
+      return FALSE;
+    }
+
+  while (mongo_sync_cursor_next (fc))
+    {
+      bson *meta = mongo_sync_cursor_get_data (fc), *q;
+      bson_cursor *c;
+      const guint8 *ooid;
+      guint8 oid[12];
+
+      c = bson_find (meta, "_id");
+      if (!bson_cursor_get_oid (c, &ooid))
+	{
+	  bson_free (meta);
+	  bson_cursor_free (c);
+	  mongo_sync_cursor_free (fc);
+
+	  errno = EPROTO;
+	  return FALSE;
+	}
+      bson_cursor_free (c);
+      memcpy (oid, ooid, 12);
+      bson_free (meta);
+
+      /* Delete metadata */
+      q = bson_build (BSON_TYPE_OID, "_id", oid,
+		      BSON_TYPE_NONE);
+      bson_finish (q);
+
+      if (!mongo_sync_cmd_delete (gfs->conn, gfs->ns.files, 0, q))
+	{
+	  bson_free (q);
+	  mongo_sync_cursor_free (fc);
+	  return FALSE;
+	}
+      bson_free (q);
+
+      /* Delete chunks */
+      q = bson_build (BSON_TYPE_OID, "files_id", oid,
+		      BSON_TYPE_NONE);
+      bson_finish (q);
+
+      /* Chunks may or may not exist, an error in this case is
+	 non-fatal. */
+      mongo_sync_cmd_delete (gfs->conn, gfs->ns.chunks, 0, q);
+      bson_free (q);
+    }
+
+  mongo_sync_cursor_free (fc);
+
+  return TRUE;
+}

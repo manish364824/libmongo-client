@@ -354,6 +354,48 @@ test_func_sync_gridfs_list (void)
 }
 
 void
+test_fync_sync_gridfs_remove (void)
+{
+  mongo_sync_gridfs *gfs;
+  bson *query;
+
+  gfs = mongo_sync_gridfs_new
+    (mongo_sync_connect (config.primary_host, config.primary_port, TRUE),
+     config.gfs_prefix);
+
+  /* Test with a non-matching query */
+  query = bson_build (BSON_TYPE_STRING, "no-such-field",
+		      "You're not seeing this field.", -1,
+		      BSON_TYPE_NONE);
+  bson_finish (query);
+
+  ok (mongo_sync_gridfs_remove (gfs, query) == FALSE,
+      "mongo_sync_gridfs_remove() should fail if there's nothing to delete.");
+  bson_free (query);
+
+  /* Test with a non-string id */
+  query = bson_build (BSON_TYPE_STRING, "my-id", "string-id", -1,
+		      BSON_TYPE_NONE);
+  bson_finish (query);
+
+  ok (mongo_sync_gridfs_remove (gfs, query) == FALSE,
+      "mongo_sync_gridfs_remove() should fail if the file id is not "
+      "an ObjectId");
+  bson_free (query);
+
+  /* Test with a working query */
+  query = bson_build (BSON_TYPE_OID, "_id", named_oid,
+		      BSON_TYPE_NONE);
+  bson_finish (query);
+
+  ok (mongo_sync_gridfs_remove (gfs, query) == TRUE,
+      "mongo_sync_gridfs_remove() works");
+  bson_finish (query);
+
+  mongo_sync_gridfs_free (gfs, TRUE);
+}
+
+void
 test_func_sync_gridfs (void)
 {
   mongo_util_oid_init (0);
@@ -364,6 +406,8 @@ test_func_sync_gridfs (void)
 
   test_func_sync_gridfs_put_invalid ();
   test_func_sync_gridfs_get_invalid ();
+
+  test_fync_sync_gridfs_remove ();
 }
 
-RUN_NET_TEST (26, func_sync_gridfs);
+RUN_NET_TEST (29, func_sync_gridfs);

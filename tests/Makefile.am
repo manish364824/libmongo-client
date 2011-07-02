@@ -163,7 +163,8 @@ mongo_sync_gridfs_unit_tests	= \
 		unit/mongo/sync-gridfs/sync_gridfs_file_get_metadata \
 		unit/mongo/sync-gridfs/sync_gridfs_file_cursor_new \
 		unit/mongo/sync-gridfs/sync_gridfs_file_cursor_get_chunk \
-		unit/mongo/sync-gridfs/sync_gridfs_list
+		unit/mongo/sync-gridfs/sync_gridfs_list \
+		unit/mongo/sync-gridfs/sync_gridfs_remove
 
 mongo_sync_gridfs_func_tests	= \
 		func/mongo/sync-gridfs/f_sync_gridfs
