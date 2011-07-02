@@ -21,6 +21,8 @@
  *     mongo-sync, @see mongo_sync_pool_api.
  *   - sync-gridfs: Synchronous GridFS API. @see
  *     mongo_sync_gridfs_api.
+ *   - sync-gridfs-stream: Streaming API for GridFS. @see
+ *     mongo_sync_gridfs_stream_api.
  *
  * The intended way to use the library to work with MongoDB is to
  * first construct the BSON objects, then construct the packets, and
