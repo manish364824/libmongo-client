@@ -312,6 +312,41 @@ mongo_gridfs_list (config_t *config)
   mongo_sync_gridfs_free (gfs, TRUE);
 }
 
+void
+mongo_gridfs_remove (config_t *config, gint argc, gchar *argv[])
+{
+  mongo_sync_gridfs *gfs;
+  bson *query;
+  gchar *fn;
+
+  if (argc < 3)
+    {
+      fprintf (stderr, "Usage: %s remove GRIDFS_FILENAME\n", argv[0]);
+      exit (1);
+    }
+  fn = argv[2];
+
+  gfs = mongo_gridfs_connect (config);
+
+  VLOG ("Deleting file: '%s'...\n", fn);
+
+  query = bson_build (BSON_TYPE_STRING, "filename", fn, -1,
+		      BSON_TYPE_NONE);
+  bson_finish (query);
+
+  if (mongo_sync_gridfs_remove (gfs, query))
+    {
+      VLOG ("\tDeleted\n");
+    }
+  else
+    {
+      VLOG ("\tFailed: %s\n", strerror (errno));
+    }
+  bson_free (query);
+
+  mongo_sync_gridfs_free (gfs, TRUE);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -362,6 +397,8 @@ main (int argc, char *argv[])
     mongo_gridfs_put (&config, argc, argv);
   else if (g_ascii_strcasecmp (argv[1], "list") == 0)
     mongo_gridfs_list (&config);
+  else if (g_ascii_strcasecmp (argv[1], "remove") == 0)
+    mongo_gridfs_remove (&config, argc, argv);
 
   g_free (config.ns);
   g_option_context_free (context);
