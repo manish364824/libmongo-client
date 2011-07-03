@@ -201,12 +201,11 @@ LDADD = $(top_builddir)/src/libmongo-client.la ${top_builddir}/tests/libtap/libt
 
 EXTRA_DIST = README
 
-check:
-	@${MAKE} ${AM_MAKEFLAGS} check-HARNESS
+check-%: BASE=$(subst -,_,$(subst check-,,$@))
+check-%: TESTCASES=$(value $(BASE)_unit_tests) $(value $(BASE)_func_tests) $(value $(BASE)_tests)
+check check-%: ${TESTCASES} ${noinst_PROGRAMS}
+	$(AM_V_at) ${builddir}/test_cleanup
+	$(AM_V_GEN) srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
+	$(AM_V_at) ${builddir}/test_cleanup
 
-check-HARNESS: ${TESTS} ${noinst_PROGRAMS}
-	@${builddir}/test_cleanup
-	$(AM_V_GEN)srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
-	@${builddir}/test_cleanup
-
-.PHONY: check-HARNESS
+.PHONY: check
