@@ -300,7 +300,8 @@ mongo_sync_gridfs_file_cursor_get_chunk (mongo_sync_cursor *cursor,
   const guint8 *d;
   guint8 *data;
   gint32 s;
-  bson_binary_subtype sub;
+  bson_binary_subtype sub = BSON_BINARY_SUBTYPE_USER_DEFINED;
+  gboolean r;
 
   if (!cursor)
     {
@@ -310,7 +311,8 @@ mongo_sync_gridfs_file_cursor_get_chunk (mongo_sync_cursor *cursor,
 
   b = mongo_sync_cursor_get_data (cursor);
   c = bson_find (b, "data");
-  if (!bson_cursor_get_binary (c, &sub, &d, &s))
+  r = bson_cursor_get_binary (c, &sub, &d, &s);
+  if (!r || sub != BSON_BINARY_SUBTYPE_GENERIC)
     {
       bson_cursor_free (c);
       errno = EPROTO;

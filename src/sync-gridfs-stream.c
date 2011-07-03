@@ -169,7 +169,8 @@ _stream_seek_chunk (mongo_sync_gridfs_stream *stream,
   bson *b;
   mongo_packet *p;
   bson_cursor *c;
-  bson_binary_subtype subt;
+  bson_binary_subtype subt = BSON_BINARY_SUBTYPE_USER_DEFINED;
+  gboolean r;
 
   b = bson_new_sized (32);
   bson_append_oid (b, "files_id", stream->file.oid);
@@ -190,8 +191,9 @@ _stream_seek_chunk (mongo_sync_gridfs_stream *stream,
   bson_finish (stream->reader.bson);
 
   c = bson_find (stream->reader.bson, "data");
-  if (!bson_cursor_get_binary (c, &subt, &stream->reader.chunk.data,
-			       &stream->reader.chunk.size))
+  r = bson_cursor_get_binary (c, &subt, &stream->reader.chunk.data,
+			      &stream->reader.chunk.size);
+  if (!r || subt != BSON_BINARY_SUBTYPE_GENERIC)
     {
       bson_cursor_free (c);
       bson_free (stream->reader.bson);
