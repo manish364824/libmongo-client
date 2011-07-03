@@ -142,11 +142,23 @@ test_func_sync_gridfs_stream_seek (void)
       "The two chunks differ, as they should");
 
   ok (mongo_sync_gridfs_stream_seek (stream, 0, SEEK_END) == TRUE,
-      "mongo_sync_gridfs_stream_seek() works");
+      "mongo_sync_gridfs_stream_seek() works, with SEEK_END");
+  cmp_ok (stream->file.offset, "==", stream->file.length,
+	  "mongo_sync_gridfs_stream_seek() can seek to the end");
+
   ok (mongo_sync_gridfs_stream_seek (stream, 1, SEEK_SET) == TRUE,
-      "mongo_sync_gridfs_stream_seek() works");
+      "mongo_sync_gridfs_stream_seek() works, with SEEK_SET");
+  cmp_ok (stream->file.offset, "==", 1,
+	  "mongo_sync_gridfs_stream_seek()'s SEEK_SET works");
+  ok (mongo_sync_gridfs_stream_seek (stream, 1, SEEK_SET) == TRUE,
+      "mongo_sync_gridfs_stream_seek() works, with SEEK_SET");
+
   ok (mongo_sync_gridfs_stream_seek (stream, -1, SEEK_CUR) == TRUE,
-      "mongo_sync_gridfs_stream_seek() works");
+      "mongo_sync_gridfs_stream_seek() works, with SEEK_CUR");
+  cmp_ok (stream->file.offset, "==", 0,
+	  "mongo_sync_gridfs_stream_seek()'s SEEK_CUR works");
+  ok (mongo_sync_gridfs_stream_seek (stream, 0, SEEK_CUR) == TRUE,
+      "mongo_sync_gridfs_stream_seek() works, with SEEK_CUR");
 
   cmp_ok (mongo_sync_gridfs_stream_read (stream, chunk3, 300 * 1024), "==",
 	  300 * 1024,
@@ -175,4 +187,4 @@ test_func_sync_gridfs_stream (void)
   g_free (write_md5);
 }
 
-RUN_NET_TEST (15, func_sync_gridfs_stream);
+RUN_NET_TEST (20, func_sync_gridfs_stream);
