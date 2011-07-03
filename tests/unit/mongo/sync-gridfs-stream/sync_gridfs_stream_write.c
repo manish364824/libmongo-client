@@ -35,7 +35,7 @@ test_mongo_sync_gridfs_stream_write (void)
   ok (mongo_sync_gridfs_stream_write (stream, buffer, sizeof (buffer)) == TRUE,
       "mongo_sync_gridfs_stream_write() works");
 
-  stream->write_stream = FALSE;
+  stream->writable = FALSE;
   ok (mongo_sync_gridfs_stream_write (stream, buffer, sizeof (buffer)) == FALSE,
       "mongo_sync_gridfs_stream_write() should fail with a read stream");
 

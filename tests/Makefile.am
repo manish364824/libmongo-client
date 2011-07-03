@@ -170,7 +170,6 @@ mongo_sync_gridfs_func_tests	= \
 		func/mongo/sync-gridfs/f_sync_gridfs
 
 mongo_sync_gridfs_stream_unit_tests = \
-		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_from_file \
 		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_find \
 		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_new \
 		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_read \

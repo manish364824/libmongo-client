@@ -27,7 +27,7 @@ test_mongo_sync_gridfs_stream_read (void)
       "mongo-sync_gridfs_stream_read() should fail when the stream is "
       "write-only");
 
-  stream->write_stream = FALSE;
+  stream->writable = FALSE;
 
   ok (mongo_sync_gridfs_stream_read (stream, NULL, sizeof (buffer)) == -1,
       "mongo_sync_gridfs_stream_read() should fail with a NULL buffer");

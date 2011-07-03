@@ -25,35 +25,78 @@
 #include <errno.h>
 
 mongo_sync_gridfs_stream *
-mongo_sync_gridfs_stream_from_file (mongo_sync_gridfs_file *gfile)
-{
-  mongo_sync_gridfs_stream *stream;
-
-  if (!gfile)
-    {
-      errno = ENOENT;
-      return NULL;
-    }
-
-  stream = g_new0 (mongo_sync_gridfs_stream, 1);
-
-  stream->gfile = gfile;
-  stream->write_stream = FALSE;
-
-  stream->state.buffer = NULL;
-  stream->state.buffer_offset = 0;
-  stream->state.file_offset = 0;
-  stream->state.current_chunk = 0;
-
-  return stream;
-}
-
-mongo_sync_gridfs_stream *
 mongo_sync_gridfs_stream_find (mongo_sync_gridfs *gfs,
 			       const bson *query)
 {
-  return mongo_sync_gridfs_stream_from_file
-    (mongo_sync_gridfs_find (gfs, query));
+  mongo_sync_gridfs_stream *stream;
+  bson *meta = NULL;
+  bson_cursor *c;
+  mongo_packet *p;
+  const guint8 *oid;
+
+  if (!gfs)
+    {
+      errno = ENOTCONN;
+      return NULL;
+    }
+  if (!query)
+    {
+      errno = EINVAL;
+      return NULL;
+    }
+
+  p = mongo_sync_cmd_query (gfs->conn, gfs->ns.files, 0, 0, 1, query, NULL);
+  if (!p)
+    return NULL;
+
+  stream = g_new0 (mongo_sync_gridfs_stream, 1);
+  stream->gfs = gfs;
+  stream->writable = FALSE;
+
+  mongo_wire_reply_packet_get_nth_document (p, 1, &meta);
+  bson_finish (meta);
+  mongo_wire_packet_free (p);
+
+  c = bson_find (meta, "_id");
+  if (!bson_cursor_get_oid (c, &oid))
+    {
+      bson_cursor_free (c);
+      bson_free (meta);
+      g_free (stream);
+
+      errno = EPROTO;
+      return NULL;
+    }
+  stream->file.oid = g_malloc (12);
+  memcpy (stream->file.oid, oid, 12);
+
+  bson_cursor_find (c, "length");
+  bson_cursor_get_int64 (c, &stream->file.length);
+  if (stream->file.length == 0)
+    {
+      gint32 i = 0;
+
+      bson_cursor_get_int32 (c, &i);
+      stream->file.length = i;
+    }
+
+  bson_cursor_find (c, "chunkSize");
+  bson_cursor_get_int32 (c, &stream->file.chunk_size);
+
+  bson_cursor_free (c);
+  bson_free (meta);
+
+  if (stream->file.length == 0 ||
+      stream->file.chunk_size == 0)
+    {
+      g_free (stream->file.oid);
+      g_free (stream);
+
+      errno = EPROTO;
+      return NULL;
+    }
+
+  return stream;
 }
 
 mongo_sync_gridfs_stream *
@@ -66,53 +109,55 @@ mongo_sync_gridfs_stream_new (mongo_sync_gridfs *gfs,
   if (!gfs)
     {
       errno = ENOTCONN;
-      return FALSE;
+      return NULL;
     }
 
   stream = g_new0 (mongo_sync_gridfs_stream, 1);
-  stream->write_stream = TRUE;
-  stream->gfile = g_new0 (mongo_sync_gridfs_file, 1);
+  stream->writable = TRUE;
+  stream->gfs = gfs;
 
-  /* Set up stream->super here */
-  stream->gfile->gfs = gfs;
-  stream->gfile->meta.metadata = bson_new_from_data (bson_data (metadata),
-						     bson_size (metadata) - 1);
-  stream->gfile->meta.chunk_size = gfs->chunk_size;
-  stream->gfile->meta.length = 0;
-  stream->gfile->meta.date = 0;
-  stream->gfile->meta.md5 = NULL;
+  stream->file.chunk_size = gfs->chunk_size;
+
+  stream->writer.metadata = bson_new_from_data (bson_data (metadata),
+						bson_size (metadata) - 1);
+
   c = bson_find (metadata, "_id");
   if (!c)
     {
-      guint8 *oid;
-
-      oid = mongo_util_oid_new
+      stream->file.oid = mongo_util_oid_new
 	(mongo_connection_get_requestid ((mongo_connection *)gfs->conn));
-      if (!oid)
+      if (!stream->file.oid)
 	{
-	  bson_free (stream->gfile->meta.metadata);
+	  bson_free (stream->writer.metadata);
 	  g_free (stream);
 
 	  errno = EFAULT;
 	  return NULL;
 	}
+      bson_append_oid (stream->writer.metadata, "_id", stream->file.oid);
+    }
+  else
+    {
+      const guint8 *oid;
 
-      bson_append_oid (stream->gfile->meta.metadata, "_id", oid);
-      g_free (oid);
+      if (!bson_cursor_get_oid (c, &oid))
+	{
+	  bson_cursor_free (c);
+	  bson_free (stream->writer.metadata);
+	  g_free (stream);
+
+	  errno = EPROTO;
+	  return NULL;
+	}
+
+      stream->file.oid = g_malloc (12);
+      memcpy (stream->file.oid, oid, 12);
     }
   bson_cursor_free (c);
-  bson_finish (stream->gfile->meta.metadata);
+  bson_finish (stream->writer.metadata);
 
-  c = bson_find (stream->gfile->meta.metadata, "_id");
-  bson_cursor_get_oid (c, &stream->gfile->meta.oid);
-  bson_cursor_free (c);
-
-  stream->state.buffer = g_malloc (stream->gfile->meta.chunk_size);
-  stream->state.buffer_offset = 0;
-  stream->state.file_offset = 0;
-  stream->state.current_chunk = 0;
-
-  stream->checksum = g_checksum_new (G_CHECKSUM_MD5);
+  stream->writer.buffer = g_malloc (stream->file.chunk_size);
+  stream->writer.checksum = g_checksum_new (G_CHECKSUM_MD5);
 
   return stream;
 }
@@ -127,53 +172,38 @@ _stream_seek_chunk (mongo_sync_gridfs_stream *stream,
   bson_binary_subtype subt;
 
   b = bson_new_sized (32);
-  bson_append_oid (b, "files_id", stream->gfile->meta.oid);
+  bson_append_oid (b, "files_id", stream->file.oid);
   bson_append_int64 (b, "n", chunk);
   bson_finish (b);
 
-  p = mongo_sync_cmd_query (stream->gfile->gfs->conn,
-			    stream->gfile->gfs->ns.chunks, 0,
+  p = mongo_sync_cmd_query (stream->gfs->conn,
+			    stream->gfs->ns.chunks, 0,
 			    0, 1, b, NULL);
-  if (!p)
-    {
-      int e = errno;
-
-      bson_free (b);
-      errno = e;
-      return FALSE;
-    }
   bson_free (b);
 
-  bson_free (stream->chunk.bson);
-  stream->chunk.bson = NULL;
-  stream->chunk.data = NULL;
+  bson_free (stream->reader.bson);
+  stream->reader.bson = NULL;
+  stream->reader.chunk.data = NULL;
 
-  if (!mongo_wire_reply_packet_get_nth_document (p, 1, &stream->chunk.bson))
-    {
-      int e = errno;
-
-      mongo_wire_packet_free (p);
-      errno = e;
-      return FALSE;
-    }
+  mongo_wire_reply_packet_get_nth_document (p, 1, &stream->reader.bson);
   mongo_wire_packet_free (p);
-  bson_finish (stream->chunk.bson);
+  bson_finish (stream->reader.bson);
 
-  c = bson_find (stream->chunk.bson, "data");
-  if (!bson_cursor_get_binary (c, &subt, &stream->chunk.data,
-			       &stream->chunk.size))
+  c = bson_find (stream->reader.bson, "data");
+  if (!bson_cursor_get_binary (c, &subt, &stream->reader.chunk.data,
+			       &stream->reader.chunk.size))
     {
       bson_cursor_free (c);
-      bson_free (stream->chunk.bson);
-      stream->chunk.bson = NULL;
-      stream->chunk.data = NULL;
+      bson_free (stream->reader.bson);
+      stream->reader.bson = NULL;
+      stream->reader.chunk.data = NULL;
 
       errno = EPROTO;
       return FALSE;
     }
   bson_cursor_free (c);
 
-  stream->chunk.offset = 0;
+  stream->reader.chunk.offset = 0;
   return TRUE;
 }
 
@@ -189,7 +219,7 @@ mongo_sync_gridfs_stream_read (mongo_sync_gridfs_stream *stream,
       errno = ENOENT;
       return -1;
     }
-  if (stream->write_stream)
+  if (stream->writable)
     {
       errno = EOPNOTSUPP;
       return -1;
@@ -200,31 +230,31 @@ mongo_sync_gridfs_stream_read (mongo_sync_gridfs_stream *stream,
       return -1;
     }
 
-  if (!stream->chunk.data)
+  if (!stream->reader.chunk.data)
     {
       if (!_stream_seek_chunk (stream, 0))
 	return -1;
     }
 
-  while (pos < size && stream->state.file_offset < stream->gfile->meta.length)
+  while (pos < size && stream->file.offset < stream->file.length)
     {
-      gint32 csize = stream->chunk.size - stream->chunk.offset;
+      gint32 csize = stream->reader.chunk.size - stream->reader.chunk.offset;
 
       if (size - pos < csize)
 	csize = size - pos;
 
-      memcpy (buffer + pos, stream->chunk.data + stream->chunk.offset,
-	      csize);
+      memcpy (buffer + pos,
+	      stream->reader.chunk.data + stream->reader.chunk.offset, csize);
 
-      stream->chunk.offset += csize;
-      stream->state.file_offset += csize;
+      stream->reader.chunk.offset += csize;
+      stream->file.offset += csize;
       pos += csize;
 
-      if (stream->chunk.offset >= stream->chunk.size &&
-	  stream->state.file_offset < stream->gfile->meta.length)
+      if (stream->reader.chunk.offset >= stream->reader.chunk.size &&
+	  stream->file.offset < stream->file.length)
 	{
-	  stream->state.current_chunk++;
-	  if (!_stream_seek_chunk (stream, stream->state.current_chunk))
+	  stream->file.current_chunk++;
+	  if (!_stream_seek_chunk (stream, stream->file.current_chunk))
 	    return -1;
 	}
     }
@@ -271,7 +301,7 @@ mongo_sync_gridfs_stream_write (mongo_sync_gridfs_stream *stream,
       errno = ENOENT;
       return FALSE;
     }
-  if (!stream->write_stream)
+  if (!stream->writable)
     {
       errno = EOPNOTSUPP;
       return FALSE;
@@ -284,31 +314,30 @@ mongo_sync_gridfs_stream_write (mongo_sync_gridfs_stream *stream,
 
   while (pos < size)
     {
-      gint32 csize = stream->gfile->meta.chunk_size -
-	stream->state.buffer_offset;
+      gint32 csize = stream->file.chunk_size - stream->writer.buffer_offset;
 
       if (size - pos < csize)
 	csize = size - pos;
 
-      memcpy (stream->state.buffer + stream->state.buffer_offset,
+      memcpy (stream->writer.buffer + stream->writer.buffer_offset,
 	      buffer + pos, csize);
-      stream->state.buffer_offset += csize;
-      stream->state.file_offset += csize;
-      stream->gfile->meta.length += csize;
+      stream->writer.buffer_offset += csize;
+      stream->file.offset += csize;
+      stream->file.length += csize;
       pos += csize;
 
-      if (stream->state.buffer_offset == stream->gfile->meta.chunk_size)
+      if (stream->writer.buffer_offset == stream->file.chunk_size)
 	{
-	  _stream_chunk_write (stream->gfile->gfs,
-			       stream->gfile->meta.oid,
-			       stream->state.current_chunk,
-			       stream->state.buffer,
-			       stream->gfile->meta.chunk_size);
-	  g_checksum_update (stream->checksum, stream->state.buffer,
-			     stream->gfile->meta.chunk_size);
+	  _stream_chunk_write (stream->gfs,
+			       stream->file.oid,
+			       stream->file.current_chunk,
+			       stream->writer.buffer,
+			       stream->file.chunk_size);
+	  g_checksum_update (stream->writer.checksum, stream->writer.buffer,
+			     stream->file.chunk_size);
 
-	  stream->state.buffer_offset = 0;
-	  stream->state.current_chunk++;
+	  stream->writer.buffer_offset = 0;
+	  stream->file.current_chunk++;
 	}
     }
 
@@ -329,7 +358,7 @@ mongo_sync_gridfs_stream_seek (mongo_sync_gridfs_stream *stream,
       errno = ENOENT;
       return FALSE;
     }
-  if (stream->write_stream)
+  if (stream->writable)
     {
       errno = EOPNOTSUPP;
       return FALSE;
@@ -338,9 +367,9 @@ mongo_sync_gridfs_stream_seek (mongo_sync_gridfs_stream *stream,
   switch (whence)
     {
     case SEEK_SET:
-      if (pos == stream->state.file_offset)
+      if (pos == stream->file.offset)
 	return TRUE;
-      if (pos < 0 || pos > stream->gfile->meta.length)
+      if (pos < 0 || pos > stream->file.length)
 	{
 	  errno = ERANGE;
 	  return FALSE;
@@ -348,39 +377,38 @@ mongo_sync_gridfs_stream_seek (mongo_sync_gridfs_stream *stream,
       real_pos = pos;
       break;
     case SEEK_CUR:
-      if (pos + stream->state.file_offset < 0 ||
-	  pos + stream->state.file_offset > stream->gfile->meta.length)
+      if (pos + stream->file.offset < 0 ||
+	  pos + stream->file.offset > stream->file.length)
 	{
 	  errno = ERANGE;
 	  return FALSE;
 	}
       if (pos == 0)
 	return TRUE;
-      real_pos = pos + stream->state.file_offset;
+      real_pos = pos + stream->file.offset;
       break;
     case SEEK_END:
-      if (pos > 0 ||
-	  pos + stream->gfile->meta.length < 0)
+      if (pos > 0 || pos + stream->file.length < 0)
 	{
 	  errno = ERANGE;
 	  return FALSE;
 	}
-      real_pos = pos + stream->gfile->meta.length;
+      real_pos = pos + stream->file.length;
       break;
     default:
       errno = EINVAL;
       return FALSE;
     }
 
-  chunk = real_pos / stream->gfile->meta.chunk_size;
-  offs = real_pos % stream->gfile->meta.chunk_size;
+  chunk = real_pos / stream->file.chunk_size;
+  offs = real_pos % stream->file.chunk_size;
 
   if (!_stream_seek_chunk (stream, chunk))
     return FALSE;
 
-  stream->chunk.offset = offs;
-  stream->state.current_chunk = chunk;
-  stream->state.file_offset = real_pos;
+  stream->reader.chunk.offset = offs;
+  stream->file.current_chunk = chunk;
+  stream->file.offset = real_pos;
 
   return TRUE;
 }
@@ -394,42 +422,42 @@ mongo_sync_gridfs_stream_close (mongo_sync_gridfs_stream *stream)
       return FALSE;
     }
 
-  if (stream->write_stream)
+  if (stream->writable)
     {
       bson *meta;
       gint64 upload_date;
       GTimeVal tv;
 
-      if (stream->state.buffer_offset > 0)
+      if (stream->writer.buffer_offset > 0)
 	{
-	  _stream_chunk_write (stream->gfile->gfs,
-			       stream->gfile->meta.oid,
-			       stream->state.current_chunk,
-			       stream->state.buffer,
-			       stream->state.buffer_offset);
-	  g_checksum_update (stream->checksum, stream->state.buffer,
-			     stream->state.buffer_offset);
+	  _stream_chunk_write (stream->gfs,
+			       stream->file.oid,
+			       stream->file.current_chunk,
+			       stream->writer.buffer,
+			       stream->writer.buffer_offset);
+	  g_checksum_update (stream->writer.checksum, stream->writer.buffer,
+			     stream->writer.buffer_offset);
 	}
 
       g_get_current_time (&tv);
       upload_date =  (((gint64) tv.tv_sec) * 1000) +
 	(gint64)(tv.tv_usec / 1000);
 
-      if (stream->gfile->meta.metadata)
-	meta = bson_new_from_data (bson_data (stream->gfile->meta.metadata),
-				   bson_size (stream->gfile->meta.metadata) - 1);
+      if (stream->writer.metadata)
+	meta = bson_new_from_data (bson_data (stream->writer.metadata),
+				   bson_size (stream->writer.metadata) - 1);
       else
 	meta = bson_new_sized (128);
-      bson_append_int64 (meta, "length", stream->gfile->meta.length);
-      bson_append_int32 (meta, "chunkSize", stream->gfile->meta.chunk_size);
+      bson_append_int64 (meta, "length", stream->file.length);
+      bson_append_int32 (meta, "chunkSize", stream->file.chunk_size);
       bson_append_utc_datetime (meta, "uploadDate", upload_date);
-      if (stream->gfile->meta.length)
+      if (stream->file.length)
 	bson_append_string (meta, "md5",
-			    g_checksum_get_string (stream->checksum), -1);
+			    g_checksum_get_string (stream->writer.checksum), -1);
       bson_finish (meta);
 
-      if (!mongo_sync_cmd_insert (stream->gfile->gfs->conn,
-				  stream->gfile->gfs->ns.files, meta, NULL))
+      if (!mongo_sync_cmd_insert (stream->gfs->conn,
+				  stream->gfs->ns.files, meta, NULL))
 	{
 	  int e = errno;
 
@@ -438,11 +466,14 @@ mongo_sync_gridfs_stream_close (mongo_sync_gridfs_stream *stream)
 	  return FALSE;
 	}
       bson_free (meta);
-    }
 
-  g_checksum_free (stream->checksum);
-  g_free (stream->state.buffer);
-  bson_free (stream->chunk.bson);
-  mongo_sync_gridfs_file_free (stream->gfile);
+      g_checksum_free (stream->writer.checksum);
+      g_free (stream->writer.buffer);
+    }
+  else
+    bson_free (stream->reader.bson);
+
+  g_free (stream->file.oid);
+  g_free (stream);
   return TRUE;
 }

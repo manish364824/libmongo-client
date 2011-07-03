@@ -132,32 +132,55 @@ struct _mongo_sync_gridfs_file
 /** @internal GridFS file stream object. */
 struct _mongo_sync_gridfs_stream
 {
-  mongo_sync_gridfs_file *gfile; /**< The parent GridFS file object. */
+  mongo_sync_gridfs *gfs; /**< The GridFS the file is on. */
 
-  /** File state.
+  /** Common file data.
    */
   struct
   {
-    gint64 file_offset; /**< Offset we're into the file. */
-    gint64 current_chunk; /**< The current chunk number in the
-			     file. */
-    guint8 *buffer; /**< I/O buffer, holding temporary output data. */
-    gint32 buffer_offset; /**< Offset we're into the buffer. */
-  } state;
+    gint64 offset; /**< Offset we're into the file. */
+    gint64 length; /**< Total length of the file. */
+    gint64 current_chunk; /**< The current chunk we're on. */
+    gint32 chunk_size; /**< Maximum chunk size for this file. */
 
-  /** Chunk state for the reader.
+    guint8 *oid; /**< A copy of the file's ObjectID. */
+  } file;
+
+  /** Reader & Writer structure union.
    */
-  struct
+  union
   {
-    bson *bson;
-    const guint8 *data;
-    gint32 size;
-    gint32 offset;
-  } chunk;
+    /** Reader-specific data.
+     */
+    struct
+    {
+      bson *bson; /**< The current chunk as BSON. */
 
-  gboolean write_stream; /**< Flag whether the stream is read- or
-			    write-only. */
-  GChecksum *checksum; /**< Checksum of a file upload. */
+      /** Chunk state information.
+       */
+      struct
+      {
+	const guint8 *data; /**< The current chunk data, pointing
+			       into ->reader.bson. */
+	gint32 size; /**< Size of the current chunk. */
+	gint32 offset; /**< Offset we're into the chunk. */
+      } chunk;
+    } reader;
+
+    /** Writer-specific data.
+     */
+    struct
+    {
+      bson *metadata; /**< Copy of the user-supplied metadata. */
+      guint8 *buffer; /**< The current output buffer. */
+      gint32 buffer_offset; /**< Offset into the output buffer. */
+
+      GChecksum *checksum; /**< The running checksum of the output
+			      file. */
+    } writer;
+  };
+
+  gboolean writable; /**< Whether the file is writable. */
 };
 
 /** @internal Construct a kill cursors command, using a va_list.

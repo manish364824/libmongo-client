@@ -38,20 +38,6 @@ G_BEGIN_DECLS
 /** Opaque GridFS file stream object type. */
 typedef struct _mongo_sync_gridfs_stream mongo_sync_gridfs_stream;
 
-/** Create a stream reader from an existing GridFS file object.
- *
- * @param gfile is the existing GridFS file object to create a stream
- * reader from.
- *
- * @returns A newly allocated read-only stream object, or NULL on
- * error.
- *
- * @note It is the responsibility of the caller to free the stream
- * once it is no longer used. The original GridFS file object will be
- * embedded into the object, and freed aswell.
- */
-mongo_sync_gridfs_stream *mongo_sync_gridfs_stream_from_file (mongo_sync_gridfs_file *gfile);
-
 /** Create a stream reader by finding the file matching a query.
  *
  * @param gfs is the GridFS to search on.
