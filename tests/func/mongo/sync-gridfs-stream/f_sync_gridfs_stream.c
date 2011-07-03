@@ -80,10 +80,13 @@ test_func_sync_gridfs_stream_write_invalid (void)
   mongo_sync_gridfs *gfs;
   mongo_sync_gridfs_stream *stream;
   bson *meta;
+  gchar *ns;
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
+  ns = g_strconcat (config.gfs_prefix, ".files", NULL);
 
+  /* Try to write a file with a custom, non-OID _id */
   meta = bson_build (BSON_TYPE_STRING, "filename", "lmc-invalid-id", -1,
 		     BSON_TYPE_STRING, "_id", "Short and stout", -1,
 		     BSON_TYPE_NONE);
@@ -92,6 +95,47 @@ test_func_sync_gridfs_stream_write_invalid (void)
   stream = mongo_sync_gridfs_stream_new (gfs, meta);
   ok (stream == NULL,
       "mongo_sync_gridfs_stream_new() should fail if meta has an invalid _id");
+  bson_free (meta);
+
+  /* Write a file with a non-OID _id, bypassing the GridFS API. */
+  meta = bson_build (BSON_TYPE_STRING, "_id", "Short and stout", -1,
+		     BSON_TYPE_STRING, "my-id", "stream:string-id", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  mongo_sync_cmd_insert (conn, ns, meta, NULL);
+  bson_free (meta);
+
+  /* Insert metadata with invalid length type. */
+  meta = bson_build (BSON_TYPE_DOUBLE, "length", 1.0,
+		     BSON_TYPE_STRING, "my-id", "stream:invalid-length", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  mongo_sync_cmd_insert (conn, ns, meta, NULL);
+  bson_free (meta);
+
+  /* Insert metadata with invalid chunkSize type. */
+  meta = bson_build (BSON_TYPE_INT32, "length", 10,
+		     BSON_TYPE_DOUBLE, "chunkSize", 12.5,
+		     BSON_TYPE_STRING, "my-id", "stream:invalid-chunkSize", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  mongo_sync_cmd_insert (conn, ns, meta, NULL);
+  bson_free (meta);
+
+  /* Insert a valid metadata, without chunks. */
+  meta = bson_build (BSON_TYPE_INT32, "length", 32,
+		     BSON_TYPE_INT32, "chunkSize", 12,
+		     BSON_TYPE_UTC_DATETIME, "uploadDate", (gint64)1234,
+		     BSON_TYPE_STRING, "md5", "deadbeef", -1,
+		     BSON_TYPE_STRING, "my-id", "stream:no-chunks", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  mongo_sync_cmd_insert (conn, ns, meta, NULL);
+  bson_free (meta);
 
   mongo_sync_gridfs_free (gfs, TRUE);
 }
@@ -141,6 +185,68 @@ test_func_sync_gridfs_stream_read (void)
   g_checksum_free (chk);
   ok (mongo_sync_gridfs_stream_close (stream) == TRUE,
       "mongo_sync_gridfs_stream_close() works");
+  mongo_sync_gridfs_free (gfs, TRUE);
+}
+
+void
+test_func_sync_gridfs_stream_read_invalid (void)
+{
+  mongo_sync_connection *conn;
+  mongo_sync_gridfs *gfs;
+  mongo_sync_gridfs_stream *stream;
+  guint8 data[1245];
+  gint64 r;
+  bson *meta;
+
+  conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
+  gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
+
+  /* ---- */
+  meta = bson_build (BSON_TYPE_STRING, "my-id", "stream:string-id", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  stream = mongo_sync_gridfs_stream_find (gfs, meta);
+  ok (stream == NULL,
+      "mongo_sync_gridfs_stream_find() should fail if _id is non-OID");
+  bson_free (meta);
+
+  /* ---- */
+  meta = bson_build (BSON_TYPE_STRING, "my-id", "stream:invalid-length", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  stream = mongo_sync_gridfs_stream_find (gfs, meta);
+  ok (stream == NULL,
+      "mongo_sync_gridfs_stream_find() should fail with invalid metadata");
+  bson_free (meta);
+
+  /* ---- */
+  meta = bson_build (BSON_TYPE_STRING, "my-id", "stream:invalid-chunkSize", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  stream = mongo_sync_gridfs_stream_find (gfs, meta);
+  ok (stream == NULL,
+      "mongo_sync_gridfs_stream_find() should fail with invalid metadata");
+  bson_free (meta);
+
+  /* no-chunk test */
+  meta = bson_build (BSON_TYPE_STRING, "my-id", "stream:no-chunks", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  stream = mongo_sync_gridfs_stream_find (gfs, meta);
+  ok (stream != NULL,
+      "mongo_sync_gridfs_stream_find() works [stream:no-chunks]");
+  bson_free (meta);
+
+  r = mongo_sync_gridfs_stream_read (stream, data, sizeof (data));
+  cmp_ok (r, "==", -1,
+	  "Reading from a chunk-less file should fail");
+
+  mongo_sync_gridfs_stream_close (stream);
+
   mongo_sync_gridfs_free (gfs, TRUE);
 }
 
@@ -210,14 +316,41 @@ test_func_sync_gridfs_stream_seek (void)
 }
 
 void
+test_func_sync_gridfs_stream_seek_invalid (void)
+{
+  mongo_sync_connection *conn;
+  mongo_sync_gridfs *gfs;
+  mongo_sync_gridfs_stream *stream;
+  bson *meta;
+
+  conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
+  gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
+  meta = bson_build (BSON_TYPE_STRING, "my-id", "stream:no-chunks", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  stream = mongo_sync_gridfs_stream_find (gfs, meta);
+  bson_free (meta);
+
+  ok (mongo_sync_gridfs_stream_seek (stream, 1, SEEK_SET) == FALSE,
+      "mongo_sync_gridfs_stream_seek() should fail with no chunks");
+
+  mongo_sync_gridfs_stream_close (stream);
+
+  mongo_sync_gridfs_free (gfs, TRUE);
+}
+
+void
 test_func_sync_gridfs_stream (void)
 {
   test_func_sync_gridfs_stream_write ();
   test_func_sync_gridfs_stream_write_invalid ();
   test_func_sync_gridfs_stream_read ();
+  test_func_sync_gridfs_stream_read_invalid ();
   test_func_sync_gridfs_stream_seek ();
+  test_func_sync_gridfs_stream_seek_invalid ();
 
   g_free (write_md5);
 }
 
-RUN_NET_TEST (22, func_sync_gridfs_stream);
+RUN_NET_TEST (28, func_sync_gridfs_stream);
