@@ -467,6 +467,7 @@ mongo_sync_gridfs_stream_close (mongo_sync_gridfs_stream *stream)
 	}
       bson_free (meta);
 
+      bson_free (stream->writer.metadata);
       g_checksum_free (stream->writer.checksum);
       g_free (stream->writer.buffer);
     }
