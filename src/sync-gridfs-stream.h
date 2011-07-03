@@ -46,10 +46,11 @@ typedef struct _mongo_sync_gridfs_stream mongo_sync_gridfs_stream;
  * @returns A newly allocated read-only stream object, or NULL on
  * error.
  *
- * @note It is the responsibility of the caller to free both the
- * stream, and the GridFS file object once they're no longer needed.
+ * @note It is the responsibility of the caller to free the stream
+ * once it is no longer used. The original GridFS file object will be
+ * embedded into the object, and freed aswell.
  */
-mongo_sync_gridfs_stream *mongo_sync_gridfs_stream_from_file (const mongo_sync_gridfs_file *gfile);
+mongo_sync_gridfs_stream *mongo_sync_gridfs_stream_from_file (mongo_sync_gridfs_file *gfile);
 
 /** Create a stream reader by finding the file matching a query.
  *

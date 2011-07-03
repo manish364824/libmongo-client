@@ -132,7 +132,7 @@ struct _mongo_sync_gridfs_file
 /** @internal GridFS file stream object. */
 struct _mongo_sync_gridfs_stream
 {
-  mongo_sync_gridfs_file super; /**< The parent GridFS file object. */
+  mongo_sync_gridfs_file *gfile; /**< The parent GridFS file object. */
 
   /** File state.
    */
