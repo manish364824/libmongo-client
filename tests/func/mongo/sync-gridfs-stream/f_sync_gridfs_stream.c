@@ -13,7 +13,7 @@ test_func_sync_gridfs_stream_write (void)
   mongo_sync_gridfs *gfs;
   mongo_sync_gridfs_stream *stream;
   bson *meta;
-  guint8 *data;
+  guint8 *data, *oid;
   gint pos = 0;
   gint filler = 0;
   gboolean write_ok = TRUE;
@@ -21,9 +21,19 @@ test_func_sync_gridfs_stream_write (void)
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
+
+  stream = mongo_sync_gridfs_stream_new (gfs, NULL);
+  ok (stream == NULL,
+      "mongo_sync_gridfs_stream_new() fails without mongo_util_oid_init()");
+
+  mongo_util_oid_init (0);
+
+  oid = mongo_util_oid_new (1);
   meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test-stream", -1,
+		     BSON_TYPE_OID, "_id", oid,
 		     BSON_TYPE_NONE);
   bson_finish (meta);
+  g_free (oid);
 
   stream = mongo_sync_gridfs_stream_new (gfs, meta);
   ok (stream != NULL,
@@ -59,6 +69,30 @@ test_func_sync_gridfs_stream_write (void)
   g_free (data);
   ok (mongo_sync_gridfs_stream_close (stream) == TRUE,
       "mongo_sync_gridfs_stream_close() works");
+
+  mongo_sync_gridfs_free (gfs, TRUE);
+}
+
+void
+test_func_sync_gridfs_stream_write_invalid (void)
+{
+  mongo_sync_connection *conn;
+  mongo_sync_gridfs *gfs;
+  mongo_sync_gridfs_stream *stream;
+  bson *meta;
+
+  conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
+  gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
+
+  meta = bson_build (BSON_TYPE_STRING, "filename", "lmc-invalid-id", -1,
+		     BSON_TYPE_STRING, "_id", "Short and stout", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  stream = mongo_sync_gridfs_stream_new (gfs, meta);
+  ok (stream == NULL,
+      "mongo_sync_gridfs_stream_new() should fail if meta has an invalid _id");
+
   mongo_sync_gridfs_free (gfs, TRUE);
 }
 
@@ -178,13 +212,12 @@ test_func_sync_gridfs_stream_seek (void)
 void
 test_func_sync_gridfs_stream (void)
 {
-  mongo_util_oid_init (0);
-
   test_func_sync_gridfs_stream_write ();
+  test_func_sync_gridfs_stream_write_invalid ();
   test_func_sync_gridfs_stream_read ();
   test_func_sync_gridfs_stream_seek ();
 
   g_free (write_md5);
 }
 
-RUN_NET_TEST (20, func_sync_gridfs_stream);
+RUN_NET_TEST (22, func_sync_gridfs_stream);
