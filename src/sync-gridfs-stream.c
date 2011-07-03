@@ -328,11 +328,12 @@ mongo_sync_gridfs_stream_write (mongo_sync_gridfs_stream *stream,
 
       if (stream->writer.buffer_offset == stream->file.chunk_size)
 	{
-	  _stream_chunk_write (stream->gfs,
-			       stream->file.oid,
-			       stream->file.current_chunk,
-			       stream->writer.buffer,
-			       stream->file.chunk_size);
+	  if (!_stream_chunk_write (stream->gfs,
+				    stream->file.oid,
+				    stream->file.current_chunk,
+				    stream->writer.buffer,
+				    stream->file.chunk_size))
+	    return FALSE;
 	  g_checksum_update (stream->writer.checksum, stream->writer.buffer,
 			     stream->file.chunk_size);
 
@@ -427,45 +428,52 @@ mongo_sync_gridfs_stream_close (mongo_sync_gridfs_stream *stream)
       bson *meta;
       gint64 upload_date;
       GTimeVal tv;
+      gboolean closed = FALSE;
 
       if (stream->writer.buffer_offset > 0)
 	{
-	  _stream_chunk_write (stream->gfs,
-			       stream->file.oid,
-			       stream->file.current_chunk,
+	  closed = _stream_chunk_write (stream->gfs,
+					stream->file.oid,
+					stream->file.current_chunk,
+					stream->writer.buffer,
+					stream->writer.buffer_offset);
+
+	  if (closed)
+	    g_checksum_update (stream->writer.checksum,
 			       stream->writer.buffer,
 			       stream->writer.buffer_offset);
-	  g_checksum_update (stream->writer.checksum, stream->writer.buffer,
-			     stream->writer.buffer_offset);
 	}
 
-      g_get_current_time (&tv);
-      upload_date =  (((gint64) tv.tv_sec) * 1000) +
-	(gint64)(tv.tv_usec / 1000);
-
-      if (stream->writer.metadata)
-	meta = bson_new_from_data (bson_data (stream->writer.metadata),
-				   bson_size (stream->writer.metadata) - 1);
-      else
-	meta = bson_new_sized (128);
-      bson_append_int64 (meta, "length", stream->file.length);
-      bson_append_int32 (meta, "chunkSize", stream->file.chunk_size);
-      bson_append_utc_datetime (meta, "uploadDate", upload_date);
-      if (stream->file.length)
-	bson_append_string (meta, "md5",
-			    g_checksum_get_string (stream->writer.checksum), -1);
-      bson_finish (meta);
-
-      if (!mongo_sync_cmd_insert (stream->gfs->conn,
-				  stream->gfs->ns.files, meta, NULL))
+      if (closed)
 	{
-	  int e = errno;
+	  g_get_current_time (&tv);
+	  upload_date =  (((gint64) tv.tv_sec) * 1000) +
+	    (gint64)(tv.tv_usec / 1000);
 
+	  if (stream->writer.metadata)
+	    meta = bson_new_from_data (bson_data (stream->writer.metadata),
+				       bson_size (stream->writer.metadata) - 1);
+	  else
+	    meta = bson_new_sized (128);
+	  bson_append_int64 (meta, "length", stream->file.length);
+	  bson_append_int32 (meta, "chunkSize", stream->file.chunk_size);
+	  bson_append_utc_datetime (meta, "uploadDate", upload_date);
+	  if (stream->file.length)
+	    bson_append_string (meta, "md5",
+				g_checksum_get_string (stream->writer.checksum), -1);
+	  bson_finish (meta);
+
+	  if (!mongo_sync_cmd_insert (stream->gfs->conn,
+				      stream->gfs->ns.files, meta, NULL))
+	    {
+	      int e = errno;
+
+	      bson_free (meta);
+	      errno = e;
+	      return FALSE;
+	    }
 	  bson_free (meta);
-	  errno = e;
-	  return FALSE;
 	}
-      bson_free (meta);
 
       bson_free (stream->writer.metadata);
       g_checksum_free (stream->writer.checksum);
