@@ -450,11 +450,9 @@ mongo_sync_gridfs_stream_close (mongo_sync_gridfs_stream *stream)
 	  upload_date =  (((gint64) tv.tv_sec) * 1000) +
 	    (gint64)(tv.tv_usec / 1000);
 
-	  if (stream->writer.metadata)
-	    meta = bson_new_from_data (bson_data (stream->writer.metadata),
-				       bson_size (stream->writer.metadata) - 1);
-	  else
-	    meta = bson_new_sized (128);
+	  /* _id is guaranteed by _stream_new() */
+	  meta = bson_new_from_data (bson_data (stream->writer.metadata),
+				     bson_size (stream->writer.metadata) - 1);
 	  bson_append_int64 (meta, "length", stream->file.length);
 	  bson_append_int32 (meta, "chunkSize", stream->file.chunk_size);
 	  bson_append_utc_datetime (meta, "uploadDate", upload_date);
