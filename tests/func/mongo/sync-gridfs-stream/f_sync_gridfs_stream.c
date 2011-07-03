@@ -171,6 +171,8 @@ test_func_sync_gridfs_stream (void)
   test_func_sync_gridfs_stream_write ();
   test_func_sync_gridfs_stream_read ();
   test_func_sync_gridfs_stream_seek ();
+
+  g_free (write_md5);
 }
 
 RUN_NET_TEST (15, func_sync_gridfs_stream);
