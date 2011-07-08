@@ -110,7 +110,7 @@ struct _mongo_sync_gridfs
 };
 
 /** @internal GridFS file object. */
-struct _mongo_sync_gridfs_file
+struct _mongo_sync_gridfs_chunked_file
 {
   mongo_sync_gridfs *gfs; /**< The GridFS the file is on. */
 

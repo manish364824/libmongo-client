@@ -91,7 +91,7 @@ void
 mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
 {
   mongo_sync_gridfs *gfs;
-  mongo_sync_gridfs_file *gfile;
+  mongo_sync_gridfs_chunked_file *gfile;
   mongo_sync_cursor *cursor;
   gint64 n = 0;
   bson *query;
@@ -115,7 +115,7 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
   query = bson_build (BSON_TYPE_STRING, "filename", gfn, -1,
 		      BSON_TYPE_NONE);
   bson_finish (query);
-  gfile = mongo_sync_gridfs_find (gfs, query);
+  gfile = mongo_sync_gridfs_chunked_find (gfs, query);
   if (!gfile)
     mongo_gridfs_error (errno);
   bson_free (query);
@@ -129,12 +129,14 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
       exit (1);
     }
 
+#if 0
   VLOG ("Writing '%s' -> '%s' (%" G_GINT64_FORMAT " bytes in %" G_GINT64_FORMAT
 	" chunks)\n", gfn, ofn,
 	mongo_sync_gridfs_file_get_length (gfile),
 	mongo_sync_gridfs_file_get_chunks (gfile));
+#endif
 
-  cursor = mongo_sync_gridfs_file_cursor_new (gfile, 0, 0);
+  cursor = mongo_sync_gridfs_chunked_file_cursor_new (gfile, 0, 0);
   if (!cursor)
     mongo_gridfs_error (errno);
 
@@ -145,7 +147,7 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
 
       VLOG ("\rWriting chunk %" G_GINT64_FORMAT "...", n++);
 
-      data = mongo_sync_gridfs_file_cursor_get_chunk (cursor, &size);
+      data = mongo_sync_gridfs_chunked_file_cursor_get_chunk (cursor, &size);
       if (!data)
 	mongo_gridfs_error (errno);
 
@@ -153,6 +155,7 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
       g_free (data);
     }
   mongo_sync_cursor_free (cursor);
+  mongo_sync_gridfs_chunked_file_free (gfile);
 
   close (fd);
 
@@ -165,7 +168,7 @@ void
 mongo_gridfs_put (config_t *config, gint argc, gchar *argv[])
 {
   mongo_sync_gridfs *gfs;
-  mongo_sync_gridfs_file *gfile;
+  mongo_sync_gridfs_chunked_file *gfile;
   bson *meta;
   int fd;
   guint8 *data;
@@ -214,17 +217,20 @@ mongo_gridfs_put (config_t *config, gint argc, gchar *argv[])
 
   VLOG ("Uploading '%s' -> '%s'...\n", ifn, gfn);
 
-  gfile = mongo_sync_gridfs_file_new_from_buffer (gfs, meta, data, st.st_size);
+  gfile = mongo_sync_gridfs_chunked_file_new_from_buffer (gfs, meta,
+							  data, st.st_size);
   if (!gfile)
     mongo_gridfs_error (errno);
   bson_free (meta);
   munmap (data, st.st_size);
 
+#if 0
   printf ("Uploaded file: %s (_id: %s; md5 = %s)\n", gfn,
 	  oid_to_string (mongo_sync_gridfs_file_get_id (gfile)),
 	  mongo_sync_gridfs_file_get_md5 (gfile));
+#endif
 
-  mongo_sync_gridfs_file_free (gfile);
+  mongo_sync_gridfs_chunked_file_free (gfile);
   mongo_sync_gridfs_free (gfs, TRUE);
 }
 

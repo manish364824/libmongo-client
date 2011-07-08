@@ -4,7 +4,7 @@
 #include <errno.h>
 
 void
-test_mongo_sync_gridfs_find (void)
+test_mongo_sync_gridfs_chunked_find (void)
 {
   mongo_sync_connection *conn;
   mongo_sync_gridfs *gfs;
@@ -14,19 +14,19 @@ test_mongo_sync_gridfs_find (void)
 		      BSON_TYPE_NONE);
   bson_finish (query);
 
-  ok (mongo_sync_gridfs_find (NULL, query) == NULL,
-      "mongo_sync_gridfs_find() fails with a NULL GridFS");
+  ok (mongo_sync_gridfs_chunked_find (NULL, query) == NULL,
+      "mongo_sync_gridfs_chunked_find() fails with a NULL GridFS");
 
   begin_network_tests (2);
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
 
-  ok (mongo_sync_gridfs_find (gfs, NULL) == NULL,
-      "mongo_sync_gridfs_find() fails with a NULL query");
+  ok (mongo_sync_gridfs_chunked_find (gfs, NULL) == NULL,
+      "mongo_sync_gridfs_chunked_find() fails with a NULL query");
 
-  ok (mongo_sync_gridfs_find (gfs, query) == NULL,
-      "mongo_sync_gridfs_find() fails when the file is not found");
+  ok (mongo_sync_gridfs_chunked_find (gfs, query) == NULL,
+      "mongo_sync_gridfs_chunked_find() fails when the file is not found");
 
   mongo_sync_gridfs_free (gfs, TRUE);
 
@@ -35,4 +35,4 @@ test_mongo_sync_gridfs_find (void)
   bson_free (query);
 }
 
-RUN_TEST (3, mongo_sync_gridfs_find);
+RUN_TEST (3, mongo_sync_gridfs_chunked_find);

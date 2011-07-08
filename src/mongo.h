@@ -29,6 +29,7 @@
 #include <mongo-sync-cursor.h>
 #include <mongo-sync-pool.h>
 #include <sync-gridfs.h>
+#include <sync-gridfs-chunk.h>
 #include <sync-gridfs-stream.h>
 
 /** @mainpage libmongo-client

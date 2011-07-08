@@ -155,19 +155,24 @@ mongo_sync_pool_func_tests	= \
 
 mongo_sync_gridfs_unit_tests	= \
 		unit/mongo/sync-gridfs/sync_gridfs_new \
-		unit/mongo/sync-gridfs/sync_gridfs_free \
-		unit/mongo/sync-gridfs/sync_gridfs_get_set_chunk_size \
-		unit/mongo/sync-gridfs/sync_gridfs_find \
-		unit/mongo/sync-gridfs/sync_gridfs_file_new_from_buffer \
-		unit/mongo/sync-gridfs/sync_gridfs_file_free \
-		unit/mongo/sync-gridfs/sync_gridfs_file_get_metadata \
-		unit/mongo/sync-gridfs/sync_gridfs_file_cursor_new \
-		unit/mongo/sync-gridfs/sync_gridfs_file_cursor_get_chunk \
-		unit/mongo/sync-gridfs/sync_gridfs_list \
-		unit/mongo/sync-gridfs/sync_gridfs_remove
+		unit/mongo/sync-gridfs/sync_gridfs_free 
+#		unit/mongo/sync-gridfs/sync_gridfs_get_set_chunk_size \
+#		unit/mongo/sync-gridfs/sync_gridfs_file_get_metadata \
+#		unit/mongo/sync-gridfs/sync_gridfs_list \
+#		unit/mongo/sync-gridfs/sync_gridfs_remove
 
-mongo_sync_gridfs_func_tests	= \
-		func/mongo/sync-gridfs/f_sync_gridfs
+#mongo_sync_gridfs_func_tests	= \
+#		func/mongo/sync-gridfs/f_sync_gridfs
+
+mongo_sync_gridfs_chunk_unit_tests = \
+		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_find \
+		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_new_from_buffer \
+		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_free \
+		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_cursor_new \
+		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_cursor_get_chunk
+
+#mongo_sync_gridfs_chunk_func_tests = \
+#		func/mongo/sync-gridfs-chunk/f_sync_gridfs_chunk
 
 mongo_sync_gridfs_stream_unit_tests = \
 		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_find \
@@ -184,11 +189,13 @@ UNIT_TESTS	= ${bson_unit_tests} ${mongo_utils_unit_tests} \
 		${mongo_wire_unit_tests} ${mongo_client_unit_tests} \
 		${mongo_sync_unit_tests} ${mongo_sync_cursor_unit_tests} \
 		${mongo_sync_pool_unit_tests} ${mongo_sync_gridfs_unit_tests} \
+		${mongo_sync_gridfs_chunk_unit_tests} \
 		${mongo_sync_gridfs_stream_unit_tests}
 FUNC_TESTS	= ${bson_func_tests} ${mongo_sync_func_tests} \
 		${mongo_client_func_tests} \
 		${mongo_sync_cursor_func_tests} ${mongo_sync_pool_func_tests} \
 		${mongo_sync_gridfs_func_tests} \
+		${mongo_sync_gridfs_chunk_func_test} \
 		${mongo_sync_gridfs_stream_func_tests}
 PERF_TESTS	= ${bson_perf_tests}
 TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}

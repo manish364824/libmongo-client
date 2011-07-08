@@ -39,9 +39,6 @@ G_BEGIN_DECLS
 /** Opaque GridFS object. */
 typedef struct _mongo_sync_gridfs mongo_sync_gridfs;
 
-/** Opaque GridFS file object. */
-typedef struct _mongo_sync_gridfs_file mongo_sync_gridfs_file;
-
 /** Create a new GridFS object.
  *
  * @param conn is the MongoDB connection to base the filesystem object
@@ -80,28 +77,6 @@ gint32 mongo_sync_gridfs_get_chunk_size (mongo_sync_gridfs *gfs);
 gboolean mongo_sync_gridfs_set_chunk_size (mongo_sync_gridfs *gfs,
 					   gint32 chunk_size);
 
-
-/** @defgroup mongo_sync_gridfs_fops Mongo GridFS File Operations
- *
- * @addtogroup mongo_sync_gridfs_fops
- * @{
- */
-
-/** Find a file on GridFS.
- *
- * Finds a file on GridFS, based on a custom query.
- *
- * @param gfs is the GridFS to find the file in.
- * @param query is the custom query based on which the file shall be
- * sought.
- *
- * @returns A newly allocated file object, or NULL on error. It is the
- * responsibility of the caller to free the returned object once it is
- * no longer needed.
- */
-mongo_sync_gridfs_file *mongo_sync_gridfs_find (mongo_sync_gridfs *gfs,
-						const bson *query);
-
 /** List GridFS files matching a query.
  *
  * Finds all files on a GridFS, based on a custom query.
@@ -134,43 +109,7 @@ mongo_sync_cursor *mongo_sync_gridfs_list (mongo_sync_gridfs *gfs,
 gboolean mongo_sync_gridfs_remove (mongo_sync_gridfs *gfs,
 				   const bson *query);
 
-/** Upload a file to GridFS from a buffer.
- *
- * Create a new file on GridFS from a buffer, using custom meta-data.
- *
- * @param gfs is the GridFS to create the file on.
- * @param metadata is the (optional) file metadata.
- * @param data is the data to store on GridFS.
- * @param size is the size of the data.
- *
- * @returns A newly allocated file object, or NULL on error. It is the
- * responsibility of the caller to free the returned object once it is
- * no longer needed.
- *
- * @note The metadata MUST NOT contain any of the required GridFS
- * metadata fields (_id, length, chunkSize, uploadDate, md5),
- * otherwise a conflict will occurr, against which the function does
- * not guard by design.
- */
-mongo_sync_gridfs_file *mongo_sync_gridfs_file_new_from_buffer (mongo_sync_gridfs *gfs,
-								const bson *metadata,
-								const guint8 *data,
-								gint64 size);
-
-/** Free a GridFS File object.
- *
- * @param gfile is the file object to free.
- */
-void mongo_sync_gridfs_file_free (mongo_sync_gridfs_file *gfile);
-
-/** @} */
-
-/** @defgroup mongo_sync_gridfs_file Mongo GridFS file objects
- *
- * @addtogroup mongo_sync_gridfs_file
- * @{
-*/
-
+#if 0
 /* Metadata */
 
 /** Get the file ID of a GridFS file.
@@ -236,47 +175,11 @@ const bson *mongo_sync_gridfs_file_get_metadata (mongo_sync_gridfs_file *gfile);
  */
 gint64 mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile);
 
-/* Data access */
-
-/** Create a cursor for a GridFS file.
- *
- * The cursor can be used (via
- * mongo_sync_gridfs_file_cursor_get_chunk()) to retrieve a GridFS
- * file chunk by chunk.
- *
- * @param gfile is the GridFS file to work with.
- * @param start is the starting chunk.
- * @param num is the total number of chunks to make a cursor for.
- *
- * @returns A newly allocated cursor object, or NULL on error. It is
- * the responsibility of the caller to free the cursor once it is no
- * longer needed.
- */
-mongo_sync_cursor *mongo_sync_gridfs_file_cursor_new (mongo_sync_gridfs_file *gfile,
-						      gint start, gint num);
-
-/** Get the data of a GridFS file chunk, via a cursor.
- *
- * Once we have a cursor, it can be iterated over with
- * mongo_sync_cursor_next(), and its data can be conveniently accessed
- * with this function.
- *
- * @param cursor is the cursor object to work with.
- * @param size is a pointer to a variable where the chunk's actual
- * size can be stored.
- *
- * @returns A pointer to newly allocated memory that holds the current
- * chunk's data, or NULL on error. It is the responsibility of the
- * caller to free this once it is no longer needed.
- */
-guint8 *mongo_sync_gridfs_file_cursor_get_chunk (mongo_sync_cursor *cursor,
-						 gint32 *size);
+#endif
 
 /** @} */
 
 G_END_DECLS
-
-/** @} */
 
 /** @} */
 
