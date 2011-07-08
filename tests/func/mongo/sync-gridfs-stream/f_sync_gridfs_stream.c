@@ -189,6 +189,40 @@ test_func_sync_gridfs_stream_read (void)
 }
 
 void
+test_func_sync_gridfs_stream_meta (void)
+{
+  mongo_sync_connection *conn;
+  mongo_sync_gridfs *gfs;
+  mongo_sync_gridfs_stream *stream;
+  bson *meta;
+  const guint8 *id;
+
+  conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
+  gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
+  meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test-stream", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  stream = mongo_sync_gridfs_stream_find (gfs, meta);
+  bson_free (meta);
+
+  id = mongo_sync_gridfs_file_get_id (stream);
+  ok (id != NULL,
+      "mongo_sync_gridfs_file_get_id() works on streams");
+
+  ok (mongo_sync_gridfs_file_get_md5 (stream) == NULL,
+      "mongo_sync_gridfs_file_get_md5() fails on streams");
+  ok (mongo_sync_gridfs_file_get_date (stream) == -1,
+      "mongo_sync_gridfs_file_get_date() fails on streams");
+  ok (mongo_sync_gridfs_file_get_metadata (stream) == NULL,
+      "mongo_sync_gridfs_file_get_metadata() fails on streams");
+
+  mongo_sync_gridfs_stream_close (stream);
+
+  mongo_sync_gridfs_free (gfs, TRUE);
+}
+
+void
 test_func_sync_gridfs_stream_read_invalid (void)
 {
   mongo_sync_connection *conn;
@@ -349,8 +383,9 @@ test_func_sync_gridfs_stream (void)
   test_func_sync_gridfs_stream_read_invalid ();
   test_func_sync_gridfs_stream_seek ();
   test_func_sync_gridfs_stream_seek_invalid ();
+  test_func_sync_gridfs_stream_meta ();
 
   g_free (write_md5);
 }
 
-RUN_NET_TEST (28, func_sync_gridfs_stream);
+RUN_NET_TEST (32, func_sync_gridfs_stream);
