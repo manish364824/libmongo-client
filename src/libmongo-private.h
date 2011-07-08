@@ -109,6 +109,47 @@ struct _mongo_sync_gridfs
   gint32 chunk_size; /**< The default chunk size. */
 };
 
+/** @internal GridFS file types. */
+typedef enum
+{
+  LMC_GRIDFS_FILE_CHUNKED, /**< Chunked file. */
+  LMC_GRIDFS_FILE_STREAM_READER, /**< Streamed file, reader. */
+  LMC_GRIDFS_FILE_STREAM_WRITER, /**< Streamed file, writer. */
+} _mongo_gridfs_type;
+
+/** @internal GridFS common file properties.
+ *
+ * This is shared between chunked and streamed files.
+ */
+typedef struct
+{
+  gint32 chunk_size; /**< Maximum chunk size for this file. */
+  gint64 length; /**< Total length of the file. */
+
+  union
+  {
+    /** Chunked file data. */
+    struct
+    {
+      const guint8 *oid; /**< The file's ObjectID. */
+      const gchar *md5; /**< MD5 sum of the file. */
+      gint64 date; /**< The upload date. */
+      bson *metadata; /**< Full file metadata, including user-set
+			 keys. */
+    };
+
+    /** Streamed file data */
+    struct
+    {
+      gint64 offset; /**< Offset we're into the file. */
+      gint64 current_chunk; /**< The current chunk we're on. */
+      guint8 *id; /**< A copy of the file's ObjectID. */
+    };
+  };
+
+  _mongo_gridfs_type type; /**< The type of the GridFS file. */
+} mongo_sync_gridfs_common;
+
 /** @internal GridFS file object. */
 struct _mongo_sync_gridfs_chunked_file
 {
@@ -116,17 +157,7 @@ struct _mongo_sync_gridfs_chunked_file
 
   /** The file metadata.
    */
-  struct
-  {
-    bson *metadata; /**< Full file metadata, including user-set
-		       keys. */
-
-    const guint8 *oid; /**< The ObjectID of the file. */
-    gint32 chunk_size; /**< Maximum chunk size. */
-    gint64 length; /**< Total length of the file. */
-    gint64 date; /**< The upload date. */
-    const gchar *md5; /**< MD5 sum of the file. */
-  } meta;
+  mongo_sync_gridfs_common meta;
 };
 
 /** @internal GridFS file stream object. */
@@ -136,15 +167,7 @@ struct _mongo_sync_gridfs_stream
 
   /** Common file data.
    */
-  struct
-  {
-    gint64 offset; /**< Offset we're into the file. */
-    gint64 length; /**< Total length of the file. */
-    gint64 current_chunk; /**< The current chunk we're on. */
-    gint32 chunk_size; /**< Maximum chunk size for this file. */
-
-    guint8 *oid; /**< A copy of the file's ObjectID. */
-  } file;
+  mongo_sync_gridfs_common file;
 
   /** Reader & Writer structure union.
    */
@@ -179,8 +202,6 @@ struct _mongo_sync_gridfs_stream
 			      file. */
     } writer;
   };
-
-  gboolean writable; /**< Whether the file is writable. */
 };
 
 /** @internal Construct a kill cursors command, using a va_list.

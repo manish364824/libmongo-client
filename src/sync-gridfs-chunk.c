@@ -62,6 +62,7 @@ mongo_sync_gridfs_chunked_find (mongo_sync_gridfs *gfs, const bson *query)
 
   f = g_new0 (mongo_sync_gridfs_chunked_file, 1);
   f->gfs = gfs;
+  f->meta.type = LMC_GRIDFS_FILE_CHUNKED;
 
   mongo_wire_reply_packet_get_nth_document (p, 1, &f->meta.metadata);
   bson_finish (f->meta.metadata);
@@ -300,6 +301,7 @@ mongo_sync_gridfs_chunked_file_new_from_buffer (mongo_sync_gridfs *gfs,
   gfile->meta.length = size;
   gfile->meta.chunk_size = gfs->chunk_size;
   gfile->meta.date = 0;
+  gfile->meta.type = LMC_GRIDFS_FILE_CHUNKED;
 
   c = bson_find (meta, "_id");
   bson_cursor_get_oid (c, &gfile->meta.oid);

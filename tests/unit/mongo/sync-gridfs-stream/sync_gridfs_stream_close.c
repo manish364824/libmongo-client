@@ -1,6 +1,8 @@
 #include "test.h"
 #include "mongo.h"
 
+#include "libmongo-private.h"
+
 void
 test_mongo_sync_gridfs_stream_close (void)
 {
@@ -23,7 +25,11 @@ test_mongo_sync_gridfs_stream_close (void)
       "mongo_sync_gridfs_stream_close() works with a write stream");
 
   stream = mongo_sync_gridfs_stream_new (gfs, NULL);
-  stream->writable = FALSE;
+  stream->file.type = LMC_GRIDFS_FILE_CHUNKED;
+  ok (mongo_sync_gridfs_stream_close (stream) == FALSE,
+      "mongo_sync_gridfs_stream_close() should fail with a chunked file");
+
+  stream->file.type = LMC_GRIDFS_FILE_STREAM_READER;
   ok (mongo_sync_gridfs_stream_close (stream) == TRUE,
       "mongo_sync_gridfs_stream_close() works with a read stream");
 
@@ -32,4 +38,4 @@ test_mongo_sync_gridfs_stream_close (void)
   end_network_tests ();
 }
 
-RUN_TEST (3, mongo_sync_gridfs_stream_close);
+RUN_TEST (4, mongo_sync_gridfs_stream_close);

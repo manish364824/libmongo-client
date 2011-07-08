@@ -51,7 +51,7 @@ mongo_sync_gridfs_stream_find (mongo_sync_gridfs *gfs,
 
   stream = g_new0 (mongo_sync_gridfs_stream, 1);
   stream->gfs = gfs;
-  stream->writable = FALSE;
+  stream->file.type = LMC_GRIDFS_FILE_STREAM_READER;
 
   mongo_wire_reply_packet_get_nth_document (p, 1, &meta);
   bson_finish (meta);
@@ -67,8 +67,8 @@ mongo_sync_gridfs_stream_find (mongo_sync_gridfs *gfs,
       errno = EPROTO;
       return NULL;
     }
-  stream->file.oid = g_malloc (12);
-  memcpy (stream->file.oid, oid, 12);
+  stream->file.id = g_malloc (12);
+  memcpy (stream->file.id, oid, 12);
 
   bson_cursor_find (c, "length");
   bson_cursor_get_int64 (c, &stream->file.length);
@@ -89,7 +89,7 @@ mongo_sync_gridfs_stream_find (mongo_sync_gridfs *gfs,
   if (stream->file.length == 0 ||
       stream->file.chunk_size == 0)
     {
-      g_free (stream->file.oid);
+      g_free (stream->file.id);
       g_free (stream);
 
       errno = EPROTO;
@@ -113,7 +113,7 @@ mongo_sync_gridfs_stream_new (mongo_sync_gridfs *gfs,
     }
 
   stream = g_new0 (mongo_sync_gridfs_stream, 1);
-  stream->writable = TRUE;
+  stream->file.type = LMC_GRIDFS_FILE_STREAM_WRITER;
   stream->gfs = gfs;
 
   stream->file.chunk_size = gfs->chunk_size;
@@ -124,9 +124,9 @@ mongo_sync_gridfs_stream_new (mongo_sync_gridfs *gfs,
   c = bson_find (metadata, "_id");
   if (!c)
     {
-      stream->file.oid = mongo_util_oid_new
+      stream->file.id = mongo_util_oid_new
 	(mongo_connection_get_requestid ((mongo_connection *)gfs->conn));
-      if (!stream->file.oid)
+      if (!stream->file.id)
 	{
 	  bson_free (stream->writer.metadata);
 	  g_free (stream);
@@ -134,7 +134,7 @@ mongo_sync_gridfs_stream_new (mongo_sync_gridfs *gfs,
 	  errno = EFAULT;
 	  return NULL;
 	}
-      bson_append_oid (stream->writer.metadata, "_id", stream->file.oid);
+      bson_append_oid (stream->writer.metadata, "_id", stream->file.id);
     }
   else
     {
@@ -150,8 +150,8 @@ mongo_sync_gridfs_stream_new (mongo_sync_gridfs *gfs,
 	  return NULL;
 	}
 
-      stream->file.oid = g_malloc (12);
-      memcpy (stream->file.oid, oid, 12);
+      stream->file.id = g_malloc (12);
+      memcpy (stream->file.id, oid, 12);
     }
   bson_cursor_free (c);
   bson_finish (stream->writer.metadata);
@@ -173,7 +173,7 @@ _stream_seek_chunk (mongo_sync_gridfs_stream *stream,
   gboolean r;
 
   b = bson_new_sized (32);
-  bson_append_oid (b, "files_id", stream->file.oid);
+  bson_append_oid (b, "files_id", stream->file.id);
   bson_append_int64 (b, "n", chunk);
   bson_finish (b);
 
@@ -221,7 +221,7 @@ mongo_sync_gridfs_stream_read (mongo_sync_gridfs_stream *stream,
       errno = ENOENT;
       return -1;
     }
-  if (stream->writable)
+  if (stream->file.type != LMC_GRIDFS_FILE_STREAM_READER)
     {
       errno = EOPNOTSUPP;
       return -1;
@@ -303,7 +303,7 @@ mongo_sync_gridfs_stream_write (mongo_sync_gridfs_stream *stream,
       errno = ENOENT;
       return FALSE;
     }
-  if (!stream->writable)
+  if (stream->file.type != LMC_GRIDFS_FILE_STREAM_WRITER)
     {
       errno = EOPNOTSUPP;
       return FALSE;
@@ -331,7 +331,7 @@ mongo_sync_gridfs_stream_write (mongo_sync_gridfs_stream *stream,
       if (stream->writer.buffer_offset == stream->file.chunk_size)
 	{
 	  if (!_stream_chunk_write (stream->gfs,
-				    stream->file.oid,
+				    stream->file.id,
 				    stream->file.current_chunk,
 				    stream->writer.buffer,
 				    stream->file.chunk_size))
@@ -361,7 +361,7 @@ mongo_sync_gridfs_stream_seek (mongo_sync_gridfs_stream *stream,
       errno = ENOENT;
       return FALSE;
     }
-  if (stream->writable)
+  if (stream->file.type != LMC_GRIDFS_FILE_STREAM_READER)
     {
       errno = EOPNOTSUPP;
       return FALSE;
@@ -425,7 +425,14 @@ mongo_sync_gridfs_stream_close (mongo_sync_gridfs_stream *stream)
       return FALSE;
     }
 
-  if (stream->writable)
+  if (stream->file.type != LMC_GRIDFS_FILE_STREAM_READER &&
+      stream->file.type != LMC_GRIDFS_FILE_STREAM_WRITER)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  if (stream->file.type == LMC_GRIDFS_FILE_STREAM_WRITER)
     {
       bson *meta;
       gint64 upload_date;
@@ -435,7 +442,7 @@ mongo_sync_gridfs_stream_close (mongo_sync_gridfs_stream *stream)
       if (stream->writer.buffer_offset > 0)
 	{
 	  closed = _stream_chunk_write (stream->gfs,
-					stream->file.oid,
+					stream->file.id,
 					stream->file.current_chunk,
 					stream->writer.buffer,
 					stream->writer.buffer_offset);
@@ -482,7 +489,7 @@ mongo_sync_gridfs_stream_close (mongo_sync_gridfs_stream *stream)
   else
     bson_free (stream->reader.bson);
 
-  g_free (stream->file.oid);
+  g_free (stream->file.id);
   g_free (stream);
   return TRUE;
 }

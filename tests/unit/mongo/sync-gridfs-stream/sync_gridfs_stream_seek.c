@@ -27,7 +27,7 @@ test_mongo_sync_gridfs_stream_seek (void)
   ok (mongo_sync_gridfs_stream_seek (stream, 0, SEEK_SET) == FALSE,
       "mongo_sync_gridfs_stream_seek() fails with a write stream");
 
-  stream->writable = FALSE;
+  stream->file.type = LMC_GRIDFS_FILE_STREAM_READER;
 
   ok (mongo_sync_gridfs_stream_seek (stream, -1, SEEK_SET) == FALSE,
       "mongo_sync_gridfs_stream_seek() fails with SEEK_SET and a negative "
