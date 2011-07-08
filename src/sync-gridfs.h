@@ -109,7 +109,6 @@ mongo_sync_cursor *mongo_sync_gridfs_list (mongo_sync_gridfs *gfs,
 gboolean mongo_sync_gridfs_remove (mongo_sync_gridfs *gfs,
 				   const bson *query);
 
-#if 0
 /* Metadata */
 
 /** Get the file ID of a GridFS file.
@@ -120,7 +119,7 @@ gboolean mongo_sync_gridfs_remove (mongo_sync_gridfs *gfs,
  * pointer points to an internal area, and should not be modified or
  * freed, and is only valid as long as the file object is valid.
  */
-const guint8 *mongo_sync_gridfs_file_get_id (mongo_sync_gridfs_file *gfile);
+const guint8 *mongo_sync_gridfs_file_get_id (gpointer gfile);
 
 /** Get the length of a GridFS file.
  *
@@ -128,7 +127,7 @@ const guint8 *mongo_sync_gridfs_file_get_id (mongo_sync_gridfs_file *gfile);
  *
  * @returns The length of the file, or -1 on error.
  */
-gint64 mongo_sync_gridfs_file_get_length (mongo_sync_gridfs_file *gfile);
+gint64 mongo_sync_gridfs_file_get_length (gpointer gfile);
 
 /** Get the chunk size of a GridFS file.
  *
@@ -136,7 +135,7 @@ gint64 mongo_sync_gridfs_file_get_length (mongo_sync_gridfs_file *gfile);
  *
  * @returns The maximum size of the chunks of the file, or -1 on error.
  */
-gint32 mongo_sync_gridfs_file_get_chunk_size (mongo_sync_gridfs_file *gfile);
+gint32 mongo_sync_gridfs_file_get_chunk_size (gpointer gfile);
 
 /** Get the MD5 digest of a GridFS file.
  *
@@ -146,7 +145,7 @@ gint32 mongo_sync_gridfs_file_get_chunk_size (mongo_sync_gridfs_file *gfile);
  * pointer points to an internal area, and should not be modified or
  * freed, and is only valid as long as the file object is valid.
  */
-const gchar *mongo_sync_gridfs_file_get_md5 (mongo_sync_gridfs_file *gfile);
+const gchar *mongo_sync_gridfs_file_get_md5 (gpointer gfile);
 
 /** Get the upload date of a GridFS file.
  *
@@ -154,7 +153,7 @@ const gchar *mongo_sync_gridfs_file_get_md5 (mongo_sync_gridfs_file *gfile);
  *
  * @returns The upload date of the file, or -1 on error.
  */
-gint64 mongo_sync_gridfs_file_get_date (mongo_sync_gridfs_file *gfile);
+gint64 mongo_sync_gridfs_file_get_date (gpointer gfile);
 
 /** Get the full metadata of a GridFS file
  *
@@ -165,7 +164,7 @@ gint64 mongo_sync_gridfs_file_get_date (mongo_sync_gridfs_file *gfile);
  * not be modified or freed, and is only valid as long as the file
  * object is valid.
  */
-const bson *mongo_sync_gridfs_file_get_metadata (mongo_sync_gridfs_file *gfile);
+const bson *mongo_sync_gridfs_file_get_metadata (gpointer gfile);
 
 /** Get the number of chunks in a GridFS file.
  *
@@ -173,9 +172,7 @@ const bson *mongo_sync_gridfs_file_get_metadata (mongo_sync_gridfs_file *gfile);
  *
  * @returns The number of chunks in the GridFS file, or -1 on error.
  */
-gint64 mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile);
-
-#endif
+gint64 mongo_sync_gridfs_file_get_chunks (gpointer gfile);
 
 /** @} */
 

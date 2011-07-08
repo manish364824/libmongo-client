@@ -23,7 +23,7 @@ test_func_sync_gridfs_put (void)
 {
   mongo_sync_connection *conn;
   mongo_sync_gridfs *gfs;
-  mongo_sync_gridfs_file *gfile;
+  mongo_sync_gridfs_chunked_file *gfile;
   bson *meta;
   guint8 *data;
 
@@ -36,19 +36,21 @@ test_func_sync_gridfs_put (void)
   data = g_malloc (FILE_SIZE);
   memset (data, 'x', FILE_SIZE);
 
-  gfile = mongo_sync_gridfs_file_new_from_buffer (gfs, meta, data, FILE_SIZE);
+  gfile = mongo_sync_gridfs_chunked_file_new_from_buffer (gfs, meta,
+							  data, FILE_SIZE);
   ok (gfile != NULL,
       "GridFS file upload (with metadata) works!");
   memcpy (named_oid, mongo_sync_gridfs_file_get_id (gfile), 12);
   note ("Named file ID : %s\n", oid_to_string (named_oid));
-  mongo_sync_gridfs_file_free (gfile);
+  mongo_sync_gridfs_chunked_file_free (gfile);
 
-  gfile = mongo_sync_gridfs_file_new_from_buffer (gfs, NULL, data, FILE_SIZE);
+  gfile = mongo_sync_gridfs_chunked_file_new_from_buffer (gfs, NULL,
+							  data, FILE_SIZE);
   ok (gfile != NULL,
       "GridFS file upload (w/o metadata) works!");
   memcpy (noname_oid, mongo_sync_gridfs_file_get_id (gfile), 12);
   note ("Noname file ID: %s\n", oid_to_string (noname_oid));
-  mongo_sync_gridfs_file_free (gfile);
+  mongo_sync_gridfs_chunked_file_free (gfile);
 
   g_free (data);
   bson_free (meta);
@@ -143,12 +145,12 @@ test_func_sync_gridfs_put_invalid (void)
 void
 validate_file (mongo_sync_gridfs *gfs, const bson *query, guint8 *oid)
 {
-  mongo_sync_gridfs_file *f;
+  mongo_sync_gridfs_chunked_file *f;
   mongo_sync_cursor *cursor;
   gint64 n = 0, tsize = 0;
   const bson *meta;
 
-  f = mongo_sync_gridfs_find (gfs, query);
+  f = mongo_sync_gridfs_chunked_find (gfs, query);
 
   ok (memcmp (mongo_sync_gridfs_file_get_id (f), oid, 12) == 0,
       "File _id matches");
@@ -169,13 +171,13 @@ validate_file (mongo_sync_gridfs *gfs, const bson *query, guint8 *oid)
   ok (meta != NULL,
       "mongo_sync_gridfs_file_get_metadata() works");
 
-  cursor = mongo_sync_gridfs_file_cursor_new (f, 0, 0);
+  cursor = mongo_sync_gridfs_chunked_file_cursor_new (f, 0, 0);
   while (mongo_sync_cursor_next (cursor))
     {
       gint32 size;
       guint8 *data;
 
-      data = mongo_sync_gridfs_file_cursor_get_chunk (cursor, &size);
+      data = mongo_sync_gridfs_chunked_file_cursor_get_chunk (cursor, &size);
       g_free (data);
 
       tsize += size;
@@ -188,7 +190,7 @@ validate_file (mongo_sync_gridfs *gfs, const bson *query, guint8 *oid)
   cmp_ok (mongo_sync_gridfs_file_get_chunks (f), "==", n,
 	  "Number of chunks matches the expected number");
 
-  mongo_sync_gridfs_file_free (f);
+  mongo_sync_gridfs_chunked_file_free (f);
 }
 
 void
@@ -224,7 +226,7 @@ test_get_invalid (mongo_sync_gridfs *gfs, gchar *name, gchar *msg)
   query = bson_build (BSON_TYPE_STRING, "my-id", name, -1,
 		      BSON_TYPE_NONE);
   bson_finish (query);
-  ok (mongo_sync_gridfs_find (gfs, query) == NULL, msg);
+  ok (mongo_sync_gridfs_chunked_find (gfs, query) == NULL, msg);
   bson_free (query);
 }
 
@@ -241,25 +243,25 @@ test_func_sync_gridfs_get_invalid (void)
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
 
   test_get_invalid (gfs, "unknown",
-		    "mongo_sync_gridfs_find() should fail when no file "
+		    "mongo_sync_gridfs_chunked_find() should fail when no file "
 		    "is found");
   test_get_invalid (gfs, "id-only",
-		    "mongo_sync_gridfs_find() should fail if the metadata "
+		    "mongo_sync_gridfs_chunked__find() should fail if the metadata "
 		    "is incomplete");
   test_get_invalid (gfs, "string-id",
-		    "mongo_sync_gridfs_find() should fail if the _id is "
+		    "mongo_sync_gridfs_chunked__find() should fail if the _id is "
 		    "not an ObjectID");
   test_get_invalid (gfs, "invalid-length",
-		    "mongo_sync_gridfs_find() should fail if length is "
+		    "mongo_sync_gridfs_chunked__find() should fail if length is "
 		    "of inappropriate type");
   test_get_invalid (gfs, "invalid-chunkSize",
-		    "mongo_sync_gridfs_find() should fail if chunkSize is "
+		    "mongo_sync_gridfs_chunked__find() should fail if chunkSize is "
 		    "of inappropriate type");
   test_get_invalid (gfs, "invalid-date",
-		    "mongo_sync_gridfs_find() should fail if uploadDate is "
+		    "mongo_sync_gridfs_chunked__find() should fail if uploadDate is "
 		    "of inappropriate type");
   test_get_invalid (gfs, "invalid-md5",
-		    "mongo_sync_gridfs_find() should fail if md5 is of "
+		    "mongo_sync_gridfs_chunked__find() should fail if md5 is of "
 		    "inappropriate type");
 
   ns = g_strconcat (config.gfs_prefix, ".files", NULL);
@@ -272,8 +274,8 @@ test_func_sync_gridfs_get_invalid (void)
 							query, NULL));
   bson_free (query);
   mongo_sync_cursor_next (cursor);
-  ok (mongo_sync_gridfs_file_cursor_get_chunk (cursor, NULL) == NULL,
-      "mongo_sync_gridfs_file_cursor_get_chunk() should fail with "
+  ok (mongo_sync_gridfs_chunked_file_cursor_get_chunk (cursor, NULL) == NULL,
+      "mongo_sync_gridfs_chunked_file_cursor_get_chunk() should fail with "
       "invalid data");
 
   mongo_sync_gridfs_free (gfs, TRUE);
@@ -396,7 +398,7 @@ test_fync_sync_gridfs_remove (void)
 }
 
 void
-test_func_sync_gridfs (void)
+test_func_sync_gridfs_chunk (void)
 {
   mongo_util_oid_init (0);
 
@@ -410,4 +412,4 @@ test_func_sync_gridfs (void)
   test_fync_sync_gridfs_remove ();
 }
 
-RUN_NET_TEST (29, func_sync_gridfs);
+RUN_NET_TEST (29, func_sync_gridfs_chunk);

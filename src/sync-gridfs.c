@@ -163,76 +163,110 @@ mongo_sync_gridfs_list (mongo_sync_gridfs *gfs,
   return cursor;
 }
 
-#if 0
 const guint8 *
-mongo_sync_gridfs_file_get_id (mongo_sync_gridfs_file *gfile)
+mongo_sync_gridfs_file_get_id (gpointer gfile)
 {
+  mongo_sync_gridfs_chunked_file *c = (mongo_sync_gridfs_chunked_file *)gfile;
+  mongo_sync_gridfs_stream *s = (mongo_sync_gridfs_stream *)gfile;
+
   if (!gfile)
     {
       errno = ENOTCONN;
       return NULL;
     }
-  return gfile->meta.oid;
+  if (c->meta.type == LMC_GRIDFS_FILE_CHUNKED)
+    return c->meta.oid;
+  else
+    return s->file.id;
 }
 
 gint64
-mongo_sync_gridfs_file_get_length (mongo_sync_gridfs_file *gfile)
+mongo_sync_gridfs_file_get_length (gpointer gfile)
 {
+  mongo_sync_gridfs_file_common *f = (mongo_sync_gridfs_file_common *)gfile;
+
   if (!gfile)
     {
       errno = ENOTCONN;
       return -1;
     }
-  return gfile->meta.length;
+  return f->length;
 }
 
 gint32
-mongo_sync_gridfs_file_get_chunk_size (mongo_sync_gridfs_file *gfile)
+mongo_sync_gridfs_file_get_chunk_size (gpointer gfile)
 {
+  mongo_sync_gridfs_file_common *f = (mongo_sync_gridfs_file_common *)gfile;
+
   if (!gfile)
     {
       errno = ENOTCONN;
       return -1;
     }
-  return gfile->meta.chunk_size;
+  return f->chunk_size;
 }
 
 const gchar *
-mongo_sync_gridfs_file_get_md5 (mongo_sync_gridfs_file *gfile)
+mongo_sync_gridfs_file_get_md5 (gpointer gfile)
 {
+  mongo_sync_gridfs_chunked_file *f = (mongo_sync_gridfs_chunked_file *)gfile;
+
   if (!gfile)
     {
       errno = ENOTCONN;
       return NULL;
     }
-  return gfile->meta.md5;
+  if (f->meta.type != LMC_GRIDFS_FILE_CHUNKED)
+    {
+      errno = EOPNOTSUPP;
+      return NULL;
+    }
+
+  return f->meta.md5;
 }
 
 gint64
-mongo_sync_gridfs_file_get_date (mongo_sync_gridfs_file *gfile)
+mongo_sync_gridfs_file_get_date (gpointer gfile)
 {
+  mongo_sync_gridfs_chunked_file *f = (mongo_sync_gridfs_chunked_file *)gfile;
+
   if (!gfile)
     {
       errno = ENOTCONN;
       return -1;
     }
-  return gfile->meta.date;
+  if (f->meta.type != LMC_GRIDFS_FILE_CHUNKED)
+    {
+      errno = EOPNOTSUPP;
+      return -1;
+    }
+
+  return f->meta.date;
 }
 
 const bson *
-mongo_sync_gridfs_file_get_metadata (mongo_sync_gridfs_file *gfile)
+mongo_sync_gridfs_file_get_metadata (gpointer gfile)
 {
+  mongo_sync_gridfs_chunked_file *f = (mongo_sync_gridfs_chunked_file *)gfile;
+
   if (!gfile)
     {
       errno = ENOTCONN;
       return NULL;
     }
-  return gfile->meta.metadata;
+  if (f->meta.type != LMC_GRIDFS_FILE_CHUNKED)
+    {
+      errno = EOPNOTSUPP;
+      return NULL;
+    }
+
+  return f->meta.metadata;
 }
 
 gint64
-mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile)
+mongo_sync_gridfs_file_get_chunks (gpointer gfile)
 {
+  mongo_sync_gridfs_file_common *f = (mongo_sync_gridfs_file_common *)gfile;
   double chunk_count;
 
   if (!gfile)
@@ -241,11 +275,10 @@ mongo_sync_gridfs_file_get_chunks (mongo_sync_gridfs_file *gfile)
       return -1;
     }
 
-  chunk_count = (double)gfile->meta.length / (double)gfile->meta.chunk_size;
+  chunk_count = (double)f->length / (double)f->chunk_size;
   return (chunk_count - (gint64)chunk_count > 0) ?
     (gint64)(chunk_count + 1) : (gint64)(chunk_count);
 }
-#endif
 
 gboolean
 mongo_sync_gridfs_remove (mongo_sync_gridfs *gfs,

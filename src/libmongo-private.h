@@ -148,26 +148,20 @@ typedef struct
   };
 
   _mongo_gridfs_type type; /**< The type of the GridFS file. */
-} mongo_sync_gridfs_common;
+} mongo_sync_gridfs_file_common;
 
 /** @internal GridFS file object. */
 struct _mongo_sync_gridfs_chunked_file
 {
+  mongo_sync_gridfs_file_common meta; /**< The file metadata. */
   mongo_sync_gridfs *gfs; /**< The GridFS the file is on. */
-
-  /** The file metadata.
-   */
-  mongo_sync_gridfs_common meta;
 };
 
 /** @internal GridFS file stream object. */
 struct _mongo_sync_gridfs_stream
 {
+  mongo_sync_gridfs_file_common file; /**< Common file data. */
   mongo_sync_gridfs *gfs; /**< The GridFS the file is on. */
-
-  /** Common file data.
-   */
-  mongo_sync_gridfs_common file;
 
   /** Reader & Writer structure union.
    */
