@@ -1,5 +1,12 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.1.3 - <UNRELEASED>
+
+** New index options: background & sparse.
+It is now possible to create sparse indexes, and create them in the
+background, using two new option flags: MONGO_INDEX_BACKGROUND and
+MONGO_INDEX_SPARSE.
+
 * 0.1.2 - <2011-07-01 Fri>
 
 ** Bugfix: mongo_packet_recv() waits for all data.

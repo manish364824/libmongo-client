@@ -447,6 +447,9 @@ enum
     MONGO_INDEX_UNIQUE = 0x01, /**< Create a unique index. */
     MONGO_INDEX_DROP_DUPS = 0x02, /**< Drop duplicate entries when
 				     creating the indexes. */
+    MONGO_INDEX_BACKGROUND = 0x04, /**< Create indexes in the
+				      background. */
+    MONGO_INDEX_SPARSE = 0x08, /**< Create sparse indexes. */
   };
 
 /** Create an index.
