@@ -129,12 +129,10 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
       exit (1);
     }
 
-#if 0
   VLOG ("Writing '%s' -> '%s' (%" G_GINT64_FORMAT " bytes in %" G_GINT64_FORMAT
 	" chunks)\n", gfn, ofn,
 	mongo_sync_gridfs_file_get_length (gfile),
 	mongo_sync_gridfs_file_get_chunks (gfile));
-#endif
 
   cursor = mongo_sync_gridfs_chunked_file_cursor_new (gfile, 0, 0);
   if (!cursor)
@@ -224,11 +222,9 @@ mongo_gridfs_put (config_t *config, gint argc, gchar *argv[])
   bson_free (meta);
   munmap (data, st.st_size);
 
-#if 0
   printf ("Uploaded file: %s (_id: %s; md5 = %s)\n", gfn,
 	  oid_to_string (mongo_sync_gridfs_file_get_id (gfile)),
 	  mongo_sync_gridfs_file_get_md5 (gfile));
-#endif
 
   mongo_sync_gridfs_chunked_file_free (gfile);
   mongo_sync_gridfs_free (gfs, TRUE);
