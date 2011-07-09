@@ -12,7 +12,7 @@ test_func_mongo_sync_cursor_iterate (void)
   mongo_sync_cursor *sc;
   bson_cursor *c;
   gint i;
-  gint32 first_i32 = -1, last_i32, current_i32;
+  gint32 first_i32 = -1, last_i32 = -1, current_i32 = -1;
   gboolean early_break = FALSE, continous = TRUE;
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
