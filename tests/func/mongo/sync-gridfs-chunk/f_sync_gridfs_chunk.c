@@ -160,7 +160,10 @@ validate_file (mongo_sync_gridfs *gfs, const bson *query, guint8 *oid)
 	  mongo_sync_gridfs_get_chunk_size (gfs),
 	  "File chunk size matches");
 
-  note ("File info:\n\tid = %s; length = %d; chunk_size = %d; date = %lu; md5 = %s; n = %d\n",
+  note ("File info:\n\tid = %s; length = %" G_GINT64_FORMAT "; "
+	"chunk_size = %d; date = %" G_GINT64_FORMAT "; "
+	"md5 = %s; n = %" G_GINT64_FORMAT "\n",
+
 	oid_to_string (mongo_sync_gridfs_file_get_id (f)),
 	mongo_sync_gridfs_file_get_length (f),
 	mongo_sync_gridfs_file_get_chunk_size (f),
