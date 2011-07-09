@@ -28,6 +28,9 @@
 #include <mongo-sync.h>
 #include <mongo-sync-cursor.h>
 #include <mongo-sync-pool.h>
+#include <sync-gridfs.h>
+#include <sync-gridfs-chunk.h>
+#include <sync-gridfs-stream.h>
 
 /** @mainpage libmongo-client
  *
@@ -37,6 +40,10 @@
  * language, with clarity, correctness and completeness in mind.
  *
  * Contents:
- *  - @subpage api
- *  - @subpage tutorial
+ * @htmlonly
+ *  <ul>
+ *   <li><a href="modules.html"><b>API Documentation</b></a></li>
+ *   <li><a href="tutorial.html"><b>Tutorial</b></a></li>
+ * </ul>
+ * @endhtmlonly
  */

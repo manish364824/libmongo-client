@@ -15,6 +15,9 @@ libmongo_client_la_SOURCES	= \
 	mongo-sync.c mongo-sync.h \
 	mongo-sync-cursor.c mongo-sync-cursor.h \
 	mongo-sync-pool.c mongo-sync-pool.h \
+	sync-gridfs.c sync-gridfs.h \
+	sync-gridfs-chunk.c sync-gridfs-chunk.h \
+	sync-gridfs-stream.c sync-gridfs-stream.h \
 	mongo.h \
 	libmongo-private.h libmongo-macros.h
 
@@ -22,6 +25,7 @@ libmongo_client_includedir	= $(includedir)/mongo-client
 libmongo_client_include_HEADERS	= \
 	bson.h mongo-wire.h mongo-client.h mongo-utils.h \
 	mongo-sync.h mongo-sync-cursor.h mongo-sync-pool.h \
+	sync-gridfs.h sync-gridfs-chunk.h sync-gridfs-stream.h \
 	mongo.h
 
 pkgconfigdir			= $(libdir)/pkgconfig
