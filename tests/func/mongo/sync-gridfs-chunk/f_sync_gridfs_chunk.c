@@ -9,7 +9,7 @@ static guint8 named_oid[12];
 gchar *
 oid_to_string (const guint8* oid)
 {
-  static gchar os[25];
+  static gchar os[26];
   gint j;
 
   for (j = 0; j < 12; j++)
