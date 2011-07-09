@@ -1573,6 +1573,10 @@ mongo_sync_cmd_index_create (mongo_sync_connection *conn,
     bson_append_boolean (cmd, "unique", TRUE);
   if (options & MONGO_INDEX_DROP_DUPS)
     bson_append_boolean (cmd, "dropDups", TRUE);
+  if (options & MONGO_INDEX_BACKGROUND)
+    bson_append_boolean (cmd, "background", TRUE);
+  if (options & MONGO_INDEX_SPARSE)
+    bson_append_boolean (cmd, "sparse", TRUE);
   bson_finish (cmd);
   g_string_free (name, TRUE);
 
