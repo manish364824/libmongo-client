@@ -31,6 +31,14 @@ G_BEGIN_DECLS
 
 /** @defgroup mongo_sync_gridfs_chunk_api Mongo GridFS Chunk API
  *
+ * This submodule provides chunk-based access to GridFS
+ * files. Chunk-based access has the advantage of being reasonably
+ * lightweight and fast, and the disadvantage of making it harder to
+ * do arbitrary reads or multi-part writes.
+ *
+ * It's best used when the whole file needs to be retrieved, or when
+ * uploading files that either fit in a buffer, or can be mmapped.
+ *
  * @addtogroup mongo_sync_gridfs_chunk_api
  * @{
  */

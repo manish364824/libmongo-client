@@ -31,6 +31,17 @@ G_BEGIN_DECLS
 
 /** @defgroup mongo_sync_gridfs_stream_api Mongo GridFS Streaming API
  *
+ * Ths submodule provides stream-based access to GridFS files. Stream
+ * based access has the advantage of allowing arbitrary reads and
+ * multi-part writes, at the cost of slightly higher memory usage and
+ * lower performance speed.
+ *
+ * It's best used when one needs only part of a file (and not
+ * neccessarily a full chunk, or the parts cross chunk boundaries), or
+ * when uploading a file from a source that cannot be fully stored in
+ * a memory buffer, and cannot be mmapped. Such as a network
+ * connection.
+ *
  * @addtogroup mongo_sync_gridfs_stream_api
  * @{
  */

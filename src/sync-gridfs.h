@@ -32,6 +32,16 @@ G_BEGIN_DECLS
 
 /** @defgroup mongo_sync_gridfs_api Mongo GridFS API
  *
+ * The GridFS API - and related modules, like @ref
+ * mongo_sync_gridfs_chunk_api and @ref mongo_sync_gridfs_stream_api -
+ * provide a conveneint way to work with GridFS, and files stored on
+ * it.
+ *
+ * This module implements the GridFS support functions, which allow
+ * one to connect to or create new GridFS instances, list or remove
+ * files, or retrieve metadata about files opened by one of the
+ * sub-modules.
+ *
  * @addtogroup mongo_sync_gridfs_api
  * @{
  */
