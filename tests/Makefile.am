@@ -116,6 +116,7 @@ mongo_sync_unit_tests	= \
 		unit/mongo/sync/sync_cmd_kill_cursors \
 		unit/mongo/sync/sync_cmd_custom \
 		unit/mongo/sync/sync_cmd_count \
+		unit/mongo/sync/sync_cmd_create \
 		unit/mongo/sync/sync_cmd_drop \
 		unit/mongo/sync/sync_cmd_get_last_error \
 		unit/mongo/sync/sync_cmd_reset_error \

@@ -1006,6 +1006,80 @@ mongo_sync_cmd_count (mongo_sync_connection *conn,
 }
 
 gboolean
+mongo_sync_cmd_create (mongo_sync_connection *conn,
+		       const gchar *db, const gchar *coll,
+		       gint flags, ...)
+{
+  mongo_packet *p;
+  bson *cmd;
+
+  if (!conn)
+    {
+      errno = ENOTCONN;
+      return FALSE;
+    }
+  if (!db || !coll)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  cmd = bson_new_sized (128);
+  bson_append_string (cmd, "create", coll, -1);
+  if (flags & MONGO_COLLECTION_AUTO_INDEX_ID)
+    bson_append_boolean (cmd, "autoIndexId", TRUE);
+  if (flags & MONGO_COLLECTION_CAPPED ||
+      flags & MONGO_COLLECTION_CAPPED_MAX ||
+      flags & MONGO_COLLECTION_SIZED)
+    {
+      va_list ap;
+      gint64 i;
+
+      if (flags & MONGO_COLLECTION_CAPPED ||
+	  flags & MONGO_COLLECTION_CAPPED_MAX)
+	bson_append_boolean (cmd, "capped", TRUE);
+
+      va_start (ap, flags);
+      i = (gint64)va_arg (ap, gint64);
+      if (i <= 0)
+	{
+	  bson_free (cmd);
+	  errno = ERANGE;
+	  return FALSE;
+	}
+      bson_append_int64 (cmd, "size", i);
+
+      if (flags & MONGO_COLLECTION_CAPPED_MAX)
+	{
+	  i = (gint64)va_arg (ap, gint64);
+	  if (i <= 0)
+	    {
+	      bson_free (cmd);
+	      errno = ERANGE;
+	      return FALSE;
+	    }
+	  bson_append_int64 (cmd, "max", i);
+	}
+      va_end (ap);
+    }
+  bson_finish (cmd);
+
+  p = _mongo_sync_cmd_custom (conn, db, cmd, TRUE, TRUE);
+  if (!p)
+    {
+      int e = errno;
+
+      bson_free (cmd);
+      errno = e;
+      return FALSE;
+    }
+  bson_free (cmd);
+  mongo_wire_packet_free (p);
+
+  return TRUE;
+}
+
+gboolean
 mongo_sync_cmd_drop (mongo_sync_connection *conn,
 		     const gchar *db, const gchar *coll)
 {
