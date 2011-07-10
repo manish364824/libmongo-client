@@ -345,6 +345,44 @@ gdouble mongo_sync_cmd_count (mongo_sync_connection *conn,
 			      const gchar *db, const gchar *coll,
 			      const bson *query);
 
+/** Flags that can be set during collection creation. */
+enum
+  {
+    /** Default options. */
+    MONGO_COLLECTION_DEFAULTS = 0,
+    /** The collection is capped. */
+    MONGO_COLLECTION_CAPPED = 1 << 0,
+    /** The collection is capped by element number aswell. */
+    MONGO_COLLECTION_CAPPED_MAX = 1 << 1,
+    /** The collection's _id should be autoindexed. */
+    MONGO_COLLECTION_AUTO_INDEX_ID = 1 << 2,
+  };
+
+/** Create a new MongoDB collection.
+ *
+ * This command can be used to explicitly create a MongoDB collection,
+ * with various parameters pre-set.
+ *
+ * @param conn is the connection to work with.
+ * @param db is the name of the database.
+ * @param coll is the name of the collection to create.
+ * @param flags is a collection of flags for the collection.  Any
+ * combination of MONGO_COLLECTION_DEFAULTS, MONGO_COLLECTION_CAPPED,
+ * MONGO_COLLECTION_CAPPED_MAX and MONGO_COLLECTION_AUTO_INDEX_ID is
+ * acceptable.
+ *
+ * @tparam size @b MUST be a 64-bit integer, if
+ * MONGO_COLLECTION_CAPPED is specified, and ist must follow the @a
+ * flags parameter.
+ * @tparam max @b MUST be a 64-bit integer, if
+ * MONGO_COLLECTION_CAPPED_MAX is specified, and must follow @a size.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+gboolean mongo_sync_cmd_create (mongo_sync_connection *conn,
+				const gchar *db, const gchar *coll,
+				gint flags, ...);
+
 /** Send a drop() command to MongoDB.
  *
  * With this command, one can easily drop a collection.
