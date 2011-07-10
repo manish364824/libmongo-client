@@ -10,7 +10,7 @@ test_mongo_sync_cmd_create_net (void)
   mongo_sync_connection *conn;
   gchar *cc;
 
-  begin_network_tests (4);
+  begin_network_tests (5);
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
 
@@ -22,6 +22,13 @@ test_mongo_sync_cmd_create_net (void)
   ok (mongo_sync_cmd_create (conn, config.db, config.coll,
 			     MONGO_COLLECTION_DEFAULTS) == TRUE,
       "mongo_sync_cmd_create() can create normal collections");
+  mongo_sync_cmd_drop (conn, config.db, config.coll);
+
+  ok (mongo_sync_cmd_create (conn, config.db, config.coll,
+			     MONGO_COLLECTION_SIZED,
+			     (gint64) 64 * 1024 * 10) == TRUE,
+      "mongo_sync_cmd_create() can create pre-allocated collections");
+
   ok (mongo_sync_cmd_create (conn, config.db, cc,
 			     MONGO_COLLECTION_CAPPED, (gint64) -1) == FALSE,
       "mongo_sync_cmd_create() fails when trying to create a capped "
@@ -68,4 +75,4 @@ test_mongo_sync_cmd_create (void)
   test_mongo_sync_cmd_create_net ();
 }
 
-RUN_TEST (7, mongo_sync_cmd_create);
+RUN_TEST (8, mongo_sync_cmd_create);

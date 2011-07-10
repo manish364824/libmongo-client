@@ -1029,12 +1029,15 @@ mongo_sync_cmd_create (mongo_sync_connection *conn,
   if (flags & MONGO_COLLECTION_AUTO_INDEX_ID)
     bson_append_boolean (cmd, "autoIndexId", TRUE);
   if (flags & MONGO_COLLECTION_CAPPED ||
-      flags & MONGO_COLLECTION_CAPPED_MAX)
+      flags & MONGO_COLLECTION_CAPPED_MAX ||
+      flags & MONGO_COLLECTION_SIZED)
     {
       va_list ap;
       gint64 i;
 
-      bson_append_boolean (cmd, "capped", TRUE);
+      if (flags & MONGO_COLLECTION_CAPPED ||
+	  flags & MONGO_COLLECTION_CAPPED_MAX)
+	bson_append_boolean (cmd, "capped", TRUE);
 
       va_start (ap, flags);
       i = (gint64)va_arg (ap, gint64);

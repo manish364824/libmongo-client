@@ -356,6 +356,8 @@ enum
     MONGO_COLLECTION_CAPPED_MAX = 1 << 1,
     /** The collection's _id should be autoindexed. */
     MONGO_COLLECTION_AUTO_INDEX_ID = 1 << 2,
+    /** The collection needs to be pre-allocated. */
+    MONGO_COLLECTION_SIZED = 1 << 3,
   };
 
 /** Create a new MongoDB collection.
@@ -368,12 +370,12 @@ enum
  * @param coll is the name of the collection to create.
  * @param flags is a collection of flags for the collection.  Any
  * combination of MONGO_COLLECTION_DEFAULTS, MONGO_COLLECTION_CAPPED,
- * MONGO_COLLECTION_CAPPED_MAX and MONGO_COLLECTION_AUTO_INDEX_ID is
- * acceptable.
+ * MONGO_COLLECTION_CAPPED_MAX, MONGO_COLLECTION_SIZED and
+ * MONGO_COLLECTION_AUTO_INDEX_ID is acceptable.
  *
  * @tparam size @b MUST be a 64-bit integer, if
- * MONGO_COLLECTION_CAPPED is specified, and ist must follow the @a
- * flags parameter.
+ * MONGO_COLLECTION_CAPPED or MONGO_COLLECTION_SIZED is specified, and
+ * ist must follow the @a flags parameter.
  * @tparam max @b MUST be a 64-bit integer, if
  * MONGO_COLLECTION_CAPPED_MAX is specified, and must follow @a size.
  *
