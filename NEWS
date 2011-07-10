@@ -11,6 +11,10 @@ removing files, or offering a file-like streaming API.
 A new helper function was introduced to aid us in creating capped and
 pre-allocated collections.
 
+** New function: mongo_sync_cmd_exists()
+Another new helper function to aid in retrieving information about a
+collection - whether it exists, and if so, with what parameters.
+
 ** New index options: background & sparse.
 It is now possible to create sparse indexes, and create them in the
 background, using two new option flags: MONGO_INDEX_BACKGROUND and

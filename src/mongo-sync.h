@@ -385,6 +385,19 @@ gboolean mongo_sync_cmd_create (mongo_sync_connection *conn,
 				const gchar *db, const gchar *coll,
 				gint flags, ...);
 
+/** Check whether a collection exists in MongoDB.
+ *
+ * @param conn is the connection to work with.
+ * @param db is the database to search for the collection.
+ * @param coll is the collection to search for.
+ *
+ * @returns A newly allocated BSON object, with data about the
+ * collection on success, NULL otherwise. It is the responsiblity of
+ * the caller to free the BSON object once it is no longer needed.
+ */
+bson *mongo_sync_cmd_exists (mongo_sync_connection *conn,
+			     const gchar *db, const gchar *coll);
+
 /** Send a drop() command to MongoDB.
  *
  * With this command, one can easily drop a collection.
