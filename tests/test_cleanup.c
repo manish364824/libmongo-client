@@ -21,6 +21,10 @@ main (void)
   mongo_sync_cmd_drop (conn, config.db, c);
   g_free (c);
 
+  c = g_strconcat (config.coll, ".capped", NULL);
+  mongo_sync_cmd_drop (conn, config.db, c);
+  g_free (c);
+
   test_env_free ();
 
   return 0;

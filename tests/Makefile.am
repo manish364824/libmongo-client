@@ -142,7 +142,8 @@ mongo_sync_cursor_unit_tests	= \
 		unit/mongo/sync-cursor/sync_cursor_free
 
 mongo_sync_cursor_func_tests	= \
-		func/mongo/sync-cursor/f_sync_cursor_iterate
+		func/mongo/sync-cursor/f_sync_cursor_iterate \
+		func/mongo/sync-cursor/f_sync_cursor_tailable
 
 mongo_sync_pool_unit_tests	= \
 		unit/mongo/sync-pool/sync_pool_new \
