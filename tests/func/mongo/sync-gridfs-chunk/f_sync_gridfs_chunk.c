@@ -6,18 +6,6 @@
 static guint8 noname_oid[12];
 static guint8 named_oid[12];
 
-gchar *
-oid_to_string (const guint8* oid)
-{
-  static gchar os[26];
-  gint j;
-
-  for (j = 0; j < 12; j++)
-    sprintf (&os[j * 2], "%02x", oid[j]);
-  os[25] = 0;
-  return os;
-}
-
 void
 test_func_sync_gridfs_put (void)
 {
@@ -26,6 +14,7 @@ test_func_sync_gridfs_put (void)
   mongo_sync_gridfs_chunked_file *gfile;
   bson *meta;
   guint8 *data;
+  gchar *oid_s;
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
@@ -41,7 +30,9 @@ test_func_sync_gridfs_put (void)
   ok (gfile != NULL,
       "GridFS file upload (with metadata) works!");
   memcpy (named_oid, mongo_sync_gridfs_file_get_id (gfile), 12);
-  note ("Named file ID : %s\n", oid_to_string (named_oid));
+  oid_s = mongo_util_oid_as_string (named_oid);
+  note ("Named file ID : %s\n", oid_s);
+  g_free (oid_s);
   mongo_sync_gridfs_chunked_file_free (gfile);
 
   gfile = mongo_sync_gridfs_chunked_file_new_from_buffer (gfs, NULL,
@@ -49,7 +40,9 @@ test_func_sync_gridfs_put (void)
   ok (gfile != NULL,
       "GridFS file upload (w/o metadata) works!");
   memcpy (noname_oid, mongo_sync_gridfs_file_get_id (gfile), 12);
-  note ("Noname file ID: %s\n", oid_to_string (noname_oid));
+  oid_s = mongo_util_oid_as_string (noname_oid);
+  note ("Noname file ID: %s\n", oid_s);
+  g_free (oid_s);
   mongo_sync_gridfs_chunked_file_free (gfile);
 
   g_free (data);
@@ -149,6 +142,7 @@ validate_file (mongo_sync_gridfs *gfs, const bson *query, guint8 *oid)
   mongo_sync_cursor *cursor;
   gint64 n = 0, tsize = 0;
   const bson *meta;
+  gchar *oid_s;
 
   f = mongo_sync_gridfs_chunked_find (gfs, query);
 
@@ -160,16 +154,18 @@ validate_file (mongo_sync_gridfs *gfs, const bson *query, guint8 *oid)
 	  mongo_sync_gridfs_get_chunk_size (gfs),
 	  "File chunk size matches");
 
+  oid_s = mongo_util_oid_as_string (mongo_sync_gridfs_file_get_id (f));
   note ("File info:\n\tid = %s; length = %" G_GINT64_FORMAT "; "
 	"chunk_size = %d; date = %" G_GINT64_FORMAT "; "
 	"md5 = %s; n = %" G_GINT64_FORMAT "\n",
 
-	oid_to_string (mongo_sync_gridfs_file_get_id (f)),
+	oid_s,
 	mongo_sync_gridfs_file_get_length (f),
 	mongo_sync_gridfs_file_get_chunk_size (f),
 	mongo_sync_gridfs_file_get_date (f),
 	mongo_sync_gridfs_file_get_md5 (f),
 	mongo_sync_gridfs_file_get_chunks (f));
+  g_free (oid_s);
   meta = mongo_sync_gridfs_file_get_metadata (f);
   ok (meta != NULL,
       "mongo_sync_gridfs_file_get_metadata() works");

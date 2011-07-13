@@ -66,6 +66,7 @@ mongo_utils_unit_tests	= \
 		unit/mongo/utils/oid_init \
 		unit/mongo/utils/oid_new \
 		unit/mongo/utils/oid_new_with_time \
+		unit/mongo/utils/oid_as_string \
 		unit/mongo/utils/parse_addr
 
 mongo_wire_unit_tests	= \

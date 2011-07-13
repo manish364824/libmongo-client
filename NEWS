@@ -15,6 +15,10 @@ pre-allocated collections.
 Another new helper function to aid in retrieving information about a
 collection - whether it exists, and if so, with what parameters.
 
+** New function: mongo_util_oid_as_string()
+When one needs to print the value of an ObjectId in human-readable
+hexadecimal format, this new function is the one to turn to.
+
 ** New index options: background & sparse.
 It is now possible to create sparse indexes, and create them in the
 background, using two new option flags: MONGO_INDEX_BACKGROUND and

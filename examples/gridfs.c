@@ -40,18 +40,6 @@ typedef struct
 
 #define VLOG(...) { if (config->verbose) fprintf (stderr, __VA_ARGS__); }
 
-gchar *
-oid_to_string (const guint8* oid)
-{
-  static gchar os[26];
-  gint j;
-
-  for (j = 0; j < 12; j++)
-    sprintf (&os[j * 2], "%02x", oid[j]);
-  os[25] = 0;
-  return os;
-}
-
 void
 mongo_gridfs_error (int e)
 {
@@ -172,7 +160,7 @@ mongo_gridfs_put (config_t *config, gint argc, gchar *argv[])
   guint8 *data;
   struct stat st;
 
-  gchar *gfn, *ifn;
+  gchar *gfn, *ifn, *oid_s;
 
   if (argc < 4)
     {
@@ -222,10 +210,12 @@ mongo_gridfs_put (config_t *config, gint argc, gchar *argv[])
   bson_free (meta);
   munmap (data, st.st_size);
 
+  oid_s = mongo_util_oid_as_string (mongo_sync_gridfs_file_get_id (gfile));
   printf ("Uploaded file: %s (_id: %s; md5 = %s)\n", gfn,
-	  oid_to_string (mongo_sync_gridfs_file_get_id (gfile)),
+	  oid_s,
 	  mongo_sync_gridfs_file_get_md5 (gfile));
 
+  g_free (oid_s);
   mongo_sync_gridfs_chunked_file_free (gfile);
   mongo_sync_gridfs_free (gfs, TRUE);
 }
@@ -248,6 +238,7 @@ mongo_gridfs_list (config_t *config)
       gint32 i32, chunk_size;
       gint64 length, date;
       const gchar *md5, *filename = NULL;
+      gchar *oid_s;
 
       c = bson_find (meta, "_id");
       if (!bson_cursor_get_oid (c, (const guint8 **)&oid))
@@ -279,11 +270,13 @@ mongo_gridfs_list (config_t *config)
 
       bson_cursor_free (c);
 
+      oid_s = mongo_util_oid_as_string (oid);
       printf ("{ _id: ObjectID(\"%s\"), length: %" G_GINT64_FORMAT
 	      ", chunkSize: %i, uploadDate: %"
 	      G_GINT64_FORMAT ", md5: \"%s\"",
 
-	      oid_to_string (oid), length, chunk_size, date, md5);
+	      oid_s, length, chunk_size, date, md5);
+      g_free (oid_s);
 
       if (filename)
 	printf (", filename: \"%s\"", filename);
