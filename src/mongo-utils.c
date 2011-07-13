@@ -89,7 +89,7 @@ mongo_util_oid_new (gint32 seq)
 }
 
 gchar *
-mongo_util_oid_as_string (guint8 *oid)
+mongo_util_oid_as_string (const guint8 *oid)
 {
   gchar *str;
   gint j;

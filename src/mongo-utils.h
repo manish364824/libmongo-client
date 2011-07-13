@@ -91,9 +91,10 @@ guint8 *mongo_util_oid_new_with_time (gint32 time, gint32 seq);
  * @param oid is the binary ObjectID.
  *
  * @returns A newly allocated string representation of the ObjectID,
- * or NULL on error.
+ * or NULL on error. It is the responsibility of the caller to free it
+ * once it is no longer needed.
  */
-gchar *mongo_util_oid_as_string (guint8 *oid);
+gchar *mongo_util_oid_as_string (const guint8 *oid);
 
 /** Parse a HOST:IP pair.
  *
