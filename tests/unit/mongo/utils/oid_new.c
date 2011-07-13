@@ -9,6 +9,7 @@ void
 test_mongo_utils_oid_new (void)
 {
   guint8 *oid1, *oid2, *oid3;
+  gchar *oid1_s, *oid2_s;
 
   ok (mongo_util_oid_new (0) == NULL,
       "mongo_util_oid_new() should fail before mongo_util_oid_init()");
@@ -32,8 +33,15 @@ test_mongo_utils_oid_new (void)
   sleep (2);
   oid2 = mongo_util_oid_new (0);
 
+  oid1_s = mongo_util_oid_as_string (oid1);
+  oid2_s = mongo_util_oid_as_string (oid2);
+
   ok (memcmp (oid2, oid1, 12) > 0,
-      "OIDs with the same sequence ID, a few seconds later sort higher");
+      "OIDs with the same sequence ID, a few seconds later sort higher; "
+      "oid1=%s; oid2=%s", oid1_s, oid2_s);
+
+  g_free (oid2_s);
+  g_free (oid1_s);
   g_free (oid2);
   g_free (oid1);
 }
