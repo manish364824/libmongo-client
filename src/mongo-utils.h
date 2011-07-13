@@ -84,6 +84,17 @@ guint8 *mongo_util_oid_new (gint32 seq);
  */
 guint8 *mongo_util_oid_new_with_time (gint32 time, gint32 seq);
 
+/** Convert an ObjectID to its string representation.
+ *
+ * Turns a binary ObjectID into a hexadecimal string.
+ *
+ * @param oid is the binary ObjectID.
+ *
+ * @returns A newly allocated string representation of the ObjectID,
+ * or NULL on error.
+ */
+gchar *mongo_util_oid_as_string (guint8 *oid);
+
 /** Parse a HOST:IP pair.
  *
  * Given a HOST:IP pair, split it up into a host and a port. IPv6
