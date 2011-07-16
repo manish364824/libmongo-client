@@ -3,11 +3,12 @@ LMC_REVISION			= 0
 LMC_AGE				= 2
 
 lib_LTLIBRARIES			= libmongo-client.la
-libmongo_client_la_LIBADD	= @GLIB_LIBS@
-libmongo_client_la_CFLAGS	= @GLIB_CFLAGS@
+libmongo_client_la_LIBADD	= @GLIB_LIBS@ @OPENSSL_LIBS@
+libmongo_client_la_CFLAGS	= @GLIB_CFLAGS@ @OPENSSL_CFLAGS@
 libmongo_client_la_LDFLAGS	= -version-info ${LMC_CURRENT}:${LMC_REVISION}:${LMC_AGE} @vsymldflags@
 
 libmongo_client_la_SOURCES	= \
+	compat.c compat.h \
 	bson.c bson.h \
 	mongo-wire.c mongo-wire.h \
 	mongo-client.c mongo-client.h \

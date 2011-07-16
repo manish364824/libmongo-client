@@ -12,7 +12,8 @@ VERSION="0.1.2"
 dnl ***************************************************************************
 dnl dependencies
 
-GLIB_MIN_VERSION="2.16.0"
+GLIB_MIN_VERSION="2.12.0"
+OPENSSL_MIN_VERSION="0.9.8"
 
 dnl ***************************************************************************
 dnl Initial setup
@@ -24,13 +25,6 @@ AM_CONFIG_HEADER(config.h)
 AC_ARG_WITH([versioned-symbols], AC_HELP_STRING([--with-versioned-symbols],[Use versioned symbols]),[dnl
 vsymldflags="-Wl,--version-script,\${srcdir}/libmongo-client.ver -Wl,-O1"
 ],[vsymldflags=])
-AC_MSG_CHECKING([whether to enable symbol versioning])
-AC_SUBST(vsymldflags)
-if test -z "${vsymldflags}"; then
-   AC_MSG_RESULT([no])
-else
-   AC_MSG_RESULT([yes, ${vsymldflags}])
-fi
 
 dnl ***************************************************************************
 dnl Checks for programs.
@@ -107,6 +101,19 @@ if test "x$blb_cv_glib_sane" = "xno"; then
 	AC_MSG_ERROR([Glib headers inconsistent with current compiler setting. You might be using 32 bit Glib with a 64 bit compiler, check PKG_CONFIG_PATH])
 fi
 
+dnl Check for g_checksum_new
+AC_CHECK_LIB(glib-2.0, g_checksum_new, [glib_checksum="yes"; with_openssl="0"], [glib_checksum="no"; with_openssl="1"])
+if test "x$glib_checksum" = "xno"; then
+  dnl Using the compat stuff disables symbol versioning
+  vsymldflags=""
+  PKG_CHECK_MODULES(OPENSSL, openssl >= $OPENSSL_MIN_VERSION,, OPENSSL_LIBS="")
+  if test "x$OPENSSL_LIBS" = "x"; then
+     AC_MSG_ERROR([OpenSSL is required when glib-2.0 << 2.16.0])
+  fi
+fi
+
+AC_DEFINE_UNQUOTED(WITH_OPENSSL, $with_openssl, [Compile with OpenSSL])
+
 dnl ***************************************************************************
 dnl misc features to be enabled
 dnl ***************************************************************************
@@ -119,6 +126,14 @@ if test "x$blb_cv_c_struct_sockaddr_in6" = "xyes"; then
 else
 	enable_ipv6=no
 	AC_MSG_RESULT(no)
+fi
+
+AC_MSG_CHECKING([whether to enable symbol versioning])
+AC_SUBST(vsymldflags)
+if test -z "${vsymldflags}"; then
+   AC_MSG_RESULT([no])
+else
+   AC_MSG_RESULT([yes, ${vsymldflags}])
 fi
 
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [package name])
