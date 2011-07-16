@@ -15,7 +15,7 @@ test_mongo_sync_gridfs_stream_close (void)
   ok (mongo_sync_gridfs_stream_close (NULL) == FALSE,
       "mongo_sync_gridfs_stream_close() fails with a NULL stream");
 
-  begin_network_tests (2);
+  begin_network_tests (3);
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
