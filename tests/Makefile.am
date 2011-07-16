@@ -216,4 +216,9 @@ check-%: ${TESTCASES} ${noinst_PROGRAMS}
 	$(AM_V_GEN) srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
 	$(AM_V_at) ${builddir}/test_cleanup
 
+check: ${TESTCASES} ${noinst_PROGRAMS}
+	$(AM_V_at) ${builddir}/test_cleanup
+	$(AM_V_GEN) srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
+	$(AM_V_at) ${builddir}/test_cleanup
+
 .PHONY: check
