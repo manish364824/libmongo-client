@@ -74,8 +74,7 @@ dnl ***************************************************************************
 dnl GLib headers/libraries
 dnl ***************************************************************************
 
-GLIB_ADDONS="gmodule-2.0"
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_MIN_VERSION $GLIB_ADDONS,,)
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_MIN_VERSION,,)
 
 old_CPPFLAGS=$CPPFLAGS
 CPPFLAGS="$GLIB_CFLAGS"
