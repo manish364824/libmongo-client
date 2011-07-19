@@ -23,6 +23,7 @@
 #define LIBMONGO_PRIVATE_H 1
 
 #include "mongo.h"
+#include "compat.h"
 
 /** @internal BSON structure.
  */

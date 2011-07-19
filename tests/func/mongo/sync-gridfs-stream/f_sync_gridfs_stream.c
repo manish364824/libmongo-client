@@ -1,5 +1,6 @@
 #include "test.h"
 #include "mongo.h"
+#include "compat.h"
 
 #define FILE_SIZE 1024 * 1024 + 12345
 #define BUFFER_SIZE 64 * 1024
