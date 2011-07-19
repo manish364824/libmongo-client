@@ -17,6 +17,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Data&nbsp;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
@@ -56,6 +57,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Implementation for various libmongo-client helper functions.  
 <a href="#_details">More...</a></p>
 <code>#include &lt;glib.h&gt;</code><br/>
+<code>#include &lt;glib/gprintf.h&gt;</code><br/>
 <code>#include &lt;sys/types.h&gt;</code><br/>
 <code>#include &lt;string.h&gt;</code><br/>
 <code>#include &lt;stdlib.h&gt;</code><br/>
@@ -66,6 +68,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Include dependency graph for mongo-utils.c:</div>
 <div class="dyncontent">
 <div class="center"><img src="mongo-utils_8c__incl.png" border="0" usemap="#src_2mongo-utils_8c" alt=""/></div>
+<map name="src_2mongo-utils_8c" id="src_2mongo-utils_8c">
+</map>
 </div>
 
 <p><a href="mongo-utils_8c_source.html">Go to the source code of this file.</a></p>
@@ -78,6 +82,8 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Generate a new ObjectID, with a predefined timestamp.  <a href="group__mongo__util.html#ga1f3b0421ba55bc6b63d172b29f710a57"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">guint8 *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__util.html#ga692cc07bb07d2eb6a0026325e2fc13c8">mongo_util_oid_new</a> (gint32 seq)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Generate a new ObjectID.  <a href="group__mongo__util.html#ga692cc07bb07d2eb6a0026325e2fc13c8"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__util.html#ga7acf5058b212028695e666943bef6047">mongo_util_oid_as_string</a> (const guint8 *oid)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Convert an ObjectID to its string representation.  <a href="group__mongo__util.html#ga7acf5058b212028695e666943bef6047"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__util.html#ga322ea87ec69f5964eea7e8da40288579">mongo_util_parse_addr</a> (const gchar *addr, gchar **host, gint *port)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse a HOST:IP pair.  <a href="group__mongo__util.html#ga322ea87ec69f5964eea7e8da40288579"></a><br/></td></tr>
 </table>
@@ -100,7 +106,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jul 19 2011 20:23:05 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

@@ -1,6 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59" title="Authenticate a user with MongoDB." alt="" coords="224,5,451,35"/>
-<area shape="rect" id="node5" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="233,59,441,88"/>
-<area shape="rect" id="node7" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="503,20,671,49"/>
-<area shape="rect" id="node9" href="$group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d" title="Attempt to connect to another member of a replica set." alt="" coords="500,97,673,127"/>
+<area shape="rect" id="node3" href="$group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59" title="Authenticate a user with MongoDB." alt="" coords="283,5,509,35"/>
+<area shape="rect" id="node5" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="292,59,500,88"/>
+<area shape="rect" id="node12" href="$group__mongo__sync__gridfs__chunk__api.html#gaf398eaa2d1bfb24f879af6f6899c8278" title="Upload a file to GridFS from a buffer." alt="" coords="224,112,568,141"/>
+<area shape="rect" id="node14" href="$group__mongo__sync__gridfs__chunk__api.html#ga54de2ac6d88a819b4c6b9a1560fbe9c0" title="Find a file on GridFS." alt="" coords="279,165,513,195"/>
+<area shape="rect" id="node7" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="620,20,788,49"/>
+<area shape="rect" id="node9" href="$group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d" title="Attempt to connect to another member of a replica set." alt="" coords="617,97,791,127"/>
 </map>

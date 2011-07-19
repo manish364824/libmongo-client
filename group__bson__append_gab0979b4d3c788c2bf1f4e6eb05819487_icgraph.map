@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__mongo__sync.html#ga6fbd3a0fddb2642bc568e39288a4af42" title="Create a new MongoDB collection." alt="" coords="279,5,465,35"/>
+<area shape="rect" id="node5" href="$group__mongo__sync__gridfs__chunk__api.html#gaf398eaa2d1bfb24f879af6f6899c8278" title="Upload a file to GridFS from a buffer." alt="" coords="200,59,544,88"/>
+<area shape="rect" id="node7" href="$group__mongo__sync__gridfs__stream__api.html#gaaf94f166caa84ab51ab1e7d2d4553e2c" title="Close a GridFS stream." alt="" coords="253,112,491,141"/>
+</map>

@@ -1,4 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync.html#ga342218b37c0b0d4beafd7071b530ee1f" title="Send a delete command to MongoDB." alt="" coords="236,5,420,35"/>
+<area shape="rect" id="node3" href="$group__mongo__sync.html#ga342218b37c0b0d4beafd7071b530ee1f" title="Send a delete command to MongoDB." alt="" coords="236,32,420,61"/>
 <area shape="rect" id="node5" href="$group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c" title="Remove a user from MongoDB." alt="" coords="469,5,699,35"/>
+<area shape="rect" id="node7" href="$group__mongo__sync__gridfs__api.html#ga98a18a4524def495ccc2b9e37679f11c" title="Delete files matching a query from GridFS." alt="" coords="484,59,684,88"/>
 </map>

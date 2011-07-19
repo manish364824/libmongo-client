@@ -17,6 +17,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Data&nbsp;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
@@ -60,13 +61,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Include dependency graph for mongo-utils.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="mongo-utils_8h__incl.png" border="0" usemap="#src_2mongo-utils_8h" alt=""/></div>
+<map name="src_2mongo-utils_8h" id="src_2mongo-utils_8h">
+</map>
 </div>
 <div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="mongo-utils_8h__dep__incl.png" border="0" usemap="#src_2mongo-utils_8hdep" alt=""/></div>
 <map name="src_2mongo-utils_8hdep" id="src_2mongo-utils_8hdep">
-<area shape="rect" id="node3" href="mongo_8h.html" title="libmongo&#45;client meta&#45;header." alt="" coords="567,83,668,112"/><area shape="rect" id="node5" href="libmongo-private_8h.html" title="Private types and functions, for internal use in libmongo&#45;client only." alt="" coords="463,160,628,189"/><area shape="rect" id="node11" href="mongo-sync-cursor_8c.html" title="MongoDB Cursor API implementation." alt="" coords="5,237,184,267"/><area shape="rect" id="node13" href="mongo-sync-pool_8c.html" title="MongoDB connection pool API implementation." alt="" coords="635,237,800,267"/><area shape="rect" id="node15" href="mongo-sync_8c.html" title="MongoDB synchronous wrapper API implementation." alt="" coords="824,237,957,267"/><area shape="rect" id="node7" href="bson_8c.html" title="Implementation of the BSON API." alt="" coords="208,237,293,267"/><area shape="rect" id="node9" href="mongo-client_8c.html" title="MongoDB client API implementation." alt="" coords="317,237,456,267"/><area shape="rect" id="node17" href="mongo-wire_8c.html" title="Implementation of the MongoDB Wire Protocol." alt="" coords="480,237,611,267"/></map>
+<area shape="rect" id="node3" href="mongo_8h.html" title="libmongo&#45;client meta&#45;header." alt="" coords="529,83,631,112"/><area shape="rect" id="node5" href="libmongo-private_8h.html" title="Private types and functions, for internal use in libmongo&#45;client only." alt="" coords="681,160,847,189"/><area shape="rect" id="node11" href="mongo-sync-cursor_8c.html" title="MongoDB Cursor API implementation." alt="" coords="5,237,184,267"/><area shape="rect" id="node13" href="mongo-sync-pool_8c.html" title="MongoDB connection pool API implementation." alt="" coords="208,237,373,267"/><area shape="rect" id="node15" href="mongo-sync_8c.html" title="MongoDB synchronous wrapper API implementation." alt="" coords="1365,237,1499,267"/><area shape="rect" id="node7" href="bson_8c.html" title="Implementation of the BSON API." alt="" coords="939,237,1024,267"/><area shape="rect" id="node9" href="mongo-client_8c.html" title="MongoDB client API implementation." alt="" coords="1048,237,1187,267"/><area shape="rect" id="node17" href="mongo-wire_8c.html" title="Implementation of the MongoDB Wire Protocol." alt="" coords="1211,237,1341,267"/><area shape="rect" id="node19" href="sync-gridfs-chunk_8c.html" title="MongoDB GridFS chunk access implementation." alt="" coords="397,237,565,267"/><area shape="rect" id="node21" href="sync-gridfs-stream_8c.html" title="MongoDB GridFS Streaming API implementation." alt="" coords="589,237,765,267"/><area shape="rect" id="node23" href="sync-gridfs_8c.html" title="MongoDB GridFS implementation." alt="" coords="789,237,915,267"/></map>
 </div>
 
 <p><a href="mongo-utils_8h_source.html">Go to the source code of this file.</a></p>
@@ -79,6 +82,8 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Generate a new ObjectID.  <a href="group__mongo__util.html#ga692cc07bb07d2eb6a0026325e2fc13c8"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">guint8 *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__util.html#ga1f3b0421ba55bc6b63d172b29f710a57">mongo_util_oid_new_with_time</a> (gint32 time, gint32 seq)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Generate a new ObjectID, with a predefined timestamp.  <a href="group__mongo__util.html#ga1f3b0421ba55bc6b63d172b29f710a57"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gchar *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__util.html#ga7acf5058b212028695e666943bef6047">mongo_util_oid_as_string</a> (const guint8 *oid)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Convert an ObjectID to its string representation.  <a href="group__mongo__util.html#ga7acf5058b212028695e666943bef6047"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__util.html#ga322ea87ec69f5964eea7e8da40288579">mongo_util_parse_addr</a> (const gchar *addr, gchar **host, gint *port)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse a HOST:IP pair.  <a href="group__mongo__util.html#ga322ea87ec69f5964eea7e8da40288579"></a><br/></td></tr>
 </table>
@@ -101,7 +106,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jul 19 2011 20:23:05 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

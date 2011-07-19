@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__mongo__sync__gridfs__chunk__api.html#gafcbf8ca35a03d760586dcc853527b765" title="Get the data of a GridFS file chunk, via a cursor." alt="" coords="271,5,620,35"/>
+<area shape="rect" id="node5" href="$group__mongo__sync__gridfs__api.html#ga98a18a4524def495ccc2b9e37679f11c" title="Delete files matching a query from GridFS." alt="" coords="345,59,545,88"/>
+</map>

@@ -17,6 +17,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Data&nbsp;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
@@ -878,11 +879,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00831"></a>00831 
 <a name="l00832"></a>00832   <span class="keywordflow">if</span> (!_mongo_sync_packet_send (conn, p,
 <a name="l00833"></a>00833                                 !((conn &amp;&amp; conn-&gt;slaveok) ||
-<a name="l00834"></a>00834                                   (flags &amp; <a class="code" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca041055bcf40f8d3cc4543f6ada3fc53e" title="Allow queries made against a replica slave.">MONGO_WIRE_FLAG_QUERY_SLAVE_OK</a>)),
+<a name="l00834"></a>00834                                   (flags &amp; <a class="code" href="group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaa041055bcf40f8d3cc4543f6ada3fc53e" title="Allow queries made against a replica slave.">MONGO_WIRE_FLAG_QUERY_SLAVE_OK</a>)),
 <a name="l00835"></a>00835                                 TRUE))
 <a name="l00836"></a>00836     <span class="keywordflow">return</span> NULL;
 <a name="l00837"></a>00837 
-<a name="l00838"></a>00838   p = _mongo_sync_packet_recv (conn, rid, <a class="code" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5a199b2f5de60a6e97c9e434ab6d8fcdf7" title="Set when the query failed.">MONGO_REPLY_FLAG_QUERY_FAIL</a>);
+<a name="l00838"></a>00838   p = _mongo_sync_packet_recv (conn, rid, <a class="code" href="group__mongo__wire__reply.html#ggaba01db17f4a2bfbc3db60dc172972a25a199b2f5de60a6e97c9e434ab6d8fcdf7" title="Set when the query failed.">MONGO_REPLY_FLAG_QUERY_FAIL</a>);
 <a name="l00839"></a>00839   <span class="keywordflow">return</span> _mongo_sync_packet_check_error (conn, p, FALSE);
 <a name="l00840"></a>00840 }
 <a name="l00841"></a>00841 
@@ -906,7 +907,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00859"></a>00859   <span class="keywordflow">if</span> (!_mongo_sync_packet_send (conn, p, FALSE, TRUE))
 <a name="l00860"></a>00860     <span class="keywordflow">return</span> FALSE;
 <a name="l00861"></a>00861 
-<a name="l00862"></a>00862   p = _mongo_sync_packet_recv (conn, rid, <a class="code" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5a451db5f21c7c43f9cca3b875b0e35750" title="Set when get_more is called but the cursor id is invalid.">MONGO_REPLY_FLAG_NO_CURSOR</a>);
+<a name="l00862"></a>00862   p = _mongo_sync_packet_recv (conn, rid, <a class="code" href="group__mongo__wire__reply.html#ggaba01db17f4a2bfbc3db60dc172972a25a451db5f21c7c43f9cca3b875b0e35750" title="Set when get_more is called but the cursor id is invalid.">MONGO_REPLY_FLAG_NO_CURSOR</a>);
 <a name="l00863"></a>00863   <span class="keywordflow">return</span> _mongo_sync_packet_check_error (conn, p, FALSE);
 <a name="l00864"></a>00864 }
 <a name="l00865"></a>00865 
@@ -982,7 +983,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00935"></a>00935   <span class="keywordflow">if</span> (!_mongo_sync_packet_send (conn, p, force_master, check_conn))
 <a name="l00936"></a>00936     <span class="keywordflow">return</span> NULL;
 <a name="l00937"></a>00937 
-<a name="l00938"></a>00938   p = _mongo_sync_packet_recv (conn, rid, <a class="code" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5a199b2f5de60a6e97c9e434ab6d8fcdf7" title="Set when the query failed.">MONGO_REPLY_FLAG_QUERY_FAIL</a>);
+<a name="l00938"></a>00938   p = _mongo_sync_packet_recv (conn, rid, <a class="code" href="group__mongo__wire__reply.html#ggaba01db17f4a2bfbc3db60dc172972a25a199b2f5de60a6e97c9e434ab6d8fcdf7" title="Set when the query failed.">MONGO_REPLY_FLAG_QUERY_FAIL</a>);
 <a name="l00939"></a>00939   <span class="keywordflow">return</span> _mongo_sync_packet_check_error (conn, p, TRUE);
 <a name="l00940"></a>00940 }
 <a name="l00941"></a>00941 
@@ -1053,673 +1054,820 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l01006"></a>01006 }
 <a name="l01007"></a>01007 
 <a name="l01008"></a>01008 gboolean
-<a name="l01009"></a><a class="code" href="group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378">01009</a> <a class="code" href="group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378" title="Send a drop() command to MongoDB.">mongo_sync_cmd_drop</a> (mongo_sync_connection *conn,
-<a name="l01010"></a>01010                      <span class="keyword">const</span> gchar *db, <span class="keyword">const</span> gchar *coll)
-<a name="l01011"></a>01011 {
-<a name="l01012"></a>01012   mongo_packet *p;
-<a name="l01013"></a>01013   bson *cmd;
-<a name="l01014"></a>01014 
-<a name="l01015"></a>01015   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (64);
-<a name="l01016"></a>01016   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;drop&quot;</span>, coll, -1);
-<a name="l01017"></a>01017   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
-<a name="l01018"></a>01018 
-<a name="l01019"></a>01019   p = _mongo_sync_cmd_custom (conn, db, cmd, TRUE, TRUE);
-<a name="l01020"></a>01020   <span class="keywordflow">if</span> (!p)
-<a name="l01021"></a>01021     {
-<a name="l01022"></a>01022       <span class="keywordtype">int</span> e = errno;
-<a name="l01023"></a>01023 
-<a name="l01024"></a>01024       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01025"></a>01025       errno = e;
-<a name="l01026"></a>01026       <span class="keywordflow">return</span> FALSE;
-<a name="l01027"></a>01027     }
-<a name="l01028"></a>01028   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01029"></a>01029   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
-<a name="l01030"></a>01030 
-<a name="l01031"></a>01031   <span class="keywordflow">return</span> TRUE;
-<a name="l01032"></a>01032 }
-<a name="l01033"></a>01033 
-<a name="l01034"></a>01034 gboolean
-<a name="l01035"></a><a class="code" href="group__mongo__sync.html#gaf58b4929296fa55335f209dbbe7370e2">01035</a> <a class="code" href="group__mongo__sync.html#gaf58b4929296fa55335f209dbbe7370e2" title="Get the last error from MongoDB.">mongo_sync_cmd_get_last_error</a> (mongo_sync_connection *conn,
-<a name="l01036"></a>01036                                <span class="keyword">const</span> gchar *db, gchar **error)
-<a name="l01037"></a>01037 {
-<a name="l01038"></a>01038   mongo_packet *p;
-<a name="l01039"></a>01039   bson *cmd;
-<a name="l01040"></a>01040 
-<a name="l01041"></a>01041   <span class="keywordflow">if</span> (!conn)
-<a name="l01042"></a>01042     {
-<a name="l01043"></a>01043       errno = ENOTCONN;
-<a name="l01044"></a>01044       <span class="keywordflow">return</span> FALSE;
-<a name="l01045"></a>01045     }
-<a name="l01046"></a>01046   <span class="keywordflow">if</span> (!error)
-<a name="l01047"></a>01047     {
-<a name="l01048"></a>01048       errno = EINVAL;
-<a name="l01049"></a>01049       <span class="keywordflow">return</span> FALSE;
-<a name="l01050"></a>01050     }
+<a name="l01009"></a><a class="code" href="group__mongo__sync.html#ga6fbd3a0fddb2642bc568e39288a4af42">01009</a> <a class="code" href="group__mongo__sync.html#ga6fbd3a0fddb2642bc568e39288a4af42" title="Create a new MongoDB collection.">mongo_sync_cmd_create</a> (mongo_sync_connection *conn,
+<a name="l01010"></a>01010                        <span class="keyword">const</span> gchar *db, <span class="keyword">const</span> gchar *coll,
+<a name="l01011"></a>01011                        gint flags, ...)
+<a name="l01012"></a>01012 {
+<a name="l01013"></a>01013   mongo_packet *p;
+<a name="l01014"></a>01014   bson *cmd;
+<a name="l01015"></a>01015 
+<a name="l01016"></a>01016   <span class="keywordflow">if</span> (!conn)
+<a name="l01017"></a>01017     {
+<a name="l01018"></a>01018       errno = ENOTCONN;
+<a name="l01019"></a>01019       <span class="keywordflow">return</span> FALSE;
+<a name="l01020"></a>01020     }
+<a name="l01021"></a>01021   <span class="keywordflow">if</span> (!db || !coll)
+<a name="l01022"></a>01022     {
+<a name="l01023"></a>01023       errno = EINVAL;
+<a name="l01024"></a>01024       <span class="keywordflow">return</span> FALSE;
+<a name="l01025"></a>01025     }
+<a name="l01026"></a>01026 
+<a name="l01027"></a>01027   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (128);
+<a name="l01028"></a>01028   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;create&quot;</span>, coll, -1);
+<a name="l01029"></a>01029   <span class="keywordflow">if</span> (flags &amp; <a class="code" href="group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea307874ef23c8e6cfe2edd90c40ff8855" title="The collection&amp;#39;s _id should be autoindexed.">MONGO_COLLECTION_AUTO_INDEX_ID</a>)
+<a name="l01030"></a>01030     <a class="code" href="group__bson__append.html#ga6bd3d1aa4e6869c173c3f402d106414a" title="Append a boolean to a BSON object.">bson_append_boolean</a> (cmd, <span class="stringliteral">&quot;autoIndexId&quot;</span>, TRUE);
+<a name="l01031"></a>01031   <span class="keywordflow">if</span> (flags &amp; <a class="code" href="group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea87d3d094a9a7bcdd73e18f5a8a0839c8" title="The collection is capped.">MONGO_COLLECTION_CAPPED</a> ||
+<a name="l01032"></a>01032       flags &amp; <a class="code" href="group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea50f6e1a79c91f4c683385839a7980940" title="The collection is capped by element number aswell.">MONGO_COLLECTION_CAPPED_MAX</a> ||
+<a name="l01033"></a>01033       flags &amp; <a class="code" href="group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9eaebac473a06bc56de39f1d5bf247be93e" title="The collection needs to be pre-allocated.">MONGO_COLLECTION_SIZED</a>)
+<a name="l01034"></a>01034     {
+<a name="l01035"></a>01035       va_list ap;
+<a name="l01036"></a>01036       gint64 i;
+<a name="l01037"></a>01037 
+<a name="l01038"></a>01038       <span class="keywordflow">if</span> (flags &amp; <a class="code" href="group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea87d3d094a9a7bcdd73e18f5a8a0839c8" title="The collection is capped.">MONGO_COLLECTION_CAPPED</a> ||
+<a name="l01039"></a>01039           flags &amp; <a class="code" href="group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea50f6e1a79c91f4c683385839a7980940" title="The collection is capped by element number aswell.">MONGO_COLLECTION_CAPPED_MAX</a>)
+<a name="l01040"></a>01040         <a class="code" href="group__bson__append.html#ga6bd3d1aa4e6869c173c3f402d106414a" title="Append a boolean to a BSON object.">bson_append_boolean</a> (cmd, <span class="stringliteral">&quot;capped&quot;</span>, TRUE);
+<a name="l01041"></a>01041 
+<a name="l01042"></a>01042       va_start (ap, flags);
+<a name="l01043"></a>01043       i = (gint64)va_arg (ap, gint64);
+<a name="l01044"></a>01044       <span class="keywordflow">if</span> (i &lt;= 0)
+<a name="l01045"></a>01045         {
+<a name="l01046"></a>01046           <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01047"></a>01047           errno = ERANGE;
+<a name="l01048"></a>01048           <span class="keywordflow">return</span> FALSE;
+<a name="l01049"></a>01049         }
+<a name="l01050"></a>01050       <a class="code" href="group__bson__append.html#gab0979b4d3c788c2bf1f4e6eb05819487" title="Append a 64-bit integer to a BSON object.">bson_append_int64</a> (cmd, <span class="stringliteral">&quot;size&quot;</span>, i);
 <a name="l01051"></a>01051 
-<a name="l01052"></a>01052   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (64);
-<a name="l01053"></a>01053   <a class="code" href="group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32-bit integer to a BSON object.">bson_append_int32</a> (cmd, <span class="stringliteral">&quot;getlasterror&quot;</span>, 1);
-<a name="l01054"></a>01054   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
-<a name="l01055"></a>01055 
-<a name="l01056"></a>01056   p = _mongo_sync_cmd_custom (conn, db, cmd, FALSE, FALSE);
-<a name="l01057"></a>01057   <span class="keywordflow">if</span> (!p)
-<a name="l01058"></a>01058     {
-<a name="l01059"></a>01059       <span class="keywordtype">int</span> e = errno;
-<a name="l01060"></a>01060 
-<a name="l01061"></a>01061       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01062"></a>01062       errno = e;
-<a name="l01063"></a>01063       <span class="keywordflow">return</span> FALSE;
+<a name="l01052"></a>01052       <span class="keywordflow">if</span> (flags &amp; MONGO_COLLECTION_CAPPED_MAX)
+<a name="l01053"></a>01053         {
+<a name="l01054"></a>01054           i = (gint64)va_arg (ap, gint64);
+<a name="l01055"></a>01055           <span class="keywordflow">if</span> (i &lt;= 0)
+<a name="l01056"></a>01056             {
+<a name="l01057"></a>01057               <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01058"></a>01058               errno = ERANGE;
+<a name="l01059"></a>01059               <span class="keywordflow">return</span> FALSE;
+<a name="l01060"></a>01060             }
+<a name="l01061"></a>01061           <a class="code" href="group__bson__append.html#gab0979b4d3c788c2bf1f4e6eb05819487" title="Append a 64-bit integer to a BSON object.">bson_append_int64</a> (cmd, <span class="stringliteral">&quot;max&quot;</span>, i);
+<a name="l01062"></a>01062         }
+<a name="l01063"></a>01063       va_end (ap);
 <a name="l01064"></a>01064     }
-<a name="l01065"></a>01065   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01065"></a>01065   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
 <a name="l01066"></a>01066 
-<a name="l01067"></a>01067   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet.">mongo_wire_reply_packet_get_nth_document</a> (p, 1, &amp;cmd))
-<a name="l01068"></a>01068     {
-<a name="l01069"></a>01069       <span class="keywordtype">int</span> e = errno;
-<a name="l01070"></a>01070 
-<a name="l01071"></a>01071       <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
-<a name="l01072"></a>01072       errno = e;
-<a name="l01073"></a>01073       <span class="keywordflow">return</span> FALSE;
-<a name="l01074"></a>01074     }
-<a name="l01075"></a>01075   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
-<a name="l01076"></a>01076   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
-<a name="l01077"></a>01077 
-<a name="l01078"></a>01078   <span class="keywordflow">if</span> (!_mongo_sync_get_error (cmd, error))
-<a name="l01079"></a>01079     {
-<a name="l01080"></a>01080       <span class="keywordtype">int</span> e = errno;
+<a name="l01067"></a>01067   p = _mongo_sync_cmd_custom (conn, db, cmd, TRUE, TRUE);
+<a name="l01068"></a>01068   <span class="keywordflow">if</span> (!p)
+<a name="l01069"></a>01069     {
+<a name="l01070"></a>01070       <span class="keywordtype">int</span> e = errno;
+<a name="l01071"></a>01071 
+<a name="l01072"></a>01072       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01073"></a>01073       errno = e;
+<a name="l01074"></a>01074       <span class="keywordflow">return</span> FALSE;
+<a name="l01075"></a>01075     }
+<a name="l01076"></a>01076   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01077"></a>01077   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01078"></a>01078 
+<a name="l01079"></a>01079   <span class="keywordflow">return</span> TRUE;
+<a name="l01080"></a>01080 }
 <a name="l01081"></a>01081 
-<a name="l01082"></a>01082       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01083"></a>01083       errno = e;
-<a name="l01084"></a>01084       <span class="keywordflow">return</span> FALSE;
-<a name="l01085"></a>01085     }
-<a name="l01086"></a>01086   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01087"></a>01087 
-<a name="l01088"></a>01088   <span class="keywordflow">if</span> (*error == NULL)
-<a name="l01089"></a>01089     *error = g_strdup (conn-&gt;last_error);
-<a name="l01090"></a>01090   <span class="keywordflow">else</span>
-<a name="l01091"></a>01091     {
-<a name="l01092"></a>01092       g_free (conn-&gt;last_error);
-<a name="l01093"></a>01093       conn-&gt;last_error = NULL;
-<a name="l01094"></a>01094     }
-<a name="l01095"></a>01095 
-<a name="l01096"></a>01096   <span class="keywordflow">return</span> TRUE;
-<a name="l01097"></a>01097 }
-<a name="l01098"></a>01098 
-<a name="l01099"></a>01099 gboolean
-<a name="l01100"></a><a class="code" href="group__mongo__sync.html#ga46b67cfe6443950b6083b5d668e9f37e">01100</a> <a class="code" href="group__mongo__sync.html#ga46b67cfe6443950b6083b5d668e9f37e" title="Reset the last error variable in MongoDB.">mongo_sync_cmd_reset_error</a> (mongo_sync_connection *conn,
-<a name="l01101"></a>01101                             <span class="keyword">const</span> gchar *db)
-<a name="l01102"></a>01102 {
-<a name="l01103"></a>01103   mongo_packet *p;
-<a name="l01104"></a>01104   bson *cmd;
-<a name="l01105"></a>01105 
-<a name="l01106"></a>01106   <span class="keywordflow">if</span> (conn)
-<a name="l01107"></a>01107     {
-<a name="l01108"></a>01108       g_free (conn-&gt;last_error);
-<a name="l01109"></a>01109       conn-&gt;last_error = NULL;
-<a name="l01110"></a>01110     }
+<a name="l01082"></a>01082 bson *
+<a name="l01083"></a><a class="code" href="group__mongo__sync.html#ga53a08c34a7319ab22ac005abd45d7af1">01083</a> <a class="code" href="group__mongo__sync.html#ga53a08c34a7319ab22ac005abd45d7af1" title="Check whether a collection exists in MongoDB.">mongo_sync_cmd_exists</a> (mongo_sync_connection *conn,
+<a name="l01084"></a>01084                        <span class="keyword">const</span> gchar *db, <span class="keyword">const</span> gchar *coll)
+<a name="l01085"></a>01085 {
+<a name="l01086"></a>01086   bson *cmd, *r;
+<a name="l01087"></a>01087   mongo_packet *p;
+<a name="l01088"></a>01088   gchar *ns, *sys;
+<a name="l01089"></a>01089   gint32 rid;
+<a name="l01090"></a>01090 
+<a name="l01091"></a>01091   <span class="keywordflow">if</span> (!conn)
+<a name="l01092"></a>01092     {
+<a name="l01093"></a>01093       errno = ENOTCONN;
+<a name="l01094"></a>01094       <span class="keywordflow">return</span> NULL;
+<a name="l01095"></a>01095     }
+<a name="l01096"></a>01096   <span class="keywordflow">if</span> (!db || !coll)
+<a name="l01097"></a>01097     {
+<a name="l01098"></a>01098       errno = EINVAL;
+<a name="l01099"></a>01099       <span class="keywordflow">return</span> NULL;
+<a name="l01100"></a>01100     }
+<a name="l01101"></a>01101 
+<a name="l01102"></a>01102   rid = <a class="code" href="group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99" title="Get the last requestID from a connection object.">mongo_connection_get_requestid</a> ((mongo_connection *)conn) + 1;
+<a name="l01103"></a>01103 
+<a name="l01104"></a>01104   ns = g_strconcat (db, <span class="stringliteral">&quot;.&quot;</span>, coll, NULL);
+<a name="l01105"></a>01105   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (128);
+<a name="l01106"></a>01106   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;name&quot;</span>, ns, -1);
+<a name="l01107"></a>01107   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
+<a name="l01108"></a>01108   g_free (ns);
+<a name="l01109"></a>01109 
+<a name="l01110"></a>01110   sys = g_strconcat (db, <span class="stringliteral">&quot;.system.namespaces&quot;</span>, NULL);
 <a name="l01111"></a>01111 
-<a name="l01112"></a>01112   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (32);
-<a name="l01113"></a>01113   <a class="code" href="group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32-bit integer to a BSON object.">bson_append_int32</a> (cmd, <span class="stringliteral">&quot;reseterror&quot;</span>, 1);
-<a name="l01114"></a>01114   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
-<a name="l01115"></a>01115 
-<a name="l01116"></a>01116   p = _mongo_sync_cmd_custom (conn, db, cmd, FALSE, FALSE);
-<a name="l01117"></a>01117   <span class="keywordflow">if</span> (!p)
-<a name="l01118"></a>01118     {
-<a name="l01119"></a>01119       <span class="keywordtype">int</span> e = errno;
-<a name="l01120"></a>01120 
-<a name="l01121"></a>01121       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01122"></a>01122       errno = e;
-<a name="l01123"></a>01123       <span class="keywordflow">return</span> FALSE;
-<a name="l01124"></a>01124     }
-<a name="l01125"></a>01125   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01126"></a>01126   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
-<a name="l01127"></a>01127   <span class="keywordflow">return</span> TRUE;
-<a name="l01128"></a>01128 }
-<a name="l01129"></a>01129 
-<a name="l01130"></a>01130 gboolean
-<a name="l01131"></a><a class="code" href="group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854">01131</a> <a class="code" href="group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master.">mongo_sync_cmd_is_master</a> (mongo_sync_connection *conn)
-<a name="l01132"></a>01132 {
-<a name="l01133"></a>01133   bson *cmd, *res, *hosts;
-<a name="l01134"></a>01134   mongo_packet *p;
-<a name="l01135"></a>01135   bson_cursor *c;
-<a name="l01136"></a>01136   gboolean b;
-<a name="l01137"></a>01137   GList *l;
-<a name="l01138"></a>01138 
-<a name="l01139"></a>01139   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (32);
-<a name="l01140"></a>01140   <a class="code" href="group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32-bit integer to a BSON object.">bson_append_int32</a> (cmd, <span class="stringliteral">&quot;ismaster&quot;</span>, 1);
-<a name="l01141"></a>01141   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
-<a name="l01142"></a>01142 
-<a name="l01143"></a>01143   p = _mongo_sync_cmd_custom (conn, <span class="stringliteral">&quot;system&quot;</span>, cmd, FALSE, FALSE);
-<a name="l01144"></a>01144   <span class="keywordflow">if</span> (!p)
-<a name="l01145"></a>01145     {
-<a name="l01146"></a>01146       <span class="keywordtype">int</span> e = errno;
+<a name="l01112"></a>01112   p = <a class="code" href="group__mongo__wire__cmd.html#ga07c82c11f2e103a79b88f22bdb586472" title="Construct a query command.">mongo_wire_cmd_query</a> (rid, sys, _SLAVE_FLAG (conn), 0, 1, cmd, NULL);
+<a name="l01113"></a>01113   <span class="keywordflow">if</span> (!p)
+<a name="l01114"></a>01114     {
+<a name="l01115"></a>01115       <span class="keywordtype">int</span> e = errno;
+<a name="l01116"></a>01116 
+<a name="l01117"></a>01117       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01118"></a>01118       g_free (sys);
+<a name="l01119"></a>01119 
+<a name="l01120"></a>01120       errno = e;
+<a name="l01121"></a>01121       <span class="keywordflow">return</span> NULL;
+<a name="l01122"></a>01122     }
+<a name="l01123"></a>01123   g_free (sys);
+<a name="l01124"></a>01124   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01125"></a>01125 
+<a name="l01126"></a>01126   <span class="keywordflow">if</span> (!_mongo_sync_packet_send (conn, p, !conn-&gt;slaveok, TRUE))
+<a name="l01127"></a>01127     <span class="keywordflow">return</span> NULL;
+<a name="l01128"></a>01128 
+<a name="l01129"></a>01129   p = _mongo_sync_packet_recv (conn, rid, <a class="code" href="group__mongo__wire__reply.html#ggaba01db17f4a2bfbc3db60dc172972a25a199b2f5de60a6e97c9e434ab6d8fcdf7" title="Set when the query failed.">MONGO_REPLY_FLAG_QUERY_FAIL</a>);
+<a name="l01130"></a>01130   <span class="keywordflow">if</span> (!p)
+<a name="l01131"></a>01131     <span class="keywordflow">return</span> NULL;
+<a name="l01132"></a>01132 
+<a name="l01133"></a>01133   p = _mongo_sync_packet_check_error (conn, p, FALSE);
+<a name="l01134"></a>01134   <span class="keywordflow">if</span> (!p)
+<a name="l01135"></a>01135     <span class="keywordflow">return</span> NULL;
+<a name="l01136"></a>01136 
+<a name="l01137"></a>01137   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet.">mongo_wire_reply_packet_get_nth_document</a> (p, 1, &amp;r))
+<a name="l01138"></a>01138     {
+<a name="l01139"></a>01139       <span class="keywordtype">int</span> e = errno;
+<a name="l01140"></a>01140 
+<a name="l01141"></a>01141       <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01142"></a>01142       errno = e;
+<a name="l01143"></a>01143       <span class="keywordflow">return</span> NULL;
+<a name="l01144"></a>01144     }
+<a name="l01145"></a>01145   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01146"></a>01146   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (r);
 <a name="l01147"></a>01147 
-<a name="l01148"></a>01148       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01149"></a>01149       errno = e;
-<a name="l01150"></a>01150       <span class="keywordflow">return</span> FALSE;
-<a name="l01151"></a>01151     }
-<a name="l01152"></a>01152   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01153"></a>01153 
-<a name="l01154"></a>01154   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet.">mongo_wire_reply_packet_get_nth_document</a> (p, 1, &amp;res))
-<a name="l01155"></a>01155     {
-<a name="l01156"></a>01156       <span class="keywordtype">int</span> e = errno;
+<a name="l01148"></a>01148   <span class="keywordflow">return</span> r;
+<a name="l01149"></a>01149 }
+<a name="l01150"></a>01150 
+<a name="l01151"></a>01151 gboolean
+<a name="l01152"></a><a class="code" href="group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378">01152</a> <a class="code" href="group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378" title="Send a drop() command to MongoDB.">mongo_sync_cmd_drop</a> (mongo_sync_connection *conn,
+<a name="l01153"></a>01153                      <span class="keyword">const</span> gchar *db, <span class="keyword">const</span> gchar *coll)
+<a name="l01154"></a>01154 {
+<a name="l01155"></a>01155   mongo_packet *p;
+<a name="l01156"></a>01156   bson *cmd;
 <a name="l01157"></a>01157 
-<a name="l01158"></a>01158       <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
-<a name="l01159"></a>01159       errno = e;
-<a name="l01160"></a>01160       <span class="keywordflow">return</span> FALSE;
-<a name="l01161"></a>01161     }
-<a name="l01162"></a>01162   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
-<a name="l01163"></a>01163   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (res);
-<a name="l01164"></a>01164 
-<a name="l01165"></a>01165   c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (res, <span class="stringliteral">&quot;ismaster&quot;</span>);
-<a name="l01166"></a>01166   <span class="keywordflow">if</span> (!<a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean.">bson_cursor_get_boolean</a> (c, &amp;b))
-<a name="l01167"></a>01167     {
-<a name="l01168"></a>01168       <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
-<a name="l01169"></a>01169       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (res);
-<a name="l01170"></a>01170       errno = EPROTO;
-<a name="l01171"></a>01171       <span class="keywordflow">return</span> FALSE;
-<a name="l01172"></a>01172     }
-<a name="l01173"></a>01173   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
-<a name="l01174"></a>01174 
-<a name="l01175"></a>01175   <span class="keywordflow">if</span> (!b)
-<a name="l01176"></a>01176     {
-<a name="l01177"></a>01177       <span class="keyword">const</span> gchar *s;
-<a name="l01178"></a>01178 
-<a name="l01179"></a>01179       <span class="comment">/* We&#39;re not the master, so we should have a &#39;primary&#39; key in</span>
-<a name="l01180"></a>01180 <span class="comment">         the response. */</span>
-<a name="l01181"></a>01181       c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (res, <span class="stringliteral">&quot;primary&quot;</span>);
-<a name="l01182"></a>01182       <span class="keywordflow">if</span> (<a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (c, &amp;s))
-<a name="l01183"></a>01183         {
-<a name="l01184"></a>01184           g_free (conn-&gt;rs.primary);
-<a name="l01185"></a>01185           conn-&gt;rs.primary = g_strdup (s);
-<a name="l01186"></a>01186         }
-<a name="l01187"></a>01187       <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l01158"></a>01158   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (64);
+<a name="l01159"></a>01159   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;drop&quot;</span>, coll, -1);
+<a name="l01160"></a>01160   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
+<a name="l01161"></a>01161 
+<a name="l01162"></a>01162   p = _mongo_sync_cmd_custom (conn, db, cmd, TRUE, TRUE);
+<a name="l01163"></a>01163   <span class="keywordflow">if</span> (!p)
+<a name="l01164"></a>01164     {
+<a name="l01165"></a>01165       <span class="keywordtype">int</span> e = errno;
+<a name="l01166"></a>01166 
+<a name="l01167"></a>01167       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01168"></a>01168       errno = e;
+<a name="l01169"></a>01169       <span class="keywordflow">return</span> FALSE;
+<a name="l01170"></a>01170     }
+<a name="l01171"></a>01171   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01172"></a>01172   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01173"></a>01173 
+<a name="l01174"></a>01174   <span class="keywordflow">return</span> TRUE;
+<a name="l01175"></a>01175 }
+<a name="l01176"></a>01176 
+<a name="l01177"></a>01177 gboolean
+<a name="l01178"></a><a class="code" href="group__mongo__sync.html#gaf58b4929296fa55335f209dbbe7370e2">01178</a> <a class="code" href="group__mongo__sync.html#gaf58b4929296fa55335f209dbbe7370e2" title="Get the last error from MongoDB.">mongo_sync_cmd_get_last_error</a> (mongo_sync_connection *conn,
+<a name="l01179"></a>01179                                <span class="keyword">const</span> gchar *db, gchar **error)
+<a name="l01180"></a>01180 {
+<a name="l01181"></a>01181   mongo_packet *p;
+<a name="l01182"></a>01182   bson *cmd;
+<a name="l01183"></a>01183 
+<a name="l01184"></a>01184   <span class="keywordflow">if</span> (!conn)
+<a name="l01185"></a>01185     {
+<a name="l01186"></a>01186       errno = ENOTCONN;
+<a name="l01187"></a>01187       <span class="keywordflow">return</span> FALSE;
 <a name="l01188"></a>01188     }
-<a name="l01189"></a>01189 
-<a name="l01190"></a>01190   <span class="comment">/* Find all the members of the set, and cache them. */</span>
-<a name="l01191"></a>01191   c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (res, <span class="stringliteral">&quot;hosts&quot;</span>);
-<a name="l01192"></a>01192   <span class="keywordflow">if</span> (!c)
-<a name="l01193"></a>01193     {
-<a name="l01194"></a>01194       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (res);
-<a name="l01195"></a>01195       errno = 0;
-<a name="l01196"></a>01196       <span class="keywordflow">return</span> b;
-<a name="l01197"></a>01197     }
+<a name="l01189"></a>01189   <span class="keywordflow">if</span> (!error)
+<a name="l01190"></a>01190     {
+<a name="l01191"></a>01191       errno = EINVAL;
+<a name="l01192"></a>01192       <span class="keywordflow">return</span> FALSE;
+<a name="l01193"></a>01193     }
+<a name="l01194"></a>01194 
+<a name="l01195"></a>01195   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (64);
+<a name="l01196"></a>01196   <a class="code" href="group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32-bit integer to a BSON object.">bson_append_int32</a> (cmd, <span class="stringliteral">&quot;getlasterror&quot;</span>, 1);
+<a name="l01197"></a>01197   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
 <a name="l01198"></a>01198 
-<a name="l01199"></a>01199   <span class="keywordflow">if</span> (!<a class="code" href="group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array.">bson_cursor_get_array</a> (c, &amp;hosts))
-<a name="l01200"></a>01200     {
-<a name="l01201"></a>01201       <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
-<a name="l01202"></a>01202       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (res);
-<a name="l01203"></a>01203       errno = 0;
-<a name="l01204"></a>01204       <span class="keywordflow">return</span> b;
-<a name="l01205"></a>01205     }
-<a name="l01206"></a>01206   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
-<a name="l01207"></a>01207   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (hosts);
-<a name="l01208"></a>01208 
-<a name="l01209"></a>01209   <span class="comment">/* Delete the old host list. */</span>
-<a name="l01210"></a>01210   l = conn-&gt;rs.hosts;
-<a name="l01211"></a>01211   <span class="keywordflow">while</span> (l)
-<a name="l01212"></a>01212     {
-<a name="l01213"></a>01213       g_free (l-&gt;data);
-<a name="l01214"></a>01214       l = g_list_delete_link (l, l);
-<a name="l01215"></a>01215     }
-<a name="l01216"></a>01216   conn-&gt;rs.hosts = NULL;
-<a name="l01217"></a>01217 
-<a name="l01218"></a>01218   c = <a class="code" href="group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor.">bson_cursor_new</a> (hosts);
-<a name="l01219"></a>01219   <span class="keywordflow">while</span> (<a class="code" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next</a> (c))
-<a name="l01220"></a>01220     {
-<a name="l01221"></a>01221       <span class="keyword">const</span> gchar *s;
-<a name="l01222"></a>01222 
-<a name="l01223"></a>01223       <span class="keywordflow">if</span> (<a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (c, &amp;s))
-<a name="l01224"></a>01224         conn-&gt;rs.hosts = g_list_append (conn-&gt;rs.hosts, g_strdup (s));
-<a name="l01225"></a>01225     }
-<a name="l01226"></a>01226   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
-<a name="l01227"></a>01227   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (hosts);
-<a name="l01228"></a>01228 
-<a name="l01229"></a>01229   c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (res, <span class="stringliteral">&quot;passives&quot;</span>);
-<a name="l01230"></a>01230   <span class="keywordflow">if</span> (<a class="code" href="group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array.">bson_cursor_get_array</a> (c, &amp;hosts))
-<a name="l01231"></a>01231     {
-<a name="l01232"></a>01232       <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
-<a name="l01233"></a>01233       <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (hosts);
-<a name="l01234"></a>01234 
-<a name="l01235"></a>01235       c = <a class="code" href="group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor.">bson_cursor_new</a> (hosts);
-<a name="l01236"></a>01236       <span class="keywordflow">while</span> (<a class="code" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next</a> (c))
-<a name="l01237"></a>01237         {
-<a name="l01238"></a>01238           <span class="keyword">const</span> gchar *s;
-<a name="l01239"></a>01239 
-<a name="l01240"></a>01240           <span class="keywordflow">if</span> (<a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (c, &amp;s))
-<a name="l01241"></a>01241             conn-&gt;rs.hosts = g_list_append (conn-&gt;rs.hosts, g_strdup (s));
-<a name="l01242"></a>01242         }
-<a name="l01243"></a>01243       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (hosts);
-<a name="l01244"></a>01244     }
-<a name="l01245"></a>01245   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
-<a name="l01246"></a>01246 
-<a name="l01247"></a>01247   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (res);
-<a name="l01248"></a>01248   errno = 0;
-<a name="l01249"></a>01249   <span class="keywordflow">return</span> b;
-<a name="l01250"></a>01250 }
-<a name="l01251"></a>01251 
-<a name="l01252"></a>01252 gboolean
-<a name="l01253"></a><a class="code" href="group__mongo__sync.html#gadbc79fc4f323ba7df77fe54f669ebfb0">01253</a> <a class="code" href="group__mongo__sync.html#gadbc79fc4f323ba7df77fe54f669ebfb0" title="Send a PING command to MongoDB.">mongo_sync_cmd_ping</a> (mongo_sync_connection *conn)
-<a name="l01254"></a>01254 {
-<a name="l01255"></a>01255   bson *cmd;
-<a name="l01256"></a>01256   mongo_packet *p;
-<a name="l01257"></a>01257 
-<a name="l01258"></a>01258   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (32);
-<a name="l01259"></a>01259   <a class="code" href="group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32-bit integer to a BSON object.">bson_append_int32</a> (cmd, <span class="stringliteral">&quot;ping&quot;</span>, 1);
-<a name="l01260"></a>01260   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
-<a name="l01261"></a>01261 
-<a name="l01262"></a>01262   p = _mongo_sync_cmd_custom (conn, <span class="stringliteral">&quot;system&quot;</span>, cmd, FALSE, FALSE);
-<a name="l01263"></a>01263   <span class="keywordflow">if</span> (!p)
-<a name="l01264"></a>01264     {
-<a name="l01265"></a>01265       <span class="keywordtype">int</span> e = errno;
-<a name="l01266"></a>01266 
-<a name="l01267"></a>01267       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01268"></a>01268       errno = e;
-<a name="l01269"></a>01269       <span class="keywordflow">return</span> FALSE;
-<a name="l01270"></a>01270     }
-<a name="l01271"></a>01271   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01272"></a>01272   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
-<a name="l01273"></a>01273 
-<a name="l01274"></a>01274   errno = 0;
-<a name="l01275"></a>01275   <span class="keywordflow">return</span> TRUE;
-<a name="l01276"></a>01276 }
-<a name="l01277"></a>01277 
-<a name="l01278"></a>01278 <span class="keyword">static</span> gchar *
-<a name="l01279"></a>01279 _pass_digest (<span class="keyword">const</span> gchar *user, <span class="keyword">const</span> gchar *pw)
-<a name="l01280"></a>01280 {
-<a name="l01281"></a>01281   GChecksum *chk;
-<a name="l01282"></a>01282   gchar *digest;
-<a name="l01283"></a>01283 
-<a name="l01284"></a>01284   chk = g_checksum_new (G_CHECKSUM_MD5);
-<a name="l01285"></a>01285   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)user, -1);
-<a name="l01286"></a>01286   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)<span class="stringliteral">&quot;:mongo:&quot;</span>, 7);
-<a name="l01287"></a>01287   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)pw, -1);
-<a name="l01288"></a>01288   digest = g_strdup (g_checksum_get_string (chk));
-<a name="l01289"></a>01289   g_checksum_free (chk);
+<a name="l01199"></a>01199   p = _mongo_sync_cmd_custom (conn, db, cmd, FALSE, FALSE);
+<a name="l01200"></a>01200   <span class="keywordflow">if</span> (!p)
+<a name="l01201"></a>01201     {
+<a name="l01202"></a>01202       <span class="keywordtype">int</span> e = errno;
+<a name="l01203"></a>01203 
+<a name="l01204"></a>01204       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01205"></a>01205       errno = e;
+<a name="l01206"></a>01206       <span class="keywordflow">return</span> FALSE;
+<a name="l01207"></a>01207     }
+<a name="l01208"></a>01208   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01209"></a>01209 
+<a name="l01210"></a>01210   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet.">mongo_wire_reply_packet_get_nth_document</a> (p, 1, &amp;cmd))
+<a name="l01211"></a>01211     {
+<a name="l01212"></a>01212       <span class="keywordtype">int</span> e = errno;
+<a name="l01213"></a>01213 
+<a name="l01214"></a>01214       <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01215"></a>01215       errno = e;
+<a name="l01216"></a>01216       <span class="keywordflow">return</span> FALSE;
+<a name="l01217"></a>01217     }
+<a name="l01218"></a>01218   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01219"></a>01219   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
+<a name="l01220"></a>01220 
+<a name="l01221"></a>01221   <span class="keywordflow">if</span> (!_mongo_sync_get_error (cmd, error))
+<a name="l01222"></a>01222     {
+<a name="l01223"></a>01223       <span class="keywordtype">int</span> e = errno;
+<a name="l01224"></a>01224 
+<a name="l01225"></a>01225       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01226"></a>01226       errno = e;
+<a name="l01227"></a>01227       <span class="keywordflow">return</span> FALSE;
+<a name="l01228"></a>01228     }
+<a name="l01229"></a>01229   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01230"></a>01230 
+<a name="l01231"></a>01231   <span class="keywordflow">if</span> (*error == NULL)
+<a name="l01232"></a>01232     *error = g_strdup (conn-&gt;last_error);
+<a name="l01233"></a>01233   <span class="keywordflow">else</span>
+<a name="l01234"></a>01234     {
+<a name="l01235"></a>01235       g_free (conn-&gt;last_error);
+<a name="l01236"></a>01236       conn-&gt;last_error = NULL;
+<a name="l01237"></a>01237     }
+<a name="l01238"></a>01238 
+<a name="l01239"></a>01239   <span class="keywordflow">return</span> TRUE;
+<a name="l01240"></a>01240 }
+<a name="l01241"></a>01241 
+<a name="l01242"></a>01242 gboolean
+<a name="l01243"></a><a class="code" href="group__mongo__sync.html#ga46b67cfe6443950b6083b5d668e9f37e">01243</a> <a class="code" href="group__mongo__sync.html#ga46b67cfe6443950b6083b5d668e9f37e" title="Reset the last error variable in MongoDB.">mongo_sync_cmd_reset_error</a> (mongo_sync_connection *conn,
+<a name="l01244"></a>01244                             <span class="keyword">const</span> gchar *db)
+<a name="l01245"></a>01245 {
+<a name="l01246"></a>01246   mongo_packet *p;
+<a name="l01247"></a>01247   bson *cmd;
+<a name="l01248"></a>01248 
+<a name="l01249"></a>01249   <span class="keywordflow">if</span> (conn)
+<a name="l01250"></a>01250     {
+<a name="l01251"></a>01251       g_free (conn-&gt;last_error);
+<a name="l01252"></a>01252       conn-&gt;last_error = NULL;
+<a name="l01253"></a>01253     }
+<a name="l01254"></a>01254 
+<a name="l01255"></a>01255   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (32);
+<a name="l01256"></a>01256   <a class="code" href="group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32-bit integer to a BSON object.">bson_append_int32</a> (cmd, <span class="stringliteral">&quot;reseterror&quot;</span>, 1);
+<a name="l01257"></a>01257   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
+<a name="l01258"></a>01258 
+<a name="l01259"></a>01259   p = _mongo_sync_cmd_custom (conn, db, cmd, FALSE, FALSE);
+<a name="l01260"></a>01260   <span class="keywordflow">if</span> (!p)
+<a name="l01261"></a>01261     {
+<a name="l01262"></a>01262       <span class="keywordtype">int</span> e = errno;
+<a name="l01263"></a>01263 
+<a name="l01264"></a>01264       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01265"></a>01265       errno = e;
+<a name="l01266"></a>01266       <span class="keywordflow">return</span> FALSE;
+<a name="l01267"></a>01267     }
+<a name="l01268"></a>01268   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01269"></a>01269   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01270"></a>01270   <span class="keywordflow">return</span> TRUE;
+<a name="l01271"></a>01271 }
+<a name="l01272"></a>01272 
+<a name="l01273"></a>01273 gboolean
+<a name="l01274"></a><a class="code" href="group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854">01274</a> <a class="code" href="group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master.">mongo_sync_cmd_is_master</a> (mongo_sync_connection *conn)
+<a name="l01275"></a>01275 {
+<a name="l01276"></a>01276   bson *cmd, *res, *hosts;
+<a name="l01277"></a>01277   mongo_packet *p;
+<a name="l01278"></a>01278   bson_cursor *c;
+<a name="l01279"></a>01279   gboolean b;
+<a name="l01280"></a>01280   GList *l;
+<a name="l01281"></a>01281 
+<a name="l01282"></a>01282   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (32);
+<a name="l01283"></a>01283   <a class="code" href="group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32-bit integer to a BSON object.">bson_append_int32</a> (cmd, <span class="stringliteral">&quot;ismaster&quot;</span>, 1);
+<a name="l01284"></a>01284   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
+<a name="l01285"></a>01285 
+<a name="l01286"></a>01286   p = _mongo_sync_cmd_custom (conn, <span class="stringliteral">&quot;system&quot;</span>, cmd, FALSE, FALSE);
+<a name="l01287"></a>01287   <span class="keywordflow">if</span> (!p)
+<a name="l01288"></a>01288     {
+<a name="l01289"></a>01289       <span class="keywordtype">int</span> e = errno;
 <a name="l01290"></a>01290 
-<a name="l01291"></a>01291   <span class="keywordflow">return</span> digest;
-<a name="l01292"></a>01292 }
-<a name="l01293"></a>01293 
-<a name="l01294"></a>01294 gboolean
-<a name="l01295"></a><a class="code" href="group__mongo__sync.html#ga7864f55710c0bdec14f75a936209b56e">01295</a> <a class="code" href="group__mongo__sync.html#ga7864f55710c0bdec14f75a936209b56e" title="Add a user to MongoDB.">mongo_sync_cmd_user_add</a> (mongo_sync_connection *conn,
-<a name="l01296"></a>01296                          <span class="keyword">const</span> gchar *db,
-<a name="l01297"></a>01297                          <span class="keyword">const</span> gchar *user,
-<a name="l01298"></a>01298                          <span class="keyword">const</span> gchar *pw)
-<a name="l01299"></a>01299 {
-<a name="l01300"></a>01300   bson *s, *u;
-<a name="l01301"></a>01301   gchar *userns;
-<a name="l01302"></a>01302   gchar *hex_digest;
-<a name="l01303"></a>01303 
-<a name="l01304"></a>01304   <span class="keywordflow">if</span> (!db || !user || !pw)
-<a name="l01305"></a>01305     {
-<a name="l01306"></a>01306       errno = EINVAL;
-<a name="l01307"></a>01307       <span class="keywordflow">return</span> FALSE;
-<a name="l01308"></a>01308     }
-<a name="l01309"></a>01309 
-<a name="l01310"></a>01310   userns = g_strconcat (db, <span class="stringliteral">&quot;.system.users&quot;</span>, NULL);
-<a name="l01311"></a>01311 
-<a name="l01312"></a>01312   hex_digest = _pass_digest (user, pw);
-<a name="l01313"></a>01313 
-<a name="l01314"></a>01314   s = <a class="code" href="group__bson__object__access.html#gae017cba3a7c5a49981aae92ff26d1ed8" title="Build a BSON object in one go.">bson_build</a> (<a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;user&quot;</span>, user, -1,
-<a name="l01315"></a>01315                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba8da6f27ef8afcaac44402b61731a05df" title="Only used for errors.">BSON_TYPE_NONE</a>);
-<a name="l01316"></a>01316   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (s);
-<a name="l01317"></a>01317   u = <a class="code" href="group__bson__object__access.html#ga5bec2a5276b310191f94ba193a024fcb" title="Build a BSON object in one go, with full control.">bson_build_full</a> (<a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba0d25e0e5ffcd3b598ed1893bb2581234" title="4byte length + NULL terminated document">BSON_TYPE_DOCUMENT</a>, <span class="stringliteral">&quot;$set&quot;</span>, TRUE,
-<a name="l01318"></a>01318                        <a class="code" href="group__bson__object__access.html#gae017cba3a7c5a49981aae92ff26d1ed8" title="Build a BSON object in one go.">bson_build</a> (<a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;pwd&quot;</span>, hex_digest, -1,
-<a name="l01319"></a>01319                                    <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba8da6f27ef8afcaac44402b61731a05df" title="Only used for errors.">BSON_TYPE_NONE</a>),
-<a name="l01320"></a>01320                        <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba8da6f27ef8afcaac44402b61731a05df" title="Only used for errors.">BSON_TYPE_NONE</a>);
-<a name="l01321"></a>01321   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (u);
-<a name="l01322"></a>01322   g_free (hex_digest);
-<a name="l01323"></a>01323 
-<a name="l01324"></a>01324   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__sync.html#gae299d207c5afabc9f114bab874454c12" title="Send an update command to MongoDB.">mongo_sync_cmd_update</a> (conn, userns, <a class="code" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aa73d76d928ff95cc8dc903247148f54d" title="When set, inserts if no matching document was found.">MONGO_WIRE_FLAG_UPDATE_UPSERT</a>,
-<a name="l01325"></a>01325                               s, u))
-<a name="l01326"></a>01326     {
-<a name="l01327"></a>01327       <span class="keywordtype">int</span> e = errno;
-<a name="l01328"></a>01328 
-<a name="l01329"></a>01329       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (s);
-<a name="l01330"></a>01330       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (u);
-<a name="l01331"></a>01331       g_free (userns);
-<a name="l01332"></a>01332       errno = e;
-<a name="l01333"></a>01333       <span class="keywordflow">return</span> FALSE;
-<a name="l01334"></a>01334     }
-<a name="l01335"></a>01335   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (s);
-<a name="l01336"></a>01336   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (u);
-<a name="l01337"></a>01337   g_free (userns);
-<a name="l01338"></a>01338 
-<a name="l01339"></a>01339   <span class="keywordflow">return</span> TRUE;
-<a name="l01340"></a>01340 }
+<a name="l01291"></a>01291       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01292"></a>01292       errno = e;
+<a name="l01293"></a>01293       <span class="keywordflow">return</span> FALSE;
+<a name="l01294"></a>01294     }
+<a name="l01295"></a>01295   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01296"></a>01296 
+<a name="l01297"></a>01297   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet.">mongo_wire_reply_packet_get_nth_document</a> (p, 1, &amp;res))
+<a name="l01298"></a>01298     {
+<a name="l01299"></a>01299       <span class="keywordtype">int</span> e = errno;
+<a name="l01300"></a>01300 
+<a name="l01301"></a>01301       <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01302"></a>01302       errno = e;
+<a name="l01303"></a>01303       <span class="keywordflow">return</span> FALSE;
+<a name="l01304"></a>01304     }
+<a name="l01305"></a>01305   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01306"></a>01306   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (res);
+<a name="l01307"></a>01307 
+<a name="l01308"></a>01308   c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (res, <span class="stringliteral">&quot;ismaster&quot;</span>);
+<a name="l01309"></a>01309   <span class="keywordflow">if</span> (!<a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean.">bson_cursor_get_boolean</a> (c, &amp;b))
+<a name="l01310"></a>01310     {
+<a name="l01311"></a>01311       <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l01312"></a>01312       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (res);
+<a name="l01313"></a>01313       errno = EPROTO;
+<a name="l01314"></a>01314       <span class="keywordflow">return</span> FALSE;
+<a name="l01315"></a>01315     }
+<a name="l01316"></a>01316   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l01317"></a>01317 
+<a name="l01318"></a>01318   <span class="keywordflow">if</span> (!b)
+<a name="l01319"></a>01319     {
+<a name="l01320"></a>01320       <span class="keyword">const</span> gchar *s;
+<a name="l01321"></a>01321 
+<a name="l01322"></a>01322       <span class="comment">/* We&#39;re not the master, so we should have a &#39;primary&#39; key in</span>
+<a name="l01323"></a>01323 <span class="comment">         the response. */</span>
+<a name="l01324"></a>01324       c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (res, <span class="stringliteral">&quot;primary&quot;</span>);
+<a name="l01325"></a>01325       <span class="keywordflow">if</span> (<a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (c, &amp;s))
+<a name="l01326"></a>01326         {
+<a name="l01327"></a>01327           g_free (conn-&gt;rs.primary);
+<a name="l01328"></a>01328           conn-&gt;rs.primary = g_strdup (s);
+<a name="l01329"></a>01329         }
+<a name="l01330"></a>01330       <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l01331"></a>01331     }
+<a name="l01332"></a>01332 
+<a name="l01333"></a>01333   <span class="comment">/* Find all the members of the set, and cache them. */</span>
+<a name="l01334"></a>01334   c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (res, <span class="stringliteral">&quot;hosts&quot;</span>);
+<a name="l01335"></a>01335   <span class="keywordflow">if</span> (!c)
+<a name="l01336"></a>01336     {
+<a name="l01337"></a>01337       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (res);
+<a name="l01338"></a>01338       errno = 0;
+<a name="l01339"></a>01339       <span class="keywordflow">return</span> b;
+<a name="l01340"></a>01340     }
 <a name="l01341"></a>01341 
-<a name="l01342"></a>01342 gboolean
-<a name="l01343"></a><a class="code" href="group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c">01343</a> <a class="code" href="group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c" title="Remove a user from MongoDB.">mongo_sync_cmd_user_remove</a> (mongo_sync_connection *conn,
-<a name="l01344"></a>01344                             <span class="keyword">const</span> gchar *db,
-<a name="l01345"></a>01345                             <span class="keyword">const</span> gchar *user)
-<a name="l01346"></a>01346 {
-<a name="l01347"></a>01347   bson *s;
-<a name="l01348"></a>01348   gchar *userns;
-<a name="l01349"></a>01349 
-<a name="l01350"></a>01350   <span class="keywordflow">if</span> (!db || !user)
-<a name="l01351"></a>01351     {
-<a name="l01352"></a>01352       errno = EINVAL;
-<a name="l01353"></a>01353       <span class="keywordflow">return</span> FALSE;
-<a name="l01354"></a>01354     }
-<a name="l01355"></a>01355 
-<a name="l01356"></a>01356   userns = g_strconcat (db, <span class="stringliteral">&quot;.system.users&quot;</span>, NULL);
-<a name="l01357"></a>01357 
-<a name="l01358"></a>01358   s = <a class="code" href="group__bson__object__access.html#gae017cba3a7c5a49981aae92ff26d1ed8" title="Build a BSON object in one go.">bson_build</a> (<a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;user&quot;</span>, user, -1,
-<a name="l01359"></a>01359                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba8da6f27ef8afcaac44402b61731a05df" title="Only used for errors.">BSON_TYPE_NONE</a>);
-<a name="l01360"></a>01360   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (s);
-<a name="l01361"></a>01361 
-<a name="l01362"></a>01362   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__sync.html#ga342218b37c0b0d4beafd7071b530ee1f" title="Send a delete command to MongoDB.">mongo_sync_cmd_delete</a> (conn, userns, 0, s))
+<a name="l01342"></a>01342   <span class="keywordflow">if</span> (!<a class="code" href="group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array.">bson_cursor_get_array</a> (c, &amp;hosts))
+<a name="l01343"></a>01343     {
+<a name="l01344"></a>01344       <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l01345"></a>01345       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (res);
+<a name="l01346"></a>01346       errno = 0;
+<a name="l01347"></a>01347       <span class="keywordflow">return</span> b;
+<a name="l01348"></a>01348     }
+<a name="l01349"></a>01349   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l01350"></a>01350   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (hosts);
+<a name="l01351"></a>01351 
+<a name="l01352"></a>01352   <span class="comment">/* Delete the old host list. */</span>
+<a name="l01353"></a>01353   l = conn-&gt;rs.hosts;
+<a name="l01354"></a>01354   <span class="keywordflow">while</span> (l)
+<a name="l01355"></a>01355     {
+<a name="l01356"></a>01356       g_free (l-&gt;data);
+<a name="l01357"></a>01357       l = g_list_delete_link (l, l);
+<a name="l01358"></a>01358     }
+<a name="l01359"></a>01359   conn-&gt;rs.hosts = NULL;
+<a name="l01360"></a>01360 
+<a name="l01361"></a>01361   c = <a class="code" href="group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor.">bson_cursor_new</a> (hosts);
+<a name="l01362"></a>01362   <span class="keywordflow">while</span> (<a class="code" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next</a> (c))
 <a name="l01363"></a>01363     {
-<a name="l01364"></a>01364       <span class="keywordtype">int</span> e = errno;
+<a name="l01364"></a>01364       <span class="keyword">const</span> gchar *s;
 <a name="l01365"></a>01365 
-<a name="l01366"></a>01366       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (s);
-<a name="l01367"></a>01367       g_free (userns);
-<a name="l01368"></a>01368       errno = e;
-<a name="l01369"></a>01369       <span class="keywordflow">return</span> FALSE;
-<a name="l01370"></a>01370     }
-<a name="l01371"></a>01371   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (s);
-<a name="l01372"></a>01372   g_free (userns);
-<a name="l01373"></a>01373 
-<a name="l01374"></a>01374   <span class="keywordflow">return</span> TRUE;
-<a name="l01375"></a>01375 }
-<a name="l01376"></a>01376 
-<a name="l01377"></a>01377 gboolean
-<a name="l01378"></a><a class="code" href="group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59">01378</a> <a class="code" href="group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59" title="Authenticate a user with MongoDB.">mongo_sync_cmd_authenticate</a> (mongo_sync_connection *conn,
-<a name="l01379"></a>01379                              <span class="keyword">const</span> gchar *db,
-<a name="l01380"></a>01380                              <span class="keyword">const</span> gchar *user,
-<a name="l01381"></a>01381                              <span class="keyword">const</span> gchar *pw)
-<a name="l01382"></a>01382 {
-<a name="l01383"></a>01383   bson *b;
-<a name="l01384"></a>01384   mongo_packet *p;
-<a name="l01385"></a>01385   <span class="keyword">const</span> gchar *s;
-<a name="l01386"></a>01386   gchar *nonce;
-<a name="l01387"></a>01387   bson_cursor *c;
-<a name="l01388"></a>01388 
-<a name="l01389"></a>01389   GChecksum *chk;
-<a name="l01390"></a>01390   gchar *hex_digest;
-<a name="l01391"></a>01391   <span class="keyword">const</span> gchar *digest;
-<a name="l01392"></a>01392 
-<a name="l01393"></a>01393   <span class="keywordflow">if</span> (!db || !user || !pw)
-<a name="l01394"></a>01394     {
-<a name="l01395"></a>01395       errno = EINVAL;
-<a name="l01396"></a>01396       <span class="keywordflow">return</span> FALSE;
-<a name="l01397"></a>01397     }
-<a name="l01398"></a>01398 
-<a name="l01399"></a>01399   <span class="comment">/* Obtain nonce */</span>
-<a name="l01400"></a>01400   b = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (32);
-<a name="l01401"></a>01401   <a class="code" href="group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32-bit integer to a BSON object.">bson_append_int32</a> (b, <span class="stringliteral">&quot;getnonce&quot;</span>, 1);
-<a name="l01402"></a>01402   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
-<a name="l01403"></a>01403 
-<a name="l01404"></a>01404   p = <a class="code" href="group__mongo__sync.html#ga3980761b18bae206e6564db6483924df" title="Send a custom command to MongoDB.">mongo_sync_cmd_custom</a> (conn, db, b);
-<a name="l01405"></a>01405   <span class="keywordflow">if</span> (!p)
-<a name="l01406"></a>01406     {
-<a name="l01407"></a>01407       <span class="keywordtype">int</span> e = errno;
-<a name="l01408"></a>01408 
-<a name="l01409"></a>01409       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
-<a name="l01410"></a>01410       errno = e;
-<a name="l01411"></a>01411       <span class="keywordflow">return</span> FALSE;
-<a name="l01412"></a>01412     }
-<a name="l01413"></a>01413   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
-<a name="l01414"></a>01414 
-<a name="l01415"></a>01415   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet.">mongo_wire_reply_packet_get_nth_document</a> (p, 1, &amp;b))
-<a name="l01416"></a>01416     {
-<a name="l01417"></a>01417       <span class="keywordtype">int</span> e = errno;
-<a name="l01418"></a>01418 
-<a name="l01419"></a>01419       <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
-<a name="l01420"></a>01420       errno = e;
-<a name="l01421"></a>01421       <span class="keywordflow">return</span> FALSE;
-<a name="l01422"></a>01422     }
-<a name="l01423"></a>01423   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
-<a name="l01424"></a>01424   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
-<a name="l01425"></a>01425 
-<a name="l01426"></a>01426   c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (b, <span class="stringliteral">&quot;nonce&quot;</span>);
-<a name="l01427"></a>01427   <span class="keywordflow">if</span> (!c)
-<a name="l01428"></a>01428     {
-<a name="l01429"></a>01429       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
-<a name="l01430"></a>01430       errno = EPROTO;
-<a name="l01431"></a>01431       <span class="keywordflow">return</span> FALSE;
-<a name="l01432"></a>01432     }
-<a name="l01433"></a>01433   <span class="keywordflow">if</span> (!<a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (c, &amp;s))
-<a name="l01434"></a>01434     {
-<a name="l01435"></a>01435       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
-<a name="l01436"></a>01436       errno = EPROTO;
-<a name="l01437"></a>01437       <span class="keywordflow">return</span> FALSE;
-<a name="l01438"></a>01438     }
-<a name="l01439"></a>01439   nonce = g_strdup (s);
-<a name="l01440"></a>01440   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
-<a name="l01441"></a>01441   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
-<a name="l01442"></a>01442 
-<a name="l01443"></a>01443   <span class="comment">/* Generate the password digest. */</span>
-<a name="l01444"></a>01444   hex_digest = _pass_digest (user, pw);
-<a name="l01445"></a>01445 
-<a name="l01446"></a>01446   <span class="comment">/* Generate the key */</span>
-<a name="l01447"></a>01447   chk = g_checksum_new (G_CHECKSUM_MD5);
-<a name="l01448"></a>01448   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)nonce, -1);
-<a name="l01449"></a>01449   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)user, -1);
-<a name="l01450"></a>01450   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)hex_digest, -1);
-<a name="l01451"></a>01451   g_free (hex_digest);
+<a name="l01366"></a>01366       <span class="keywordflow">if</span> (<a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (c, &amp;s))
+<a name="l01367"></a>01367         conn-&gt;rs.hosts = g_list_append (conn-&gt;rs.hosts, g_strdup (s));
+<a name="l01368"></a>01368     }
+<a name="l01369"></a>01369   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l01370"></a>01370   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (hosts);
+<a name="l01371"></a>01371 
+<a name="l01372"></a>01372   c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (res, <span class="stringliteral">&quot;passives&quot;</span>);
+<a name="l01373"></a>01373   <span class="keywordflow">if</span> (<a class="code" href="group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array.">bson_cursor_get_array</a> (c, &amp;hosts))
+<a name="l01374"></a>01374     {
+<a name="l01375"></a>01375       <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l01376"></a>01376       <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (hosts);
+<a name="l01377"></a>01377 
+<a name="l01378"></a>01378       c = <a class="code" href="group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor.">bson_cursor_new</a> (hosts);
+<a name="l01379"></a>01379       <span class="keywordflow">while</span> (<a class="code" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next</a> (c))
+<a name="l01380"></a>01380         {
+<a name="l01381"></a>01381           <span class="keyword">const</span> gchar *s;
+<a name="l01382"></a>01382 
+<a name="l01383"></a>01383           <span class="keywordflow">if</span> (<a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (c, &amp;s))
+<a name="l01384"></a>01384             conn-&gt;rs.hosts = g_list_append (conn-&gt;rs.hosts, g_strdup (s));
+<a name="l01385"></a>01385         }
+<a name="l01386"></a>01386       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (hosts);
+<a name="l01387"></a>01387     }
+<a name="l01388"></a>01388   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l01389"></a>01389 
+<a name="l01390"></a>01390   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (res);
+<a name="l01391"></a>01391   errno = 0;
+<a name="l01392"></a>01392   <span class="keywordflow">return</span> b;
+<a name="l01393"></a>01393 }
+<a name="l01394"></a>01394 
+<a name="l01395"></a>01395 gboolean
+<a name="l01396"></a><a class="code" href="group__mongo__sync.html#gadbc79fc4f323ba7df77fe54f669ebfb0">01396</a> <a class="code" href="group__mongo__sync.html#gadbc79fc4f323ba7df77fe54f669ebfb0" title="Send a PING command to MongoDB.">mongo_sync_cmd_ping</a> (mongo_sync_connection *conn)
+<a name="l01397"></a>01397 {
+<a name="l01398"></a>01398   bson *cmd;
+<a name="l01399"></a>01399   mongo_packet *p;
+<a name="l01400"></a>01400 
+<a name="l01401"></a>01401   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (32);
+<a name="l01402"></a>01402   <a class="code" href="group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32-bit integer to a BSON object.">bson_append_int32</a> (cmd, <span class="stringliteral">&quot;ping&quot;</span>, 1);
+<a name="l01403"></a>01403   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
+<a name="l01404"></a>01404 
+<a name="l01405"></a>01405   p = _mongo_sync_cmd_custom (conn, <span class="stringliteral">&quot;system&quot;</span>, cmd, FALSE, FALSE);
+<a name="l01406"></a>01406   <span class="keywordflow">if</span> (!p)
+<a name="l01407"></a>01407     {
+<a name="l01408"></a>01408       <span class="keywordtype">int</span> e = errno;
+<a name="l01409"></a>01409 
+<a name="l01410"></a>01410       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01411"></a>01411       errno = e;
+<a name="l01412"></a>01412       <span class="keywordflow">return</span> FALSE;
+<a name="l01413"></a>01413     }
+<a name="l01414"></a>01414   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01415"></a>01415   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01416"></a>01416 
+<a name="l01417"></a>01417   errno = 0;
+<a name="l01418"></a>01418   <span class="keywordflow">return</span> TRUE;
+<a name="l01419"></a>01419 }
+<a name="l01420"></a>01420 
+<a name="l01421"></a>01421 <span class="keyword">static</span> gchar *
+<a name="l01422"></a>01422 _pass_digest (<span class="keyword">const</span> gchar *user, <span class="keyword">const</span> gchar *pw)
+<a name="l01423"></a>01423 {
+<a name="l01424"></a>01424   GChecksum *chk;
+<a name="l01425"></a>01425   gchar *digest;
+<a name="l01426"></a>01426 
+<a name="l01427"></a>01427   chk = g_checksum_new (G_CHECKSUM_MD5);
+<a name="l01428"></a>01428   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)user, -1);
+<a name="l01429"></a>01429   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)<span class="stringliteral">&quot;:mongo:&quot;</span>, 7);
+<a name="l01430"></a>01430   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)pw, -1);
+<a name="l01431"></a>01431   digest = g_strdup (g_checksum_get_string (chk));
+<a name="l01432"></a>01432   g_checksum_free (chk);
+<a name="l01433"></a>01433 
+<a name="l01434"></a>01434   <span class="keywordflow">return</span> digest;
+<a name="l01435"></a>01435 }
+<a name="l01436"></a>01436 
+<a name="l01437"></a>01437 gboolean
+<a name="l01438"></a><a class="code" href="group__mongo__sync.html#ga7864f55710c0bdec14f75a936209b56e">01438</a> <a class="code" href="group__mongo__sync.html#ga7864f55710c0bdec14f75a936209b56e" title="Add a user to MongoDB.">mongo_sync_cmd_user_add</a> (mongo_sync_connection *conn,
+<a name="l01439"></a>01439                          <span class="keyword">const</span> gchar *db,
+<a name="l01440"></a>01440                          <span class="keyword">const</span> gchar *user,
+<a name="l01441"></a>01441                          <span class="keyword">const</span> gchar *pw)
+<a name="l01442"></a>01442 {
+<a name="l01443"></a>01443   bson *s, *u;
+<a name="l01444"></a>01444   gchar *userns;
+<a name="l01445"></a>01445   gchar *hex_digest;
+<a name="l01446"></a>01446 
+<a name="l01447"></a>01447   <span class="keywordflow">if</span> (!db || !user || !pw)
+<a name="l01448"></a>01448     {
+<a name="l01449"></a>01449       errno = EINVAL;
+<a name="l01450"></a>01450       <span class="keywordflow">return</span> FALSE;
+<a name="l01451"></a>01451     }
 <a name="l01452"></a>01452 
-<a name="l01453"></a>01453   digest = g_checksum_get_string (chk);
+<a name="l01453"></a>01453   userns = g_strconcat (db, <span class="stringliteral">&quot;.system.users&quot;</span>, NULL);
 <a name="l01454"></a>01454 
-<a name="l01455"></a>01455   <span class="comment">/* Run the authenticate command. */</span>
-<a name="l01456"></a>01456   b = <a class="code" href="group__bson__object__access.html#gae017cba3a7c5a49981aae92ff26d1ed8" title="Build a BSON object in one go.">bson_build</a> (<a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba9a106beacbbedfec723680af06b44bbc" title="4byte integer">BSON_TYPE_INT32</a>, <span class="stringliteral">&quot;authenticate&quot;</span>, 1,
-<a name="l01457"></a>01457                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;user&quot;</span>, user, -1,
-<a name="l01458"></a>01458                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;nonce&quot;</span>, nonce, -1,
-<a name="l01459"></a>01459                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;key&quot;</span>, digest, -1,
-<a name="l01460"></a>01460                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba8da6f27ef8afcaac44402b61731a05df" title="Only used for errors.">BSON_TYPE_NONE</a>);
-<a name="l01461"></a>01461   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
-<a name="l01462"></a>01462   g_free (nonce);
-<a name="l01463"></a>01463   g_checksum_free (chk);
-<a name="l01464"></a>01464 
-<a name="l01465"></a>01465   p = <a class="code" href="group__mongo__sync.html#ga3980761b18bae206e6564db6483924df" title="Send a custom command to MongoDB.">mongo_sync_cmd_custom</a> (conn, db, b);
-<a name="l01466"></a>01466   <span class="keywordflow">if</span> (!p)
-<a name="l01467"></a>01467     {
-<a name="l01468"></a>01468       <span class="keywordtype">int</span> e = errno;
-<a name="l01469"></a>01469 
-<a name="l01470"></a>01470       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
-<a name="l01471"></a>01471       errno = e;
-<a name="l01472"></a>01472       <span class="keywordflow">return</span> FALSE;
-<a name="l01473"></a>01473     }
-<a name="l01474"></a>01474   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
-<a name="l01475"></a>01475   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
-<a name="l01476"></a>01476 
-<a name="l01477"></a>01477   <span class="keywordflow">return</span> TRUE;
-<a name="l01478"></a>01478 }
-<a name="l01479"></a>01479 
-<a name="l01480"></a>01480 <span class="keyword">static</span> GString *
-<a name="l01481"></a>01481 _mongo_index_gen_name (<span class="keyword">const</span> bson *key)
-<a name="l01482"></a>01482 {
-<a name="l01483"></a>01483   bson_cursor *c;
-<a name="l01484"></a>01484   GString *name;
-<a name="l01485"></a>01485 
-<a name="l01486"></a>01486   name = g_string_new (<span class="stringliteral">&quot;_&quot;</span>);
-<a name="l01487"></a>01487   c = <a class="code" href="group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor.">bson_cursor_new</a> (key);
-<a name="l01488"></a>01488   <span class="keywordflow">while</span> (<a class="code" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next</a> (c))
-<a name="l01489"></a>01489     {
-<a name="l01490"></a>01490       gint64 v = 0;
-<a name="l01491"></a>01491 
-<a name="l01492"></a>01492       g_string_append (name, <a class="code" href="group__bson__cursor.html#ga8de19693c54fca2eb6c8a4f5a30eb637" title="Determine the name of the current elements key.">bson_cursor_key</a> (c));
-<a name="l01493"></a>01493       g_string_append_c (name, <span class="charliteral">&#39;_&#39;</span>);
-<a name="l01494"></a>01494 
-<a name="l01495"></a>01495       <span class="keywordflow">switch</span> (<a class="code" href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3" title="Determine the type of the current element.">bson_cursor_type</a> (c))
-<a name="l01496"></a>01496         {
-<a name="l01497"></a>01497         <span class="keywordflow">case</span> <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbad60fbf033900d76f926b09790318c4f6" title="1byte boolean value">BSON_TYPE_BOOLEAN</a>:
-<a name="l01498"></a>01498           {
-<a name="l01499"></a>01499             gboolean vb;
+<a name="l01455"></a>01455   hex_digest = _pass_digest (user, pw);
+<a name="l01456"></a>01456 
+<a name="l01457"></a>01457   s = <a class="code" href="group__bson__object__access.html#gae017cba3a7c5a49981aae92ff26d1ed8" title="Build a BSON object in one go.">bson_build</a> (<a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;user&quot;</span>, user, -1,
+<a name="l01458"></a>01458                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba8da6f27ef8afcaac44402b61731a05df" title="Only used for errors.">BSON_TYPE_NONE</a>);
+<a name="l01459"></a>01459   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (s);
+<a name="l01460"></a>01460   u = <a class="code" href="group__bson__object__access.html#ga5bec2a5276b310191f94ba193a024fcb" title="Build a BSON object in one go, with full control.">bson_build_full</a> (<a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba0d25e0e5ffcd3b598ed1893bb2581234" title="4byte length + NULL terminated document">BSON_TYPE_DOCUMENT</a>, <span class="stringliteral">&quot;$set&quot;</span>, TRUE,
+<a name="l01461"></a>01461                        <a class="code" href="group__bson__object__access.html#gae017cba3a7c5a49981aae92ff26d1ed8" title="Build a BSON object in one go.">bson_build</a> (<a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;pwd&quot;</span>, hex_digest, -1,
+<a name="l01462"></a>01462                                    <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba8da6f27ef8afcaac44402b61731a05df" title="Only used for errors.">BSON_TYPE_NONE</a>),
+<a name="l01463"></a>01463                        <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba8da6f27ef8afcaac44402b61731a05df" title="Only used for errors.">BSON_TYPE_NONE</a>);
+<a name="l01464"></a>01464   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (u);
+<a name="l01465"></a>01465   g_free (hex_digest);
+<a name="l01466"></a>01466 
+<a name="l01467"></a>01467   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__sync.html#gae299d207c5afabc9f114bab874454c12" title="Send an update command to MongoDB.">mongo_sync_cmd_update</a> (conn, userns, <a class="code" href="group__mongo__wire__cmd.html#ggaaf105ae5beaca1dee30ae54530691fceaa73d76d928ff95cc8dc903247148f54d" title="When set, inserts if no matching document was found.">MONGO_WIRE_FLAG_UPDATE_UPSERT</a>,
+<a name="l01468"></a>01468                               s, u))
+<a name="l01469"></a>01469     {
+<a name="l01470"></a>01470       <span class="keywordtype">int</span> e = errno;
+<a name="l01471"></a>01471 
+<a name="l01472"></a>01472       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (s);
+<a name="l01473"></a>01473       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (u);
+<a name="l01474"></a>01474       g_free (userns);
+<a name="l01475"></a>01475       errno = e;
+<a name="l01476"></a>01476       <span class="keywordflow">return</span> FALSE;
+<a name="l01477"></a>01477     }
+<a name="l01478"></a>01478   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (s);
+<a name="l01479"></a>01479   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (u);
+<a name="l01480"></a>01480   g_free (userns);
+<a name="l01481"></a>01481 
+<a name="l01482"></a>01482   <span class="keywordflow">return</span> TRUE;
+<a name="l01483"></a>01483 }
+<a name="l01484"></a>01484 
+<a name="l01485"></a>01485 gboolean
+<a name="l01486"></a><a class="code" href="group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c">01486</a> <a class="code" href="group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c" title="Remove a user from MongoDB.">mongo_sync_cmd_user_remove</a> (mongo_sync_connection *conn,
+<a name="l01487"></a>01487                             <span class="keyword">const</span> gchar *db,
+<a name="l01488"></a>01488                             <span class="keyword">const</span> gchar *user)
+<a name="l01489"></a>01489 {
+<a name="l01490"></a>01490   bson *s;
+<a name="l01491"></a>01491   gchar *userns;
+<a name="l01492"></a>01492 
+<a name="l01493"></a>01493   <span class="keywordflow">if</span> (!db || !user)
+<a name="l01494"></a>01494     {
+<a name="l01495"></a>01495       errno = EINVAL;
+<a name="l01496"></a>01496       <span class="keywordflow">return</span> FALSE;
+<a name="l01497"></a>01497     }
+<a name="l01498"></a>01498 
+<a name="l01499"></a>01499   userns = g_strconcat (db, <span class="stringliteral">&quot;.system.users&quot;</span>, NULL);
 <a name="l01500"></a>01500 
-<a name="l01501"></a>01501             <a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean.">bson_cursor_get_boolean</a> (c, &amp;vb);
-<a name="l01502"></a>01502             v = vb;
-<a name="l01503"></a>01503             <span class="keywordflow">break</span>;
-<a name="l01504"></a>01504           }
-<a name="l01505"></a>01505         <span class="keywordflow">case</span> <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba9a106beacbbedfec723680af06b44bbc" title="4byte integer">BSON_TYPE_INT32</a>:
-<a name="l01506"></a>01506           {
-<a name="l01507"></a>01507             gint32 vi;
+<a name="l01501"></a>01501   s = <a class="code" href="group__bson__object__access.html#gae017cba3a7c5a49981aae92ff26d1ed8" title="Build a BSON object in one go.">bson_build</a> (<a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;user&quot;</span>, user, -1,
+<a name="l01502"></a>01502                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba8da6f27ef8afcaac44402b61731a05df" title="Only used for errors.">BSON_TYPE_NONE</a>);
+<a name="l01503"></a>01503   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (s);
+<a name="l01504"></a>01504 
+<a name="l01505"></a>01505   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__sync.html#ga342218b37c0b0d4beafd7071b530ee1f" title="Send a delete command to MongoDB.">mongo_sync_cmd_delete</a> (conn, userns, 0, s))
+<a name="l01506"></a>01506     {
+<a name="l01507"></a>01507       <span class="keywordtype">int</span> e = errno;
 <a name="l01508"></a>01508 
-<a name="l01509"></a>01509             <a class="code" href="group__bson__cursor.html#ga869b17014b3863a8ae0cda9eb82bb5ac" title="Get the value stored at the cursor, as a 32-bit integer.">bson_cursor_get_int32</a> (c, &amp;vi);
-<a name="l01510"></a>01510             v = vi;
-<a name="l01511"></a>01511             <span class="keywordflow">break</span>;
-<a name="l01512"></a>01512           }
-<a name="l01513"></a>01513         <span class="keywordflow">case</span> <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba7e84b17ee5c60cf8bf32e308aa23b611" title="8byte integer">BSON_TYPE_INT64</a>:
-<a name="l01514"></a>01514           {
-<a name="l01515"></a>01515             gint64 vl;
+<a name="l01509"></a>01509       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (s);
+<a name="l01510"></a>01510       g_free (userns);
+<a name="l01511"></a>01511       errno = e;
+<a name="l01512"></a>01512       <span class="keywordflow">return</span> FALSE;
+<a name="l01513"></a>01513     }
+<a name="l01514"></a>01514   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (s);
+<a name="l01515"></a>01515   g_free (userns);
 <a name="l01516"></a>01516 
-<a name="l01517"></a>01517             <a class="code" href="group__bson__cursor.html#ga50f3858c3ce2d30a15544cf46887be50" title="Get the value stored at the cursor, as a 64-bit integer.">bson_cursor_get_int64</a> (c, &amp;vl);
-<a name="l01518"></a>01518             v = vl;
-<a name="l01519"></a>01519             <span class="keywordflow">break</span>;
-<a name="l01520"></a>01520           }
-<a name="l01521"></a>01521         <span class="keywordflow">case</span> <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbabfcfb85257205dfad1148f88e7675950" title="8byte double">BSON_TYPE_DOUBLE</a>:
-<a name="l01522"></a>01522           {
-<a name="l01523"></a>01523             gdouble vd;
-<a name="l01524"></a>01524 
-<a name="l01525"></a>01525             <a class="code" href="group__bson__cursor.html#ga10e9c6f2686c407daa77d46e8c5d88b4" title="Get the value stored at the cursor, as a double.">bson_cursor_get_double</a> (c, &amp;vd);
-<a name="l01526"></a>01526             v = (gint64)vd;
-<a name="l01527"></a>01527             <span class="keywordflow">break</span>;
-<a name="l01528"></a>01528           }
-<a name="l01529"></a>01529         <span class="keywordflow">default</span>:
-<a name="l01530"></a>01530           <span class="keywordflow">break</span>;
-<a name="l01531"></a>01531         }
-<a name="l01532"></a>01532       <span class="keywordflow">if</span> (v != 0)
-<a name="l01533"></a>01533         g_string_append_printf (name, <span class="stringliteral">&quot;%&quot;</span> G_GINT64_FORMAT <span class="stringliteral">&quot;_&quot;</span>, v);
-<a name="l01534"></a>01534     }
-<a name="l01535"></a>01535   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
-<a name="l01536"></a>01536 
-<a name="l01537"></a>01537   <span class="keywordflow">return</span> name;
-<a name="l01538"></a>01538 }
-<a name="l01539"></a>01539 
-<a name="l01540"></a>01540 gboolean
-<a name="l01541"></a><a class="code" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c">01541</a> <a class="code" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index.">mongo_sync_cmd_index_create</a> (mongo_sync_connection *conn,
-<a name="l01542"></a>01542                              <span class="keyword">const</span> gchar *ns,
-<a name="l01543"></a>01543                              <span class="keyword">const</span> bson *key,
-<a name="l01544"></a>01544                              gint options)
-<a name="l01545"></a>01545 {
-<a name="l01546"></a>01546   GString *name;
-<a name="l01547"></a>01547   gchar *idxns, *t;
-<a name="l01548"></a>01548   bson *cmd;
-<a name="l01549"></a>01549 
-<a name="l01550"></a>01550   <span class="keywordflow">if</span> (!conn)
-<a name="l01551"></a>01551     {
-<a name="l01552"></a>01552       errno = ENOTCONN;
-<a name="l01553"></a>01553       <span class="keywordflow">return</span> FALSE;
-<a name="l01554"></a>01554     }
-<a name="l01555"></a>01555   <span class="keywordflow">if</span> (!ns || !key)
-<a name="l01556"></a>01556     {
-<a name="l01557"></a>01557       errno = EINVAL;
-<a name="l01558"></a>01558       <span class="keywordflow">return</span> FALSE;
-<a name="l01559"></a>01559     }
-<a name="l01560"></a>01560   <span class="keywordflow">if</span> (strchr (ns, <span class="charliteral">&#39;.&#39;</span>) == NULL)
-<a name="l01561"></a>01561     {
-<a name="l01562"></a>01562       errno = EINVAL;
-<a name="l01563"></a>01563       <span class="keywordflow">return</span> FALSE;
-<a name="l01564"></a>01564     }
-<a name="l01565"></a>01565 
-<a name="l01566"></a>01566   name = _mongo_index_gen_name (key);
-<a name="l01567"></a>01567 
-<a name="l01568"></a>01568   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (<a class="code" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object.">bson_size</a> (key) + name-&gt;len + 128);
-<a name="l01569"></a>01569   <a class="code" href="group__bson__append.html#gab2673b16bf736e1093fadc32154454be" title="Append a BSON document to a BSON object.">bson_append_document</a> (cmd, <span class="stringliteral">&quot;key&quot;</span>, key);
-<a name="l01570"></a>01570   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;ns&quot;</span>, ns, -1);
-<a name="l01571"></a>01571   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;name&quot;</span>, name-&gt;str, name-&gt;len);
-<a name="l01572"></a>01572   <span class="keywordflow">if</span> (options &amp; <a class="code" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a9bba6324f54c9c4be4526a75de4f069d" title="Create a unique index.">MONGO_INDEX_UNIQUE</a>)
-<a name="l01573"></a>01573     <a class="code" href="group__bson__append.html#ga6bd3d1aa4e6869c173c3f402d106414a" title="Append a boolean to a BSON object.">bson_append_boolean</a> (cmd, <span class="stringliteral">&quot;unique&quot;</span>, TRUE);
-<a name="l01574"></a>01574   <span class="keywordflow">if</span> (options &amp; <a class="code" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a1f17ac23aa3790516427b30a976490b5" title="Drop duplicate entries when creating the indexes.">MONGO_INDEX_DROP_DUPS</a>)
-<a name="l01575"></a>01575     <a class="code" href="group__bson__append.html#ga6bd3d1aa4e6869c173c3f402d106414a" title="Append a boolean to a BSON object.">bson_append_boolean</a> (cmd, <span class="stringliteral">&quot;dropDups&quot;</span>, TRUE);
-<a name="l01576"></a>01576   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
-<a name="l01577"></a>01577   g_string_free (name, TRUE);
-<a name="l01578"></a>01578 
-<a name="l01579"></a>01579   t = g_strdup (ns);
-<a name="l01580"></a>01580   *(strchr (t, <span class="charliteral">&#39;.&#39;</span>)) = <span class="charliteral">&#39;\0&#39;</span>;
-<a name="l01581"></a>01581   idxns = g_strconcat (t, <span class="stringliteral">&quot;.system.indexes&quot;</span>, NULL);
-<a name="l01582"></a>01582   g_free (t);
-<a name="l01583"></a>01583 
-<a name="l01584"></a>01584   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__sync.html#ga60b1dea6c43b120d84f6d424e773f52b" title="Send an insert command to MongoDB.">mongo_sync_cmd_insert_n</a> (conn, idxns, 1, (<span class="keyword">const</span> bson **)&amp;cmd))
-<a name="l01585"></a>01585     {
-<a name="l01586"></a>01586       <span class="keywordtype">int</span> e = errno;
-<a name="l01587"></a>01587 
-<a name="l01588"></a>01588       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01589"></a>01589       g_free (idxns);
-<a name="l01590"></a>01590       errno = e;
-<a name="l01591"></a>01591       <span class="keywordflow">return</span> FALSE;
-<a name="l01592"></a>01592     }
-<a name="l01593"></a>01593   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01594"></a>01594   g_free (idxns);
+<a name="l01517"></a>01517   <span class="keywordflow">return</span> TRUE;
+<a name="l01518"></a>01518 }
+<a name="l01519"></a>01519 
+<a name="l01520"></a>01520 gboolean
+<a name="l01521"></a><a class="code" href="group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59">01521</a> <a class="code" href="group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59" title="Authenticate a user with MongoDB.">mongo_sync_cmd_authenticate</a> (mongo_sync_connection *conn,
+<a name="l01522"></a>01522                              <span class="keyword">const</span> gchar *db,
+<a name="l01523"></a>01523                              <span class="keyword">const</span> gchar *user,
+<a name="l01524"></a>01524                              <span class="keyword">const</span> gchar *pw)
+<a name="l01525"></a>01525 {
+<a name="l01526"></a>01526   bson *b;
+<a name="l01527"></a>01527   mongo_packet *p;
+<a name="l01528"></a>01528   <span class="keyword">const</span> gchar *s;
+<a name="l01529"></a>01529   gchar *nonce;
+<a name="l01530"></a>01530   bson_cursor *c;
+<a name="l01531"></a>01531 
+<a name="l01532"></a>01532   GChecksum *chk;
+<a name="l01533"></a>01533   gchar *hex_digest;
+<a name="l01534"></a>01534   <span class="keyword">const</span> gchar *digest;
+<a name="l01535"></a>01535 
+<a name="l01536"></a>01536   <span class="keywordflow">if</span> (!db || !user || !pw)
+<a name="l01537"></a>01537     {
+<a name="l01538"></a>01538       errno = EINVAL;
+<a name="l01539"></a>01539       <span class="keywordflow">return</span> FALSE;
+<a name="l01540"></a>01540     }
+<a name="l01541"></a>01541 
+<a name="l01542"></a>01542   <span class="comment">/* Obtain nonce */</span>
+<a name="l01543"></a>01543   b = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (32);
+<a name="l01544"></a>01544   <a class="code" href="group__bson__append.html#gad5d474c266b6ee9278e339eb78126b00" title="Append a 32-bit integer to a BSON object.">bson_append_int32</a> (b, <span class="stringliteral">&quot;getnonce&quot;</span>, 1);
+<a name="l01545"></a>01545   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
+<a name="l01546"></a>01546 
+<a name="l01547"></a>01547   p = <a class="code" href="group__mongo__sync.html#ga3980761b18bae206e6564db6483924df" title="Send a custom command to MongoDB.">mongo_sync_cmd_custom</a> (conn, db, b);
+<a name="l01548"></a>01548   <span class="keywordflow">if</span> (!p)
+<a name="l01549"></a>01549     {
+<a name="l01550"></a>01550       <span class="keywordtype">int</span> e = errno;
+<a name="l01551"></a>01551 
+<a name="l01552"></a>01552       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
+<a name="l01553"></a>01553       errno = e;
+<a name="l01554"></a>01554       <span class="keywordflow">return</span> FALSE;
+<a name="l01555"></a>01555     }
+<a name="l01556"></a>01556   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
+<a name="l01557"></a>01557 
+<a name="l01558"></a>01558   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet.">mongo_wire_reply_packet_get_nth_document</a> (p, 1, &amp;b))
+<a name="l01559"></a>01559     {
+<a name="l01560"></a>01560       <span class="keywordtype">int</span> e = errno;
+<a name="l01561"></a>01561 
+<a name="l01562"></a>01562       <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01563"></a>01563       errno = e;
+<a name="l01564"></a>01564       <span class="keywordflow">return</span> FALSE;
+<a name="l01565"></a>01565     }
+<a name="l01566"></a>01566   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01567"></a>01567   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
+<a name="l01568"></a>01568 
+<a name="l01569"></a>01569   c = <a class="code" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key.">bson_find</a> (b, <span class="stringliteral">&quot;nonce&quot;</span>);
+<a name="l01570"></a>01570   <span class="keywordflow">if</span> (!c)
+<a name="l01571"></a>01571     {
+<a name="l01572"></a>01572       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
+<a name="l01573"></a>01573       errno = EPROTO;
+<a name="l01574"></a>01574       <span class="keywordflow">return</span> FALSE;
+<a name="l01575"></a>01575     }
+<a name="l01576"></a>01576   <span class="keywordflow">if</span> (!<a class="code" href="group__bson__cursor.html#ga657fb2f0fecd190b824d3e38936b1d4d" title="Get the value stored at the cursor, as string.">bson_cursor_get_string</a> (c, &amp;s))
+<a name="l01577"></a>01577     {
+<a name="l01578"></a>01578       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
+<a name="l01579"></a>01579       errno = EPROTO;
+<a name="l01580"></a>01580       <span class="keywordflow">return</span> FALSE;
+<a name="l01581"></a>01581     }
+<a name="l01582"></a>01582   nonce = g_strdup (s);
+<a name="l01583"></a>01583   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l01584"></a>01584   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
+<a name="l01585"></a>01585 
+<a name="l01586"></a>01586   <span class="comment">/* Generate the password digest. */</span>
+<a name="l01587"></a>01587   hex_digest = _pass_digest (user, pw);
+<a name="l01588"></a>01588 
+<a name="l01589"></a>01589   <span class="comment">/* Generate the key */</span>
+<a name="l01590"></a>01590   chk = g_checksum_new (G_CHECKSUM_MD5);
+<a name="l01591"></a>01591   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)nonce, -1);
+<a name="l01592"></a>01592   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)user, -1);
+<a name="l01593"></a>01593   g_checksum_update (chk, (<span class="keyword">const</span> guchar *)hex_digest, -1);
+<a name="l01594"></a>01594   g_free (hex_digest);
 <a name="l01595"></a>01595 
-<a name="l01596"></a>01596   <span class="keywordflow">return</span> TRUE;
-<a name="l01597"></a>01597 }
-<a name="l01598"></a>01598 
-<a name="l01599"></a>01599 <span class="keyword">static</span> gboolean
-<a name="l01600"></a>01600 _mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
-<a name="l01601"></a>01601                             <span class="keyword">const</span> gchar *full_ns,
-<a name="l01602"></a>01602                             <span class="keyword">const</span> gchar *index_name)
-<a name="l01603"></a>01603 {
-<a name="l01604"></a>01604   bson *cmd;
-<a name="l01605"></a>01605   gchar *db, *ns;
-<a name="l01606"></a>01606   mongo_packet *p;
+<a name="l01596"></a>01596   digest = g_checksum_get_string (chk);
+<a name="l01597"></a>01597 
+<a name="l01598"></a>01598   <span class="comment">/* Run the authenticate command. */</span>
+<a name="l01599"></a>01599   b = <a class="code" href="group__bson__object__access.html#gae017cba3a7c5a49981aae92ff26d1ed8" title="Build a BSON object in one go.">bson_build</a> (<a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba9a106beacbbedfec723680af06b44bbc" title="4byte integer">BSON_TYPE_INT32</a>, <span class="stringliteral">&quot;authenticate&quot;</span>, 1,
+<a name="l01600"></a>01600                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;user&quot;</span>, user, -1,
+<a name="l01601"></a>01601                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;nonce&quot;</span>, nonce, -1,
+<a name="l01602"></a>01602                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba83acce0871337a68a22c7c9d7b8c5c4a" title="4byte length + NULL terminated string">BSON_TYPE_STRING</a>, <span class="stringliteral">&quot;key&quot;</span>, digest, -1,
+<a name="l01603"></a>01603                   <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba8da6f27ef8afcaac44402b61731a05df" title="Only used for errors.">BSON_TYPE_NONE</a>);
+<a name="l01604"></a>01604   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (b);
+<a name="l01605"></a>01605   g_free (nonce);
+<a name="l01606"></a>01606   g_checksum_free (chk);
 <a name="l01607"></a>01607 
-<a name="l01608"></a>01608   <span class="keywordflow">if</span> (!conn)
-<a name="l01609"></a>01609     {
-<a name="l01610"></a>01610       errno = ENOTCONN;
-<a name="l01611"></a>01611       <span class="keywordflow">return</span> FALSE;
-<a name="l01612"></a>01612     }
-<a name="l01613"></a>01613   <span class="keywordflow">if</span> (!full_ns || !index_name)
-<a name="l01614"></a>01614     {
-<a name="l01615"></a>01615       errno = EINVAL;
-<a name="l01616"></a>01616       <span class="keywordflow">return</span> FALSE;
-<a name="l01617"></a>01617     }
-<a name="l01618"></a>01618   ns = strchr (full_ns, <span class="charliteral">&#39;.&#39;</span>);
-<a name="l01619"></a>01619   <span class="keywordflow">if</span> (ns == NULL)
-<a name="l01620"></a>01620     {
-<a name="l01621"></a>01621       errno = EINVAL;
-<a name="l01622"></a>01622       <span class="keywordflow">return</span> FALSE;
-<a name="l01623"></a>01623     }
-<a name="l01624"></a>01624   ns++;
-<a name="l01625"></a>01625 
-<a name="l01626"></a>01626   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (256 + strlen (index_name));
-<a name="l01627"></a>01627   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;deleteIndexes&quot;</span>, ns, -1);
-<a name="l01628"></a>01628   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;index&quot;</span>, index_name, -1);
-<a name="l01629"></a>01629   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
-<a name="l01630"></a>01630 
-<a name="l01631"></a>01631   db = g_strndup (full_ns, ns - full_ns - 1);
-<a name="l01632"></a>01632   p = <a class="code" href="group__mongo__sync.html#ga3980761b18bae206e6564db6483924df" title="Send a custom command to MongoDB.">mongo_sync_cmd_custom</a> (conn, db, cmd);
-<a name="l01633"></a>01633   <span class="keywordflow">if</span> (!p)
-<a name="l01634"></a>01634     {
-<a name="l01635"></a>01635       <span class="keywordtype">int</span> e = errno;
-<a name="l01636"></a>01636 
-<a name="l01637"></a>01637       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01638"></a>01638       g_free (db);
-<a name="l01639"></a>01639       errno = e;
-<a name="l01640"></a>01640       <span class="keywordflow">return</span> FALSE;
-<a name="l01641"></a>01641     }
-<a name="l01642"></a>01642   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
-<a name="l01643"></a>01643   g_free (db);
-<a name="l01644"></a>01644   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
-<a name="l01645"></a>01645 
-<a name="l01646"></a>01646   <span class="keywordflow">return</span> TRUE;
-<a name="l01647"></a>01647 }
-<a name="l01648"></a>01648 
-<a name="l01649"></a>01649 gboolean
-<a name="l01650"></a><a class="code" href="group__mongo__sync.html#ga1e45a4ca4c933a909a9b4b1b04a6dfa2">01650</a> <a class="code" href="group__mongo__sync.html#ga1e45a4ca4c933a909a9b4b1b04a6dfa2" title="Drop an index.">mongo_sync_cmd_index_drop</a> (mongo_sync_connection *conn,
-<a name="l01651"></a>01651                            <span class="keyword">const</span> gchar *ns,
-<a name="l01652"></a>01652                            <span class="keyword">const</span> bson *key)
-<a name="l01653"></a>01653 {
-<a name="l01654"></a>01654   GString *name;
-<a name="l01655"></a>01655   gboolean b;
-<a name="l01656"></a>01656 
-<a name="l01657"></a>01657   <span class="keywordflow">if</span> (!key)
-<a name="l01658"></a>01658     {
-<a name="l01659"></a>01659       errno = EINVAL;
-<a name="l01660"></a>01660       <span class="keywordflow">return</span> FALSE;
-<a name="l01661"></a>01661     }
-<a name="l01662"></a>01662 
-<a name="l01663"></a>01663   name = _mongo_index_gen_name (key);
-<a name="l01664"></a>01664 
-<a name="l01665"></a>01665   b = _mongo_sync_cmd_index_drop (conn, ns, name-&gt;str);
-<a name="l01666"></a>01666   g_string_free (name, TRUE);
-<a name="l01667"></a>01667   <span class="keywordflow">return</span> b;
-<a name="l01668"></a>01668 }
-<a name="l01669"></a>01669 
-<a name="l01670"></a>01670 gboolean
-<a name="l01671"></a><a class="code" href="group__mongo__sync.html#ga9f693b6c98b6d042c1fda2b8cd41da87">01671</a> <a class="code" href="group__mongo__sync.html#ga9f693b6c98b6d042c1fda2b8cd41da87" title="Drop all indexes from a namespace.">mongo_sync_cmd_index_drop_all</a> (mongo_sync_connection *conn,
-<a name="l01672"></a>01672                                <span class="keyword">const</span> gchar *ns)
-<a name="l01673"></a>01673 {
-<a name="l01674"></a>01674   <span class="keywordflow">return</span> _mongo_sync_cmd_index_drop (conn, ns, <span class="stringliteral">&quot;*&quot;</span>);
-<a name="l01675"></a>01675 }
+<a name="l01608"></a>01608   p = <a class="code" href="group__mongo__sync.html#ga3980761b18bae206e6564db6483924df" title="Send a custom command to MongoDB.">mongo_sync_cmd_custom</a> (conn, db, b);
+<a name="l01609"></a>01609   <span class="keywordflow">if</span> (!p)
+<a name="l01610"></a>01610     {
+<a name="l01611"></a>01611       <span class="keywordtype">int</span> e = errno;
+<a name="l01612"></a>01612 
+<a name="l01613"></a>01613       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
+<a name="l01614"></a>01614       errno = e;
+<a name="l01615"></a>01615       <span class="keywordflow">return</span> FALSE;
+<a name="l01616"></a>01616     }
+<a name="l01617"></a>01617   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (b);
+<a name="l01618"></a>01618   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01619"></a>01619 
+<a name="l01620"></a>01620   <span class="keywordflow">return</span> TRUE;
+<a name="l01621"></a>01621 }
+<a name="l01622"></a>01622 
+<a name="l01623"></a>01623 <span class="keyword">static</span> GString *
+<a name="l01624"></a>01624 _mongo_index_gen_name (<span class="keyword">const</span> bson *key)
+<a name="l01625"></a>01625 {
+<a name="l01626"></a>01626   bson_cursor *c;
+<a name="l01627"></a>01627   GString *name;
+<a name="l01628"></a>01628 
+<a name="l01629"></a>01629   name = g_string_new (<span class="stringliteral">&quot;_&quot;</span>);
+<a name="l01630"></a>01630   c = <a class="code" href="group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor.">bson_cursor_new</a> (key);
+<a name="l01631"></a>01631   <span class="keywordflow">while</span> (<a class="code" href="group__bson__cursor.html#ga88ecba6bdfb9c33a7945daddb5bcab5c" title="Position the cursor to the next key.">bson_cursor_next</a> (c))
+<a name="l01632"></a>01632     {
+<a name="l01633"></a>01633       gint64 v = 0;
+<a name="l01634"></a>01634 
+<a name="l01635"></a>01635       g_string_append (name, <a class="code" href="group__bson__cursor.html#ga8de19693c54fca2eb6c8a4f5a30eb637" title="Determine the name of the current elements key.">bson_cursor_key</a> (c));
+<a name="l01636"></a>01636       g_string_append_c (name, <span class="charliteral">&#39;_&#39;</span>);
+<a name="l01637"></a>01637 
+<a name="l01638"></a>01638       <span class="keywordflow">switch</span> (<a class="code" href="group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3" title="Determine the type of the current element.">bson_cursor_type</a> (c))
+<a name="l01639"></a>01639         {
+<a name="l01640"></a>01640         <span class="keywordflow">case</span> <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbad60fbf033900d76f926b09790318c4f6" title="1byte boolean value">BSON_TYPE_BOOLEAN</a>:
+<a name="l01641"></a>01641           {
+<a name="l01642"></a>01642             gboolean vb;
+<a name="l01643"></a>01643 
+<a name="l01644"></a>01644             <a class="code" href="group__bson__cursor.html#ga25d4336571d2954b22ef3bbfb9b53c4e" title="Get the value stored at the cursor, as a boolean.">bson_cursor_get_boolean</a> (c, &amp;vb);
+<a name="l01645"></a>01645             v = vb;
+<a name="l01646"></a>01646             <span class="keywordflow">break</span>;
+<a name="l01647"></a>01647           }
+<a name="l01648"></a>01648         <span class="keywordflow">case</span> <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba9a106beacbbedfec723680af06b44bbc" title="4byte integer">BSON_TYPE_INT32</a>:
+<a name="l01649"></a>01649           {
+<a name="l01650"></a>01650             gint32 vi;
+<a name="l01651"></a>01651 
+<a name="l01652"></a>01652             <a class="code" href="group__bson__cursor.html#ga869b17014b3863a8ae0cda9eb82bb5ac" title="Get the value stored at the cursor, as a 32-bit integer.">bson_cursor_get_int32</a> (c, &amp;vi);
+<a name="l01653"></a>01653             v = vi;
+<a name="l01654"></a>01654             <span class="keywordflow">break</span>;
+<a name="l01655"></a>01655           }
+<a name="l01656"></a>01656         <span class="keywordflow">case</span> <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cba7e84b17ee5c60cf8bf32e308aa23b611" title="8byte integer">BSON_TYPE_INT64</a>:
+<a name="l01657"></a>01657           {
+<a name="l01658"></a>01658             gint64 vl;
+<a name="l01659"></a>01659 
+<a name="l01660"></a>01660             <a class="code" href="group__bson__cursor.html#ga50f3858c3ce2d30a15544cf46887be50" title="Get the value stored at the cursor, as a 64-bit integer.">bson_cursor_get_int64</a> (c, &amp;vl);
+<a name="l01661"></a>01661             v = vl;
+<a name="l01662"></a>01662             <span class="keywordflow">break</span>;
+<a name="l01663"></a>01663           }
+<a name="l01664"></a>01664         <span class="keywordflow">case</span> <a class="code" href="group__bson__types.html#ggadac27a93ef69dbe56a6409c68395e5cbabfcfb85257205dfad1148f88e7675950" title="8byte double">BSON_TYPE_DOUBLE</a>:
+<a name="l01665"></a>01665           {
+<a name="l01666"></a>01666             gdouble vd;
+<a name="l01667"></a>01667 
+<a name="l01668"></a>01668             <a class="code" href="group__bson__cursor.html#ga10e9c6f2686c407daa77d46e8c5d88b4" title="Get the value stored at the cursor, as a double.">bson_cursor_get_double</a> (c, &amp;vd);
+<a name="l01669"></a>01669             v = (gint64)vd;
+<a name="l01670"></a>01670             <span class="keywordflow">break</span>;
+<a name="l01671"></a>01671           }
+<a name="l01672"></a>01672         <span class="keywordflow">default</span>:
+<a name="l01673"></a>01673           <span class="keywordflow">break</span>;
+<a name="l01674"></a>01674         }
+<a name="l01675"></a>01675       <span class="keywordflow">if</span> (v != 0)
+<a name="l01676"></a>01676         g_string_append_printf (name, <span class="stringliteral">&quot;%&quot;</span> G_GINT64_FORMAT <span class="stringliteral">&quot;_&quot;</span>, v);
+<a name="l01677"></a>01677     }
+<a name="l01678"></a>01678   <a class="code" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it.">bson_cursor_free</a> (c);
+<a name="l01679"></a>01679 
+<a name="l01680"></a>01680   <span class="keywordflow">return</span> name;
+<a name="l01681"></a>01681 }
+<a name="l01682"></a>01682 
+<a name="l01683"></a>01683 gboolean
+<a name="l01684"></a><a class="code" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c">01684</a> <a class="code" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index.">mongo_sync_cmd_index_create</a> (mongo_sync_connection *conn,
+<a name="l01685"></a>01685                              <span class="keyword">const</span> gchar *ns,
+<a name="l01686"></a>01686                              <span class="keyword">const</span> bson *key,
+<a name="l01687"></a>01687                              gint options)
+<a name="l01688"></a>01688 {
+<a name="l01689"></a>01689   GString *name;
+<a name="l01690"></a>01690   gchar *idxns, *t;
+<a name="l01691"></a>01691   bson *cmd;
+<a name="l01692"></a>01692 
+<a name="l01693"></a>01693   <span class="keywordflow">if</span> (!conn)
+<a name="l01694"></a>01694     {
+<a name="l01695"></a>01695       errno = ENOTCONN;
+<a name="l01696"></a>01696       <span class="keywordflow">return</span> FALSE;
+<a name="l01697"></a>01697     }
+<a name="l01698"></a>01698   <span class="keywordflow">if</span> (!ns || !key)
+<a name="l01699"></a>01699     {
+<a name="l01700"></a>01700       errno = EINVAL;
+<a name="l01701"></a>01701       <span class="keywordflow">return</span> FALSE;
+<a name="l01702"></a>01702     }
+<a name="l01703"></a>01703   <span class="keywordflow">if</span> (strchr (ns, <span class="charliteral">&#39;.&#39;</span>) == NULL)
+<a name="l01704"></a>01704     {
+<a name="l01705"></a>01705       errno = EINVAL;
+<a name="l01706"></a>01706       <span class="keywordflow">return</span> FALSE;
+<a name="l01707"></a>01707     }
+<a name="l01708"></a>01708 
+<a name="l01709"></a>01709   name = _mongo_index_gen_name (key);
+<a name="l01710"></a>01710 
+<a name="l01711"></a>01711   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (<a class="code" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object.">bson_size</a> (key) + name-&gt;len + 128);
+<a name="l01712"></a>01712   <a class="code" href="group__bson__append.html#gab2673b16bf736e1093fadc32154454be" title="Append a BSON document to a BSON object.">bson_append_document</a> (cmd, <span class="stringliteral">&quot;key&quot;</span>, key);
+<a name="l01713"></a>01713   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;ns&quot;</span>, ns, -1);
+<a name="l01714"></a>01714   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;name&quot;</span>, name-&gt;str, name-&gt;len);
+<a name="l01715"></a>01715   <span class="keywordflow">if</span> (options &amp; <a class="code" href="group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4da9bba6324f54c9c4be4526a75de4f069d" title="Create a unique index.">MONGO_INDEX_UNIQUE</a>)
+<a name="l01716"></a>01716     <a class="code" href="group__bson__append.html#ga6bd3d1aa4e6869c173c3f402d106414a" title="Append a boolean to a BSON object.">bson_append_boolean</a> (cmd, <span class="stringliteral">&quot;unique&quot;</span>, TRUE);
+<a name="l01717"></a>01717   <span class="keywordflow">if</span> (options &amp; <a class="code" href="group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4da1f17ac23aa3790516427b30a976490b5" title="Drop duplicate entries when creating the indexes.">MONGO_INDEX_DROP_DUPS</a>)
+<a name="l01718"></a>01718     <a class="code" href="group__bson__append.html#ga6bd3d1aa4e6869c173c3f402d106414a" title="Append a boolean to a BSON object.">bson_append_boolean</a> (cmd, <span class="stringliteral">&quot;dropDups&quot;</span>, TRUE);
+<a name="l01719"></a>01719   <span class="keywordflow">if</span> (options &amp; <a class="code" href="group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4da24291685786563d9e27e959946c5e3f3" title="Create indexes in the background.">MONGO_INDEX_BACKGROUND</a>)
+<a name="l01720"></a>01720     <a class="code" href="group__bson__append.html#ga6bd3d1aa4e6869c173c3f402d106414a" title="Append a boolean to a BSON object.">bson_append_boolean</a> (cmd, <span class="stringliteral">&quot;background&quot;</span>, TRUE);
+<a name="l01721"></a>01721   <span class="keywordflow">if</span> (options &amp; <a class="code" href="group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4daca69693fc239bb6cc24e2d0d42543b46" title="Create sparse indexes.">MONGO_INDEX_SPARSE</a>)
+<a name="l01722"></a>01722     <a class="code" href="group__bson__append.html#ga6bd3d1aa4e6869c173c3f402d106414a" title="Append a boolean to a BSON object.">bson_append_boolean</a> (cmd, <span class="stringliteral">&quot;sparse&quot;</span>, TRUE);
+<a name="l01723"></a>01723   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
+<a name="l01724"></a>01724   g_string_free (name, TRUE);
+<a name="l01725"></a>01725 
+<a name="l01726"></a>01726   t = g_strdup (ns);
+<a name="l01727"></a>01727   *(strchr (t, <span class="charliteral">&#39;.&#39;</span>)) = <span class="charliteral">&#39;\0&#39;</span>;
+<a name="l01728"></a>01728   idxns = g_strconcat (t, <span class="stringliteral">&quot;.system.indexes&quot;</span>, NULL);
+<a name="l01729"></a>01729   g_free (t);
+<a name="l01730"></a>01730 
+<a name="l01731"></a>01731   <span class="keywordflow">if</span> (!<a class="code" href="group__mongo__sync.html#ga60b1dea6c43b120d84f6d424e773f52b" title="Send an insert command to MongoDB.">mongo_sync_cmd_insert_n</a> (conn, idxns, 1, (<span class="keyword">const</span> bson **)&amp;cmd))
+<a name="l01732"></a>01732     {
+<a name="l01733"></a>01733       <span class="keywordtype">int</span> e = errno;
+<a name="l01734"></a>01734 
+<a name="l01735"></a>01735       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01736"></a>01736       g_free (idxns);
+<a name="l01737"></a>01737       errno = e;
+<a name="l01738"></a>01738       <span class="keywordflow">return</span> FALSE;
+<a name="l01739"></a>01739     }
+<a name="l01740"></a>01740   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01741"></a>01741   g_free (idxns);
+<a name="l01742"></a>01742 
+<a name="l01743"></a>01743   <span class="keywordflow">return</span> TRUE;
+<a name="l01744"></a>01744 }
+<a name="l01745"></a>01745 
+<a name="l01746"></a>01746 <span class="keyword">static</span> gboolean
+<a name="l01747"></a>01747 _mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
+<a name="l01748"></a>01748                             <span class="keyword">const</span> gchar *full_ns,
+<a name="l01749"></a>01749                             <span class="keyword">const</span> gchar *index_name)
+<a name="l01750"></a>01750 {
+<a name="l01751"></a>01751   bson *cmd;
+<a name="l01752"></a>01752   gchar *db, *ns;
+<a name="l01753"></a>01753   mongo_packet *p;
+<a name="l01754"></a>01754 
+<a name="l01755"></a>01755   <span class="keywordflow">if</span> (!conn)
+<a name="l01756"></a>01756     {
+<a name="l01757"></a>01757       errno = ENOTCONN;
+<a name="l01758"></a>01758       <span class="keywordflow">return</span> FALSE;
+<a name="l01759"></a>01759     }
+<a name="l01760"></a>01760   <span class="keywordflow">if</span> (!full_ns || !index_name)
+<a name="l01761"></a>01761     {
+<a name="l01762"></a>01762       errno = EINVAL;
+<a name="l01763"></a>01763       <span class="keywordflow">return</span> FALSE;
+<a name="l01764"></a>01764     }
+<a name="l01765"></a>01765   ns = strchr (full_ns, <span class="charliteral">&#39;.&#39;</span>);
+<a name="l01766"></a>01766   <span class="keywordflow">if</span> (ns == NULL)
+<a name="l01767"></a>01767     {
+<a name="l01768"></a>01768       errno = EINVAL;
+<a name="l01769"></a>01769       <span class="keywordflow">return</span> FALSE;
+<a name="l01770"></a>01770     }
+<a name="l01771"></a>01771   ns++;
+<a name="l01772"></a>01772 
+<a name="l01773"></a>01773   cmd = <a class="code" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space.">bson_new_sized</a> (256 + strlen (index_name));
+<a name="l01774"></a>01774   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;deleteIndexes&quot;</span>, ns, -1);
+<a name="l01775"></a>01775   <a class="code" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object.">bson_append_string</a> (cmd, <span class="stringliteral">&quot;index&quot;</span>, index_name, -1);
+<a name="l01776"></a>01776   <a class="code" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object.">bson_finish</a> (cmd);
+<a name="l01777"></a>01777 
+<a name="l01778"></a>01778   db = g_strndup (full_ns, ns - full_ns - 1);
+<a name="l01779"></a>01779   p = <a class="code" href="group__mongo__sync.html#ga3980761b18bae206e6564db6483924df" title="Send a custom command to MongoDB.">mongo_sync_cmd_custom</a> (conn, db, cmd);
+<a name="l01780"></a>01780   <span class="keywordflow">if</span> (!p)
+<a name="l01781"></a>01781     {
+<a name="l01782"></a>01782       <span class="keywordtype">int</span> e = errno;
+<a name="l01783"></a>01783 
+<a name="l01784"></a>01784       <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01785"></a>01785       g_free (db);
+<a name="l01786"></a>01786       errno = e;
+<a name="l01787"></a>01787       <span class="keywordflow">return</span> FALSE;
+<a name="l01788"></a>01788     }
+<a name="l01789"></a>01789   <a class="code" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet.">mongo_wire_packet_free</a> (p);
+<a name="l01790"></a>01790   g_free (db);
+<a name="l01791"></a>01791   <a class="code" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object.">bson_free</a> (cmd);
+<a name="l01792"></a>01792 
+<a name="l01793"></a>01793   <span class="keywordflow">return</span> TRUE;
+<a name="l01794"></a>01794 }
+<a name="l01795"></a>01795 
+<a name="l01796"></a>01796 gboolean
+<a name="l01797"></a><a class="code" href="group__mongo__sync.html#ga1e45a4ca4c933a909a9b4b1b04a6dfa2">01797</a> <a class="code" href="group__mongo__sync.html#ga1e45a4ca4c933a909a9b4b1b04a6dfa2" title="Drop an index.">mongo_sync_cmd_index_drop</a> (mongo_sync_connection *conn,
+<a name="l01798"></a>01798                            <span class="keyword">const</span> gchar *ns,
+<a name="l01799"></a>01799                            <span class="keyword">const</span> bson *key)
+<a name="l01800"></a>01800 {
+<a name="l01801"></a>01801   GString *name;
+<a name="l01802"></a>01802   gboolean b;
+<a name="l01803"></a>01803 
+<a name="l01804"></a>01804   <span class="keywordflow">if</span> (!key)
+<a name="l01805"></a>01805     {
+<a name="l01806"></a>01806       errno = EINVAL;
+<a name="l01807"></a>01807       <span class="keywordflow">return</span> FALSE;
+<a name="l01808"></a>01808     }
+<a name="l01809"></a>01809 
+<a name="l01810"></a>01810   name = _mongo_index_gen_name (key);
+<a name="l01811"></a>01811 
+<a name="l01812"></a>01812   b = _mongo_sync_cmd_index_drop (conn, ns, name-&gt;str);
+<a name="l01813"></a>01813   g_string_free (name, TRUE);
+<a name="l01814"></a>01814   <span class="keywordflow">return</span> b;
+<a name="l01815"></a>01815 }
+<a name="l01816"></a>01816 
+<a name="l01817"></a>01817 gboolean
+<a name="l01818"></a><a class="code" href="group__mongo__sync.html#ga9f693b6c98b6d042c1fda2b8cd41da87">01818</a> <a class="code" href="group__mongo__sync.html#ga9f693b6c98b6d042c1fda2b8cd41da87" title="Drop all indexes from a namespace.">mongo_sync_cmd_index_drop_all</a> (mongo_sync_connection *conn,
+<a name="l01819"></a>01819                                <span class="keyword">const</span> gchar *ns)
+<a name="l01820"></a>01820 {
+<a name="l01821"></a>01821   <span class="keywordflow">return</span> _mongo_sync_cmd_index_drop (conn, ns, <span class="stringliteral">&quot;*&quot;</span>);
+<a name="l01822"></a>01822 }
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -1736,7 +1884,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:10 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jul 19 2011 20:23:05 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

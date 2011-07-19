@@ -1,19 +1,31 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array." alt="" coords="192,5,360,35"/>
-<area shape="rect" id="node5" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="453,57,661,87"/>
-<area shape="rect" id="node12" href="$group__bson__cursor.html#ga6f8c5f012e5236e18d677142b49262fb" title="Get the value stored at the cursor, as a BSON document." alt="" coords="176,109,376,139"/>
-<area shape="rect" id="node14" href="$group__bson__cursor.html#ga795172cdba462973cb35a6c94014219b" title="Get the value stored at the cursor, as javascript code w/ scope." alt="" coords="148,163,404,192"/>
-<area shape="rect" id="node16" href="$group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59" title="Authenticate a user with MongoDB." alt="" coords="163,216,389,245"/>
-<area shape="rect" id="node18" href="$group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18" title="Send a count() command to MongoDB." alt="" coords="185,269,367,299"/>
-<area shape="rect" id="node20" href="$group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378" title="Send a drop() command to MongoDB." alt="" coords="189,323,363,352"/>
-<area shape="rect" id="node22" href="$group__mongo__sync.html#gaf58b4929296fa55335f209dbbe7370e2" title="Get the last error from MongoDB." alt="" coords="159,376,393,405"/>
-<area shape="rect" id="node24" href="$group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index." alt="" coords="163,429,389,459"/>
-<area shape="rect" id="node27" href="$group__mongo__sync.html#gadbc79fc4f323ba7df77fe54f669ebfb0" title="Send a PING command to MongoDB." alt="" coords="472,395,643,424"/>
-<area shape="rect" id="node30" href="$group__mongo__sync.html#ga46b67cfe6443950b6083b5d668e9f37e" title="Reset the last error variable in MongoDB." alt="" coords="168,533,384,563"/>
-<area shape="rect" id="node32" href="$group__mongo__sync.html#ga7864f55710c0bdec14f75a936209b56e" title="Add a user to MongoDB." alt="" coords="175,587,377,616"/>
-<area shape="rect" id="node34" href="$group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c" title="Remove a user from MongoDB." alt="" coords="161,640,391,669"/>
-<area shape="rect" id="node36" href="$group__mongo__sync__cursor.html#gae40a3a8297fccd66baa5ac4bf82a92bb" title="Retrieve the BSON document at the cursor&#39;s position." alt="" coords="169,693,383,723"/>
-<area shape="rect" id="node38" href="$group__mongo__wire__cmd.html#ga7c7b378c3675d90d4da766b65b3ccef5" title="Construct a custom command." alt="" coords="181,747,371,776"/>
-<area shape="rect" id="node7" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="713,57,881,87"/>
-<area shape="rect" id="node9" href="$group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d" title="Attempt to connect to another member of a replica set." alt="" coords="711,308,884,337"/>
+<area shape="rect" id="node3" href="$group__bson__cursor.html#ga92fec73041e5d7efaf9899c5b6d37343" title="Get the value stored at the cursor, as a BSON array." alt="" coords="235,5,403,35"/>
+<area shape="rect" id="node5" href="$group__mongo__sync.html#ga68dba9bac0f92adc2b3de62a357d6854" title="Check whether the current node is the master." alt="" coords="611,57,819,87"/>
+<area shape="rect" id="node12" href="$group__bson__cursor.html#ga6f8c5f012e5236e18d677142b49262fb" title="Get the value stored at the cursor, as a BSON document." alt="" coords="219,109,419,139"/>
+<area shape="rect" id="node14" href="$group__bson__cursor.html#ga795172cdba462973cb35a6c94014219b" title="Get the value stored at the cursor, as javascript code w/ scope." alt="" coords="191,163,447,192"/>
+<area shape="rect" id="node16" href="$group__mongo__sync.html#ga7d3aeae73f1d63aa6654ab11e51d3e59" title="Authenticate a user with MongoDB." alt="" coords="205,216,432,245"/>
+<area shape="rect" id="node18" href="$group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18" title="Send a count() command to MongoDB." alt="" coords="228,269,409,299"/>
+<area shape="rect" id="node20" href="$group__mongo__sync.html#ga6fbd3a0fddb2642bc568e39288a4af42" title="Create a new MongoDB collection." alt="" coords="225,323,412,352"/>
+<area shape="rect" id="node22" href="$group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378" title="Send a drop() command to MongoDB." alt="" coords="232,376,405,405"/>
+<area shape="rect" id="node24" href="$group__mongo__sync.html#ga53a08c34a7319ab22ac005abd45d7af1" title="Check whether a collection exists in MongoDB." alt="" coords="228,429,409,459"/>
+<area shape="rect" id="node26" href="$group__mongo__sync.html#gaf58b4929296fa55335f209dbbe7370e2" title="Get the last error from MongoDB." alt="" coords="201,483,436,512"/>
+<area shape="rect" id="node28" href="$group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index." alt="" coords="205,536,432,565"/>
+<area shape="rect" id="node30" href="$group__mongo__sync__gridfs__api.html#gafb787e1b2dd183b9461b55fa6c96abbb" title="Create a new GridFS object." alt="" coords="627,560,803,589"/>
+<area shape="rect" id="node33" href="$group__mongo__sync.html#gadbc79fc4f323ba7df77fe54f669ebfb0" title="Send a PING command to MongoDB." alt="" coords="629,627,800,656"/>
+<area shape="rect" id="node36" href="$group__mongo__sync.html#ga46b67cfe6443950b6083b5d668e9f37e" title="Reset the last error variable in MongoDB." alt="" coords="211,691,427,720"/>
+<area shape="rect" id="node38" href="$group__mongo__sync.html#ga7864f55710c0bdec14f75a936209b56e" title="Add a user to MongoDB." alt="" coords="217,744,420,773"/>
+<area shape="rect" id="node40" href="$group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c" title="Remove a user from MongoDB." alt="" coords="204,797,433,827"/>
+<area shape="rect" id="node42" href="$group__mongo__sync__cursor.html#gae40a3a8297fccd66baa5ac4bf82a92bb" title="Retrieve the BSON document at the cursor&#39;s position." alt="" coords="212,851,425,880"/>
+<area shape="rect" id="node46" href="$group__mongo__sync__gridfs__api.html#ga98a18a4524def495ccc2b9e37679f11c" title="Delete files matching a query from GridFS." alt="" coords="615,904,815,933"/>
+<area shape="rect" id="node48" href="$group__mongo__sync__gridfs__chunk__api.html#gabff321c07bade7b3528b9beda6de72de" title="Create a cursor for a GridFS chunked file." alt="" coords="164,955,473,984"/>
+<area shape="rect" id="node50" href="$group__mongo__sync__gridfs__chunk__api.html#gaf398eaa2d1bfb24f879af6f6899c8278" title="Upload a file to GridFS from a buffer." alt="" coords="147,1008,491,1037"/>
+<area shape="rect" id="node52" href="$group__mongo__sync__gridfs__chunk__api.html#ga54de2ac6d88a819b4c6b9a1560fbe9c0" title="Find a file on GridFS." alt="" coords="201,1061,436,1091"/>
+<area shape="rect" id="node54" href="$group__mongo__sync__gridfs__api.html#ga20cdcadd37ef931f76c03cf7401e63be" title="List GridFS files matching a query." alt="" coords="233,1115,404,1144"/>
+<area shape="rect" id="node59" href="$group__mongo__sync__gridfs__stream__api.html#gaaf94f166caa84ab51ab1e7d2d4553e2c" title="Close a GridFS stream." alt="" coords="200,1168,437,1197"/>
+<area shape="rect" id="node61" href="$group__mongo__sync__gridfs__stream__api.html#ga991b7e09191d888e8709705df3c5a558" title="Create a stream reader by finding the file matching a query." alt="" coords="205,1221,432,1251"/>
+<area shape="rect" id="node63" href="$group__mongo__sync__gridfs__stream__api.html#gaf7b0d0c1302180e31e648419f1613bca" title="Create a new GridFS stream writer." alt="" coords="204,1275,433,1304"/>
+<area shape="rect" id="node65" href="$group__mongo__wire__cmd.html#ga7c7b378c3675d90d4da766b65b3ccef5" title="Construct a custom command." alt="" coords="224,1328,413,1357"/>
+<area shape="rect" id="node7" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="943,57,1111,87"/>
+<area shape="rect" id="node9" href="$group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d" title="Attempt to connect to another member of a replica set." alt="" coords="940,387,1113,416"/>
+<area shape="rect" id="node44" href="$group__mongo__sync__gridfs__chunk__api.html#gafcbf8ca35a03d760586dcc853527b765" title="Get the data of a GridFS file chunk, via a cursor." alt="" coords="540,851,889,880"/>
 </map>

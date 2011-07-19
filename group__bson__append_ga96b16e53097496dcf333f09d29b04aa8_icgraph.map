@@ -1,5 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18" title="Send a count() command to MongoDB." alt="" coords="228,5,409,35"/>
-<area shape="rect" id="node5" href="$group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378" title="Send a drop() command to MongoDB." alt="" coords="232,59,405,88"/>
-<area shape="rect" id="node7" href="$group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index." alt="" coords="205,112,432,141"/>
+<area shape="rect" id="node3" href="$group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18" title="Send a count() command to MongoDB." alt="" coords="287,5,468,35"/>
+<area shape="rect" id="node5" href="$group__mongo__sync.html#ga6fbd3a0fddb2642bc568e39288a4af42" title="Create a new MongoDB collection." alt="" coords="284,59,471,88"/>
+<area shape="rect" id="node7" href="$group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378" title="Send a drop() command to MongoDB." alt="" coords="291,112,464,141"/>
+<area shape="rect" id="node9" href="$group__mongo__sync.html#ga53a08c34a7319ab22ac005abd45d7af1" title="Check whether a collection exists in MongoDB." alt="" coords="287,165,468,195"/>
+<area shape="rect" id="node11" href="$group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index." alt="" coords="264,219,491,248"/>
+<area shape="rect" id="node15" href="$group__mongo__sync__gridfs__chunk__api.html#gaf398eaa2d1bfb24f879af6f6899c8278" title="Upload a file to GridFS from a buffer." alt="" coords="205,272,549,301"/>
+<area shape="rect" id="node17" href="$group__mongo__sync__gridfs__stream__api.html#gaaf94f166caa84ab51ab1e7d2d4553e2c" title="Close a GridFS stream." alt="" coords="259,325,496,355"/>
+<area shape="rect" id="node13" href="$group__mongo__sync__gridfs__api.html#gafb787e1b2dd183b9461b55fa6c96abbb" title="Create a new GridFS object." alt="" coords="599,219,775,248"/>
 </map>

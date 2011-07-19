@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>libmongo-client: API Documentation</title>
+<title>libmongo-client: Page Index</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javaScript" src="search/search.js"></script>
@@ -17,6 +17,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
+      <li class="current"><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Data&nbsp;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -38,40 +39,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
-  <div class="navpath">
-    <ul>
-      <li><a class="el" href="index.html">libmongo-client</a>      </li>
-    </ul>
-  </div>
 </div>
 <div class="header">
   <div class="headertitle">
-<h1>API Documentation </h1>  </div>
+<h1>Related Pages</h1>  </div>
 </div>
 <div class="contents">
-<p>On these pages, one will find the complete API documentation.</p>
-<h2><a class="anchor" id="Structure"></a>
-Structure</h2>
-<p>The library can be split into four major parts:</p>
-<ul>
-<li>bson: The low-level BSON implementation. <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__bson__mod.html" title="The types, functions and everything else within this module is meant to allow one to work with BSON o...">BSON</a></dd></dl>
+Here is a list of all related documentation pages:<ul>
+<li><a class="el" href="tutorial.html">Tutorial</a>
 </li>
-<li>mongo-wire: Functions to construct packets that can be sent later. <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__mongo__wire.html" title="The structures and functions within this module implement the MongoDB wire protocol: functions to ass...">Mongo Wire Protocol</a></dd></dl>
-</li>
-<li>mongo-client: The high-level API that deals with the network. <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__mongo__client.html">Mongo Client</a></dd></dl>
-</li>
-<li>mongo-utils: Various miscellaneous utilities related to either BSON or MongoDB. <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__mongo__util.html" title="Various utility functions related to MongoDB.">Mongo Utils</a></dd></dl>
-</li>
-<li>mongo-sync: Wrappers around the wire commands, that talk to the network aswell, in a synchronous, blocking manner. <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__mongo__sync.html" title="These commands provide wrappers for the most often used MongoDB commands.">Mongo Sync API</a>.</dd></dl>
-</li>
-<li>mongo-sync-cursor: Cursor API on top of the synchronous API. <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__mongo__sync__cursor.html">Mongo Sync Cursor API</a>.</dd></dl>
-</li>
-<li>mongo-sync-pool: Simple connection pooling on top of mongo-sync, <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__mongo__sync__pool__api.html" title="These commands implement connection pooling over the mongo_sync family of commands.">Mongo Sync Pool API</a>.</dd></dl>
-The intended way to use the library to work with MongoDB is to first construct the BSON objects, then construct the packets, and finally send the packets out to the network.</li>
 </ul>
-<p>The reason behind the split between packet construction and sending is because we want to be able to construct packets in one thread and send it in another, if so need be.</p>
-<p>This split also allows scenarios where the packet must be sent over a medium the library was not prepared for (such as an SSL tunnel), or when the packet is supposed to be sent to multiple destinations (for whatever reason - perhaps for being logged to a file for debugging purposes).</p>
-<p>All in all, this separation between modules provides a great deal of flexibility. </p>
 </div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -87,7 +64,7 @@ The intended way to use the library to work with MongoDB is to first construct t
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jul 19 2011 20:23:05 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

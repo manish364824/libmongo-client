@@ -17,6 +17,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Data&nbsp;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
@@ -71,7 +72,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="mongo-wire_8h__dep__incl.png" border="0" usemap="#src_2mongo-wire_8hdep" alt=""/></div>
 <map name="src_2mongo-wire_8hdep" id="src_2mongo-wire_8hdep">
-<area shape="rect" id="node3" href="mongo_8h.html" title="libmongo&#45;client meta&#45;header." alt="" coords="516,315,617,344"/><area shape="rect" id="node9" href="mongo-client_8c.html" title="MongoDB client API implementation." alt="" coords="5,469,144,499"/><area shape="rect" id="node17" href="mongo-wire_8c.html" title="Implementation of the MongoDB Wire Protocol." alt="" coords="168,469,299,499"/><area shape="rect" id="node22" href="mongo-client_8h.html" title="MongoDB client API public header." alt="" coords="172,83,313,112"/><area shape="rect" id="node5" href="libmongo-private_8h.html" title="Private types and functions, for internal use in libmongo&#45;client only." alt="" coords="484,392,649,421"/><area shape="rect" id="node11" href="mongo-sync-cursor_8c.html" title="MongoDB Cursor API implementation." alt="" coords="323,469,501,499"/><area shape="rect" id="node13" href="mongo-sync-pool_8c.html" title="MongoDB connection pool API implementation." alt="" coords="635,469,800,499"/><area shape="rect" id="node15" href="mongo-sync_8c.html" title="MongoDB synchronous wrapper API implementation." alt="" coords="824,469,957,499"/><area shape="rect" id="node7" href="bson_8c.html" title="Implementation of the BSON API." alt="" coords="525,469,611,499"/><area shape="rect" id="node26" href="mongo-sync_8h.html" title="MongoDB synchronous wrapper API public header." alt="" coords="397,160,533,189"/><area shape="rect" id="node29" href="mongo-sync-cursor_8h.html" title="MongoDB cursor API public header." alt="" coords="277,237,456,267"/><area shape="rect" id="node32" href="mongo-sync-pool_8h.html" title="MongoDB connection pool API public header." alt="" coords="480,237,648,267"/></map>
+<area shape="rect" id="node3" href="mongo_8h.html" title="libmongo&#45;client meta&#45;header." alt="" coords="444,469,545,499"/><area shape="rect" id="node9" href="mongo-client_8c.html" title="MongoDB client API implementation." alt="" coords="1360,624,1499,653"/><area shape="rect" id="node17" href="mongo-wire_8c.html" title="Implementation of the MongoDB Wire Protocol." alt="" coords="1205,624,1336,653"/><area shape="rect" id="node28" href="mongo-client_8h.html" title="MongoDB client API public header." alt="" coords="812,83,953,112"/><area shape="rect" id="node5" href="libmongo-private_8h.html" title="Private types and functions, for internal use in libmongo&#45;client only." alt="" coords="532,547,697,576"/><area shape="rect" id="node11" href="mongo-sync-cursor_8c.html" title="MongoDB Cursor API implementation." alt="" coords="5,624,184,653"/><area shape="rect" id="node13" href="mongo-sync-pool_8c.html" title="MongoDB connection pool API implementation." alt="" coords="208,624,373,653"/><area shape="rect" id="node15" href="mongo-sync_8c.html" title="MongoDB synchronous wrapper API implementation." alt="" coords="397,624,531,653"/><area shape="rect" id="node7" href="bson_8c.html" title="Implementation of the BSON API." alt="" coords="555,624,640,653"/><area shape="rect" id="node19" href="sync-gridfs-chunk_8c.html" title="MongoDB GridFS chunk access implementation." alt="" coords="864,624,1032,653"/><area shape="rect" id="node21" href="sync-gridfs-stream_8c.html" title="MongoDB GridFS Streaming API implementation." alt="" coords="664,624,840,653"/><area shape="rect" id="node23" href="sync-gridfs_8c.html" title="MongoDB GridFS implementation." alt="" coords="1056,624,1181,653"/><area shape="rect" id="node32" href="mongo-sync_8h.html" title="MongoDB synchronous wrapper API public header." alt="" coords="663,160,799,189"/><area shape="rect" id="node35" href="mongo-sync-cursor_8h.html" title="MongoDB cursor API public header." alt="" coords="641,237,820,267"/><area shape="rect" id="node38" href="sync-gridfs_8h.html" title="MongoDB GridFS API." alt="" coords="781,315,907,344"/><area shape="rect" id="node50" href="mongo-sync-pool_8h.html" title="MongoDB connection pool API public header." alt="" coords="523,315,691,344"/><area shape="rect" id="node41" href="sync-gridfs-chunk_8h.html" title="MongoDB GridFS Chunk API." alt="" coords="875,392,1043,421"/><area shape="rect" id="node45" href="sync-gridfs-stream_8h.html" title="MongoDB GridFS Streaming API." alt="" coords="675,392,851,421"/></map>
 </div>
 
 <p><a href="mongo-wire_8h_source.html">Go to the source code of this file.</a></p>
@@ -84,33 +85,33 @@ Data Structures</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Mongo reply packet header.  <a href="structmongo__reply__packet__header.html#_details">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5a451db5f21c7c43f9cca3b875b0e35750">MONGO_REPLY_FLAG_NO_CURSOR</a> =  0x1, 
-<a class="el" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5a199b2f5de60a6e97c9e434ab6d8fcdf7">MONGO_REPLY_FLAG_QUERY_FAIL</a> =  0x2, 
-<a class="el" href="group__mongo__wire__reply.html#gga99fb83031ce9923c84392b4e92f956b5ae5a6961ae5f12632a21fcc37a5304abb">MONGO_REPLY_FLAG_AWAITCAPABLE</a> =  0x8
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__mongo__wire__reply.html#ggaba01db17f4a2bfbc3db60dc172972a25a451db5f21c7c43f9cca3b875b0e35750">MONGO_REPLY_FLAG_NO_CURSOR</a> =  0x1, 
+<a class="el" href="group__mongo__wire__reply.html#ggaba01db17f4a2bfbc3db60dc172972a25a199b2f5de60a6e97c9e434ab6d8fcdf7">MONGO_REPLY_FLAG_QUERY_FAIL</a> =  0x2, 
+<a class="el" href="group__mongo__wire__reply.html#ggaba01db17f4a2bfbc3db60dc172972a25ae5a6961ae5f12632a21fcc37a5304abb">MONGO_REPLY_FLAG_AWAITCAPABLE</a> =  0x8
  }</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><p>Flags the server can set in replies. </p>
- <a href="group__mongo__wire__reply.html#ga99fb83031ce9923c84392b4e92f956b5">More...</a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aa73d76d928ff95cc8dc903247148f54d">MONGO_WIRE_FLAG_UPDATE_UPSERT</a> =  0x1, 
-<a class="el" href="group__mongo__wire__cmd.html#ggabc6126af1d45847bc59afa0aa3216b04aac446cd2b1a1e2b5cb77350d2ff203bb">MONGO_WIRE_FLAG_UPDATE_MULTI</a> =  0x2
+ <a href="group__mongo__wire__reply.html#gaba01db17f4a2bfbc3db60dc172972a25">More...</a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__mongo__wire__cmd.html#ggaaf105ae5beaca1dee30ae54530691fceaa73d76d928ff95cc8dc903247148f54d">MONGO_WIRE_FLAG_UPDATE_UPSERT</a> =  0x1, 
+<a class="el" href="group__mongo__wire__cmd.html#ggaaf105ae5beaca1dee30ae54530691fceaac446cd2b1a1e2b5cb77350d2ff203bb">MONGO_WIRE_FLAG_UPDATE_MULTI</a> =  0x2
  }</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><p>Flags available for the update command. </p>
- <a href="group__mongo__wire__cmd.html#gabc6126af1d45847bc59afa0aa3216b04">More...</a><br/></td></tr>
+ <a href="group__mongo__wire__cmd.html#gaaf105ae5beaca1dee30ae54530691fce">More...</a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br/>
-&nbsp;&nbsp;<a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca371353ae287a99e7f43902ec00472798">MONGO_WIRE_FLAG_QUERY_TAILABLE_CURSOR</a> =  1 &lt;&lt; 1, 
-<a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca041055bcf40f8d3cc4543f6ada3fc53e">MONGO_WIRE_FLAG_QUERY_SLAVE_OK</a> =  1 &lt;&lt; 2, 
-<a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca61f4eec7d66626b4b3dd8cfd4637a61c">MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT</a> =  1 &lt;&lt; 4, 
-<a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06caa7d3068d6f7c54a81c30cc12a0806517">MONGO_WIRE_FLAG_QUERY_AWAIT_DATA</a> =  1 &lt;&lt; 5, 
+&nbsp;&nbsp;<a class="el" href="group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaa371353ae287a99e7f43902ec00472798">MONGO_WIRE_FLAG_QUERY_TAILABLE_CURSOR</a> =  1 &lt;&lt; 1, 
+<a class="el" href="group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaa041055bcf40f8d3cc4543f6ada3fc53e">MONGO_WIRE_FLAG_QUERY_SLAVE_OK</a> =  1 &lt;&lt; 2, 
+<a class="el" href="group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaa61f4eec7d66626b4b3dd8cfd4637a61c">MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT</a> =  1 &lt;&lt; 4, 
+<a class="el" href="group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaaa7d3068d6f7c54a81c30cc12a0806517">MONGO_WIRE_FLAG_QUERY_AWAIT_DATA</a> =  1 &lt;&lt; 5, 
 <br/>
-&nbsp;&nbsp;<a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca2789e480d7582afb41a9471ce0c602eb">MONGO_WIRE_FLAG_QUERY_EXHAUST</a> =  1 &lt;&lt; 6, 
-<a class="el" href="group__mongo__wire__cmd.html#ggadc29c2ff13d900c2f185ee95427fb06ca52fcba0c02713c5353b2300d311551e0">MONGO_WIRE_FLAG_QUERY_PARTIAL_RESULTS</a> =  1 &lt;&lt; 7
+&nbsp;&nbsp;<a class="el" href="group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaa2789e480d7582afb41a9471ce0c602eb">MONGO_WIRE_FLAG_QUERY_EXHAUST</a> =  1 &lt;&lt; 6, 
+<a class="el" href="group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaa52fcba0c02713c5353b2300d311551e0">MONGO_WIRE_FLAG_QUERY_PARTIAL_RESULTS</a> =  1 &lt;&lt; 7
 <br/>
  }</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><p>Flags available for the query command. </p>
- <a href="group__mongo__wire__cmd.html#gadc29c2ff13d900c2f185ee95427fb06c">More...</a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__mongo__wire__cmd.html#gga61dadd085c1777f559549e05962b2c9ea12352814d851fba7a1a178ca97e5a10b">MONGO_WIRE_FLAG_DELETE_SINGLE</a> =  0x1
+ <a href="group__mongo__wire__cmd.html#ga80155586fa275b28773c9b203f52caba">More...</a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__mongo__wire__cmd.html#gga6b7b47dd702d9e331586d485013fd1eaa12352814d851fba7a1a178ca97e5a10b">MONGO_WIRE_FLAG_DELETE_SINGLE</a> =  0x1
  }</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><p>Flags available for the delete command. </p>
- <a href="group__mongo__wire__cmd.html#ga61dadd085c1777f559549e05962b2c9e">More...</a><br/></td></tr>
+ <a href="group__mongo__wire__cmd.html#ga6b7b47dd702d9e331586d485013fd1ea">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">mongo_packet *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__wire__packet.html#gab4bd96fe8aa6e3b7b9d49636766e481c">mongo_wire_packet_new</a> (void)</td></tr>
@@ -167,7 +168,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jul 19 2011 20:23:05 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

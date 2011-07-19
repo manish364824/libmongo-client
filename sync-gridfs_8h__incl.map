@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$mongo-sync_8h.html" title="MongoDB synchronous wrapper API public header." alt="" coords="92,160,204,189"/>
+<area shape="rect" id="node19" href="$mongo-sync-cursor_8h.html" title="MongoDB cursor API public header." alt="" coords="158,83,315,112"/>
+<area shape="rect" id="node5" href="$mongo-client_8h.html" title="MongoDB client API public header." alt="" coords="40,237,158,267"/>
+<area shape="rect" id="node7" href="$bson_8h.html" title="The BSON API&#39;s public header." alt="" coords="16,392,80,421"/>
+<area shape="rect" id="node13" href="$mongo-wire_8h.html" title="MongoDB Wire Protocol API public header." alt="" coords="22,315,131,344"/>
+</map>

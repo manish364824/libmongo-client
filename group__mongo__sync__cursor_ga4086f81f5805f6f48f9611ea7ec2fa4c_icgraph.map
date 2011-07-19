@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group__mongo__sync__gridfs__chunk__api.html#gabff321c07bade7b3528b9beda6de72de" title="Create a cursor for a GridFS chunked file." alt="" coords="239,5,548,35"/>
+<area shape="rect" id="node5" href="$group__mongo__sync__gridfs__api.html#ga20cdcadd37ef931f76c03cf7401e63be" title="List GridFS files matching a query." alt="" coords="308,59,479,88"/>
+<area shape="rect" id="node7" href="$group__mongo__sync__gridfs__api.html#ga98a18a4524def495ccc2b9e37679f11c" title="Delete files matching a query from GridFS." alt="" coords="599,59,799,88"/>
+</map>

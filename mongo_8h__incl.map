@@ -1,9 +1,12 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$bson_8h.html" title="The BSON API&#39;s public header." alt="" coords="72,392,136,421"/>
-<area shape="rect" id="node9" href="$mongo-wire_8h.html" title="MongoDB Wire Protocol API public header." alt="" coords="43,315,152,344"/>
-<area shape="rect" id="node13" href="$mongo-client_8h.html" title="MongoDB client API public header." alt="" coords="132,237,249,267"/>
-<area shape="rect" id="node18" href="$mongo-utils_8h.html" title="Public header for various libmongo&#45;client helper functions." alt="" coords="533,160,643,189"/>
-<area shape="rect" id="node21" href="$mongo-sync_8h.html" title="MongoDB synchronous wrapper API public header." alt="" coords="323,160,435,189"/>
-<area shape="rect" id="node25" href="$mongo-sync-cursor_8h.html" title="MongoDB cursor API public header." alt="" coords="183,83,340,112"/>
-<area shape="rect" id="node29" href="$mongo-sync-pool_8h.html" title="MongoDB connection pool API public header." alt="" coords="415,83,559,112"/>
+<area shape="rect" id="node3" href="$bson_8h.html" title="The BSON API&#39;s public header." alt="" coords="72,547,136,576"/>
+<area shape="rect" id="node9" href="$mongo-wire_8h.html" title="MongoDB Wire Protocol API public header." alt="" coords="43,469,152,499"/>
+<area shape="rect" id="node13" href="$mongo-client_8h.html" title="MongoDB client API public header." alt="" coords="131,392,248,421"/>
+<area shape="rect" id="node18" href="$mongo-utils_8h.html" title="Public header for various libmongo&#45;client helper functions." alt="" coords="760,160,869,189"/>
+<area shape="rect" id="node21" href="$mongo-sync_8h.html" title="MongoDB synchronous wrapper API public header." alt="" coords="328,315,440,344"/>
+<area shape="rect" id="node25" href="$mongo-sync-cursor_8h.html" title="MongoDB cursor API public header." alt="" coords="363,237,520,267"/>
+<area shape="rect" id="node29" href="$mongo-sync-pool_8h.html" title="MongoDB connection pool API public header." alt="" coords="144,237,288,267"/>
+<area shape="rect" id="node33" href="$sync-gridfs_8h.html" title="MongoDB GridFS API." alt="" coords="496,160,597,189"/>
+<area shape="rect" id="node38" href="$sync-gridfs-chunk_8h.html" title="MongoDB GridFS Chunk API." alt="" coords="464,83,611,112"/>
+<area shape="rect" id="node42" href="$sync-gridfs-stream_8h.html" title="MongoDB GridFS Streaming API." alt="" coords="635,83,789,112"/>
 </map>

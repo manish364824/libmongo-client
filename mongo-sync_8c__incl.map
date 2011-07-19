@@ -1,11 +1,15 @@
 <map id="G" name="G">
-<area shape="rect" id="node5" href="$mongo_8h.html" title="libmongo&#45;client meta&#45;header." alt="" coords="424,160,501,189"/>
-<area shape="rect" id="node37" href="$libmongo-private_8h.html" title="Private types and functions, for internal use in libmongo&#45;client only." alt="" coords="392,83,533,112"/>
-<area shape="rect" id="node7" href="$bson_8h.html" title="The BSON API&#39;s public header." alt="" coords="447,547,511,576"/>
-<area shape="rect" id="node13" href="$mongo-wire_8h.html" title="MongoDB Wire Protocol API public header." alt="" coords="424,469,533,499"/>
-<area shape="rect" id="node17" href="$mongo-client_8h.html" title="MongoDB client API public header." alt="" coords="328,392,445,421"/>
-<area shape="rect" id="node22" href="$mongo-utils_8h.html" title="Public header for various libmongo&#45;client helper functions." alt="" coords="323,315,432,344"/>
-<area shape="rect" id="node25" href="$mongo-sync_8h.html" title="MongoDB synchronous wrapper API public header." alt="" coords="187,315,299,344"/>
-<area shape="rect" id="node29" href="$mongo-sync-cursor_8h.html" title="MongoDB cursor API public header." alt="" coords="173,237,331,267"/>
-<area shape="rect" id="node33" href="$mongo-sync-pool_8h.html" title="MongoDB connection pool API public header." alt="" coords="5,237,149,267"/>
+<area shape="rect" id="node5" href="$mongo_8h.html" title="libmongo&#45;client meta&#45;header." alt="" coords="577,160,655,189"/>
+<area shape="rect" id="node50" href="$libmongo-private_8h.html" title="Private types and functions, for internal use in libmongo&#45;client only." alt="" coords="545,83,687,112"/>
+<area shape="rect" id="node7" href="$bson_8h.html" title="The BSON API&#39;s public header." alt="" coords="712,701,776,731"/>
+<area shape="rect" id="node13" href="$mongo-wire_8h.html" title="MongoDB Wire Protocol API public header." alt="" coords="689,624,799,653"/>
+<area shape="rect" id="node17" href="$mongo-client_8h.html" title="MongoDB client API public header." alt="" coords="589,547,707,576"/>
+<area shape="rect" id="node22" href="$mongo-utils_8h.html" title="Public header for various libmongo&#45;client helper functions." alt="" coords="768,315,877,344"/>
+<area shape="rect" id="node25" href="$mongo-sync_8h.html" title="MongoDB synchronous wrapper API public header." alt="" coords="444,469,556,499"/>
+<area shape="rect" id="node29" href="$mongo-sync-cursor_8h.html" title="MongoDB cursor API public header." alt="" coords="329,392,487,421"/>
+<area shape="rect" id="node33" href="$mongo-sync-pool_8h.html" title="MongoDB connection pool API public header." alt="" coords="561,392,705,421"/>
+<area shape="rect" id="node37" href="$sync-gridfs_8h.html" title="MongoDB GridFS API." alt="" coords="269,315,371,344"/>
+<area shape="rect" id="node42" href="$sync-gridfs-chunk_8h.html" title="MongoDB GridFS Chunk API." alt="" coords="101,237,248,267"/>
+<area shape="rect" id="node46" href="$sync-gridfs-stream_8h.html" title="MongoDB GridFS Streaming API." alt="" coords="272,237,427,267"/>
+<area shape="rect" id="node53" href="$compat_8h_source.html" title="compat.h" alt="" coords="275,160,357,189"/>
 </map>

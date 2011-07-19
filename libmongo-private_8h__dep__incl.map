@@ -5,4 +5,7 @@
 <area shape="rect" id="node9" href="$mongo-sync-pool_8c.html" title="MongoDB connection pool API implementation." alt="" coords="480,83,645,112"/>
 <area shape="rect" id="node11" href="$mongo-sync_8c.html" title="MongoDB synchronous wrapper API implementation." alt="" coords="669,83,803,112"/>
 <area shape="rect" id="node13" href="$mongo-wire_8c.html" title="Implementation of the MongoDB Wire Protocol." alt="" coords="827,83,957,112"/>
+<area shape="rect" id="node15" href="$sync-gridfs-chunk_8c.html" title="MongoDB GridFS chunk access implementation." alt="" coords="981,83,1149,112"/>
+<area shape="rect" id="node17" href="$sync-gridfs-stream_8c.html" title="MongoDB GridFS Streaming API implementation." alt="" coords="1173,83,1349,112"/>
+<area shape="rect" id="node19" href="$sync-gridfs_8c.html" title="MongoDB GridFS implementation." alt="" coords="1373,83,1499,112"/>
 </map>

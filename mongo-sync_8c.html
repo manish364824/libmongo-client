@@ -17,6 +17,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Data&nbsp;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
@@ -68,7 +69,7 @@ Include dependency graph for mongo-sync.c:</div>
 <div class="dyncontent">
 <div class="center"><img src="mongo-sync_8c__incl.png" border="0" usemap="#src_2mongo-sync_8c" alt=""/></div>
 <map name="src_2mongo-sync_8c" id="src_2mongo-sync_8c">
-<area shape="rect" id="node5" href="mongo_8h.html" title="libmongo&#45;client meta&#45;header." alt="" coords="424,160,501,189"/><area shape="rect" id="node37" href="libmongo-private_8h.html" title="Private types and functions, for internal use in libmongo&#45;client only." alt="" coords="392,83,533,112"/><area shape="rect" id="node7" href="bson_8h.html" title="The BSON API&#39;s public header." alt="" coords="447,547,511,576"/><area shape="rect" id="node13" href="mongo-wire_8h.html" title="MongoDB Wire Protocol API public header." alt="" coords="424,469,533,499"/><area shape="rect" id="node17" href="mongo-client_8h.html" title="MongoDB client API public header." alt="" coords="328,392,445,421"/><area shape="rect" id="node22" href="mongo-utils_8h.html" title="Public header for various libmongo&#45;client helper functions." alt="" coords="323,315,432,344"/><area shape="rect" id="node25" href="mongo-sync_8h.html" title="MongoDB synchronous wrapper API public header." alt="" coords="187,315,299,344"/><area shape="rect" id="node29" href="mongo-sync-cursor_8h.html" title="MongoDB cursor API public header." alt="" coords="173,237,331,267"/><area shape="rect" id="node33" href="mongo-sync-pool_8h.html" title="MongoDB connection pool API public header." alt="" coords="5,237,149,267"/></map>
+<area shape="rect" id="node5" href="mongo_8h.html" title="libmongo&#45;client meta&#45;header." alt="" coords="577,160,655,189"/><area shape="rect" id="node50" href="libmongo-private_8h.html" title="Private types and functions, for internal use in libmongo&#45;client only." alt="" coords="545,83,687,112"/><area shape="rect" id="node7" href="bson_8h.html" title="The BSON API&#39;s public header." alt="" coords="712,701,776,731"/><area shape="rect" id="node13" href="mongo-wire_8h.html" title="MongoDB Wire Protocol API public header." alt="" coords="689,624,799,653"/><area shape="rect" id="node17" href="mongo-client_8h.html" title="MongoDB client API public header." alt="" coords="589,547,707,576"/><area shape="rect" id="node22" href="mongo-utils_8h.html" title="Public header for various libmongo&#45;client helper functions." alt="" coords="768,315,877,344"/><area shape="rect" id="node25" href="mongo-sync_8h.html" title="MongoDB synchronous wrapper API public header." alt="" coords="444,469,556,499"/><area shape="rect" id="node29" href="mongo-sync-cursor_8h.html" title="MongoDB cursor API public header." alt="" coords="329,392,487,421"/><area shape="rect" id="node33" href="mongo-sync-pool_8h.html" title="MongoDB connection pool API public header." alt="" coords="561,392,705,421"/><area shape="rect" id="node37" href="sync-gridfs_8h.html" title="MongoDB GridFS API." alt="" coords="269,315,371,344"/><area shape="rect" id="node42" href="sync-gridfs-chunk_8h.html" title="MongoDB GridFS Chunk API." alt="" coords="101,237,248,267"/><area shape="rect" id="node46" href="sync-gridfs-stream_8h.html" title="MongoDB GridFS Streaming API." alt="" coords="272,237,427,267"/><area shape="rect" id="node53" href="compat_8h_source.html" title="compat.h" alt="" coords="275,160,357,189"/></map>
 </div>
 
 <p><a href="mongo-sync_8c_source.html">Go to the source code of this file.</a></p>
@@ -121,6 +122,10 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Send a custom command to MongoDB.  <a href="group__mongo__sync.html#ga3980761b18bae206e6564db6483924df"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18">mongo_sync_cmd_count</a> (mongo_sync_connection *conn, const gchar *db, const gchar *coll, const bson *query)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Send a count() command to MongoDB.  <a href="group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga6fbd3a0fddb2642bc568e39288a4af42">mongo_sync_cmd_create</a> (mongo_sync_connection *conn, const gchar *db, const gchar *coll, gint flags,...)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create a new MongoDB collection.  <a href="group__mongo__sync.html#ga6fbd3a0fddb2642bc568e39288a4af42"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bson *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga53a08c34a7319ab22ac005abd45d7af1">mongo_sync_cmd_exists</a> (mongo_sync_connection *conn, const gchar *db, const gchar *coll)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check whether a collection exists in MongoDB.  <a href="group__mongo__sync.html#ga53a08c34a7319ab22ac005abd45d7af1"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378">mongo_sync_cmd_drop</a> (mongo_sync_connection *conn, const gchar *db, const gchar *coll)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Send a drop() command to MongoDB.  <a href="group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#gaf58b4929296fa55335f209dbbe7370e2">mongo_sync_cmd_get_last_error</a> (mongo_sync_connection *conn, const gchar *db, gchar **error)</td></tr>
@@ -163,7 +168,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jul 19 2011 20:23:05 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>

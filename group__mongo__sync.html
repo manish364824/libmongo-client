@@ -17,6 +17,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Data&nbsp;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -57,7 +58,7 @@ Collaboration diagram for Mongo Sync API:</div>
 <div class="dyncontent">
 <center><table><tr><td><img src="group__mongo__sync.png" border="0" alt="" usemap="#group____mongo____sync"/>
 <map name="group____mongo____sync" id="group____mongo____sync">
-<area shape="rect" id="node1" href="group__mongo__sync__cursor.html" title="Mongo Sync Cursor API" alt="" coords="179,5,349,35"/><area shape="rect" id="node3" href="group__mongo__sync__pool__api.html" title="These commands implement connection pooling over the mongo_sync family of commands." alt="" coords="187,59,341,88"/></map>
+<area shape="rect" id="node1" href="group__mongo__sync__cursor.html" title="Mongo Sync Cursor API" alt="" coords="179,5,349,35"/><area shape="rect" id="node3" href="group__mongo__sync__pool__api.html" title="These commands implement connection pooling over the mongo_sync family of commands." alt="" coords="187,59,341,88"/><area shape="rect" id="node4" href="group__mongo__sync__gridfs__api.html" title="The GridFS API &#45; and related modules, like Mongo GridFS Chunk API and Mongo GridFS Streaming API &#45; pr..." alt="" coords="197,112,331,141"/></map>
 </td></tr></table></center>
 </div>
 </p>
@@ -70,13 +71,31 @@ Modules</h2></td></tr>
 <p><tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><p>These commands implement connection pooling over the mongo_sync family of commands. </p>
 <br/></td></tr>
 </p>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync__gridfs__api.html">Mongo GridFS API</a></td></tr>
+
+<p><tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><p>The GridFS API - and related modules, like <a class="el" href="group__mongo__sync__gridfs__chunk__api.html">Mongo GridFS Chunk API</a> and <a class="el" href="group__mongo__sync__gridfs__stream__api.html">Mongo GridFS Streaming API</a> - provide a conveneint way to work with GridFS, and files stored on it. </p>
+<br/></td></tr>
+</p>
 <tr><td colspan="2"><h2><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a9bba6324f54c9c4be4526a75de4f069d">MONGO_INDEX_UNIQUE</a> =  0x01, 
-<a class="el" href="group__mongo__sync.html#ggadf764cbdea00d65edcd07bb9953ad2b7a1f17ac23aa3790516427b30a976490b5">MONGO_INDEX_DROP_DUPS</a> =  0x02
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br/>
+&nbsp;&nbsp;<a class="el" href="group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea57d3aa843580dc934014ff67b949a2ad">MONGO_COLLECTION_DEFAULTS</a> =  0, 
+<a class="el" href="group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea87d3d094a9a7bcdd73e18f5a8a0839c8">MONGO_COLLECTION_CAPPED</a> =  1 &lt;&lt; 0, 
+<a class="el" href="group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea50f6e1a79c91f4c683385839a7980940">MONGO_COLLECTION_CAPPED_MAX</a> =  1 &lt;&lt; 1, 
+<a class="el" href="group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea307874ef23c8e6cfe2edd90c40ff8855">MONGO_COLLECTION_AUTO_INDEX_ID</a> =  1 &lt;&lt; 2, 
+<br/>
+&nbsp;&nbsp;<a class="el" href="group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9eaebac473a06bc56de39f1d5bf247be93e">MONGO_COLLECTION_SIZED</a> =  1 &lt;&lt; 3
+<br/>
+ }</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><p>Flags that can be set during collection creation. </p>
+ <a href="group__mongo__sync.html#ga05589fbab0657f08285ebdfe93f5ec9e">More...</a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4da9bba6324f54c9c4be4526a75de4f069d">MONGO_INDEX_UNIQUE</a> =  0x01, 
+<a class="el" href="group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4da1f17ac23aa3790516427b30a976490b5">MONGO_INDEX_DROP_DUPS</a> =  0x02, 
+<a class="el" href="group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4da24291685786563d9e27e959946c5e3f3">MONGO_INDEX_BACKGROUND</a> =  0x04, 
+<a class="el" href="group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4daca69693fc239bb6cc24e2d0d42543b46">MONGO_INDEX_SPARSE</a> =  0x08
  }</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><p>Flags that can be set at index creation. </p>
- <a href="group__mongo__sync.html#gadf764cbdea00d65edcd07bb9953ad2b7">More...</a><br/></td></tr>
+ <a href="group__mongo__sync.html#ga16af7b253440dadd46a80a4b9fddba4d">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">mongo_sync_connection *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga731774e2a0026cda4467193a83b6f64a">mongo_sync_connect</a> (const gchar *host, gint port, gboolean slaveok)</td></tr>
@@ -121,6 +140,10 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Send a custom command to MongoDB.  <a href="#ga3980761b18bae206e6564db6483924df"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gdouble&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18">mongo_sync_cmd_count</a> (mongo_sync_connection *conn, const gchar *db, const gchar *coll, const bson *query)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Send a count() command to MongoDB.  <a href="#gaedac9fdb1e5ec77e0fedd2289d5a8c18"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga6fbd3a0fddb2642bc568e39288a4af42">mongo_sync_cmd_create</a> (mongo_sync_connection *conn, const gchar *db, const gchar *coll, gint flags,...)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create a new MongoDB collection.  <a href="#ga6fbd3a0fddb2642bc568e39288a4af42"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bson *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga53a08c34a7319ab22ac005abd45d7af1">mongo_sync_cmd_exists</a> (mongo_sync_connection *conn, const gchar *db, const gchar *coll)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check whether a collection exists in MongoDB.  <a href="#ga53a08c34a7319ab22ac005abd45d7af1"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga624676afff72705c88ecc545f98c5378">mongo_sync_cmd_drop</a> (mongo_sync_connection *conn, const gchar *db, const gchar *coll)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Send a drop() command to MongoDB.  <a href="#ga624676afff72705c88ecc545f98c5378"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">gboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#gaf58b4929296fa55335f209dbbe7370e2">mongo_sync_cmd_get_last_error</a> (mongo_sync_connection *conn, const gchar *db, gchar **error)</td></tr>
@@ -149,7 +172,43 @@ Functions</h2></td></tr>
 <p>All of these will send the command, and receive any results, thus saving the caller from having to do that himself.</p>
 <p>However, these are only of use when blocking the application is not an issue. For asynchronous operation, one should still construct the packets himself, and send / receive when appropriate. </p>
 <hr/><h2>Enumeration Type Documentation</h2>
-<a class="anchor" id="gadf764cbdea00d65edcd07bb9953ad2b7"></a><!-- doxytag: member="mongo&#45;sync.h::@1" ref="gadf764cbdea00d65edcd07bb9953ad2b7" args="" -->
+<a class="anchor" id="ga05589fbab0657f08285ebdfe93f5ec9e"></a><!-- doxytag: member="mongo&#45;sync.h::@13" ref="ga05589fbab0657f08285ebdfe93f5ec9e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Flags that can be set during collection creation. </p>
+<dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="gga05589fbab0657f08285ebdfe93f5ec9ea57d3aa843580dc934014ff67b949a2ad"></a><!-- doxytag: member="MONGO_COLLECTION_DEFAULTS" ref="gga05589fbab0657f08285ebdfe93f5ec9ea57d3aa843580dc934014ff67b949a2ad" args="" -->MONGO_COLLECTION_DEFAULTS</em>&nbsp;</td><td>
+<p>Default options. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="gga05589fbab0657f08285ebdfe93f5ec9ea87d3d094a9a7bcdd73e18f5a8a0839c8"></a><!-- doxytag: member="MONGO_COLLECTION_CAPPED" ref="gga05589fbab0657f08285ebdfe93f5ec9ea87d3d094a9a7bcdd73e18f5a8a0839c8" args="" -->MONGO_COLLECTION_CAPPED</em>&nbsp;</td><td>
+<p>The collection is capped. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="gga05589fbab0657f08285ebdfe93f5ec9ea50f6e1a79c91f4c683385839a7980940"></a><!-- doxytag: member="MONGO_COLLECTION_CAPPED_MAX" ref="gga05589fbab0657f08285ebdfe93f5ec9ea50f6e1a79c91f4c683385839a7980940" args="" -->MONGO_COLLECTION_CAPPED_MAX</em>&nbsp;</td><td>
+<p>The collection is capped by element number aswell. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="gga05589fbab0657f08285ebdfe93f5ec9ea307874ef23c8e6cfe2edd90c40ff8855"></a><!-- doxytag: member="MONGO_COLLECTION_AUTO_INDEX_ID" ref="gga05589fbab0657f08285ebdfe93f5ec9ea307874ef23c8e6cfe2edd90c40ff8855" args="" -->MONGO_COLLECTION_AUTO_INDEX_ID</em>&nbsp;</td><td>
+<p>The collection's _id should be autoindexed. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="gga05589fbab0657f08285ebdfe93f5ec9eaebac473a06bc56de39f1d5bf247be93e"></a><!-- doxytag: member="MONGO_COLLECTION_SIZED" ref="gga05589fbab0657f08285ebdfe93f5ec9eaebac473a06bc56de39f1d5bf247be93e" args="" -->MONGO_COLLECTION_SIZED</em>&nbsp;</td><td>
+<p>The collection needs to be pre-allocated. </p>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>Definition at line <a class="el" href="mongo-sync_8h_source.html#l00349">349</a> of file <a class="el" href="mongo-sync_8h_source.html">mongo-sync.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga16af7b253440dadd46a80a4b9fddba4d"></a><!-- doxytag: member="mongo&#45;sync.h::@14" ref="ga16af7b253440dadd46a80a4b9fddba4d" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -162,17 +221,23 @@ Functions</h2></td></tr>
 
 <p>Flags that can be set at index creation. </p>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" id="ggadf764cbdea00d65edcd07bb9953ad2b7a9bba6324f54c9c4be4526a75de4f069d"></a><!-- doxytag: member="MONGO_INDEX_UNIQUE" ref="ggadf764cbdea00d65edcd07bb9953ad2b7a9bba6324f54c9c4be4526a75de4f069d" args="" -->MONGO_INDEX_UNIQUE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" id="gga16af7b253440dadd46a80a4b9fddba4da9bba6324f54c9c4be4526a75de4f069d"></a><!-- doxytag: member="MONGO_INDEX_UNIQUE" ref="gga16af7b253440dadd46a80a4b9fddba4da9bba6324f54c9c4be4526a75de4f069d" args="" -->MONGO_INDEX_UNIQUE</em>&nbsp;</td><td>
 <p>Create a unique index. </p>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" id="ggadf764cbdea00d65edcd07bb9953ad2b7a1f17ac23aa3790516427b30a976490b5"></a><!-- doxytag: member="MONGO_INDEX_DROP_DUPS" ref="ggadf764cbdea00d65edcd07bb9953ad2b7a1f17ac23aa3790516427b30a976490b5" args="" -->MONGO_INDEX_DROP_DUPS</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" id="gga16af7b253440dadd46a80a4b9fddba4da1f17ac23aa3790516427b30a976490b5"></a><!-- doxytag: member="MONGO_INDEX_DROP_DUPS" ref="gga16af7b253440dadd46a80a4b9fddba4da1f17ac23aa3790516427b30a976490b5" args="" -->MONGO_INDEX_DROP_DUPS</em>&nbsp;</td><td>
 <p>Drop duplicate entries when creating the indexes. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="gga16af7b253440dadd46a80a4b9fddba4da24291685786563d9e27e959946c5e3f3"></a><!-- doxytag: member="MONGO_INDEX_BACKGROUND" ref="gga16af7b253440dadd46a80a4b9fddba4da24291685786563d9e27e959946c5e3f3" args="" -->MONGO_INDEX_BACKGROUND</em>&nbsp;</td><td>
+<p>Create indexes in the background. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="gga16af7b253440dadd46a80a4b9fddba4daca69693fc239bb6cc24e2d0d42543b46"></a><!-- doxytag: member="MONGO_INDEX_SPARSE" ref="gga16af7b253440dadd46a80a4b9fddba4daca69693fc239bb6cc24e2d0d42543b46" args="" -->MONGO_INDEX_SPARSE</em>&nbsp;</td><td>
+<p>Create sparse indexes. </p>
 </td></tr>
 </table>
 </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8h_source.html#l00445">445</a> of file <a class="el" href="mongo-sync_8h_source.html">mongo-sync.h</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8h_source.html#l00498">498</a> of file <a class="el" href="mongo-sync_8h_source.html">mongo-sync.h</a>.</p>
 
 </div>
 </div>
@@ -226,7 +291,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE on success, FALSE otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01378">1378</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01521">1521</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -297,6 +362,82 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="group__mongo__sync_gaedac9fdb1e5ec77e0fedd2289d5a8c18_cgraph.png" border="0" usemap="#group__mongo__sync_gaedac9fdb1e5ec77e0fedd2289d5a8c18_cgraph" alt=""/></div>
 <map name="group__mongo__sync_gaedac9fdb1e5ec77e0fedd2289d5a8c18_cgraph" id="group__mongo__sync_gaedac9fdb1e5ec77e0fedd2289d5a8c18_cgraph">
 <area shape="rect" id="node3" href="group__bson__append.html#gab2673b16bf736e1093fadc32154454be" title="Append a BSON document to a BSON object." alt="" coords="303,5,481,35"/><area shape="rect" id="node5" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object." alt="" coords="317,59,467,88"/><area shape="rect" id="node7" href="group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it." alt="" coords="665,112,796,141"/><area shape="rect" id="node9" href="group__bson__cursor.html#ga10e9c6f2686c407daa77d46e8c5d88b4" title="Get the value stored at the cursor, as a double." alt="" coords="303,112,481,141"/><area shape="rect" id="node13" href="group__bson__cursor.html#ga8020ba70e4514954a5a5ebe37baa2bcb" title="Create a new cursor positioned at a given key." alt="" coords="351,216,433,245"/><area shape="rect" id="node18" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object." alt="" coords="976,216,1061,245"/><area shape="rect" id="node21" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object." alt="" coords="345,320,439,349"/><area shape="rect" id="node23" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object." alt="" coords="349,373,435,403"/><area shape="rect" id="node25" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space." alt="" coords="329,427,455,456"/><area shape="rect" id="node28" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet." alt="" coords="301,480,483,509"/><area shape="rect" id="node30" href="group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet." alt="" coords="235,533,549,563"/><area shape="rect" id="node11" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object." alt="" coords="687,59,775,88"/><area shape="rect" id="node16" href="group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor." alt="" coords="665,216,796,245"/><area shape="rect" id="node32" href="group__bson__object__access.html#gad456a97b9a887b96373b8e519d76ecff" title="Create a BSON object from existing data." alt="" coords="652,587,809,616"/><area shape="rect" id="node34" href="group__mongo__wire__reply.html#gad4378c89fad2dc0834eb0e709d6124b2" title="Get the full data part of a reply packet." alt="" coords="605,480,856,509"/><area shape="rect" id="node38" href="group__mongo__wire__reply.html#ga5d207b5b89cfee839f2129251aab5261" title="Get the header of a reply packet." alt="" coords="597,533,864,563"/><area shape="rect" id="node36" href="group__mongo__wire__packet.html#ga5350d54b0a6800ecd7df81d5c2b80c6b" title="Get the data part of a packet." alt="" coords="912,507,1125,536"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="ga6fbd3a0fddb2642bc568e39288a4af42"></a><!-- doxytag: member="mongo&#45;sync.h::mongo_sync_cmd_create" ref="ga6fbd3a0fddb2642bc568e39288a4af42" args="(mongo_sync_connection *conn, const gchar *db, const gchar *coll, gint flags,...)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean mongo_sync_cmd_create </td>
+          <td>(</td>
+          <td class="paramtype">mongo_sync_connection *&nbsp;</td>
+          <td class="paramname"> <em>conn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>db</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>coll</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&nbsp;</td>
+          <td class="paramname"> <em>flags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>...</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Create a new MongoDB collection. </p>
+<p>This command can be used to explicitly create a MongoDB collection, with various parameters pre-set.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>conn</em>&nbsp;</td><td>is the connection to work with. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>db</em>&nbsp;</td><td>is the name of the database. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>coll</em>&nbsp;</td><td>is the name of the collection to create. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>flags</em>&nbsp;</td><td>is a collection of flags for the collection. Any combination of MONGO_COLLECTION_DEFAULTS, MONGO_COLLECTION_CAPPED, MONGO_COLLECTION_CAPPED_MAX, MONGO_COLLECTION_SIZED and MONGO_COLLECTION_AUTO_INDEX_ID is acceptable.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl><dt><b>Template Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>size</em>&nbsp;</td><td><b>MUST</b> be a 64-bit integer, if MONGO_COLLECTION_CAPPED or MONGO_COLLECTION_SIZED is specified, and ist must follow the <em>flags</em> parameter. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>max</em>&nbsp;</td><td><b>MUST</b> be a 64-bit integer, if MONGO_COLLECTION_CAPPED_MAX is specified, and must follow <em>size</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>TRUE on success, FALSE otherwise. </dd></dl>
+
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01009">1009</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__mongo__sync_ga6fbd3a0fddb2642bc568e39288a4af42_cgraph.png" border="0" usemap="#group__mongo__sync_ga6fbd3a0fddb2642bc568e39288a4af42_cgraph" alt=""/></div>
+<map name="group__mongo__sync_ga6fbd3a0fddb2642bc568e39288a4af42_cgraph" id="group__mongo__sync_ga6fbd3a0fddb2642bc568e39288a4af42_cgraph">
+<area shape="rect" id="node3" href="group__bson__append.html#ga6bd3d1aa4e6869c173c3f402d106414a" title="Append a boolean to a BSON object." alt="" coords="248,5,413,35"/><area shape="rect" id="node5" href="group__bson__append.html#gab0979b4d3c788c2bf1f4e6eb05819487" title="Append a 64&#45;bit integer to a BSON object." alt="" coords="257,59,404,88"/><area shape="rect" id="node7" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object." alt="" coords="256,112,405,141"/><area shape="rect" id="node9" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object." alt="" coords="284,165,377,195"/><area shape="rect" id="node11" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object." alt="" coords="288,219,373,248"/><area shape="rect" id="node13" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space." alt="" coords="268,272,393,301"/><area shape="rect" id="node15" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet." alt="" coords="240,325,421,355"/></map>
 </div>
 </p>
 
@@ -423,7 +564,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__mongo__sync_ga342218b37c0b0d4beafd7071b530ee1f_icgraph.png" border="0" usemap="#group__mongo__sync_ga342218b37c0b0d4beafd7071b530ee1f_icgraph" alt=""/></div>
 <map name="group__mongo__sync_ga342218b37c0b0d4beafd7071b530ee1f_icgraph" id="group__mongo__sync_ga342218b37c0b0d4beafd7071b530ee1f_icgraph">
-<area shape="rect" id="node3" href="group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c" title="Remove a user from MongoDB." alt="" coords="240,5,469,35"/></map>
+<area shape="rect" id="node3" href="group__mongo__sync.html#gafa69e77be5c3686a11e0648a3190621c" title="Remove a user from MongoDB." alt="" coords="240,5,469,35"/><area shape="rect" id="node5" href="group__mongo__sync__gridfs__api.html#ga98a18a4524def495ccc2b9e37679f11c" title="Delete files matching a query from GridFS." alt="" coords="255,59,455,88"/></map>
 </div>
 </p>
 
@@ -472,7 +613,7 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE if the collection was dropped, FALSE otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01009">1009</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01152">1152</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -480,6 +621,61 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="group__mongo__sync_ga624676afff72705c88ecc545f98c5378_cgraph.png" border="0" usemap="#group__mongo__sync_ga624676afff72705c88ecc545f98c5378_cgraph" alt=""/></div>
 <map name="group__mongo__sync_ga624676afff72705c88ecc545f98c5378_cgraph" id="group__mongo__sync_ga624676afff72705c88ecc545f98c5378_cgraph">
 <area shape="rect" id="node3" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object." alt="" coords="245,5,395,35"/><area shape="rect" id="node5" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object." alt="" coords="273,59,367,88"/><area shape="rect" id="node7" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object." alt="" coords="277,112,363,141"/><area shape="rect" id="node9" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space." alt="" coords="257,165,383,195"/><area shape="rect" id="node11" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet." alt="" coords="229,219,411,248"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="ga53a08c34a7319ab22ac005abd45d7af1"></a><!-- doxytag: member="mongo&#45;sync.h::mongo_sync_cmd_exists" ref="ga53a08c34a7319ab22ac005abd45d7af1" args="(mongo_sync_connection *conn, const gchar *db, const gchar *coll)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bson* mongo_sync_cmd_exists </td>
+          <td>(</td>
+          <td class="paramtype">mongo_sync_connection *&nbsp;</td>
+          <td class="paramname"> <em>conn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>db</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const gchar *&nbsp;</td>
+          <td class="paramname"> <em>coll</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Check whether a collection exists in MongoDB. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>conn</em>&nbsp;</td><td>is the connection to work with. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>db</em>&nbsp;</td><td>is the database to search for the collection. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>coll</em>&nbsp;</td><td>is the collection to search for.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>A newly allocated BSON object, with data about the collection on success, NULL otherwise. It is the responsiblity of the caller to free the BSON object once it is no longer needed. </dd></dl>
+
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01083">1083</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__mongo__sync_ga53a08c34a7319ab22ac005abd45d7af1_cgraph.png" border="0" usemap="#group__mongo__sync_ga53a08c34a7319ab22ac005abd45d7af1_cgraph" alt=""/></div>
+<map name="group__mongo__sync_ga53a08c34a7319ab22ac005abd45d7af1_cgraph" id="group__mongo__sync_ga53a08c34a7319ab22ac005abd45d7af1_cgraph">
+<area shape="rect" id="node3" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object." alt="" coords="320,5,469,35"/><area shape="rect" id="node5" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object." alt="" coords="348,59,441,88"/><area shape="rect" id="node7" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object." alt="" coords="352,112,437,141"/><area shape="rect" id="node9" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space." alt="" coords="332,165,457,195"/><area shape="rect" id="node11" href="group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99" title="Get the last requestID from a connection object." alt="" coords="276,219,513,248"/><area shape="rect" id="node13" href="group__mongo__wire__cmd.html#ga07c82c11f2e103a79b88f22bdb586472" title="Construct a query command." alt="" coords="307,272,483,301"/><area shape="rect" id="node19" href="group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet." alt="" coords="304,325,485,355"/><area shape="rect" id="node21" href="group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet." alt="" coords="237,379,552,408"/><area shape="rect" id="node15" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object." alt="" coords="689,219,777,248"/><area shape="rect" id="node17" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object." alt="" coords="691,272,776,301"/><area shape="rect" id="node23" href="group__bson__object__access.html#gad456a97b9a887b96373b8e519d76ecff" title="Create a BSON object from existing data." alt="" coords="655,325,812,355"/><area shape="rect" id="node25" href="group__mongo__wire__reply.html#gad4378c89fad2dc0834eb0e709d6124b2" title="Get the full data part of a reply packet." alt="" coords="608,379,859,408"/><area shape="rect" id="node29" href="group__mongo__wire__reply.html#ga5d207b5b89cfee839f2129251aab5261" title="Get the header of a reply packet." alt="" coords="600,432,867,461"/><area shape="rect" id="node27" href="group__mongo__wire__packet.html#ga5350d54b0a6800ecd7df81d5c2b80c6b" title="Get the data part of a packet." alt="" coords="915,405,1128,435"/></map>
 </div>
 </p>
 
@@ -528,7 +724,7 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE if the error was succesfully retrieved, FALSE otherwise. The output variable <em>error</em> is only set if the function is returning TRUE. </dd></dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01035">1035</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01178">1178</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -606,7 +802,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__mongo__sync_ga4748ae0caf5b361929580d42ff369815_icgraph.png" border="0" usemap="#group__mongo__sync_ga4748ae0caf5b361929580d42ff369815_icgraph" alt=""/></div>
 <map name="group__mongo__sync_ga4748ae0caf5b361929580d42ff369815_icgraph" id="group__mongo__sync_ga4748ae0caf5b361929580d42ff369815_icgraph">
-<area shape="rect" id="node3" href="group__mongo__sync__cursor.html#ga321b3b8a39de8b5afd3accd9b9310d22" title="Iterate a MongoDB cursor." alt="" coords="263,5,447,35"/></map>
+<area shape="rect" id="node3" href="group__mongo__sync__cursor.html#ga321b3b8a39de8b5afd3accd9b9310d22" title="Iterate a MongoDB cursor." alt="" coords="263,5,447,35"/><area shape="rect" id="node5" href="group__mongo__sync__gridfs__api.html#ga98a18a4524def495ccc2b9e37679f11c" title="Delete files matching a query from GridFS." alt="" coords="497,5,697,35"/></map>
 </div>
 </p>
 
@@ -661,7 +857,7 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE on success, FALSE otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01541">1541</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01684">1684</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -669,6 +865,15 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="group__mongo__sync_ga6488a7ddebd38ce47c8a449320b3e98c_cgraph.png" border="0" usemap="#group__mongo__sync_ga6488a7ddebd38ce47c8a449320b3e98c_cgraph" alt=""/></div>
 <map name="group__mongo__sync_ga6488a7ddebd38ce47c8a449320b3e98c_cgraph" id="group__mongo__sync_ga6488a7ddebd38ce47c8a449320b3e98c_cgraph">
 <area shape="rect" id="node3" href="group__bson__append.html#ga6bd3d1aa4e6869c173c3f402d106414a" title="Append a boolean to a BSON object." alt="" coords="296,5,461,35"/><area shape="rect" id="node5" href="group__bson__append.html#gab2673b16bf736e1093fadc32154454be" title="Append a BSON document to a BSON object." alt="" coords="289,59,468,88"/><area shape="rect" id="node7" href="group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object." alt="" coords="304,112,453,141"/><area shape="rect" id="node9" href="group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object." alt="" coords="332,165,425,195"/><area shape="rect" id="node11" href="group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object." alt="" coords="336,219,421,248"/><area shape="rect" id="node13" href="group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space." alt="" coords="316,272,441,301"/><area shape="rect" id="node15" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object." alt="" coords="816,375,901,404"/><area shape="rect" id="node17" href="group__mongo__sync.html#ga60b1dea6c43b120d84f6d424e773f52b" title="Send an insert command to MongoDB." alt="" coords="281,401,476,431"/><area shape="rect" id="node20" href="group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99" title="Get the last requestID from a connection object." alt="" coords="527,427,764,456"/><area shape="rect" id="node22" href="group__mongo__wire__cmd.html#ga96457147e0540ea46503ca61f87c566b" title="Construct an insert command with N documents." alt="" coords="549,480,741,509"/><area shape="rect" id="node24" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object." alt="" coords="815,480,903,509"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__mongo__sync_ga6488a7ddebd38ce47c8a449320b3e98c_icgraph.png" border="0" usemap="#group__mongo__sync_ga6488a7ddebd38ce47c8a449320b3e98c_icgraph" alt=""/></div>
+<map name="group__mongo__sync_ga6488a7ddebd38ce47c8a449320b3e98c_icgraph" id="group__mongo__sync_ga6488a7ddebd38ce47c8a449320b3e98c_icgraph">
+<area shape="rect" id="node3" href="group__mongo__sync__gridfs__api.html#gafb787e1b2dd183b9461b55fa6c96abbb" title="Create a new GridFS object." alt="" coords="281,5,457,35"/></map>
 </div>
 </p>
 
@@ -716,7 +921,7 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE on success, FALSE otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01650">1650</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01797">1797</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
 
 </div>
 </div>
@@ -755,7 +960,7 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE on success, FALSE otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01671">1671</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01818">1818</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
 
 </div>
 </div>
@@ -815,6 +1020,15 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="group__mongo__sync_ga3a2312f2c0a7e6c9a4c8d0eb57051f65_cgraph.png" border="0" usemap="#group__mongo__sync_ga3a2312f2c0a7e6c9a4c8d0eb57051f65_cgraph" alt=""/></div>
 <map name="group__mongo__sync_ga3a2312f2c0a7e6c9a4c8d0eb57051f65_cgraph" id="group__mongo__sync_ga3a2312f2c0a7e6c9a4c8d0eb57051f65_cgraph">
 <area shape="rect" id="node3" href="group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object." alt="" coords="771,29,856,59"/><area shape="rect" id="node5" href="group__mongo__sync.html#ga60b1dea6c43b120d84f6d424e773f52b" title="Send an insert command to MongoDB." alt="" coords="236,56,431,85"/><area shape="rect" id="node8" href="group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99" title="Get the last requestID from a connection object." alt="" coords="481,81,719,111"/><area shape="rect" id="node10" href="group__mongo__wire__cmd.html#ga96457147e0540ea46503ca61f87c566b" title="Construct an insert command with N documents." alt="" coords="504,135,696,164"/><area shape="rect" id="node12" href="group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object." alt="" coords="769,135,857,164"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__mongo__sync_ga3a2312f2c0a7e6c9a4c8d0eb57051f65_icgraph.png" border="0" usemap="#group__mongo__sync_ga3a2312f2c0a7e6c9a4c8d0eb57051f65_icgraph" alt=""/></div>
+<map name="group__mongo__sync_ga3a2312f2c0a7e6c9a4c8d0eb57051f65_icgraph" id="group__mongo__sync_ga3a2312f2c0a7e6c9a4c8d0eb57051f65_icgraph">
+<area shape="rect" id="node3" href="group__mongo__sync__gridfs__chunk__api.html#gaf398eaa2d1bfb24f879af6f6899c8278" title="Upload a file to GridFS from a buffer." alt="" coords="235,5,579,35"/><area shape="rect" id="node5" href="group__mongo__sync__gridfs__stream__api.html#gaaf94f166caa84ab51ab1e7d2d4553e2c" title="Close a GridFS stream." alt="" coords="288,59,525,88"/></map>
 </div>
 </p>
 
@@ -886,7 +1100,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__mongo__sync_ga60b1dea6c43b120d84f6d424e773f52b_icgraph.png" border="0" usemap="#group__mongo__sync_ga60b1dea6c43b120d84f6d424e773f52b_icgraph" alt=""/></div>
 <map name="group__mongo__sync_ga60b1dea6c43b120d84f6d424e773f52b_icgraph" id="group__mongo__sync_ga60b1dea6c43b120d84f6d424e773f52b_icgraph">
-<area shape="rect" id="node3" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index." alt="" coords="251,5,477,35"/><area shape="rect" id="node5" href="group__mongo__sync.html#ga3a2312f2c0a7e6c9a4c8d0eb57051f65" title="Send an insert command to MongoDB." alt="" coords="273,59,455,88"/></map>
+<area shape="rect" id="node3" href="group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index." alt="" coords="251,5,477,35"/><area shape="rect" id="node7" href="group__mongo__sync.html#ga3a2312f2c0a7e6c9a4c8d0eb57051f65" title="Send an insert command to MongoDB." alt="" coords="273,59,455,88"/><area shape="rect" id="node5" href="group__mongo__sync__gridfs__api.html#gafb787e1b2dd183b9461b55fa6c96abbb" title="Create a new GridFS object." alt="" coords="609,5,785,35"/><area shape="rect" id="node9" href="group__mongo__sync__gridfs__chunk__api.html#gaf398eaa2d1bfb24f879af6f6899c8278" title="Upload a file to GridFS from a buffer." alt="" coords="525,59,869,88"/><area shape="rect" id="node11" href="group__mongo__sync__gridfs__stream__api.html#gaaf94f166caa84ab51ab1e7d2d4553e2c" title="Close a GridFS stream." alt="" coords="579,112,816,141"/></map>
 </div>
 </p>
 
@@ -917,7 +1131,7 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE if it is master, FALSE otherwise and on errors. </dd></dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01131">1131</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01274">1274</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -1003,7 +1217,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__mongo__sync_ga96a2018a7b4f04e73e19da2eadf8d3e4_icgraph.png" border="0" usemap="#group__mongo__sync_ga96a2018a7b4f04e73e19da2eadf8d3e4_icgraph" alt=""/></div>
 <map name="group__mongo__sync_ga96a2018a7b4f04e73e19da2eadf8d3e4_icgraph" id="group__mongo__sync_ga96a2018a7b4f04e73e19da2eadf8d3e4_icgraph">
-<area shape="rect" id="node3" href="group__mongo__sync__cursor.html#gad7ceca60dfd310b3205d9776b4ae566e" title="Free a MongoDB cursor." alt="" coords="271,5,452,35"/></map>
+<area shape="rect" id="node3" href="group__mongo__sync__cursor.html#gad7ceca60dfd310b3205d9776b4ae566e" title="Free a MongoDB cursor." alt="" coords="271,5,452,35"/><area shape="rect" id="node5" href="group__mongo__sync__gridfs__api.html#ga98a18a4524def495ccc2b9e37679f11c" title="Delete files matching a query from GridFS." alt="" coords="503,5,703,35"/></map>
 </div>
 </p>
 
@@ -1034,7 +1248,7 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE if the connection is alive and kicking, FALSE otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01253">1253</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01396">1396</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -1137,6 +1351,15 @@ Here is the call graph for this function:</div>
 </div>
 </p>
 
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__mongo__sync_ga0349cd2e80d82f52544dbafe1dcb8cdd_icgraph.png" border="0" usemap="#group__mongo__sync_ga0349cd2e80d82f52544dbafe1dcb8cdd_icgraph" alt=""/></div>
+<map name="group__mongo__sync_ga0349cd2e80d82f52544dbafe1dcb8cdd_icgraph" id="group__mongo__sync_ga0349cd2e80d82f52544dbafe1dcb8cdd_icgraph">
+<area shape="rect" id="node3" href="group__mongo__sync__gridfs__chunk__api.html#gabff321c07bade7b3528b9beda6de72de" title="Create a cursor for a GridFS chunked file." alt="" coords="236,5,545,35"/><area shape="rect" id="node5" href="group__mongo__sync__gridfs__chunk__api.html#ga54de2ac6d88a819b4c6b9a1560fbe9c0" title="Find a file on GridFS." alt="" coords="273,59,508,88"/><area shape="rect" id="node7" href="group__mongo__sync__gridfs__api.html#ga20cdcadd37ef931f76c03cf7401e63be" title="List GridFS files matching a query." alt="" coords="305,112,476,141"/><area shape="rect" id="node11" href="group__mongo__sync__gridfs__stream__api.html#ga991b7e09191d888e8709705df3c5a558" title="Create a stream reader by finding the file matching a query." alt="" coords="277,165,504,195"/><area shape="rect" id="node9" href="group__mongo__sync__gridfs__api.html#ga98a18a4524def495ccc2b9e37679f11c" title="Delete files matching a query from GridFS." alt="" coords="596,112,796,141"/></map>
+</div>
+</p>
+
 </div>
 </div>
 <a class="anchor" id="ga46b67cfe6443950b6083b5d668e9f37e"></a><!-- doxytag: member="mongo&#45;sync.h::mongo_sync_cmd_reset_error" ref="ga46b67cfe6443950b6083b5d668e9f37e" args="(mongo_sync_connection *conn, const gchar *db)" -->
@@ -1174,7 +1397,7 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE on success, FALSE otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01100">1100</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01243">1243</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -1315,7 +1538,7 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE on success, FALSE otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01295">1295</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01438">1438</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -1370,7 +1593,7 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE on success, FALSE otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01343">1343</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
+<p>Definition at line <a class="el" href="mongo-sync_8c_source.html#l01486">1486</a> of file <a class="el" href="mongo-sync_8c_source.html">mongo-sync.c</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -1813,7 +2036,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__mongo__sync_gab5fa65825c2bc29fdea7d925237556d5_icgraph.png" border="0" usemap="#group__mongo__sync_gab5fa65825c2bc29fdea7d925237556d5_icgraph" alt=""/></div>
 <map name="group__mongo__sync_gab5fa65825c2bc29fdea7d925237556d5_icgraph" id="group__mongo__sync_gab5fa65825c2bc29fdea7d925237556d5_icgraph">
-<area shape="rect" id="node3" href="group__mongo__sync__pool__api.html#gaa9362a74d4b5383aa2e903bcb920733f" title="Close and free a synchronous connection pool." alt="" coords="233,5,401,35"/><area shape="rect" id="node5" href="group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="233,59,401,88"/></map>
+<area shape="rect" id="node3" href="group__mongo__sync__gridfs__api.html#ga9b2ac40335c4026bc0f8b43366f80419" title="Close and free a GridFS object." alt="" coords="233,5,409,35"/><area shape="rect" id="node7" href="group__mongo__sync__pool__api.html#gaa9362a74d4b5383aa2e903bcb920733f" title="Close and free a synchronous connection pool." alt="" coords="237,59,405,88"/><area shape="rect" id="node9" href="group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="237,112,405,141"/><area shape="rect" id="node5" href="group__mongo__sync__gridfs__api.html#gafb787e1b2dd183b9461b55fa6c96abbb" title="Create a new GridFS object." alt="" coords="460,5,636,35"/></map>
 </div>
 </p>
 
@@ -1871,6 +2094,8 @@ Here is the call graph for this function:</div>
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__mongo__sync_gae47159f902ced01122d46bb614091a6d_icgraph.png" border="0" usemap="#group__mongo__sync_gae47159f902ced01122d46bb614091a6d_icgraph" alt=""/></div>
+<map name="group__mongo__sync_gae47159f902ced01122d46bb614091a6d_icgraph" id="group__mongo__sync_gae47159f902ced01122d46bb614091a6d_icgraph">
+</map>
 </div>
 </p>
 
@@ -1891,7 +2116,7 @@ Here is the caller graph for this function:</div>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Fri Jul 1 2011 11:39:11 for libmongo-client by&nbsp;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jul 19 2011 20:23:05 for libmongo-client by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.1 </small></address>
 </body>
