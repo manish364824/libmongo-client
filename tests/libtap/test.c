@@ -142,6 +142,8 @@ test_env_setup (void)
     }
   config.ns = g_strconcat (config.db, ".", config.coll, NULL);
 
+  config.gfs_prefix = g_strconcat (config.ns, ".", "grid", NULL);
+
   if (!getenv ("TEST_PRIMARY") || strlen (getenv ("TEST_PRIMARY")) == 0)
     return FALSE;
 
@@ -164,4 +166,5 @@ test_env_free (void)
   g_free (config.db);
   g_free (config.coll);
   g_free (config.ns);
+  g_free (config.gfs_prefix);
 }

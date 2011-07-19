@@ -39,7 +39,8 @@ test_mongo_sync_cmd_index_create (void)
   mongo_sync_cmd_insert (c, config.ns, doc, NULL);
 
   ok (mongo_sync_cmd_index_create(c, config.ns, indexes,
-				  MONGO_INDEX_UNIQUE | MONGO_INDEX_DROP_DUPS),
+				  MONGO_INDEX_UNIQUE | MONGO_INDEX_DROP_DUPS |
+				  MONGO_INDEX_BACKGROUND | MONGO_INDEX_SPARSE),
       "mongo_sync_cmd_index_create() works");
   mongo_sync_disconnect (c);
 

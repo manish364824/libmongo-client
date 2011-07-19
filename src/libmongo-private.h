@@ -23,6 +23,7 @@
 #define LIBMONGO_PRIVATE_H 1
 
 #include "mongo.h"
+#include "compat.h"
 
 /** @internal BSON structure.
  */
@@ -89,6 +90,113 @@ struct _mongo_sync_pool_connection
 
   gint pool_id; /**< ID of the connection. */
   gboolean in_use; /**< Whether the object is in use or not. */
+};
+
+/** @internal GridFS object */
+struct _mongo_sync_gridfs
+{
+  mongo_sync_connection *conn; /**< Connection the object is
+				  associated to. */
+
+  struct
+  {
+    gchar *prefix; /**< The namespace prefix. */
+    gchar *files; /**< The file metadata namespace. */
+    gchar *chunks; /**< The chunk namespace. */
+
+    gchar *db; /**< The database part of the namespace. */
+  } ns; /**< Namespaces */
+
+  gint32 chunk_size; /**< The default chunk size. */
+};
+
+/** @internal GridFS file types. */
+typedef enum
+{
+  LMC_GRIDFS_FILE_CHUNKED, /**< Chunked file. */
+  LMC_GRIDFS_FILE_STREAM_READER, /**< Streamed file, reader. */
+  LMC_GRIDFS_FILE_STREAM_WRITER, /**< Streamed file, writer. */
+} _mongo_gridfs_type;
+
+/** @internal GridFS common file properties.
+ *
+ * This is shared between chunked and streamed files.
+ */
+typedef struct
+{
+  gint32 chunk_size; /**< Maximum chunk size for this file. */
+  gint64 length; /**< Total length of the file. */
+
+  union
+  {
+    /** Chunked file data. */
+    struct
+    {
+      const guint8 *oid; /**< The file's ObjectID. */
+      const gchar *md5; /**< MD5 sum of the file. */
+      gint64 date; /**< The upload date. */
+      bson *metadata; /**< Full file metadata, including user-set
+			 keys. */
+    };
+
+    /** Streamed file data */
+    struct
+    {
+      gint64 offset; /**< Offset we're into the file. */
+      gint64 current_chunk; /**< The current chunk we're on. */
+      guint8 *id; /**< A copy of the file's ObjectID. */
+    };
+  };
+
+  _mongo_gridfs_type type; /**< The type of the GridFS file. */
+} mongo_sync_gridfs_file_common;
+
+/** @internal GridFS file object. */
+struct _mongo_sync_gridfs_chunked_file
+{
+  mongo_sync_gridfs_file_common meta; /**< The file metadata. */
+  mongo_sync_gridfs *gfs; /**< The GridFS the file is on. */
+};
+
+/** @internal GridFS file stream object. */
+struct _mongo_sync_gridfs_stream
+{
+  mongo_sync_gridfs_file_common file; /**< Common file data. */
+  mongo_sync_gridfs *gfs; /**< The GridFS the file is on. */
+
+  /** Reader & Writer structure union.
+   */
+  union
+  {
+    /** Reader-specific data.
+     */
+    struct
+    {
+      bson *bson; /**< The current chunk as BSON. */
+
+      /** Chunk state information.
+       */
+      struct
+      {
+	const guint8 *data; /**< The current chunk data, pointing
+			       into ->reader.bson. */
+	gint32 size; /**< Size of the current chunk. */
+	gint32 offset; /**< Offset we're into the chunk. */
+      } chunk;
+    } reader;
+
+    /** Writer-specific data.
+     */
+    struct
+    {
+      bson *metadata; /**< Copy of the user-supplied metadata. */
+      guint8 *buffer; /**< The current output buffer. */
+      gint32 buffer_offset; /**< Offset into the output buffer. */
+
+      GChecksum *checksum; /**< The running checksum of the output
+			      file. */
+    } writer;
+  };
 };
 
 /** @internal Construct a kill cursors command, using a va_list.

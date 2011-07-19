@@ -19,6 +19,7 @@
  */
 
 #include <glib.h>
+#include <glib/gprintf.h>
 
 #include <sys/types.h>
 #include <string.h>
@@ -85,6 +86,22 @@ guint8 *
 mongo_util_oid_new (gint32 seq)
 {
   return mongo_util_oid_new_with_time (time (NULL), seq);
+}
+
+gchar *
+mongo_util_oid_as_string (const guint8 *oid)
+{
+  gchar *str;
+  gint j;
+
+  if (!oid)
+    return NULL;
+
+  str = g_new (gchar, 26);
+  for (j = 0; j < 12; j++)
+    g_sprintf (&str[j * 2], "%02x", oid[j]);
+  str[25] = 0;
+  return str;
 }
 
 gboolean

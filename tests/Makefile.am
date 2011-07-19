@@ -66,6 +66,7 @@ mongo_utils_unit_tests	= \
 		unit/mongo/utils/oid_init \
 		unit/mongo/utils/oid_new \
 		unit/mongo/utils/oid_new_with_time \
+		unit/mongo/utils/oid_as_string \
 		unit/mongo/utils/parse_addr
 
 mongo_wire_unit_tests	= \
@@ -116,6 +117,8 @@ mongo_sync_unit_tests	= \
 		unit/mongo/sync/sync_cmd_kill_cursors \
 		unit/mongo/sync/sync_cmd_custom \
 		unit/mongo/sync/sync_cmd_count \
+		unit/mongo/sync/sync_cmd_create \
+		unit/mongo/sync/sync_cmd_exists \
 		unit/mongo/sync/sync_cmd_drop \
 		unit/mongo/sync/sync_cmd_get_last_error \
 		unit/mongo/sync/sync_cmd_reset_error \
@@ -142,7 +145,8 @@ mongo_sync_cursor_unit_tests	= \
 		unit/mongo/sync-cursor/sync_cursor_free
 
 mongo_sync_cursor_func_tests	= \
-		func/mongo/sync-cursor/f_sync_cursor_iterate
+		func/mongo/sync-cursor/f_sync_cursor_iterate \
+		func/mongo/sync-cursor/f_sync_cursor_tailable
 
 mongo_sync_pool_unit_tests	= \
 		unit/mongo/sync-pool/sync_pool_new \
@@ -153,13 +157,47 @@ mongo_sync_pool_unit_tests	= \
 mongo_sync_pool_func_tests	= \
 		func/mongo/sync-pool/f_sync_pool
 
+mongo_sync_gridfs_unit_tests	= \
+		unit/mongo/sync-gridfs/sync_gridfs_new \
+		unit/mongo/sync-gridfs/sync_gridfs_free \
+		unit/mongo/sync-gridfs/sync_gridfs_get_set_chunk_size \
+		unit/mongo/sync-gridfs/sync_gridfs_list \
+		unit/mongo/sync-gridfs/sync_gridfs_remove \
+		unit/mongo/sync-gridfs/sync_gridfs_file_get_metadata
+
+mongo_sync_gridfs_chunk_unit_tests = \
+		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_find \
+		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_new_from_buffer \
+		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_free \
+		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_cursor_new \
+		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_cursor_get_chunk
+
+mongo_sync_gridfs_chunk_func_tests = \
+		func/mongo/sync-gridfs-chunk/f_sync_gridfs_chunk
+
+mongo_sync_gridfs_stream_unit_tests = \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_find \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_new \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_read \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_write \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_seek \
+		unit/mongo/sync-gridfs-stream/sync_gridfs_stream_close
+
+mongo_sync_gridfs_stream_func_tests = \
+		func/mongo/sync-gridfs-stream/f_sync_gridfs_stream
+
 UNIT_TESTS	= ${bson_unit_tests} ${mongo_utils_unit_tests} \
 		${mongo_wire_unit_tests} ${mongo_client_unit_tests} \
 		${mongo_sync_unit_tests} ${mongo_sync_cursor_unit_tests} \
-		${mongo_sync_pool_unit_tests}
+		${mongo_sync_pool_unit_tests} ${mongo_sync_gridfs_unit_tests} \
+		${mongo_sync_gridfs_chunk_unit_tests} \
+		${mongo_sync_gridfs_stream_unit_tests}
 FUNC_TESTS	= ${bson_func_tests} ${mongo_sync_func_tests} \
 		${mongo_client_func_tests} \
-		${mongo_sync_cursor_func_tests} ${mongo_sync_pool_func_tests}
+		${mongo_sync_cursor_func_tests} ${mongo_sync_pool_func_tests} \
+		${mongo_sync_gridfs_func_tests} \
+		${mongo_sync_gridfs_chunk_func_tests} \
+		${mongo_sync_gridfs_stream_func_tests}
 PERF_TESTS	= ${bson_perf_tests}
 TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}
 
@@ -171,11 +209,16 @@ LDADD = $(top_builddir)/src/libmongo-client.la ${top_builddir}/tests/libtap/libt
 
 EXTRA_DIST = README
 
-check:
-	@${MAKE} ${AM_MAKEFLAGS} check-HARNESS
+check-%: BASE=$(subst -,_,$(subst check-,,$@))
+check-%: TESTCASES=$(value $(BASE)_unit_tests) $(value $(BASE)_func_tests) $(value $(BASE)_tests)
+check-%: ${TESTCASES} ${noinst_PROGRAMS}
+	$(AM_V_at) ${builddir}/test_cleanup
+	$(AM_V_GEN) srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
+	$(AM_V_at) ${builddir}/test_cleanup
 
-check-HARNESS: ${TESTS} ${noinst_PROGRAMS}
-	$(AM_V_GEN)srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
-	@${builddir}/test_cleanup
+check: ${TESTCASES} ${noinst_PROGRAMS}
+	$(AM_V_at) ${builddir}/test_cleanup
+	$(AM_V_GEN) srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
+	$(AM_V_at) ${builddir}/test_cleanup
 
-.PHONY: check-HARNESS
+.PHONY: check
