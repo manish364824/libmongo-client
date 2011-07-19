@@ -1006,6 +1006,149 @@ mongo_sync_cmd_count (mongo_sync_connection *conn,
 }
 
 gboolean
+mongo_sync_cmd_create (mongo_sync_connection *conn,
+		       const gchar *db, const gchar *coll,
+		       gint flags, ...)
+{
+  mongo_packet *p;
+  bson *cmd;
+
+  if (!conn)
+    {
+      errno = ENOTCONN;
+      return FALSE;
+    }
+  if (!db || !coll)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  cmd = bson_new_sized (128);
+  bson_append_string (cmd, "create", coll, -1);
+  if (flags & MONGO_COLLECTION_AUTO_INDEX_ID)
+    bson_append_boolean (cmd, "autoIndexId", TRUE);
+  if (flags & MONGO_COLLECTION_CAPPED ||
+      flags & MONGO_COLLECTION_CAPPED_MAX ||
+      flags & MONGO_COLLECTION_SIZED)
+    {
+      va_list ap;
+      gint64 i;
+
+      if (flags & MONGO_COLLECTION_CAPPED ||
+	  flags & MONGO_COLLECTION_CAPPED_MAX)
+	bson_append_boolean (cmd, "capped", TRUE);
+
+      va_start (ap, flags);
+      i = (gint64)va_arg (ap, gint64);
+      if (i <= 0)
+	{
+	  bson_free (cmd);
+	  errno = ERANGE;
+	  return FALSE;
+	}
+      bson_append_int64 (cmd, "size", i);
+
+      if (flags & MONGO_COLLECTION_CAPPED_MAX)
+	{
+	  i = (gint64)va_arg (ap, gint64);
+	  if (i <= 0)
+	    {
+	      bson_free (cmd);
+	      errno = ERANGE;
+	      return FALSE;
+	    }
+	  bson_append_int64 (cmd, "max", i);
+	}
+      va_end (ap);
+    }
+  bson_finish (cmd);
+
+  p = _mongo_sync_cmd_custom (conn, db, cmd, TRUE, TRUE);
+  if (!p)
+    {
+      int e = errno;
+
+      bson_free (cmd);
+      errno = e;
+      return FALSE;
+    }
+  bson_free (cmd);
+  mongo_wire_packet_free (p);
+
+  return TRUE;
+}
+
+bson *
+mongo_sync_cmd_exists (mongo_sync_connection *conn,
+		       const gchar *db, const gchar *coll)
+{
+  bson *cmd, *r;
+  mongo_packet *p;
+  gchar *ns, *sys;
+  gint32 rid;
+
+  if (!conn)
+    {
+      errno = ENOTCONN;
+      return NULL;
+    }
+  if (!db || !coll)
+    {
+      errno = EINVAL;
+      return NULL;
+    }
+
+  rid = mongo_connection_get_requestid ((mongo_connection *)conn) + 1;
+
+  ns = g_strconcat (db, ".", coll, NULL);
+  cmd = bson_new_sized (128);
+  bson_append_string (cmd, "name", ns, -1);
+  bson_finish (cmd);
+  g_free (ns);
+
+  sys = g_strconcat (db, ".system.namespaces", NULL);
+
+  p = mongo_wire_cmd_query (rid, sys, _SLAVE_FLAG (conn), 0, 1, cmd, NULL);
+  if (!p)
+    {
+      int e = errno;
+
+      bson_free (cmd);
+      g_free (sys);
+
+      errno = e;
+      return NULL;
+    }
+  g_free (sys);
+  bson_free (cmd);
+
+  if (!_mongo_sync_packet_send (conn, p, !conn->slaveok, TRUE))
+    return NULL;
+
+  p = _mongo_sync_packet_recv (conn, rid, MONGO_REPLY_FLAG_QUERY_FAIL);
+  if (!p)
+    return NULL;
+
+  p = _mongo_sync_packet_check_error (conn, p, FALSE);
+  if (!p)
+    return NULL;
+
+  if (!mongo_wire_reply_packet_get_nth_document (p, 1, &r))
+    {
+      int e = errno;
+
+      mongo_wire_packet_free (p);
+      errno = e;
+      return NULL;
+    }
+  mongo_wire_packet_free (p);
+  bson_finish (r);
+
+  return r;
+}
+
+gboolean
 mongo_sync_cmd_drop (mongo_sync_connection *conn,
 		     const gchar *db, const gchar *coll)
 {
@@ -1573,6 +1716,10 @@ mongo_sync_cmd_index_create (mongo_sync_connection *conn,
     bson_append_boolean (cmd, "unique", TRUE);
   if (options & MONGO_INDEX_DROP_DUPS)
     bson_append_boolean (cmd, "dropDups", TRUE);
+  if (options & MONGO_INDEX_BACKGROUND)
+    bson_append_boolean (cmd, "background", TRUE);
+  if (options & MONGO_INDEX_SPARSE)
+    bson_append_boolean (cmd, "sparse", TRUE);
   bson_finish (cmd);
   g_string_free (name, TRUE);
 

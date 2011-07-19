@@ -20,3 +20,10 @@ LMC_0.1.2 {
  mongo_connection_set_timeout;
  mongo_sync_cmd_index_*;
 } LMC_0.1.1;
+
+LMC_0.1.3 {
+ mongo_sync_gridfs_*;
+ mongo_sync_cmd_create;
+ mongo_sync_cmd_exists;
+ mongo_util_oid_as_string;
+} LMC_0.1.2;
