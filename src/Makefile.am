@@ -1,6 +1,6 @@
-LMC_CURRENT			= 2
+LMC_CURRENT			= 3
 LMC_REVISION			= 0
-LMC_AGE				= 2
+LMC_AGE				= 3
 
 lib_LTLIBRARIES			= libmongo-client.la
 libmongo_client_la_LIBADD	= @GLIB_LIBS@ @OPENSSL_LIBS@

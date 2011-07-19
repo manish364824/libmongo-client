@@ -1,6 +1,6 @@
 #+STARTUP: indent showall			-*- org -*-
 
-* 0.1.3 - <UNRELEASED>
+* 0.1.3 - <2011-07-19 Tue>
 
 ** New feature: GridFS support.
 This version introduces a set of GridFS APIs, to ease working with
