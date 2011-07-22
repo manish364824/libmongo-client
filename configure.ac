@@ -101,7 +101,12 @@ if test "x$blb_cv_glib_sane" = "xno"; then
 fi
 
 dnl Check for g_checksum_new
+old_LIBS=$LIBS
+
+dnl to make sure we're using glib from the proper path
+LIBS=$GLIB_LIBS
 AC_CHECK_LIB(glib-2.0, g_checksum_new, [glib_checksum="yes"; with_openssl="0"], [glib_checksum="no"; with_openssl="1"])
+LIBS=$old_LIBS
 if test "x$glib_checksum" = "xno"; then
   dnl Using the compat stuff disables symbol versioning
   vsymldflags=""
