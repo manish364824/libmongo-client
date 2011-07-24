@@ -4,8 +4,8 @@
 
 ** New feature: GridFS support.
 This version introduces a set of GridFS APIs, to ease working with
-GridFS, be that involve retrieving files chunk by chunk, listing and
-removing files, or offering a file-like streaming API.
+GridFS, be that retrieving files chunk by chunk, listing and removing
+files, or offering a file-like streaming API.
 
 ** New function: mongo_sync_cmd_create()
 A new helper function was introduced to aid us in creating capped and
