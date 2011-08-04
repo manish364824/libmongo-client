@@ -6,7 +6,6 @@
 void
 test_mongo_sync_gridfs_chunked_file_cursor_get_chunk (void)
 {
-  mongo_sync_cursor c;
   gint32 size;
 
   ok (mongo_sync_gridfs_chunked_file_cursor_get_chunk (NULL, &size) == NULL,
