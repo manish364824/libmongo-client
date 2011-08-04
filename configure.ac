@@ -30,10 +30,6 @@ dnl ***************************************************************************
 dnl Checks for programs.
 AC_PROG_CC
 AM_PROG_CC_STDC
-AC_PROG_CC_C99
-if test "x$ac_cv_prog_cc_c99" = "xno"; then
-	AC_MSG_ERROR("C99 standard compliant C compiler required. Try GCC 3.x or later.")
-fi
 AC_PROG_MAKE_SET
 PKG_PROG_PKG_CONFIG
 LT_INIT([shared])
