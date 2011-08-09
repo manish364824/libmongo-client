@@ -166,11 +166,11 @@ mongo_sync_gridfs_unit_tests	= \
 		unit/mongo/sync-gridfs/sync_gridfs_file_get_metadata
 
 mongo_sync_gridfs_chunk_unit_tests = \
-		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_find \
-		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_new_from_buffer \
-		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_free \
-		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_cursor_new \
-		unit/mongo/sync-gridfs-chunk/sync_gridfs_chunked_file_cursor_get_chunk
+		unit/mongo/sync-gridfs-chunk/chunked_find \
+		unit/mongo/sync-gridfs-chunk/chunked_file_new_from_buffer \
+		unit/mongo/sync-gridfs-chunk/chunked_file_free \
+		unit/mongo/sync-gridfs-chunk/chunked_file_cursor_new \
+		unit/mongo/sync-gridfs-chunk/chunked_file_cursor_get_chunk
 
 mongo_sync_gridfs_chunk_func_tests = \
 		func/mongo/sync-gridfs-chunk/f_sync_gridfs_chunk
