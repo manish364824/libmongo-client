@@ -26,6 +26,8 @@ AC_ARG_WITH([versioned-symbols], AC_HELP_STRING([--with-versioned-symbols],[Use 
 vsymldflags="-Wl,--version-script,\${srcdir}/libmongo-client.ver -Wl,-O1"
 ],[vsymldflags=])
 
+AC_ARG_ENABLE([tests], AC_HELP_STRING([--enable-tests],[Enable the test suite, if present]),[with_tests=1],[with_tests=0])
+
 dnl ***************************************************************************
 dnl Checks for programs.
 AC_PROG_CC
@@ -139,7 +141,16 @@ fi
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [package name])
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [version number])
 
-AC_OUTPUT(
+if test "$with_tests" = 1 && test -d "${srcdir}/tests"; then
+  test_mkfiles="tests/Makefile
+tests/libtap/Makefile"
+else
+  with_tests=0
+fi
+
+AM_CONDITIONAL(ENABLE_TESTS, `test "$with_tests" = 1`)
+
+AC_CONFIG_FILES([
 	Doxyfile
 	Makefile
 	docs/Makefile
@@ -147,6 +158,6 @@ AC_OUTPUT(
 	examples/Makefile
 	src/Makefile
 	src/libmongo-client.pc
-	tests/Makefile
-	tests/libtap/Makefile
-)
+	$test_mkfiles])
+
+AC_OUTPUT

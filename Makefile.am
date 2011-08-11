@@ -1,4 +1,9 @@
-SUBDIRS		= docs src tests examples
+if ENABLE_TESTS
+test_SUBDIRS	= tests
+endif
+
+SUBDIRS		= docs src examples ${test_SUBDIRS}
+DIST_SUBDIRS	= ${SUBDIRS}
 
 ACLOCAL_AMFLAGS	= -I m4 --install
 EXTRA_DIST	= NEWS README.rst
