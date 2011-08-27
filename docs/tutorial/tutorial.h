@@ -26,5 +26,7 @@ $ cc $(pkg-config --cflags --libs libmongo-client) tut_bson_build.c -o tut_bson_
  *     - @ref tut_mongo_sync_insert
  *     - @ref tut_mongo_sync_query
  *     - @ref tut_mongo_sync_query_complex
+ *     - @ref tut_mongo_sync_cmd_create
  *   - @subpage tut_hl_client
+ *   - @subpage tut_json2bson
  */

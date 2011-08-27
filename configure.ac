@@ -1,13 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_INIT(src/bson.c)
-AC_CONFIG_MACRO_DIR([m4])
 
-dnl ***************************************************************************
-dnl definitions
-
-PACKAGE="libmongo-client"
-VERSION="0.1.3"
+AC_INIT(libmongo-client, 0.1.4, algernon@madhouse-project.org, libmongo-client, https://github.com/algernon/libmongo-client)
+AM_INIT_AUTOMAKE([1.9 tar-ustar])
 
 dnl ***************************************************************************
 dnl dependencies
@@ -18,7 +13,7 @@ OPENSSL_MIN_VERSION="0.9.8"
 dnl ***************************************************************************
 dnl Initial setup
 
-AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
+AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_CONFIG_HEADER(config.h)
 
@@ -30,10 +25,6 @@ dnl ***************************************************************************
 dnl Checks for programs.
 AC_PROG_CC
 AM_PROG_CC_STDC
-AC_PROG_CC_C99
-if test "x$ac_cv_prog_cc_c99" = "xno"; then
-	AC_MSG_ERROR("C99 standard compliant C compiler required. Try GCC 3.x or later.")
-fi
 AC_PROG_MAKE_SET
 PKG_PROG_PKG_CONFIG
 LT_INIT([shared])
@@ -101,7 +92,12 @@ if test "x$blb_cv_glib_sane" = "xno"; then
 fi
 
 dnl Check for g_checksum_new
+old_LIBS=$LIBS
+
+dnl to make sure we're using glib from the proper path
+LIBS=$GLIB_LIBS
 AC_CHECK_LIB(glib-2.0, g_checksum_new, [glib_checksum="yes"; with_openssl="0"], [glib_checksum="no"; with_openssl="1"])
+LIBS=$old_LIBS
 if test "x$glib_checksum" = "xno"; then
   dnl Using the compat stuff disables symbol versioning
   vsymldflags=""

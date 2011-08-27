@@ -375,7 +375,7 @@ enum
  *
  * @tparam size @b MUST be a 64-bit integer, if
  * MONGO_COLLECTION_CAPPED or MONGO_COLLECTION_SIZED is specified, and
- * ist must follow the @a flags parameter.
+ * it must follow the @a flags parameter.
  * @tparam max @b MUST be a 64-bit integer, if
  * MONGO_COLLECTION_CAPPED_MAX is specified, and must follow @a size.
  *

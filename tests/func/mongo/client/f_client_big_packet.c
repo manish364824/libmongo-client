@@ -41,9 +41,17 @@ test_func_client_big_packet (void)
   p = mongo_packet_recv (conn);
   ok (p != NULL,
       "mongo_packet_recv() works with a huge packet");
+
+  mongo_wire_reply_packet_get_nth_document (p, 1, &b);
+  bson_finish (b);
   mongo_wire_packet_free (p);
+
+  cmp_ok (exp_size + 17, "==", bson_size (b), /* +17: _id + value */
+	  "Huge packet receiving works, and returns a same sized packet");
+
+  bson_free (b);
 
   mongo_disconnect (conn);
 }
 
-RUN_NET_TEST (1, func_client_big_packet);
+RUN_NET_TEST (2, func_client_big_packet);

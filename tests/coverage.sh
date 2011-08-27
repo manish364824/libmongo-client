@@ -7,11 +7,15 @@ for src in ${SOURCES}; do
 	case "$src" in
 		*.c)
 			obj=`echo $src | sed 's|\.c|.o|'`
+			gc=`echo $src | sed 's|\.c|.gcno|'`
 			if test -f "${builddir}/.libs/libmongo_client_la-$obj"; then
 				objdir=${builddir}/.libs
 			else
 				objdir=${builddir}
-			fi;
+			fi
+			if ! test -f "${objdir}/libmongo_client_la-${gc}"; then
+				continue
+			fi
 			gcov -b -f ${srcdir}/$src -o $objdir/libmongo_client_la-$obj >coverage/$src.cov
 			;;
 	esac
@@ -23,6 +27,10 @@ xsltproc ${top_srcdir}/tests/tools/coverage-report.xsl coverage/index.xml >cover
 for src in ${SOURCES}; do
 	case "$src" in
 		*.c)
+			if ! test -f "${src}.gcov"; then
+				continue
+			fi
+
 			perl ${top_srcdir}/tests/tools/coverage-report-entry.pl ${src}.gcov > coverage/${src}.gcov.html
 			grep -A4 -m 1 "File '${srcdir}/$src'" coverage/$src.cov | grep -v "^--" >>coverage/report.txt
 			echo >>coverage/report.txt
