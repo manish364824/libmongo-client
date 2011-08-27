@@ -7,5 +7,7 @@ EXTRA_DIST	= tutorial.h \
 			tut_mongo_sync_connect.h tut_mongo_sync_insert.h \
 			tut_mongo_sync_query.h tut_mongo_sync_query_complex.h \
 			examples/tut_mongo_sync.c \
+		  tut_mongo_sync_cmd_create.h \
+			examples/tut_mongo_sync_cmd_create.c \
 		  tut_hl_client.h examples/tut_hl_client.c \
 		  tut_json2bson.h examples/tut_json2bson.c

@@ -7,6 +7,7 @@
 TUTORIAL_PROGRAMS	= tut/bson_build \
 			  tut/bson_traverse \
 			  tut/mongo_sync \
+			  tut/mongo_sync_cmd_create \
 			  tut/hl_client \
 			  tut/json2bson
 
