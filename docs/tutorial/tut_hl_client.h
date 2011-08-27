@@ -1,6 +1,6 @@
 /** @page tut_hl_client A full-blown application
  *
- * As the conclusion of our tutorial, we will write a full blown
+ * As the next step of our tutorial, we will write a full blown
  * application. While it does not solve any real-life problems, and
  * what it does is entirely pointless, it nevertheless is a good
  * example to showcase certain patterns one is likely to run into
