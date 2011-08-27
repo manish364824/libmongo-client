@@ -24,6 +24,9 @@ json_key_to_bson_key (bson *b, void *val,
     case json_type_int:
       bson_append_int32 (b, key, json_object_get_int (val));
       break;
+    case json_type_string:
+      bson_append_string (b, key, json_object_get_string (val), -1);
+      break;
     case json_type_object:
       {
 	bson *sub;
@@ -54,9 +57,6 @@ json_key_to_bson_key (bson *b, void *val,
 	bson_free (sub);
 	break;
       }
-    case json_type_string:
-      bson_append_string (b, key, json_object_get_string (val), -1);
-      break;
     default:
       break;
     }
