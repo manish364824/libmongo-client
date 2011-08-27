@@ -1,13 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_INIT(src/bson.c)
-AC_CONFIG_MACRO_DIR([m4])
 
-dnl ***************************************************************************
-dnl definitions
-
-PACKAGE="libmongo-client"
-VERSION="0.1.3"
+AC_INIT(libmongo-client, 0.1.3, algernon@madhouse-project.org, $PACKAGE, https://github.com/algernon/libmongo-client)
+AM_INIT_AUTOMAKE([1.9 tar-ustar])
 
 dnl ***************************************************************************
 dnl dependencies
@@ -18,7 +13,7 @@ OPENSSL_MIN_VERSION="0.9.8"
 dnl ***************************************************************************
 dnl Initial setup
 
-AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
+AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_CONFIG_HEADER(config.h)
 
