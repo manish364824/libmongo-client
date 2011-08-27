@@ -207,7 +207,10 @@ noinst_PROGRAMS= test_cleanup
 AM_CFLAGS = -I$(top_srcdir)/src/ -I${top_srcdir}/tests/libtap/ @GLIB_CFLAGS@
 LDADD = $(top_builddir)/src/libmongo-client.la ${top_builddir}/tests/libtap/libtap.la @GLIB_LIBS@
 
-EXTRA_DIST = README
+EXTRA_DIST = README \
+	     coverage.sh \
+             tools/coverage-report-entry.pl tools/coverage-report.pl \
+             tools/coverage-report.xsl
 
 check-%: BASE=$(subst -,_,$(subst check-,,$@))
 check-%: TESTCASES=$(value $(BASE)_unit_tests) $(value $(BASE)_func_tests) $(value $(BASE)_tests)

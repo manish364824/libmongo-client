@@ -1,11 +1,18 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.1.4 - <2011-08-27 Sat>
+
+This release is a minor update, with neither new functionality, nor
+any bugfixes, except in the packaging.
+
+It does come with slightly more documentation, however.
+
 * 0.1.3 - <2011-07-19 Tue>
 
 ** New feature: GridFS support.
 This version introduces a set of GridFS APIs, to ease working with
-GridFS, be that involve retrieving files chunk by chunk, listing and
-removing files, or offering a file-like streaming API.
+GridFS, be that retrieving files chunk by chunk, listing and removing
+files, or offering a file-like streaming API.
 
 ** New function: mongo_sync_cmd_create()
 A new helper function was introduced to aid us in creating capped and
