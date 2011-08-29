@@ -12,5 +12,9 @@ override_dh_auto_configure:
 override_dh_installdocs:
 	dh_installdocs --link-doc=libmongo-client0
 
+override_dh_auto_build:
+	dh_auto_build
+	make -C build-tree doxygen
+
 %:
 	dh $@ --with autoreconf

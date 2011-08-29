@@ -1,7 +1,8 @@
 Source: libmongo-client
 Priority: extra
 Maintainer: Gergely Nagy <algernon@madhouse-project.org>
-Build-Depends: debhelper (>= 8.1.3), libglib2.0-dev, perl, dh-autoreconf
+Build-Depends: debhelper (>= 8.1.3), libglib2.0-dev, perl, dh-autoreconf,
+ doxygen
 Standards-Version: 3.9.2
 Section: libs
 DM-Upload-Allowed: yes
@@ -55,3 +56,14 @@ Description: Alternate C driver for MongoDB (debugging symbols)
  This package contains detached debugging symbols.
  .
  Most people will not need this package.
+
+Package: libmongo-client-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends}
+Recommends: libjs-jquery
+Description: Documentation for the alternate C driver for MongoDB
+ libmongo-client is an alternative C language driver to the MongoDB
+ document-oriented datastore.
+ .
+ This package contains the API documentation.
