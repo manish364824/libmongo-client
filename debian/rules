@@ -12,6 +12,10 @@ override_dh_auto_configure:
 override_dh_installdocs:
 	dh_installdocs --link-doc=libmongo-client0
 
+override_dh_compress:
+	dh_compress -Xusr/share/doc/libmongo-client0/examples/ \
+		    -Xusr/share/doc/libmongo-client0/html/
+
 override_dh_auto_build:
 	dh_auto_build
 	${MAKE} -C build-tree doxygen
