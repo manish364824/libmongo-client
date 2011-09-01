@@ -1,1 +1,3 @@
 build-tree/docs/html/* usr/share/doc/libmongo-client0/html/
+docs/tutorial/examples/* usr/share/doc/libmongo-client0/examples/tutorial/
+examples/*.c usr/share/doc/libmongo-client0/examples/
