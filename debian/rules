@@ -14,7 +14,7 @@ override_dh_installdocs:
 
 override_dh_auto_build:
 	dh_auto_build
-	make -C build-tree doxygen
+	${MAKE} -C build-tree doxygen
 
 %:
 	dh $@ --with autoreconf
