@@ -20,9 +20,11 @@ docs/html/
 docs/tutorial/examples/tut/
 b/
 .pc/
+debian/autoreconf.*
 debian/patches
 debian/tmp/
 debian/libmongo-client-dev/
+debian/libmongo-client-doc/
 debian/libmongo-client0-dbg/
 debian/libmongo-client0/
 *.debhelper*
