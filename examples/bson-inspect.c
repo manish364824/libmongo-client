@@ -273,9 +273,16 @@ main (int argc, char *argv[])
 
   if (argc < 2)
     {
-      gchar *help = g_option_context_get_help (context, TRUE, NULL);
+      gchar **nargv;
+      argc = 2;
 
-      printf ("%s", help);
+      nargv = g_new (gchar *, 3);
+      nargv[0] = argv[0];
+      nargv[1] = "--help";
+      nargv[2] = NULL;
+
+      g_option_context_parse (context, &argc, (gchar ***)&nargv, &error);
+
       exit (1);
     }
 
