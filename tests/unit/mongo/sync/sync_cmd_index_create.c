@@ -8,7 +8,7 @@ void
 test_mongo_sync_cmd_index_create (void)
 {
   mongo_sync_connection *c;
-  bson *doc, *indexes;
+  bson *doc, *indexes, *bad_index;
 
   c = test_make_fake_sync_conn (-1, FALSE);
   doc = test_bson_generate_full ();
@@ -18,6 +18,10 @@ test_mongo_sync_cmd_index_create (void)
 			BSON_TYPE_INT64, "print", (gint64)-1,
 			BSON_TYPE_NONE);
   bson_finish (indexes);
+
+  bad_index = bson_build (BSON_TYPE_STRING, "str", "teapot", -1,
+			  BSON_TYPE_NONE);
+  bson_finish (bad_index);
 
   ok (mongo_sync_cmd_index_create (NULL, "test.ns", indexes, 0) == FALSE,
       "mongo_sync_cmd_index_create() fails with a NULL connection");
@@ -29,10 +33,10 @@ test_mongo_sync_cmd_index_create (void)
       "mongo_sync_cmd_index_create() fails with a bogus namespace");
   ok (mongo_sync_cmd_index_create (c, "test.ns", indexes, 0) == FALSE,
       "mongo_sync_cmd_index_create() fails with a bogus FD");
-
+  
   mongo_sync_disconnect (c);
 
-  begin_network_tests (1);
+  begin_network_tests (2);
 
   c = mongo_sync_connect (config.primary_host, config.primary_port,
 			  TRUE);
@@ -42,6 +46,10 @@ test_mongo_sync_cmd_index_create (void)
 				  MONGO_INDEX_UNIQUE | MONGO_INDEX_DROP_DUPS |
 				  MONGO_INDEX_BACKGROUND | MONGO_INDEX_SPARSE),
       "mongo_sync_cmd_index_create() works");
+
+  ok (mongo_sync_cmd_index_create(c, config.ns, bad_index, 0) == FALSE,
+      "mongo_sync_cmd_index_create() should refuse to work with an invalid index spec");
+  
   mongo_sync_disconnect (c);
 
   bson_free (doc);
@@ -50,4 +58,4 @@ test_mongo_sync_cmd_index_create (void)
   end_network_tests ();
 }
 
-RUN_TEST (6, mongo_sync_cmd_index_create);
+RUN_TEST (7, mongo_sync_cmd_index_create);
