@@ -16,6 +16,7 @@ test_mongo_sync_cmd_index_create (void)
 			BSON_TYPE_DOUBLE, "double", 1.0,
 			BSON_TYPE_BOOLEAN, "TRUE", TRUE,
 			BSON_TYPE_INT64, "print", (gint64)-1,
+			BSON_TYPE_INT32, "zero", 0,
 			BSON_TYPE_NONE);
   bson_finish (indexes);
 
