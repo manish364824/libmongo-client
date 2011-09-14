@@ -1,3 +1,13 @@
+libmongo-client (0.1.4-3) unstable; urgency=low
+
+  * Build-Depend on debhelper (>= 8.9.7~) for -arch/-indep override
+    support.
+  * Move doxygen & graphviz to Build-Depends-Indep, and only build docs
+    when building -indep. This'll save quite a bit of disk space on
+    buildds. Thanks Laszlo Boszormenyi <gcs@debian.hu> for the suggestion.
+
+ -- Gergely Nagy <algernon@madhouse-project.org>  Wed, 14 Sep 2011 23:08:53 +0200
+
 libmongo-client (0.1.4-2) unstable; urgency=low
 
   * Build a libmongo-client-doc package, with API docs, the tutorial and
