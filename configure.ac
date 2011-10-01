@@ -1,14 +1,11 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
 
-AC_INIT(libmongo-client, 0.1.4, algernon@madhouse-project.org, libmongo-client, https://github.com/algernon/libmongo-client)
+AC_INIT(libmongo-client, 0.2.0, algernon@madhouse-project.org, libmongo-client, https://github.com/algernon/libmongo-client)
 AM_INIT_AUTOMAKE([1.9 tar-ustar])
 
 dnl ***************************************************************************
 dnl dependencies
-
-GLIB_MIN_VERSION="2.12.0"
-OPENSSL_MIN_VERSION="0.9.8"
 
 dnl ***************************************************************************
 dnl Initial setup
@@ -62,54 +59,6 @@ AC_TYPE_SIZE_T
 AC_CHECK_FUNCS(memset socket getaddrinfo munmap strtol strerror)
 
 dnl ***************************************************************************
-dnl GLib headers/libraries
-dnl ***************************************************************************
-
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_MIN_VERSION,,)
-
-old_CPPFLAGS=$CPPFLAGS
-CPPFLAGS="$GLIB_CFLAGS"
-
-AC_CACHE_CHECK(sanity checking Glib headers,
-               blb_cv_glib_sane,
-[AC_TRY_RUN([
-#include <glib.h>
-
-int main()
-{
-  if (sizeof(long) != GLIB_SIZEOF_LONG)
-    return 1;
-  return 0;
-}
-],
-blb_cv_glib_sane=yes,
-blb_cv_glib_sane=no,
-blb_cv_glib_sane=yes)])
-CPPFLAGS=$old_CPPFLAGS
-
-if test "x$blb_cv_glib_sane" = "xno"; then
-	AC_MSG_ERROR([Glib headers inconsistent with current compiler setting. You might be using 32 bit Glib with a 64 bit compiler, check PKG_CONFIG_PATH])
-fi
-
-dnl Check for g_checksum_new
-old_LIBS=$LIBS
-
-dnl to make sure we're using glib from the proper path
-LIBS=$GLIB_LIBS
-AC_CHECK_LIB(glib-2.0, g_checksum_new, [glib_checksum="yes"; with_openssl="0"], [glib_checksum="no"; with_openssl="1"])
-LIBS=$old_LIBS
-if test "x$glib_checksum" = "xno"; then
-  dnl Using the compat stuff disables symbol versioning
-  vsymldflags=""
-  PKG_CHECK_MODULES(OPENSSL, openssl >= $OPENSSL_MIN_VERSION,, OPENSSL_LIBS="")
-  if test "x$OPENSSL_LIBS" = "x"; then
-     AC_MSG_ERROR([OpenSSL is required when glib-2.0 << 2.16.0])
-  fi
-fi
-
-AC_DEFINE_UNQUOTED(WITH_OPENSSL, $with_openssl, [Compile with OpenSSL])
-
-dnl ***************************************************************************
 dnl misc features to be enabled
 dnl ***************************************************************************
 AC_C_INLINE
@@ -140,8 +89,8 @@ AC_OUTPUT(
 	docs/Makefile
 	docs/tutorial/Makefile
 	examples/Makefile
-	src/Makefile
-	src/libmongo-client.pc
-	tests/Makefile
-	tests/libtap/Makefile
+	lib/Makefile
+	lib/libmongo-client.pc
+	t/Makefile
+	t/libtap/Makefile
 )
