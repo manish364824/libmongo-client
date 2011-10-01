@@ -654,7 +654,6 @@ const char *bson_cursor_type_as_string (const bson_cursor_t *c);
  */
 const char *bson_cursor_key (const bson_cursor_t *c);
 
-#if 0
 /** Get the value stored at the cursor, as string.
  *
  * @param c is the cursor pointing at the appropriate element.
@@ -666,7 +665,7 @@ const char *bson_cursor_key (const bson_cursor_t *c);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_string (const bson_cursor *c, const gchar **dest);
+lmc_bool_t bson_cursor_get_string (const bson_cursor_t *c, const char **dest);
 
 /** Get the value stored at the cursor, as a double.
  *
@@ -676,7 +675,7 @@ gboolean bson_cursor_get_string (const bson_cursor *c, const gchar **dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_double (const bson_cursor *c, gdouble *dest);
+lmc_bool_t bson_cursor_get_double (const bson_cursor_t *c, double *dest);
 
 /** Get the value stored at the cursor, as a BSON document.
  *
@@ -689,7 +688,7 @@ gboolean bson_cursor_get_double (const bson_cursor *c, gdouble *dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_document (const bson_cursor *c, bson_t **dest);
+lmc_bool_t bson_cursor_get_document (const bson_cursor_t *c, bson_t **dest);
 
 /** Get the value stored at the cursor, as a BSON array.
  *
@@ -702,7 +701,7 @@ gboolean bson_cursor_get_document (const bson_cursor *c, bson_t **dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_array (const bson_cursor *c, bson_t **dest);
+lmc_bool_t bson_cursor_get_array (const bson_cursor_t *c, bson_t **dest);
 
 /** Get the value stored at the cursor, as binary data.
  *
@@ -716,9 +715,9 @@ gboolean bson_cursor_get_array (const bson_cursor *c, bson_t **dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_binary (const bson_cursor *c,
-				 bson_binary_subtype *subtype,
-				 const guint8 **data, gint32 *size);
+lmc_bool_t bson_cursor_get_binary (const bson_cursor_t *c,
+				   bson_binary_subtype_t *subtype,
+				   const uint8_t **data, int32_t *size);
 
 /** Get the value stored at the cursor, as an ObjectID.
  *
@@ -731,7 +730,8 @@ gboolean bson_cursor_get_binary (const bson_cursor *c,
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_oid (const bson_cursor *c, const guint8 **dest);
+lmc_bool_t bson_cursor_get_oid (const bson_cursor_t *c,
+				const bson_oid_t **dest);
 
 /** Get the value stored at the cursor, as a boolean.
  *
@@ -741,7 +741,7 @@ gboolean bson_cursor_get_oid (const bson_cursor *c, const guint8 **dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_boolean (const bson_cursor *c, gboolean *dest);
+lmc_bool_t bson_cursor_get_boolean (const bson_cursor_t *c, lmc_bool_t *dest);
 
 /** Get the value stored at the cursor, as an UTC datetime.
  *
@@ -751,7 +751,8 @@ gboolean bson_cursor_get_boolean (const bson_cursor *c, gboolean *dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_utc_datetime (const bson_cursor *c, gint64 *dest);
+lmc_bool_t bson_cursor_get_utc_datetime (const bson_cursor_t *c,
+					 int64_t *dest);
 
 /** Get the value stored at the cursor, as a regexp.
  *
@@ -767,8 +768,8 @@ gboolean bson_cursor_get_utc_datetime (const bson_cursor *c, gint64 *dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_regex (const bson_cursor *c, const gchar **regex,
-				const gchar **options);
+lmc_bool_t bson_cursor_get_regex (const bson_cursor_t *c, const char **regex,
+				  const char **options);
 
 /** Get the value stored at the cursor, as javascript code.
  *
@@ -781,7 +782,8 @@ gboolean bson_cursor_get_regex (const bson_cursor *c, const gchar **regex,
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_javascript (const bson_cursor *c, const gchar **dest);
+lmc_bool_t bson_cursor_get_javascript (const bson_cursor_t *c,
+				       const char **dest);
 
 /** Get the value stored at the cursor, as a symbol.
  *
@@ -794,7 +796,7 @@ gboolean bson_cursor_get_javascript (const bson_cursor *c, const gchar **dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_symbol (const bson_cursor *c, const gchar **dest);
+lmc_bool_t bson_cursor_get_symbol (const bson_cursor_t *c, const char **dest);
 
 /** Get the value stored at the cursor, as javascript code w/ scope.
  *
@@ -809,9 +811,9 @@ gboolean bson_cursor_get_symbol (const bson_cursor *c, const gchar **dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_javascript_w_scope (const bson_cursor *c,
-					     const gchar **js,
-					     bson_t **scope);
+lmc_bool_t bson_cursor_get_javascript_w_scope (const bson_cursor_t *c,
+					       const char **js,
+					       bson_t **scope);
 
 /** Get the value stored at the cursor, as a 32-bit integer.
  *
@@ -821,7 +823,7 @@ gboolean bson_cursor_get_javascript_w_scope (const bson_cursor *c,
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_int32 (const bson_cursor *c, gint32 *dest);
+lmc_bool_t bson_cursor_get_int32 (const bson_cursor_t *c, int32_t *dest);
 
 /** Get the value stored at the cursor, as a timestamp.
  *
@@ -831,7 +833,8 @@ gboolean bson_cursor_get_int32 (const bson_cursor *c, gint32 *dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_timestamp (const bson_cursor *c, gint64 *dest);
+lmc_bool_t bson_cursor_get_timestamp (const bson_cursor_t *c,
+				      bson_timestamp_t *dest);
 
 /** Get the value stored at the cursor, as a 64-bit integer.
  *
@@ -841,15 +844,11 @@ gboolean bson_cursor_get_timestamp (const bson_cursor *c, gint64 *dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_int64 (const bson_cursor *c, gint64 *dest);
+lmc_bool_t bson_cursor_get_int64 (const bson_cursor_t *c, int64_t *dest);
 
 /** @} */
 
-#endif
-
 /** @} */
-
-
 
 LMC_END_DECLS
 

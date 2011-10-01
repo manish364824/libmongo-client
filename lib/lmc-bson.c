@@ -736,3 +736,298 @@ bson_cursor_key (const bson_cursor_t *c)
 
   return c->key;
 }
+
+/* Cursor getters */
+
+/** @internal Convenience macro to verify a cursor's type.
+ *
+ * Verifies that the cursor's type is the same as the type requested
+ * by the caller, and returns FALSE if there is a mismatch.
+ */
+#define BSON_CURSOR_CHECK_TYPE(c,type)		\
+  if (bson_cursor_type(c) != type)		\
+    return FALSE;
+
+lmc_bool_t
+bson_cursor_get_string (const bson_cursor_t *c, const char **dest)
+{
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_STRING);
+
+  *dest = (char *)(bson_data (c->obj) + c->value_pos + sizeof (int32_t));
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_double (const bson_cursor_t *c, double *dest)
+{
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_DOUBLE);
+
+  memcpy (dest, bson_data (c->obj) + c->value_pos, sizeof (double));
+  *dest = LMC_DOUBLE_FROM_LE (*dest);
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_document (const bson_cursor_t *c, bson_t **dest)
+{
+  bson_t *b;
+  int32_t size;
+
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_DOCUMENT);
+
+  size = bson_stream_doc_size (bson_data(c->obj), c->value_pos) -
+    sizeof (int32_t) - 1;
+  b = bson_finish (bson_new_from_data
+		   (bson_data (c->obj) + c->value_pos + sizeof (int32_t),
+		    size));
+  *dest = b;
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_array (const bson_cursor_t *c, bson_t **dest)
+{
+  bson_t *b;
+  int32_t size;
+
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_ARRAY);
+
+  size = bson_stream_doc_size (bson_data(c->obj), c->value_pos) -
+    sizeof (int32_t) - 1;
+
+  b = bson_finish (bson_new_from_data
+		   (bson_data (c->obj) + c->value_pos + sizeof (int32_t),
+		    size));
+  *dest = b;
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_binary (const bson_cursor_t *c,
+			bson_binary_subtype_t *subtype,
+			const uint8_t **data, int32_t *size)
+{
+  if (!subtype || !data || !size)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_BINARY);
+
+  *size = bson_stream_doc_size (bson_data(c->obj), c->value_pos);
+  *subtype = (bson_binary_subtype_t)(bson_data (c->obj)[c->value_pos +
+							sizeof (int32_t)]);
+  *data = (uint8_t *)(bson_data (c->obj) + c->value_pos +
+		      sizeof (int32_t) + 1);
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_oid (const bson_cursor_t *c, const bson_oid_t **dest)
+{
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_OID);
+
+  *dest = (bson_oid_t *)(bson_data (c->obj) + c->value_pos);
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_boolean (const bson_cursor_t *c, lmc_bool_t *dest)
+{
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_BOOLEAN);
+
+  *dest = (lmc_bool_t)(bson_data (c->obj) + c->value_pos)[0];
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_utc_datetime (const bson_cursor_t *c,
+			      int64_t *dest)
+{
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_UTC_DATETIME);
+
+  memcpy (dest, bson_data (c->obj) + c->value_pos, sizeof (int64_t));
+  *dest = LMC_INT64_FROM_LE (*dest);
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_regex (const bson_cursor_t *c, const char **regex,
+		       const char **options)
+{
+  if (!regex || !options)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_REGEXP);
+
+  *regex = (char *)(bson_data (c->obj) + c->value_pos);
+  *options = (char *)(*regex + strlen(*regex) + 1);
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_javascript (const bson_cursor_t *c, const char **dest)
+{
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_JS_CODE);
+
+  *dest = (char *)(bson_data (c->obj) + c->value_pos + sizeof (int32_t));
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_symbol (const bson_cursor_t *c, const char **dest)
+{
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_SYMBOL);
+
+  *dest = (char *)(bson_data (c->obj) + c->value_pos + sizeof (int32_t));
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_javascript_w_scope (const bson_cursor_t *c,
+				    const char **js,
+				    bson_t **scope)
+{
+  bson_t *b;
+  int32_t size, docpos;
+
+  if (!js || !scope)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_JS_CODE_W_SCOPE);
+
+  docpos = bson_stream_doc_size (bson_data (c->obj),
+				 c->value_pos + sizeof (int32_t)) +
+    sizeof (int32_t) * 2;
+  size = bson_stream_doc_size (bson_data (c->obj), c->value_pos + docpos) - 1;
+
+  b = bson_finish (bson_new_from_data
+		   (bson_data (c->obj) + c->value_pos + docpos, size));
+  *scope = b;
+  *js = (char *)(bson_data (c->obj) + c->value_pos + sizeof (int32_t) * 2);
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_int32 (const bson_cursor_t *c, int32_t *dest)
+{
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_INT32);
+
+  memcpy (dest, bson_data (c->obj) + c->value_pos, sizeof (int32_t));
+  *dest = LMC_INT32_FROM_LE (*dest);
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_timestamp (const bson_cursor_t *c, bson_timestamp_t *dest)
+{
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_TIMESTAMP);
+
+  memcpy (dest, bson_data (c->obj) + c->value_pos, sizeof (int64_t));
+  *dest = LMC_INT64_FROM_LE (*dest);
+
+  return TRUE;
+}
+
+lmc_bool_t
+bson_cursor_get_int64 (const bson_cursor_t *c, int64_t *dest)
+{
+  if (!dest)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+
+  BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_INT64);
+
+  memcpy (dest, bson_data (c->obj) + c->value_pos, sizeof (int64_t));
+  *dest = LMC_INT64_FROM_LE (*dest);
+
+  return TRUE;
+}

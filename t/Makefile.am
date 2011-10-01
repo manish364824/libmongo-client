@@ -31,7 +31,23 @@ bson_unit_tests		= \
 		unit/bson/bson_cursor_next \
 		unit/bson/bson_cursor_type \
 		unit/bson/bson_cursor_type_as_string \
-		unit/bson/bson_cursor_key
+		unit/bson/bson_cursor_key \
+		\
+		unit/bson/bson_cursor_get_array \
+		unit/bson/bson_cursor_get_binary \
+		unit/bson/bson_cursor_get_boolean \
+		unit/bson/bson_cursor_get_document \
+		unit/bson/bson_cursor_get_double \
+		unit/bson/bson_cursor_get_int32 \
+		unit/bson/bson_cursor_get_int64 \
+		unit/bson/bson_cursor_get_javascript \
+		unit/bson/bson_cursor_get_javascript_w_scope \
+		unit/bson/bson_cursor_get_oid \
+		unit/bson/bson_cursor_get_regex \
+		unit/bson/bson_cursor_get_string \
+		unit/bson/bson_cursor_get_symbol \
+		unit/bson/bson_cursor_get_timestamp \
+		unit/bson/bson_cursor_get_utc_datetime
 
 bson_func_tests		= \
 		func/bson/f_bson_empty \
