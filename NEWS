@@ -1,5 +1,33 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.2.0 - <UNRELEASED>
+
+This is a major update, that breaks both the API and the ABI, in order
+to provide an even more convenient way to work with the library.
+
+The library will also be licensed under the GNU LGPL 3+ from now on,
+instead of the old Apache License.
+
+** Changed API: bson functions are now chainable
+The BSON API was reworked considerably so that most functions return
+the same object that they've worked on. This allows one to
+conveniently chain them together.
+
+Errors are handled through a new mechanism, see the documentation of
+the lmc_error family of functions.
+
+This also means that several functions that used to exist were
+removed: bson_find(), bson_cursor_find_next(), bson_build() and
+bson_build_full() are all gone.
+
+** Bug fix: bson_cursor_find() only finds exact matches now
+Due to a silly mistake, bson_cursor_find() (and the other search
+functions in former versions) behaved strangely, and returned
+partially matching keys aswell.
+
+This was corrected, and bson_cursor_find() only allows exact matches
+now.
+
 * 0.1.4 - <2011-08-27 Sat>
 
 This release is a minor update, with neither new functionality, nor

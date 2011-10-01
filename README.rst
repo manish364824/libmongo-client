@@ -35,9 +35,10 @@ bumped version will be branched off.
 Requirements
 ------------
 
-Apart from `glib`_, there are no other hard dependencies. Though, one
-will need `Perl`_ (with a suitable version of Test::Harness, along
-with the prove utility) to run the test suite.
+Apart from the autotools and a C compiler, there are no other hard
+dependencies. However, would one wish to run the test suite, then
+`Perl_` (with a suitable version of Test::Harness, along with the
+prove utility) will be needed aswell.
 
 To build the documentation, `Doxygen`_ will be needed too.
 
@@ -56,11 +57,12 @@ The library follows the usual autotools way of installation:
 License
 -------
 
-Although the code is not based on any other driver, it is released
-under the same Apache License, version 2.0 (included as the file
-LICENSE).
+While former versions were released under the Apache License version
+2.0, recent versions are released under the GNU Lesser General Public
+License, version 3 (or at your opinion, any later version).
+
+See the COPYING.GPL and COPYING.LGPL files for license information.
 
 .. _MongoDB: http://www.mongodb.org/
-.. _glib: http://developer.gnome.org/glib/
 .. _Perl: http://www.perl.org/
 .. _Doxygen: http://www.stack.nl/~dimitri/doxygen/
