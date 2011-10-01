@@ -31,7 +31,7 @@ for src in ${SOURCES}; do
 				continue
 			fi
 
-			perl ${top_srcdir}/tests/tools/coverage-report-entry.pl ${src}.gcov > coverage/${src}.gcov.html
+			perl ${top_srcdir}/t/tools/coverage-report-entry.pl ${src}.gcov > coverage/${src}.gcov.html
 			grep -A4 -m 1 "File '${srcdir}/$src'" coverage/$src.cov | grep -v "^--" >>coverage/report.txt
 			echo >>coverage/report.txt
 			;;
