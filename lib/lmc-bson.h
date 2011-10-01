@@ -326,9 +326,17 @@ static __inline__ int32_t bson_stream_doc_size (const uint8_t *doc,
  * @brief Functions to append various kinds of elements to existing
  * BSON objects.
  *
- * Every such function expects the BSON object to be open, and will
- * return FALSE immediately if it finds that the object has had
- * bson_finish() called on it before.
+ * Every such function expects the BSON object to be open, and not in
+ * an error state. All of them will return a BSON object aswell (or
+ * NULL, if they were given a NULL object too).
+ *
+ * The resulting object will have it's error flag set (see
+ * lmc_error_isok()) upon error, and not touched otherwise.
+ *
+ * If any of the append functions encounter a BSON object that has the
+ * error flag set, they will do nothing, and return the original
+ * object instead. This way, errors propagate up to the appropriate
+ * level, even if the functions were chained.
  *
  * The only way to append to a finished BSON object is to @a clone it
  * with bson_new_from_data(), and append to the newly created object.
