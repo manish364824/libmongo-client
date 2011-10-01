@@ -35,8 +35,9 @@ struct _lmc_bson_t
 		      object. */
 
   uint8_t *data; /**< The actual data of the BSON object. */
-  uint32_t size;
-  uint32_t alloc;
+  uint32_t size; /**< The current size of the BSON object. */
+  uint32_t alloc; /**< Bytes currently allocated for the object. May
+		     be bigger than size. */
 
   lmc_bool_t finished; /**< Flag to indicate whether the object is open
 			  or finished. */
