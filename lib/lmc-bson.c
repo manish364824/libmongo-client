@@ -43,6 +43,22 @@ struct _lmc_bson_t
 			  or finished. */
 };
 
+/** @internal BSON cursor structure.
+ */
+struct _lmc_bson_cursor_t
+{
+  lmc_error_t err; /**< The first error raised while working with the
+		      object. */
+  const bson_t *obj; /**< The BSON object this is a cursor for. */
+  const char *key; /**< Pointer within the BSON object to the
+		      current key. */
+  size_t pos; /**< Position within the BSON object, pointing at the
+		 element type. */
+  size_t value_pos; /**< The start of the value within the BSON
+		       object, pointing right after the end of the
+		       key. */
+};
+
 static inline lmc_bool_t
 _lmc_bson_verify_obj (const bson_t *b)
 {
@@ -208,6 +224,30 @@ bson_type_as_string (bson_type_t type)
   }
 }
 
+lmc_bool_t
+bson_validate_key (const char *key,
+		   bson_valid_context_t flags)
+{
+  if (!key)
+    {
+      errno = EINVAL;
+      return FALSE;
+    }
+  errno = 0;
+
+  if ((flags & BSON_VALID_CONTEXT_NO_DOTS) &&
+      (strchr (key, '.') != NULL))
+    return FALSE;
+
+  if ((flags & BSON_VALID_CONTEXT_NO_DOLLAR) &&
+      (key[0] == '$'))
+    return FALSE;
+
+  return TRUE;
+}
+
+/* Constructors & meta-data access */
+
 bson_t *
 bson_new (void)
 {
@@ -330,27 +370,7 @@ bson_data (const bson_t *b)
   return b->data;
 }
 
-lmc_bool_t
-bson_validate_key (const char *key,
-		   bson_valid_context_t flags)
-{
-  if (!key)
-    {
-      errno = EINVAL;
-      return FALSE;
-    }
-  errno = 0;
-
-  if ((flags & BSON_VALID_CONTEXT_NO_DOTS) &&
-      (strchr (key, '.') != NULL))
-    return FALSE;
-
-  if ((flags & BSON_VALID_CONTEXT_NO_DOLLAR) &&
-      (key[0] == '$'))
-    return FALSE;
-
-  return TRUE;
-}
+/* Append functions */
 
 bson_t *
 bson_append_string (bson_t *b, const char *name, const char *val,
@@ -513,4 +533,206 @@ bson_append_int64 (bson_t *b, const char *name, int64_t i)
 {
   _LMC_APPEND_HEADER (b, BSON_TYPE_INT64, name, sizeof (int64_t));
   return _lmc_bson_append_int64 (b, i);
+}
+
+/* Cursor functions */
+bson_cursor_t *
+bson_cursor_new (const bson_t *b)
+{
+  bson_cursor_t *c;
+
+  if (bson_size (b) == -1)
+    {
+      errno = EINVAL;
+      return NULL;
+    }
+
+  c = lmc_new (bson_cursor_t);
+  c->obj = b;
+  c->key = NULL;
+  c->pos = 0;
+  c->value_pos = 0;
+  lmc_error_reset (c);
+
+  return c;
+}
+
+bson_cursor_t *
+bson_cursor_free (bson_cursor_t *c)
+{
+  if (c)
+    free (c);
+  return NULL;
+}
+
+/** @internal Figure out the block size of a given type.
+ *
+ * Provided a #bson_type and some raw data, figures out the length of
+ * the block, counted from rigth after the element name's position.
+ *
+ * @param type is the type of object we need the size for.
+ * @param data is the raw data (starting right after the element's
+ * name).
+ *
+ * @returns The size of the block, or -1 on error.
+ */
+static int32_t
+_bson_get_block_size (bson_type_t type, const uint8_t *data)
+{
+  int64_t l;
+
+  switch (type)
+    {
+    case BSON_TYPE_STRING:
+    case BSON_TYPE_JS_CODE:
+    case BSON_TYPE_SYMBOL:
+      return bson_stream_doc_size (data, 0) + sizeof (int32_t);
+    case BSON_TYPE_DOCUMENT:
+    case BSON_TYPE_ARRAY:
+    case BSON_TYPE_JS_CODE_W_SCOPE:
+      return bson_stream_doc_size (data, 0);
+    case BSON_TYPE_DOUBLE:
+      return sizeof (double);
+    case BSON_TYPE_BINARY:
+      return bson_stream_doc_size (data, 0) +
+	sizeof (int32_t) + sizeof (uint8_t);
+    case BSON_TYPE_OID:
+      return 12;
+    case BSON_TYPE_BOOLEAN:
+      return 1;
+    case BSON_TYPE_UTC_DATETIME:
+    case BSON_TYPE_TIMESTAMP:
+    case BSON_TYPE_INT64:
+      return sizeof (int64_t);
+    case BSON_TYPE_NULL:
+      return 0;
+    case BSON_TYPE_REGEXP:
+      l = strlen((char *)data);
+      return l + strlen((char *)(data + l + 1)) + 2;
+    case BSON_TYPE_INT32:
+      return sizeof (int32_t);
+    case BSON_TYPE_DBPOINTER:
+      return bson_stream_doc_size (data, 0) + sizeof (int32_t) + 12;
+    case BSON_TYPE_NONE:
+    default:
+      return -1;
+    }
+}
+
+static inline lmc_bool_t
+_bson_cursor_find (const bson_t *b, const char *name, size_t start_pos,
+		   int32_t end_pos, lmc_bool_t wrap_over,
+		   bson_cursor_t *dest_c)
+{
+  int32_t pos = start_pos, bs, name_len;
+  const uint8_t *d;
+
+  name_len = strlen (name);
+
+  d = bson_data (b);
+
+  if (pos == 0)
+    pos = sizeof (int32_t);
+
+  while (pos < end_pos)
+    {
+      bson_type_t t = (bson_type_t) d[pos];
+      const char *key = (char *) &d[pos + 1];
+      int32_t key_len = strlen (key);
+      int32_t value_pos = pos + key_len + 2;
+
+      if (!memcmp (key, name, (name_len <= key_len) ? name_len : key_len))
+	{
+	  dest_c->obj = b;
+	  dest_c->key = key;
+	  dest_c->pos = pos;
+	  dest_c->value_pos = value_pos;
+
+	  return TRUE;
+	}
+      bs = _bson_get_block_size (t, &d[value_pos]);
+      if (bs == -1)
+	return FALSE;
+      pos = value_pos + bs;
+    }
+
+  if (wrap_over)
+    return _bson_cursor_find (b, name, sizeof (int32_t), start_pos,
+			      FALSE, dest_c);
+
+  return FALSE;
+}
+
+bson_cursor_t *
+bson_cursor_find (bson_cursor_t *c, const char *name)
+{
+  if (!c || !name)
+    lmc_error_raise (c, EINVAL);
+
+  if (_bson_cursor_find (c->obj, name, c->pos, bson_size (c->obj) - 1,
+			 TRUE, c))
+    return c;
+  else
+    lmc_error_raise (c, ENOKEY);
+}
+
+bson_cursor_t *
+bson_cursor_next (bson_cursor_t *c)
+{
+  const uint8_t *d;
+  int32_t pos, bs;
+
+  if (!c)
+    {
+      errno = EINVAL;
+      return NULL;
+    }
+
+  d = bson_data (c->obj);
+
+  if (c->pos == 0)
+    pos = sizeof (int32_t);
+  else
+    {
+      bs = _bson_get_block_size (bson_cursor_type (c), d + c->value_pos);
+      if (bs == -1)
+	lmc_error_raise (c, EPROTO);
+      pos = c->value_pos + bs;
+    }
+
+  if (pos >= bson_size (c->obj) - 1)
+    lmc_error_raise (c, ENOKEY);
+
+  c->pos = pos;
+  c->key = (char *) &d[c->pos + 1];
+  c->value_pos = c->pos + strlen (c->key) + 2;
+
+  return c;
+}
+
+bson_type_t
+bson_cursor_type (const bson_cursor_t *c)
+{
+  if (!c || c->pos < sizeof (int32_t))
+    return BSON_TYPE_NONE;
+
+  return (bson_type_t)(bson_data (c->obj)[c->pos]);
+}
+
+const char *
+bson_cursor_type_as_string (const bson_cursor_t *c)
+{
+  if (!c || c->pos < sizeof (int32_t))
+    return NULL;
+
+  return bson_type_as_string (bson_cursor_type (c));
+}
+
+const char *
+bson_cursor_key (const bson_cursor_t *c)
+{
+  if (!c)
+    return NULL;
+
+  return c->key;
 }

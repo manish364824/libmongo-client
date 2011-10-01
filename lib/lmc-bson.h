@@ -63,7 +63,7 @@ typedef struct _lmc_bson_t bson_t;
  * Cursors are used to represent a single entry within a BSON object,
  * and to help iterating over said document.
  */
-//typedef struct _lmc_bson_cursor_t bson_cursor_t;
+typedef struct _lmc_bson_cursor_t bson_cursor_t;
 
 /** Supported BSON object types.
  */
@@ -563,7 +563,6 @@ bson_t *bson_append_int64 (bson_t *b, const char *name, int64_t i);
 
 /** @} */
 
-#if 0
 /** @defgroup bson_cursor Cursor & Retrieval
  *
  * This section documents the cursors, and the data retrieval
@@ -593,59 +592,37 @@ bson_t *bson_append_int64 (bson_t *b, const char *name, int64_t i);
  *
  * @returns A newly allocated cursor, or NULL on error.
  */
-bson_cursor *bson_cursor_new (const bson_t *b);
-
-/** Create a new cursor positioned at a given key.
- *
- * Creates a new cursor, and positions it to the supplied key within
- * the BSON object.
- *
- * @param b is the BSON object to create a cursor for.
- * @param name is the key name to position to.
- *
- * @returns A newly allocated cursor, or NULL on error.
- */
-bson_cursor *bson_find (const bson_t *b, const gchar *name);
+bson_cursor_t *bson_cursor_new (const bson_t *b);
 
 /** Delete a cursor, and free up all resources used by it.
  *
  * @param c is the cursor to free.
+ *
+ * @returns NULL.
  */
-void bson_cursor_free (bson_cursor *c);
+bson_cursor_t *bson_cursor_free (bson_cursor_t *c);
+
+/** Move the cursor to a given key
+ *
+ * Starts canning the BSON object for the given key from the current
+ * position, wrapping around if neccessary.
+ *
+ * @param c is the cursor to move.
+ * @param name is the key name to position to.
+ *
+ * @returns The cursor positioned to the found key on success, NULL
+ * otherwise.
+ */
+bson_cursor_t *bson_cursor_find (bson_cursor_t *c, const char *name);
 
 /** Position the cursor to the next key.
  *
  * @param c is the cursor to move forward.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The cursor positioned to the next key, if any, NULL
+ * otherwise.
  */
-gboolean bson_cursor_next (bson_cursor *c);
-
-/** Move the cursor to a given key, past the current one.
- *
- * Scans the BSON object past the current key, in search for the
- * specified one, and positions the cursor there if found, leaves it
- * in place if not.
- *
- * @param c is the cursor to move forward.
- * @param name is the key name to position to.
- *
- * @returns TRUE on success, FALSE otherwise.
- */
-gboolean bson_cursor_find_next (bson_cursor *c, const gchar *name);
-
-/** Move the cursor to a given key
- *
- * Like bson_cursor_find_next(), this function will start scanning the
- * BSON object at the current position. If the key is not found after
- * it, it will wrap over and search up to the original position.
- *
- * @param c is the cursor to move.
- * @param name is the key name to position to.
- *
- * @returns TRUE on success, FALSE otherwise.
- */
-gboolean bson_cursor_find (bson_cursor *c, const gchar *name);
+bson_cursor_t *bson_cursor_next (bson_cursor_t *c);
 
 /** Determine the type of the current element.
  *
@@ -653,7 +630,7 @@ gboolean bson_cursor_find (bson_cursor *c, const gchar *name);
  *
  * @returns The type of the element, or #BSON_TYPE_NONE on error.
  */
-bson_type bson_cursor_type (const bson_cursor *c);
+bson_type_t bson_cursor_type (const bson_cursor_t *c);
 
 /** Retrieve the type of the current element, as string.
  *
@@ -664,7 +641,7 @@ bson_type bson_cursor_type (const bson_cursor *c);
  * @note The string points to an internal structure, it should not be
  * freed or modified.
  */
-const gchar *bson_cursor_type_as_string (const bson_cursor *c);
+const char *bson_cursor_type_as_string (const bson_cursor_t *c);
 
 /** Determine the name of the current elements key.
  *
@@ -675,8 +652,9 @@ const gchar *bson_cursor_type_as_string (const bson_cursor *c);
  * @note The name is a pointer to an internal string, one must NOT
  * free it.
  */
-const gchar *bson_cursor_key (const bson_cursor *c);
+const char *bson_cursor_key (const bson_cursor_t *c);
 
+#if 0
 /** Get the value stored at the cursor, as string.
  *
  * @param c is the cursor pointing at the appropriate element.

@@ -23,7 +23,15 @@ bson_unit_tests		= \
 		unit/bson/bson_append_symbol \
 		unit/bson/bson_append_js_code_w_scope \
 		unit/bson/bson_append_timestamp \
-		unit/bson/bson_append_int64
+		unit/bson/bson_append_int64 \
+		\
+		unit/bson/bson_cursor_new \
+		\
+		unit/bson/bson_cursor_find \
+		unit/bson/bson_cursor_next \
+		unit/bson/bson_cursor_type \
+		unit/bson/bson_cursor_type_as_string \
+		unit/bson/bson_cursor_key
 
 bson_func_tests		= \
 		func/bson/f_bson_empty \
