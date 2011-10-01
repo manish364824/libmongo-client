@@ -52,7 +52,8 @@ bson_unit_tests		= \
 bson_func_tests		= \
 		func/bson/f_bson_empty \
 		func/bson/f_bson_chained \
-		func/bson/f_bson_weird_types
+		func/bson/f_bson_weird_types \
+		func/bson/f_bson_huge_doc
 
 UNIT_TESTS	= ${bson_unit_tests}
 FUNC_TESTS	= ${bson_func_tests}

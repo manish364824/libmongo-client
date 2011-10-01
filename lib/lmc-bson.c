@@ -795,11 +795,9 @@ bson_cursor_get_document (const bson_cursor_t *c, bson_t **dest)
 
   BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_DOCUMENT);
 
-  size = bson_stream_doc_size (bson_data(c->obj), c->value_pos) -
-    sizeof (int32_t) - 1;
+  size = bson_stream_doc_size (bson_data(c->obj), c->value_pos) - 1;
   b = bson_finish (bson_new_from_data
-		   (bson_data (c->obj) + c->value_pos + sizeof (int32_t),
-		    size));
+		   (bson_data (c->obj) + c->value_pos, size));
   *dest = b;
 
   return TRUE;
@@ -819,12 +817,9 @@ bson_cursor_get_array (const bson_cursor_t *c, bson_t **dest)
 
   BSON_CURSOR_CHECK_TYPE (c, BSON_TYPE_ARRAY);
 
-  size = bson_stream_doc_size (bson_data(c->obj), c->value_pos) -
-    sizeof (int32_t) - 1;
-
+  size = bson_stream_doc_size (bson_data(c->obj), c->value_pos) - 1;
   b = bson_finish (bson_new_from_data
-		   (bson_data (c->obj) + c->value_pos + sizeof (int32_t),
-		    size));
+		   (bson_data (c->obj) + c->value_pos, size));
   *dest = b;
 
   return TRUE;
