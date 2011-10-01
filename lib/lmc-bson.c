@@ -88,6 +88,12 @@ _lmc_bson_append_int32 (bson_t *b, int32_t i)
   return _lmc_bson_append_data (b, (uint8_t *)&i, sizeof (int32_t));
 }
 
+#define _LMC_APPEND_HEADER(b,type,name,size)				\
+  if (_lmc_bson_append_element_header (b, type, name, size) == NULL)	\
+    return NULL;							\
+  if (!lmc_error_isok (b))						\
+    return b
+
 static inline bson_t *
 _lmc_bson_append_element_header (bson_t *b, bson_type_t type,
 				 const char *name, int32_t full_size)
@@ -122,10 +128,7 @@ _lmc_bson_append_string_element (bson_t *b, bson_type_t type,
 
   len = (length != -1) ? (size_t)length + 1 : strlen (val) + 1;
 
-  if (_lmc_bson_append_element_header (b, type, name, len) == NULL)
-    return NULL;
-  if (!lmc_error_isok (b))
-    return b;
+  _LMC_APPEND_HEADER (b, type, name, len);
 
   return _lmc_bson_append_int8
     (_lmc_bson_append_data
@@ -137,11 +140,7 @@ static inline bson_t *
 _lmc_bson_append_document_element (bson_t *b, bson_type_t type,
 				   const char *name, const bson_t *doc)
 {
-  if (_lmc_bson_append_element_header (b, type, name, bson_size (doc)) == NULL)
-    return NULL;
-  if (!lmc_error_isok (b))
-    return b;
-
+  _LMC_APPEND_HEADER (b, type, name, bson_size (doc));
   return _lmc_bson_append_data (b, bson_data (doc), bson_size (doc));
 }
 
@@ -359,11 +358,7 @@ bson_append_double (bson_t *b, const char *name, double d)
 {
   double v = LMC_DOUBLE_TO_LE (d);
 
-  if (_lmc_bson_append_element_header (b, BSON_TYPE_DOUBLE, name,
-				       sizeof (double)) == NULL)
-    return NULL;
-  if (!lmc_error_isok (b))
-    return b;
+  _LMC_APPEND_HEADER (b, BSON_TYPE_DOUBLE, name, sizeof (double));
 
   return _lmc_bson_append_data (b, (uint8_t *)&v, sizeof (double));
 }
@@ -388,11 +383,7 @@ bson_append_binary (bson_t *b, const char *name,
   if (!data)
     lmc_error_raise (b, EINVAL);
 
-  if (_lmc_bson_append_element_header (b, BSON_TYPE_BINARY,
-				       name, size) == NULL)
-    return NULL;
-  if (!lmc_error_isok (b))
-    return b;
+  _LMC_APPEND_HEADER (b, BSON_TYPE_BINARY, name, size);
 
   return _lmc_bson_append_data
     (_lmc_bson_append_int8
@@ -450,11 +441,7 @@ bson_append_javascript_w_scope (bson_t *b, const char *name,
 bson_t *
 bson_append_int32 (bson_t *b, const char *name, int32_t i)
 {
-  if (_lmc_bson_append_element_header (b, BSON_TYPE_INT32, name,
-				       sizeof (int32_t)) == NULL)
-    return NULL;
-  if (!lmc_error_isok (b))
-    return b;
+  _LMC_APPEND_HEADER (b, BSON_TYPE_INT32, name, sizeof (int32_t));
 
   return _lmc_bson_append_int32 (b, LMC_INT32_TO_LE (i));
 }
