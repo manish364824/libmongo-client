@@ -40,7 +40,7 @@ test_bson_document (void)
   e1 = bson_append_int32 (bson_new (), "foo", 42);
 
   b = bson_append_document (bson_new (), "doc", e1);
-  ok (lmc_error_get_errn (b) == EINVAL,
+  ok (!lmc_error_isok (b),
       "bson_append_document() with an unfinished document should fail");
   lmc_error_reset (b);
   bson_finish (e1);
@@ -51,7 +51,7 @@ test_bson_document (void)
   lmc_error_reset (b);
 
   b = bson_append_document (b, "doc", NULL);
-  ok (lmc_error_get_errn (b) == EINVAL,
+  ok (!lmc_error_isok (b),
       "bson_append_document() with a NULL document should fail");
   lmc_error_reset (b);
 

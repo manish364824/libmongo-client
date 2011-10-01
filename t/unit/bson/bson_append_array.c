@@ -38,7 +38,7 @@ test_bson_array (void)
   e1 = bson_append_int32 (bson_new (), "0", 1984);
 
   b = bson_append_array (bson_new (), "array", e1);
-  ok (lmc_error_get_errn (b) == EINVAL,
+  ok (!lmc_error_isok (b),
       "bson_append_array() with an unfinished array should fail");
   lmc_error_reset (b);
   bson_finish (e1);
@@ -49,7 +49,7 @@ test_bson_array (void)
   lmc_error_reset (b);
 
   b = bson_append_array (b, "foo", NULL);
-  ok (lmc_error_get_errn (b) == EINVAL,
+  ok (!lmc_error_isok (b),
       "bson_append_array() with a NULL array should fail");
   lmc_error_reset (b);
 

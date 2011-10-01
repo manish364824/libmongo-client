@@ -128,9 +128,15 @@ static inline int lmc_error_get_errn (const void *err)
  *
  * @param err is the error to set values in.
  * @param errn is the errno value to set.
+ *
+ * @note The macro will force a return with the supplied error object!
  */
-#define lmc_error_raise(err, errn) \
-  lmc_error_set ((lmc_error_t *)(err), __PRETTY_FUNCTION__, errn)
+#define lmc_error_raise(err, errn)					\
+  do									\
+    {									\
+      lmc_error_set ((lmc_error_t *)(err), __PRETTY_FUNCTION__, errn);	\
+      return err;							\
+    } while (0);							\
 
 /** Verify whether an error is clear.
  * @param err is the error object to verify.

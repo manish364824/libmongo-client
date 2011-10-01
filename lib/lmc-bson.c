@@ -95,15 +95,11 @@ _lmc_bson_append_element_header (bson_t *b, bson_type_t type,
   if (!_lmc_bson_verify_obj (b))
     return b;
   if (b->finished)
-    {
-      lmc_error_raise (b, EBUSY);
-      return b;
-    }
+    lmc_error_raise (b, EBUSY);
   if (!name)
-    {
-      lmc_error_raise (b, EINVAL);
-      return b;
-    }
+    lmc_error_raise (b, EINVAL);
+  if (full_size <= 0)
+    lmc_error_raise (b, ERANGE);
 
   _lmc_bson_ensure_space (b, b->size + full_size + strlen (name) + 1);
 
@@ -120,15 +116,9 @@ _lmc_bson_append_string_element (bson_t *b, bson_type_t type,
   size_t len;
 
   if (!val)
-    {
-      lmc_error_raise (b, EINVAL);
-      return b;
-    }
+    lmc_error_raise (b, EINVAL);
   if (length == 0 || length < -1)
-    {
-      lmc_error_raise (b, ERANGE);
-      return b;
-    }
+    lmc_error_raise (b, ERANGE);
 
   len = (length != -1) ? (size_t)length + 1 : strlen (val) + 1;
 
@@ -147,12 +137,6 @@ static inline bson_t *
 _lmc_bson_append_document_element (bson_t *b, bson_type_t type,
 				   const char *name, const bson_t *doc)
 {
-  if (bson_size (doc) < 0)
-    {
-      lmc_error_raise (b, EINVAL);
-      return b;
-    }
-
   if (_lmc_bson_append_element_header (b, type, name, bson_size (doc)) == NULL)
     return NULL;
   if (!lmc_error_isok (b))
@@ -402,15 +386,7 @@ bson_append_binary (bson_t *b, const char *name,
 		    const uint8_t *data, int32_t size)
 {
   if (!data)
-    {
-      lmc_error_raise (b, EINVAL);
-      return b;
-    }
-  if (size <= 0)
-    {
-      lmc_error_raise (b, ERANGE);
-      return b;
-    }
+    lmc_error_raise (b, EINVAL);
 
   if (_lmc_bson_append_element_header (b, BSON_TYPE_BINARY,
 				       name, size) == NULL)
