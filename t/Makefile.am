@@ -14,7 +14,16 @@ bson_unit_tests		= \
 		unit/bson/bson_append_array \
 		unit/bson/bson_append_binary \
 		unit/bson/bson_append_int32 \
-		unit/bson/bson_append_oid
+		unit/bson/bson_append_oid \
+		unit/bson/bson_append_boolean \
+		unit/bson/bson_append_utc_datetime \
+		unit/bson/bson_append_null \
+		unit/bson/bson_append_regexp \
+		unit/bson/bson_append_js_code \
+		unit/bson/bson_append_symbol \
+		unit/bson/bson_append_js_code_w_scope \
+		unit/bson/bson_append_timestamp \
+		unit/bson/bson_append_int64
 
 bson_func_tests		= \
 		func/bson/f_bson_empty \

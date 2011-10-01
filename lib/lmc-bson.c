@@ -88,6 +88,12 @@ _lmc_bson_append_int32 (bson_t *b, int32_t i)
   return _lmc_bson_append_data (b, (uint8_t *)&i, sizeof (int32_t));
 }
 
+static inline bson_t *
+_lmc_bson_append_int64 (bson_t *b, int64_t i)
+{
+  return _lmc_bson_append_data (b, (uint8_t *)&i, sizeof (int64_t));
+}
+
 #define _LMC_APPEND_HEADER(b,type,name,size)				\
   if (_lmc_bson_append_element_header (b, type, name, size) == NULL)	\
     return NULL;							\
@@ -402,38 +408,56 @@ bson_append_oid (bson_t *b, const char *name, const bson_oid_t *oid)
   return _lmc_bson_append_data (b, (const uint8_t *)oid->bytes, 12);
 }
 
-#if 0
 bson_t *
 bson_append_boolean (bson_t *b, const char *name, lmc_bool_t value)
 {
+  _LMC_APPEND_HEADER (b, BSON_TYPE_BOOLEAN, name, 1);
+
+  return _lmc_bson_append_int8 (b, (value) ? 1 : 0);
 }
 
 bson_t *
 bson_append_utc_datetime (bson_t *b, const char *name, int64_t ts)
 {
+  _LMC_APPEND_HEADER (b, BSON_TYPE_UTC_DATETIME, name, sizeof (int64_t));
+  return _lmc_bson_append_int64 (b, ts);
 }
 
 bson_t *
 bson_append_null (bson_t *b, const char *name)
 {
+  _LMC_APPEND_HEADER (b, BSON_TYPE_NULL, name, 1);
+  return b;
 }
 
 bson_t *
 bson_append_regex (bson_t *b, const char *name, const char *regexp,
 		   const char *options)
 {
+  if (!regexp || !options)
+    lmc_error_raise (b, EINVAL);
+
+  _LMC_APPEND_HEADER (b, BSON_TYPE_REGEXP, name,
+		      strlen (regexp) + strlen (options) + 1);
+  return _lmc_bson_append_data
+    (_lmc_bson_append_data (b, (const uint8_t *)regexp, strlen (regexp) + 1),
+     (const uint8_t *)options, strlen (options) + 1);
 }
 
 bson_t *
 bson_append_javascript (bson_t *b, const char *name, const char *js,
 			int32_t len)
 {
+  return _lmc_bson_append_string_element (b, BSON_TYPE_JS_CODE, name,
+					  js, len);
 }
 
 bson_t *
 bson_append_symbol (bson_t *b, const char *name, const char *symbol,
 		    int32_t len)
 {
+  return _lmc_bson_append_string_element (b, BSON_TYPE_SYMBOL, name,
+					  symbol, len);
 }
 
 bson_t *
@@ -441,8 +465,28 @@ bson_append_javascript_w_scope (bson_t *b, const char *name,
 				const char *js, int32_t len,
 				const bson_t *scope)
 {
+  int32_t size;
+  size_t length;
+
+  if (!js || bson_size (scope) < 0)
+    lmc_error_raise (b, EINVAL);
+  if (len < -1)
+    lmc_error_raise (b, ERANGE);
+
+  length = (len != -1) ? (size_t)len + 1 : strlen (js) + 1;
+  size = length + sizeof (int32_t) * 2 + bson_size (scope);
+
+  _LMC_APPEND_HEADER (b, BSON_TYPE_JS_CODE_W_SCOPE, name, size);
+
+  return _lmc_bson_append_data
+    (_lmc_bson_append_int8
+     (_lmc_bson_append_data
+      (_lmc_bson_append_int32
+       (_lmc_bson_append_int32 (b, LMC_INT32_TO_LE (size)),
+	LMC_INT32_TO_LE (length)),
+       (const uint8_t *)js, length - 1), 0),
+     bson_data (scope), bson_size (scope));
 }
-#endif
 
 bson_t *
 bson_append_int32 (bson_t *b, const char *name, int32_t i)
@@ -452,15 +496,20 @@ bson_append_int32 (bson_t *b, const char *name, int32_t i)
   return _lmc_bson_append_int32 (b, LMC_INT32_TO_LE (i));
 }
 
-#if 0
 bson_t *
 bson_append_timestamp (bson_t *b, const char *name,
 		       bson_timestamp_t *ts)
 {
+  int64_t v;
+
+  _LMC_APPEND_HEADER (b, BSON_TYPE_TIMESTAMP, name, sizeof (int64_t));
+  memcpy (&v, ts, sizeof (v));
+  return _lmc_bson_append_int64 (b, v);
 }
 
 bson_t *
 bson_append_int64 (bson_t *b, const char *name, int64_t i)
 {
+  _LMC_APPEND_HEADER (b, BSON_TYPE_INT64, name, sizeof (int64_t));
+  return _lmc_bson_append_int64 (b, i);
 }
-#endif
