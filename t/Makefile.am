@@ -55,6 +55,9 @@ bson_func_tests		= \
 		func/bson/f_bson_weird_types \
 		func/bson/f_bson_huge_doc
 
+bson_perf_tests		= \
+		perf/bson/p_bson_find
+
 UNIT_TESTS	= ${bson_unit_tests}
 FUNC_TESTS	= ${bson_func_tests}
 PERF_TESTS	= ${bson_perf_tests}
