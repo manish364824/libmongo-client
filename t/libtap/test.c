@@ -7,15 +7,18 @@ func_config_t config;
 bson_t *
 test_bson_generate_full (void)
 {
-  bson_t *b; //, *d, *a, *scope;
-#if 0
-  guint8 oid[] = "1234567890ab";
-#endif
+  bson_t *b, *d, *a, *scope;
+  bson_oid_t oid;
+  bson_timestamp_t t;
 
-#if 0
+  t.i = 10;
+  t.t = 12345678;
+
+  memcpy (oid.bytes, "1234567890ab", 12);
+
   a = bson_new ();
   bson_append_int32 (a, "0", 32);
-  bson_append_int64 (a, "1", (gint64)-42);
+  bson_append_int64 (a, "1", (int64_t)-42);
   bson_finish (a);
 
   d = bson_new ();
@@ -26,39 +29,32 @@ test_bson_generate_full (void)
   scope = bson_new ();
   bson_append_string (scope, "v", "hello world", -1);
   bson_finish (scope);
-#endif
 
   b = bson_new ();
-#if 0
   bson_append_double (b, "double", 3.14);
-#endif
   bson_append_string (b, "str", "hello world", -1);
 
-#if 0
   bson_append_document (b, "doc", d);
   bson_append_array (b, "array", a);
   bson_append_binary (b, "binary0", BSON_BINARY_SUBTYPE_GENERIC,
-		      (guint8 *)"foo\0bar", 7);
-  bson_append_oid (b, "_id", oid);
+		      (uint8_t *)"foo\0bar", 7);
+  bson_append_oid (b, "_id", &oid);
   bson_append_boolean (b, "TRUE", FALSE);
   bson_append_utc_datetime (b, "date", 1294860709000);
-  bson_append_timestamp (b, "ts", 1294860709000);
+  bson_append_timestamp (b, "ts", &t);
   bson_append_null (b, "null");
   bson_append_regex (b, "foobar", "s/foo.*bar/", "i");
   bson_append_javascript (b, "alert", "alert (\"hello world!\");", -1);
   bson_append_symbol (b, "sex", "Marilyn Monroe", -1);
   bson_append_javascript_w_scope (b, "print", "alert (v);", -1, scope);
   bson_append_int32 (b, "int32", 32);
-  bson_append_int64 (b, "int64", (gint64)-42);
-#endif
+  bson_append_int64 (b, "int64", (int64_t)-42);
 
   bson_finish (b);
 
-#if 0
   bson_free (d);
   bson_free (a);
   bson_free (scope);
-#endif
 
   return b;
 }
