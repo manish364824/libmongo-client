@@ -19,6 +19,9 @@ test_bson_cursor_new (void)
       "bson_cursor_new() works");
   bson_cursor_free (c);
   bson_free (b);
+
+  ok (bson_cursor_free (NULL) == NULL,
+      "bson_cursor_free(NULL) works");
 }
 
-RUN_TEST (3, bson_cursor_new);
+RUN_TEST (4, bson_cursor_new);
