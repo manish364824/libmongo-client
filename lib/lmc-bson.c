@@ -641,7 +641,7 @@ _bson_cursor_find (const bson_t *b, const char *name, size_t start_pos,
       int32_t key_len = strlen (key);
       int32_t value_pos = pos + key_len + 2;
 
-      if (!memcmp (key, name, (name_len <= key_len) ? name_len : key_len))
+      if (key_len == name_len && !memcmp (key, name, name_len))
 	{
 	  dest_c->obj = b;
 	  dest_c->key = key;
