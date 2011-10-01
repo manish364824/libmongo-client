@@ -13,7 +13,8 @@ bson_unit_tests		= \
 		unit/bson/bson_append_document \
 		unit/bson/bson_append_array \
 		unit/bson/bson_append_binary \
-		unit/bson/bson_append_int32
+		unit/bson/bson_append_int32 \
+		unit/bson/bson_append_oid
 
 bson_func_tests		= \
 		func/bson/f_bson_empty \

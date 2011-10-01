@@ -391,12 +391,18 @@ bson_append_binary (bson_t *b, const char *name,
      data, size);
 }
 
-#if 0
 bson_t *
 bson_append_oid (bson_t *b, const char *name, const bson_oid_t *oid)
 {
+  if (!oid)
+    lmc_error_raise (b, EINVAL);
+
+  _LMC_APPEND_HEADER (b, BSON_TYPE_OID, name, 12);
+
+  return _lmc_bson_append_data (b, (const uint8_t *)oid->bytes, 12);
 }
 
+#if 0
 bson_t *
 bson_append_boolean (bson_t *b, const char *name, lmc_bool_t value)
 {
