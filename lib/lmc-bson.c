@@ -143,6 +143,24 @@ _lmc_bson_append_string_element (bson_t *b, bson_type_t type,
       (uint8_t *)val, len - 1), 0);
 }
 
+static inline bson_t *
+_lmc_bson_append_document_element (bson_t *b, bson_type_t type,
+				   const char *name, const bson_t *doc)
+{
+  if (bson_size (doc) < 0)
+    {
+      lmc_error_raise (b, EINVAL);
+      return b;
+    }
+
+  if (_lmc_bson_append_element_header (b, type, name, bson_size (doc)) == NULL)
+    return NULL;
+  if (!lmc_error_isok (b))
+    return b;
+
+  return _lmc_bson_append_data (b, bson_data (doc), bson_size (doc));
+}
+
 /********************
  * Public interface *
  ********************/
@@ -351,3 +369,129 @@ bson_append_string (bson_t *b, const char *name, const char *val,
   return _lmc_bson_append_string_element (b, BSON_TYPE_STRING,
 					  name, val, length);
 }
+
+bson_t *
+bson_append_double (bson_t *b, const char *name, double d)
+{
+  double v = LMC_DOUBLE_TO_LE (d);
+
+  if (_lmc_bson_append_element_header (b, BSON_TYPE_DOUBLE, name,
+				       sizeof (double)) == NULL)
+    return NULL;
+  if (!lmc_error_isok (b))
+    return b;
+
+  return _lmc_bson_append_data (b, (uint8_t *)&v, sizeof (double));
+}
+
+bson_t *
+bson_append_document (bson_t *b, const char *name, const bson_t *doc)
+{
+  return _lmc_bson_append_document_element (b, BSON_TYPE_DOCUMENT, name, doc);
+}
+
+bson_t *
+bson_append_array (bson_t *b, const char *name, const bson_t *array)
+{
+  return _lmc_bson_append_document_element (b, BSON_TYPE_ARRAY, name, array);
+}
+
+bson_t *
+bson_append_binary (bson_t *b, const char *name,
+		    bson_binary_subtype_t subtype,
+		    const uint8_t *data, int32_t size)
+{
+  if (!data)
+    {
+      lmc_error_raise (b, EINVAL);
+      return b;
+    }
+  if (size <= 0)
+    {
+      lmc_error_raise (b, ERANGE);
+      return b;
+    }
+
+  if (_lmc_bson_append_element_header (b, BSON_TYPE_BINARY,
+				       name, size) == NULL)
+    return NULL;
+  if (!lmc_error_isok (b))
+    return b;
+
+  return _lmc_bson_append_data
+    (_lmc_bson_append_int8
+     (_lmc_bson_append_int32 (b, LMC_INT32_TO_LE (size)), (uint8_t)subtype),
+     data, size);
+}
+
+#if 0
+bson_t *
+bson_append_oid (bson_t *b, const char *name, const bson_oid_t *oid)
+{
+}
+
+bson_t *
+bson_append_boolean (bson_t *b, const char *name, lmc_bool_t value)
+{
+}
+
+bson_t *
+bson_append_utc_datetime (bson_t *b, const char *name, int64_t ts)
+{
+}
+
+bson_t *
+bson_append_null (bson_t *b, const char *name)
+{
+}
+
+bson_t *
+bson_append_regex (bson_t *b, const char *name, const char *regexp,
+		   const char *options)
+{
+}
+
+bson_t *
+bson_append_javascript (bson_t *b, const char *name, const char *js,
+			int32_t len)
+{
+}
+
+bson_t *
+bson_append_symbol (bson_t *b, const char *name, const char *symbol,
+		    int32_t len)
+{
+}
+
+bson_t *
+bson_append_javascript_w_scope (bson_t *b, const char *name,
+				const char *js, int32_t len,
+				const bson_t *scope)
+{
+}
+#endif
+
+bson_t *
+bson_append_int32 (bson_t *b, const char *name, int32_t i)
+{
+  if (_lmc_bson_append_element_header (b, BSON_TYPE_INT32, name,
+				       sizeof (int32_t)) == NULL)
+    return NULL;
+  if (!lmc_error_isok (b))
+    return b;
+
+  return _lmc_bson_append_int32 (b, LMC_INT32_TO_LE (i));
+}
+
+#if 0
+bson_t *
+bson_append_timestamp (bson_t *b, const char *name,
+		       bson_timestamp_t *ts)
+{
+}
+
+bson_t *
+bson_append_int64 (bson_t *b, const char *name, int64_t i)
+{
+}
+#endif

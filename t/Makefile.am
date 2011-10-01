@@ -8,7 +8,12 @@ bson_unit_tests		= \
 		unit/bson/bson_type_as_string \
 		unit/bson/bson_validate_key \
 		\
-		unit/bson/bson_append_string
+		unit/bson/bson_append_string \
+		unit/bson/bson_append_double \
+		unit/bson/bson_append_document \
+		unit/bson/bson_append_array \
+		unit/bson/bson_append_binary \
+		unit/bson/bson_append_int32
 
 bson_func_tests		= \
 		func/bson/f_bson_empty \
