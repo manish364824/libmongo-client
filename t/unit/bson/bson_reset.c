@@ -1,6 +1,6 @@
 #include "test.h"
 
-void
+static void
 test_bson_reset (void)
 {
   bson_t *b;

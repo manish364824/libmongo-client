@@ -1,6 +1,6 @@
 #include "test.h"
 
-void
+static void
 test_bson_new_from_data (void)
 {
   bson_t *orig, *new;

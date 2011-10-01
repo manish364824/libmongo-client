@@ -4,7 +4,7 @@
   is (bson_type_as_string (t), #t,			\
       "bson_type_as_string(%s) works", #t)
 
-void
+static void
 test_bson_type_as_string (void)
 {
   CHECK_TYPE (BSON_TYPE_NONE);

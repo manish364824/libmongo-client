@@ -1,6 +1,6 @@
 #include "test.h"
 
-void
+static void
 test_bson_validate_key (void)
 {
   lmc_bool_t valid;
