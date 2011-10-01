@@ -37,7 +37,7 @@ Requirements
 
 Apart from the autotools and a C compiler, there are no other hard
 dependencies. However, would one wish to run the test suite, then
-`Perl_` (with a suitable version of Test::Harness, along with the
+`Perl`_ (with a suitable version of Test::Harness, along with the
 prove utility) will be needed aswell.
 
 To build the documentation, `Doxygen`_ will be needed too.
