@@ -68,32 +68,32 @@ typedef struct _lmc_bson_t bson_t;
 /** Supported BSON object types.
  */
 typedef enum
-  {
-    BSON_TYPE_NONE = 0, /**< Only used for errors */
-    BSON_TYPE_DOUBLE = 0x01, /**< 8byte double */
-    BSON_TYPE_STRING, /**< 4byte length + NULL terminated string */
-    BSON_TYPE_DOCUMENT, /**< 4byte length + NULL terminated document */
-    BSON_TYPE_ARRAY, /**< 4byte length + NULL terminated document */
-    BSON_TYPE_BINARY, /**< 4byte length + 1byte subtype + data */
-    BSON_TYPE_UNDEFINED, /* Deprecated*/
-    BSON_TYPE_OID, /**< 12byte ObjectID */
-    BSON_TYPE_BOOLEAN, /**< 1byte boolean value */
-    BSON_TYPE_UTC_DATETIME, /**< 8byte timestamp; milliseconds since
-			       Unix epoch */
-    BSON_TYPE_NULL, /**< NULL value, No following data. */
-    BSON_TYPE_REGEXP, /**< Two NULL terminated C strings, the regex
-			 itself, and the options. */
-    BSON_TYPE_DBPOINTER, /* Deprecated */
-    BSON_TYPE_JS_CODE, /**< 4byte length + NULL terminated string */
-    BSON_TYPE_SYMBOL, /**< 4byte length + NULL terminated string */
-    BSON_TYPE_JS_CODE_W_SCOPE, /**< 4byte length, followed by a
-				  string and a document */
-    BSON_TYPE_INT32, /**< 4byte integer */
-    BSON_TYPE_TIMESTAMP, /**< 4bytes increment + 4bytes timestamp */
-    BSON_TYPE_INT64, /**< 8byte integer */
-    BSON_TYPE_MIN = 0xff,
-    BSON_TYPE_MAX = 0x7f
-  } bson_type_t;
+{
+  BSON_TYPE_NONE = 0, /**< Only used for errors */
+  BSON_TYPE_DOUBLE = 0x01, /**< 8byte double */
+  BSON_TYPE_STRING, /**< 4byte length + NULL terminated string */
+  BSON_TYPE_DOCUMENT, /**< 4byte length + NULL terminated document */
+  BSON_TYPE_ARRAY, /**< 4byte length + NULL terminated document */
+  BSON_TYPE_BINARY, /**< 4byte length + 1byte subtype + data */
+  BSON_TYPE_UNDEFINED, /* Deprecated*/
+  BSON_TYPE_OID, /**< 12byte ObjectID */
+  BSON_TYPE_BOOLEAN, /**< 1byte boolean value */
+  BSON_TYPE_UTC_DATETIME, /**< 8byte timestamp; milliseconds since
+			     Unix epoch */
+  BSON_TYPE_NULL, /**< NULL value, No following data. */
+  BSON_TYPE_REGEXP, /**< Two NULL terminated C strings, the regex
+		       itself, and the options. */
+  BSON_TYPE_DBPOINTER, /* Deprecated */
+  BSON_TYPE_JS_CODE, /**< 4byte length + NULL terminated string */
+  BSON_TYPE_SYMBOL, /**< 4byte length + NULL terminated string */
+  BSON_TYPE_JS_CODE_W_SCOPE, /**< 4byte length, followed by a string
+				and a document */
+  BSON_TYPE_INT32, /**< 4byte integer */
+  BSON_TYPE_TIMESTAMP, /**< 4bytes increment + 4bytes timestamp */
+  BSON_TYPE_INT64, /**< 8byte integer */
+  BSON_TYPE_MIN = 0xff,
+  BSON_TYPE_MAX = 0x7f
+} bson_type_t;
 
 /** Return a type's stringified name.
  *
@@ -106,27 +106,41 @@ const char *bson_type_as_string (bson_type_t type);
 /** Supported BSON binary subtypes.
  */
 typedef enum
-  {
-    BSON_BINARY_SUBTYPE_GENERIC = 0x00, /**< The Generic subtype, the
-					   default. */
-    BSON_BINARY_SUBTYPE_FUNCTION = 0x01, /**< Binary representation
-					    of a function. */
-    BSON_BINARY_SUBTYPE_BINARY = 0x02, /**< Obsolete, do not use. */
-    BSON_BINARY_SUBTYPE_UUID = 0x03, /**< Binary representation of an
-					UUID. */
-    BSON_BINARY_SUBTYPE_MD5 = 0x05, /**< Binary representation of an
-				       MD5 sum. */
-    BSON_BINARY_SUBTYPE_USER_DEFINED = 0x80 /**< User defined data,
-					       nothing's known about
-					       the structure. */
-  } bson_binary_subtype_t;
+{
+  BSON_BINARY_SUBTYPE_GENERIC = 0x00, /**< The Generic subtype, the
+					 default. */
+  BSON_BINARY_SUBTYPE_FUNCTION = 0x01, /**< Binary representation of a
+					  function. */
+  BSON_BINARY_SUBTYPE_BINARY = 0x02, /**< Obsolete, do not use. */
+  BSON_BINARY_SUBTYPE_UUID = 0x03, /**< Binary representation of an
+				      UUID. */
+  BSON_BINARY_SUBTYPE_MD5 = 0x05, /**< Binary representation of an MD5
+				     sum. */
+  BSON_BINARY_SUBTYPE_USER_DEFINED = 0x80 /**< User defined data,
+					     nothing's known about the
+					     structure. */
+} bson_binary_subtype_t;
 
 typedef enum
-  {
-    BSON_VALID_CONTEXT_ALL = 0,
-    BSON_VALID_CONTEXT_NO_DOTS = 1 << 1,
-    BSON_VALID_CONTEXT_NO_DOLLAR = 1 << 2,
-  } bson_valid_context_t;
+{
+  BSON_VALID_CONTEXT_ALL = 0,
+  BSON_VALID_CONTEXT_NO_DOTS = 1 << 1,
+  BSON_VALID_CONTEXT_NO_DOLLAR = 1 << 2,
+} bson_valid_context_t;
+
+#pragma pack(1)
+typedef union
+{
+  uint8_t bytes[12];
+  uint32_t ints[3];
+} bson_oid_t;
+#pragma pack()
+
+typedef struct
+{
+  uint32_t i;
+  uint32_t t;
+} bson_timestamp_t;
 
 /** @} */
 
@@ -322,16 +336,16 @@ static __inline__ int32_t bson_stream_doc_size (const uint8_t *doc,
 bson_t *bson_append_string (bson_t *b, const char *name, const char *val,
 			    int32_t length);
 
-#if 0
 /** Append a double to a BSON object.
  *
  * @param b is the BSON object to append to.
  * @param name is the key name.
  * @param d is the double value to append.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_double (bson *b, const char *name, double d);
+bson_t *bson_append_double (bson_t *b, const char *name, double d);
 
 /** Append a BSON document to a BSON object.
  *
@@ -341,9 +355,10 @@ lmc_bool bson_append_double (bson *b, const char *name, double d);
  *
  * @note @a doc MUST be a finished BSON document.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_document (bson *b, const char *name, const bson *doc);
+bson_t *bson_append_document (bson_t *b, const char *name, const bson_t *doc);
 
 /** Append a BSON array to a BSON object.
  *
@@ -359,9 +374,10 @@ lmc_bool bson_append_document (bson *b, const char *name, const bson *doc);
  * taken to verify that: it is the responsibility of the caller to set
  * the array up appropriately.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_array (bson *b, const char *name, const bson *array);
+bson_t *bson_append_array (bson_t *b, const char *name, const bson_t *array);
 
 /** Append a BSON binary blob to a BSON object.
  *
@@ -371,11 +387,12 @@ lmc_bool bson_append_array (bson *b, const char *name, const bson *array);
  * @param data is a pointer to the blob data.
  * @param size is the size of the blob.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_binary (bson *b, const char *name,
-			     bson_binary_subtype subtype,
-			     const uint8_t *data, int32_t size);
+bson_t *bson_append_binary (bson_t *b, const char *name,
+			    bson_binary_subtype_t subtype,
+			    const uint8_t *data, int32_t size);
 
 /** Append an ObjectID to a BSON object.
  *
@@ -391,9 +408,10 @@ lmc_bool bson_append_binary (bson *b, const char *name,
  * @note The OID must be 12 bytes long, and formatting it
  * appropriately is the responsiblity of the caller.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_oid (bson *b, const char *name, const uint8_t *oid);
+bson_t *bson_append_oid (bson_t *b, const char *name, const bson_oid_t *oid);
 
 /** Append a boolean to a BSON object.
  *
@@ -401,9 +419,10 @@ lmc_bool bson_append_oid (bson *b, const char *name, const uint8_t *oid);
  * @param name is the key name.
  * @param value is the boolean value to append.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_boolean (bson *b, const char *name, lmc_bool value);
+bson_t *bson_append_boolean (bson_t *b, const char *name, lmc_bool_t value);
 
 /** Append an UTC datetime to a BSON object.
  *
@@ -412,18 +431,20 @@ lmc_bool bson_append_boolean (bson *b, const char *name, lmc_bool value);
  * @param ts is the UTC timestamp: the number of milliseconds since
  * the Unix epoch.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_utc_datetime (bson *b, const char *name, int64_t ts);
+bson_t *bson_append_utc_datetime (bson_t *b, const char *name, int64_t ts);
 
 /** Append a NULL value to a BSON object.
  *
  * @param b is the BSON object to append to.
  * @param name is the key name.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_null (bson *b, const char *name);
+bson_t *bson_append_null (bson_t *b, const char *name);
 
 /** Append a regexp object to a BSON object.
  *
@@ -433,10 +454,11 @@ lmc_bool bson_append_null (bson *b, const char *name);
  * @param options represents the regexp options, serialised to a
  * string.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_regex (bson *b, const char *name, const char *regexp,
-			    const char *options);
+bson_t *bson_append_regex (bson_t *b, const char *name, const char *regexp,
+			   const char *options);
 
 /** Append Javascript code to a BSON object.
  *
@@ -446,10 +468,11 @@ lmc_bool bson_append_regex (bson *b, const char *name, const char *regexp,
  * @param len is the length of the code, use @a -1 to use the full
  * length of the string supplised in @a js.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_javascript (bson *b, const char *name, const char *js,
-				 int32_t len);
+bson_t *bson_append_javascript (bson_t *b, const char *name, const char *js,
+				int32_t len);
 
 /** Append a symbol to a BSON object.
  *
@@ -459,10 +482,11 @@ lmc_bool bson_append_javascript (bson *b, const char *name, const char *js,
  * @param len is the length of the code, use @a -1 to use the full
  * length of the string supplised in @a symbol.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_symbol (bson *b, const char *name, const char *symbol,
-			     int32_t len);
+bson_t *bson_append_symbol (bson_t *b, const char *name, const char *symbol,
+			    int32_t len);
 
 /** Append Javascript code (with scope) to a BSON object.
  *
@@ -473,11 +497,12 @@ lmc_bool bson_append_symbol (bson *b, const char *name, const char *symbol,
  * length of the string supplied in @a js.
  * @param scope is scope to evaluate the javascript code in.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_javascript_w_scope (bson *b, const char *name,
-					 const char *js, int32_t len,
-					 const bson *scope);
+bson_t *bson_append_javascript_w_scope (bson_t *b, const char *name,
+					const char *js, int32_t len,
+					const bson_t *scope);
 
 /** Append a 32-bit integer to a BSON object.
  *
@@ -485,9 +510,10 @@ lmc_bool bson_append_javascript_w_scope (bson *b, const char *name,
  * @param name is the key name.
  * @param i is the integer to append.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_int32 (bson *b, const char *name, int32_t i);
+bson_t *bson_append_int32 (bson_t *b, const char *name, int32_t i);
 
 /** Append a timestamp to a BSON object.
  *
@@ -495,13 +521,11 @@ lmc_bool bson_append_int32 (bson *b, const char *name, int32_t i);
  * @param name is the key name.
  * @param ts is the timestamp to append.
  *
- * @note The ts param should consists of 4 bytes of increment,
- * followed by 4 bytes of timestamp. It is the responsibility of the
- * caller to set the variable up appropriately.
- *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_timestamp (bson *b, const char *name, int64_t ts);
+bson_t *bson_append_timestamp (bson_t *b, const char *name,
+			       bson_timestamp_t *ts);
 
 /** Append a 64-bit integer to a BSON object.
  *
@@ -509,12 +533,14 @@ lmc_bool bson_append_timestamp (bson *b, const char *name, int64_t ts);
  * @param name is the key name.
  * @param i is the integer to append.
  *
- * @returns TRUE on success, FALSE otherwise.
+ * @returns The BSON object, with the new field appended, or the
+ * original, with errors set appropriately.
  */
-lmc_bool bson_append_int64 (bson *b, const char *name, int64_t i);
+bson_t *bson_append_int64 (bson_t *b, const char *name, int64_t i);
 
 /** @} */
 
+#if 0
 /** @defgroup bson_cursor Cursor & Retrieval
  *
  * This section documents the cursors, and the data retrieval
@@ -544,7 +570,7 @@ lmc_bool bson_append_int64 (bson *b, const char *name, int64_t i);
  *
  * @returns A newly allocated cursor, or NULL on error.
  */
-bson_cursor *bson_cursor_new (const bson *b);
+bson_cursor *bson_cursor_new (const bson_t *b);
 
 /** Create a new cursor positioned at a given key.
  *
@@ -556,7 +582,7 @@ bson_cursor *bson_cursor_new (const bson *b);
  *
  * @returns A newly allocated cursor, or NULL on error.
  */
-bson_cursor *bson_find (const bson *b, const gchar *name);
+bson_cursor *bson_find (const bson_t *b, const gchar *name);
 
 /** Delete a cursor, and free up all resources used by it.
  *
@@ -662,7 +688,7 @@ gboolean bson_cursor_get_double (const bson_cursor *c, gdouble *dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_document (const bson_cursor *c, bson **dest);
+gboolean bson_cursor_get_document (const bson_cursor *c, bson_t **dest);
 
 /** Get the value stored at the cursor, as a BSON array.
  *
@@ -675,7 +701,7 @@ gboolean bson_cursor_get_document (const bson_cursor *c, bson **dest);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean bson_cursor_get_array (const bson_cursor *c, bson **dest);
+gboolean bson_cursor_get_array (const bson_cursor *c, bson_t **dest);
 
 /** Get the value stored at the cursor, as binary data.
  *
@@ -784,7 +810,7 @@ gboolean bson_cursor_get_symbol (const bson_cursor *c, const gchar **dest);
  */
 gboolean bson_cursor_get_javascript_w_scope (const bson_cursor *c,
 					     const gchar **js,
-					     bson **scope);
+					     bson_t **scope);
 
 /** Get the value stored at the cursor, as a 32-bit integer.
  *
