@@ -1,4 +1,4 @@
-/* lmc-private.h - private headers for libmongo-client
+/* lmc/private.h - private headers for libmongo-client
  * Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
  * This file is part of the libmongo-client library.
  *
@@ -18,15 +18,17 @@
  * USA.
  */
 
-/** @file lmc-private.h
+/** @file lmc/private.h
  *
- * Private types and functions, for internal use in libmongo-client only.
+ * Private types and functions, for internal use in libmongo-client
+ * only.
  */
 
 #ifndef LMC_PRIVATE_H
 #define LMC_PRIVATE_H 1
 
-#include <lmc-common.h>
+#include <lmc/common.h>
+
 #include <inttypes.h>
 #include <stdlib.h>
 

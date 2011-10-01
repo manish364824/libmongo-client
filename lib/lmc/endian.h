@@ -1,4 +1,4 @@
-/* lmc-common.h - common macros for libmongo-client
+/* lmc/endian.h - endian conversion macros
  * Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
  * This file is part of the libmongo-client library.
  *
@@ -18,37 +18,25 @@
  * USA.
  */
 
-/** @file lib/lmc-common.h
- * Common macros for libmongo-client.
+/** @file lib/lmc/endian.h
  */
 
-#ifndef LMC_COMMON_H
-#define LMC_COMMON_H 1
+#ifndef LMC_ENDIAN_H
+#define LMC_ENDIAN_H
 
-#include <inttypes.h>
+#include <lmc/common.h>
 
-/* Guard C code in headers, while including them from C++ */
-#ifdef  __cplusplus
-# define LMC_BEGIN_DECLS  extern "C" {
-# define LMC_END_DECLS    }
-#else
-# define LMC_BEGIN_DECLS
-# define LMC_END_DECLS
-#endif
+LMC_BEGIN_DECLS
 
-/** @defgroup lmc_common Common Macros
- * @addtogroup lmc_common
- * @{
- */
+#define LMC_INT32_TO_LE(i) (i)
+#define LMC_INT32_FROM_LE(i) (i)
 
-/** Boolean values.
- */
-typedef enum
-{
-  FALSE = 0, /**< False value. */
-  TRUE = 1 /**< True value. */
-} lmc_bool_t;
+#define LMC_DOUBLE_TO_LE(d) (d)
+#define LMC_DOUBLE_FROM_LE(d) (d)
 
-/** @} */
+#define LMC_INT64_TO_LE(i) (i)
+#define LMC_INT64_FROM_LE(i) (i)
+
+LMC_END_DECLS
 
 #endif

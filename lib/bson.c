@@ -1,4 +1,4 @@
-/* lmc-bson.c - libmongo-client's BSON implementation
+/* bson.c - libmongo-client's BSON implementation
  * Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
  * This file is part of the libmongo-client library.
  *
@@ -18,12 +18,12 @@
  * USA.
  */
 
-/** @file lib/lmc-bson.c
+/** @file lib/bson.c
  * Implementation of the BSON API.
  */
 
 #include <lmc.h>
-#include "lmc-private.h"
+#include "lmc/private.h"
 
 #include <errno.h>
 

@@ -1,4 +1,4 @@
-/* lmc-bson.h - libmongo-client's BSON implementation, public headers
+/* lmc/bson.h - libmongo-client's BSON implementation, public headers
  * Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
  * This file is part of the libmongo-client library.
  *
@@ -18,15 +18,15 @@
  * USA.
  */
 
-/** @file lib/lmc-bson.h
+/** @file lib/lmc/bson.h
  * The BSON API's public header.
  */
 
 #ifndef LMC_BSON_H
 #define LMC_BSON_H 1
 
-#include <lmc-common.h>
-#include <lmc-endian.h>
+#include <lmc/common.h>
+#include <lmc/endian.h>
 
 #include <inttypes.h>
 #include <string.h>

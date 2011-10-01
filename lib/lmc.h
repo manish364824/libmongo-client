@@ -28,9 +28,9 @@
 #ifndef LMC_H
 #define LMC_H 1
 
-#include <lmc-common.h>
-#include <lmc-error.h>
+#include <lmc/common.h>
+#include <lmc/error.h>
 
-#include <lmc-bson.h>
+#include <lmc/bson.h>
 
 #endif

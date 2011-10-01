@@ -1,4 +1,4 @@
-/* lmc-error.h - error reporting and propagation tools
+/* lmc/error.h - error reporting and propagation tools
  * Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
  * This file is part of the libmongo-client library.
  *
@@ -18,13 +18,14 @@
  * USA.
  */
 
-/** @file lib/lmc-error.h
+/** @file lib/lmc/error.h
  */
 
 #ifndef LMC_ERROR_H
 #define LMC_ERROR_H 1
 
-#include <lmc-common.h>
+#include <lmc/common.h>
+
 #include <assert.h>
 #include <stddef.h>
 
