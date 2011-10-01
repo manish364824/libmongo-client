@@ -1,6 +1,6 @@
 #include "test.h"
 
-void
+static void
 test_bson_string (void)
 {
   bson_t *b;
@@ -39,7 +39,13 @@ test_bson_string (void)
 
   /* Test #3: Negative test, passing invalid arguments. */
   b = bson_new ();
+
   b = bson_append_string (b, "hello", "world", -42);
+  ok (lmc_error_get_errn (b) == ERANGE,
+      "bson_append_string() should fail with invalid length");
+  lmc_error_reset (b);
+
+  b = bson_append_string (b, "hello", "world", 0);
   ok (lmc_error_get_errn (b) == ERANGE,
       "bson_append_string() should fail with invalid length");
   lmc_error_reset (b);
@@ -68,4 +74,4 @@ test_bson_string (void)
   bson_free (b);
 }
 
-RUN_TEST (12, bson_string);
+RUN_TEST (13, bson_string);
