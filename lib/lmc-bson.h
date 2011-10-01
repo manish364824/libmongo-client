@@ -75,7 +75,7 @@ typedef enum
   BSON_TYPE_DOCUMENT, /**< 4byte length + NULL terminated document */
   BSON_TYPE_ARRAY, /**< 4byte length + NULL terminated document */
   BSON_TYPE_BINARY, /**< 4byte length + 1byte subtype + data */
-  BSON_TYPE_UNDEFINED, /* Deprecated*/
+  BSON_TYPE_UNDEFINED, /**< Deprecated type. */
   BSON_TYPE_OID, /**< 12byte ObjectID */
   BSON_TYPE_BOOLEAN, /**< 1byte boolean value */
   BSON_TYPE_UTC_DATETIME, /**< 8byte timestamp; milliseconds since
@@ -83,7 +83,7 @@ typedef enum
   BSON_TYPE_NULL, /**< NULL value, No following data. */
   BSON_TYPE_REGEXP, /**< Two NULL terminated C strings, the regex
 		       itself, and the options. */
-  BSON_TYPE_DBPOINTER, /* Deprecated */
+  BSON_TYPE_DBPOINTER, /**< Deprecated type. */
   BSON_TYPE_JS_CODE, /**< 4byte length + NULL terminated string */
   BSON_TYPE_SYMBOL, /**< 4byte length + NULL terminated string */
   BSON_TYPE_JS_CODE_W_SCOPE, /**< 4byte length, followed by a string
@@ -121,25 +121,40 @@ typedef enum
 					     structure. */
 } bson_binary_subtype_t;
 
+/** Verification contexts.
+ *
+ * These values can be OR'd together and used with
+ * bson_validate_key(), to validate certain aspects of a BSON key.
+ */
 typedef enum
 {
-  BSON_VALID_CONTEXT_ALL = 0,
-  BSON_VALID_CONTEXT_NO_DOTS = 1 << 1,
-  BSON_VALID_CONTEXT_NO_DOLLAR = 1 << 2,
+  BSON_VALID_CONTEXT_ALL = 0, /**< The key should always be valid. */
+  BSON_VALID_CONTEXT_NO_DOTS = 1 << 1, /**< The key should contain no
+					  dots. */
+  BSON_VALID_CONTEXT_NO_DOLLAR = 1 << 2, /**< The key should not
+					    start with a dollar sign. */
 } bson_valid_context_t;
 
+/** BSON ObjectID type.
+ *
+ * This union offers various alternate representations of an ObjectID
+ * type.
+ */
 #pragma pack(1)
 typedef union
 {
-  uint8_t bytes[12];
-  uint32_t ints[3];
+  uint8_t bytes[12]; /**< The ObjectID represented as 12 bytes. */
+  uint32_t ints[3]; /**< The ObjectID represented as 3 32-bit
+		       numbers. */
 } bson_oid_t;
 #pragma pack()
 
+/** BSON Timestamp type.
+ */
 typedef struct
 {
-  uint32_t i;
-  uint32_t t;
+  int32_t i; /**< 32-bit increment. */
+  uint32_t t; /**< 32-bit timestamp, since the epoch. */
 } bson_timestamp_t;
 
 /** @} */
@@ -844,9 +859,11 @@ gboolean bson_cursor_get_int64 (const bson_cursor *c, gint64 *dest);
 
 /** @} */
 
+#endif
+
 /** @} */
 
-#endif
+
 
 LMC_END_DECLS
 

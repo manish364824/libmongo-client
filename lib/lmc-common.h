@@ -18,6 +18,10 @@
  * USA.
  */
 
+/** @file lib/lmc-common.h
+ * Common macros for libmongo-client.
+ */
+
 #ifndef LMC_COMMON_H
 #define LMC_COMMON_H 1
 
@@ -32,10 +36,19 @@
 # define LMC_END_DECLS
 #endif
 
+/** @defgroup lmc_common Common Macros
+ * @addtogroup lmc_common
+ * @{
+ */
+
+/** Boolean values.
+ */
 typedef enum
 {
-  FALSE = 0,
-  TRUE = 1
+  FALSE = 0, /**< False value. */
+  TRUE = 1 /**< True value. */
 } lmc_bool_t;
+
+/** @} */
 
 #endif
