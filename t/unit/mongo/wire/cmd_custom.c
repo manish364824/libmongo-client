@@ -1,21 +1,17 @@
 #include "test.h"
-#include "tap.h"
-#include "mongo-wire.h"
 
-#include <string.h>
-
-void
+static void
 test_mongo_wire_cmd_custom (void)
 {
-  bson *cmd;
-  mongo_packet *p;
+  bson_t *cmd;
+  mongo_wire_packet_t *p;
 
-  mongo_packet_header hdr;
-  const guint8 *data;
-  gint32 data_size;
+  mongo_wire_packet_header_t hdr;
+  const uint8_t *data;
+  int32_t data_size;
 
-  bson_cursor *c;
-  gint32 pos;
+  bson_cursor_t *c;
+  int32_t pos;
 
   cmd = bson_new ();
   bson_append_int32 (cmd, "getnonce", 1);
@@ -36,7 +32,7 @@ test_mongo_wire_cmd_custom (void)
   mongo_wire_packet_get_header (p, &hdr);
   cmp_ok ((data_size = mongo_wire_packet_get_data (p, &data)), "!=", -1,
 	  "Packet data size looks fine");
-  cmp_ok (hdr.length, "==", sizeof (mongo_packet_header) + data_size,
+  cmp_ok (hdr.length, "==", sizeof (mongo_wire_packet_header_t) + data_size,
 	  "Packet header length is OK");
   cmp_ok (hdr.id, "==", 1, "Packet request ID is ok");
   cmp_ok (hdr.resp_to, "==", 0, "Packet reply ID is ok");
@@ -46,17 +42,18 @@ test_mongo_wire_cmd_custom (void)
    */
 
   /* pos = zero + collection_name + NULL + skip + ret */
-  pos = sizeof (gint32) + strlen ("test.$cmd") + 1 + sizeof (gint32) * 2;
+  pos = sizeof (int32_t) + strlen ("test.$cmd") + 1 + sizeof (int32_t) * 2;
   ok ((cmd = bson_new_from_data (data + pos,
 				 bson_stream_doc_size (data, pos) - 1)) != NULL,
       "Packet contains a BSON document");
   bson_finish (cmd);
 
-  ok ((c = bson_find (cmd, "getnonce")) != NULL,
+  c = bson_cursor_find (bson_cursor_new (cmd), "getnonce");
+  ok (lmc_error_isok (c),
       "BSON object contains a 'getnonce' key");
   cmp_ok (bson_cursor_type (c), "==", BSON_TYPE_INT32,
 	  "'getnonce' key has the correct type");
-  ok (bson_cursor_next (c) == FALSE,
+  ok (!lmc_error_isok (bson_cursor_next (c)),
       "'getnonce' key is the last in the object");
 
   bson_cursor_free (c);

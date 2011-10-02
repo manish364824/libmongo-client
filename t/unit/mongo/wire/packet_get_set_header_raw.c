@@ -1,16 +1,12 @@
-#include "tap.h"
 #include "test.h"
-#include "mongo-wire.h"
 
-#include "libmongo-private.h"
+#include "lmc/private.h"
 
-#include <string.h>
-
-void
+static void
 test_mongo_wire_packet_get_set_header_raw (void)
 {
-  mongo_packet *p;
-  mongo_packet_header ph1, ph2;
+  mongo_wire_packet_t *p;
+  mongo_wire_packet_header_t ph1, ph2;
 
   p = mongo_wire_packet_new ();
 
@@ -26,15 +22,16 @@ test_mongo_wire_packet_get_set_header_raw (void)
   ok (mongo_wire_packet_get_header_raw (p, &ph2),
       "mongo_wire_packet_get_header_raw() works on a fresh packet");
   /* Need to convert from LE, because _new() sets the length to LE. */
-  cmp_ok (GINT32_FROM_LE (ph2.length), "==", sizeof (mongo_packet_header),
+  cmp_ok (LMC_INT32_FROM_LE (ph2.length), "==",
+	  sizeof (mongo_wire_packet_header_t),
 	  "Initial packet length is the length of the header");
 
-  ph1.length = sizeof (mongo_packet_header);
+  ph1.length = sizeof (mongo_wire_packet_header_t);
   ph1.id = 1;
   ph1.resp_to = 0;
   ph1.opcode = 1000;
 
-  memset (&ph2, 0, sizeof (mongo_packet_header));
+  memset (&ph2, 0, sizeof (mongo_wire_packet_header_t));
 
   ok (mongo_wire_packet_set_header_raw (p, &ph1),
       "mongo_wire_packet_set_header_raw() works");

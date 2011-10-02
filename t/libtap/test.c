@@ -1,5 +1,7 @@
 #include "test.h"
 
+#include "lmc/private.h"
+
 #include <string.h>
 
 func_config_t config;
@@ -59,75 +61,56 @@ test_bson_generate_full (void)
   return b;
 }
 
-#if 0
-mongo_packet *
-test_mongo_wire_generate_reply (gboolean valid, gint32 nreturn,
-				gboolean with_docs)
+mongo_wire_packet_t *
+test_mongo_wire_generate_reply (lmc_bool_t valid, int32_t nreturn,
+				lmc_bool_t with_docs)
 {
-  mongo_reply_packet_header rh;
-  mongo_packet_header h;
-  mongo_packet *p;
-  guint8 *data;
-  gint data_size = sizeof (mongo_reply_packet_header);
-  bson *b1 = NULL, *b2 = NULL;
+  mongo_wire_reply_packet_header_t rh;
+  mongo_wire_packet_header_t h;
+  mongo_wire_packet_t *p;
+  uint8_t *data;
+  int data_size = sizeof (mongo_wire_reply_packet_header_t);
+  bson_t *b1 = NULL, *b2 = NULL;
 
   p = mongo_wire_packet_new ();
 
-  h.opcode = (valid) ? GINT32_TO_LE (1) : GINT32_TO_LE (42);
-  h.id = GINT32_TO_LE (1984);
-  h.resp_to = GINT32_TO_LE (42);
+  h.opcode = (valid) ? LMC_INT32_TO_LE (1) : LMC_INT32_TO_LE (42);
+  h.id = LMC_INT32_TO_LE (1984);
+  h.resp_to = LMC_INT32_TO_LE (42);
   if (with_docs)
     {
       b1 = test_bson_generate_full ();
       b2 = test_bson_generate_full ();
       data_size += bson_size (b1) + bson_size (b2);
     }
-  h.length = GINT32_TO_LE (sizeof (mongo_packet_header) + data_size);
+  h.length = LMC_INT32_TO_LE (sizeof (mongo_wire_packet_header_t) + data_size);
 
   mongo_wire_packet_set_header (p, &h);
 
-  data = g_try_malloc (data_size);
+  data = lmc_alloc (uint8_t, data_size);
 
   rh.flags = 0;
-  rh.cursor_id = GINT64_TO_LE ((gint64)12345);
+  rh.cursor_id = LMC_INT64_TO_LE ((int64_t)12345);
   rh.start = 0;
-  rh.returned = GINT32_TO_LE (nreturn);
+  rh.returned = LMC_INT32_TO_LE (nreturn);
 
-  memcpy (data, &rh, sizeof (mongo_reply_packet_header));
+  memcpy (data, &rh, sizeof (mongo_wire_reply_packet_header_t));
   if (with_docs)
     {
-      memcpy (data + sizeof (mongo_reply_packet_header),
+      memcpy (data + sizeof (mongo_wire_reply_packet_header_t),
 	      bson_data (b1), bson_size (b1));
-      memcpy (data + sizeof (mongo_reply_packet_header) + bson_size (b1),
+      memcpy (data + sizeof (mongo_wire_reply_packet_header_t) +
+	      bson_size (b1),
 	      bson_data (b2), bson_size (b2));
     }
 
   mongo_wire_packet_set_data (p, data, data_size);
-  g_free (data);
+  free (data);
   bson_free (b1);
   bson_free (b2);
 
   return p;
 }
-
-mongo_sync_connection *
-test_make_fake_sync_conn (gint fd, gboolean slaveok)
-{
-  mongo_sync_connection *c;
-
-  c = g_try_new0 (mongo_sync_connection, 1);
-  if (!c)
-    return NULL;
-
-  c->super.fd = fd;
-  c->slaveok = slaveok;
-  c->safe_mode = FALSE;
-  c->auto_reconnect = FALSE;
-  c->max_insert_size = MONGO_SYNC_DEFAULT_MAX_INSERT_SIZE;
-
-  return c;
-}
-#endif
 
 lmc_bool_t
 test_env_setup (void)

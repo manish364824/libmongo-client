@@ -1,20 +1,16 @@
 #include "test.h"
-#include "tap.h"
-#include "mongo-wire.h"
 
-#include <string.h>
-
-void
+static void
 test_mongo_wire_cmd_get_more (void)
 {
-  mongo_packet *p;
+  mongo_wire_packet_t *p;
 
-  mongo_packet_header hdr;
-  const guint8 *data;
-  gint32 data_size;
+  mongo_wire_packet_header_t hdr;
+  const uint8_t *data;
+  int32_t data_size;
 
-  gint32 pos;
-  gint64 cid = 9876543210;
+  int32_t pos;
+  int64_t cid = 9876543210;
 
   ok (mongo_wire_cmd_get_more (1, NULL, 1, cid) == NULL,
       "mongo_wire_cmd_get_more() fails with a NULL namespace");
@@ -26,7 +22,7 @@ test_mongo_wire_cmd_get_more (void)
   cmp_ok ((data_size = mongo_wire_packet_get_data (p, &data)), "!=", -1,
 	  "Packet data size appears fine");
 
-  cmp_ok (hdr.length, "==", sizeof (mongo_packet_header) + data_size,
+  cmp_ok (hdr.length, "==", sizeof (mongo_wire_packet_header_t) + data_size,
 	  "Packet header length is correct");
   cmp_ok (hdr.id, "==", 1, "Header ID is ok");
   cmp_ok (hdr.resp_to, "==", 0, "Response ID is ok");
@@ -36,10 +32,10 @@ test_mongo_wire_cmd_get_more (void)
    */
 
   /* pos = zero + ns + NULL + ret */
-  pos = sizeof (gint32) + strlen ("test.ns") + 1 + sizeof (gint32);
+  pos = sizeof (int32_t) + strlen ("test.ns") + 1 + sizeof (int32_t);
   cid = 0;
   memcpy (&cid, data + pos, sizeof (cid));
-  cid = GINT64_FROM_LE (cid);
+  cid = LMC_INT64_FROM_LE (cid);
 
   ok (cid == 9876543210,
       "Included CID is correct");

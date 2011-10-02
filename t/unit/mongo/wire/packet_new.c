@@ -1,13 +1,9 @@
-#include "tap.h"
 #include "test.h"
-#include "mongo-wire.h"
 
-#include <string.h>
-
-void
+static void
 test_mongo_wire_packet_new (void)
 {
-  mongo_packet *p;
+  mongo_wire_packet_t *p;
 
   ok ((p = mongo_wire_packet_new ()) != NULL,
       "mongo_wire_packet_new() works");

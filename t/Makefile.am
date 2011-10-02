@@ -64,7 +64,27 @@ bson_func_tests		= \
 bson_perf_tests		= \
 		perf/bson/p_bson_find
 
-UNIT_TESTS	= ${bson_unit_tests} ${bson_oid_unit_tests}
+mongo_wire_unit_tests	= \
+		unit/mongo/wire/packet_new \
+		unit/mongo/wire/packet_get_set_header_raw \
+		unit/mongo/wire/packet_get_set_header \
+		unit/mongo/wire/packet_get_set_data \
+		\
+		unit/mongo/wire/reply_packet_get_header \
+		unit/mongo/wire/reply_packet_get_data \
+		unit/mongo/wire/reply_packet_get_nth_document \
+		\
+		unit/mongo/wire/cmd_insert \
+		unit/mongo/wire/cmd_insert_n \
+		unit/mongo/wire/cmd_update \
+		unit/mongo/wire/cmd_query \
+		unit/mongo/wire/cmd_get_more \
+		unit/mongo/wire/cmd_kill_cursors \
+		unit/mongo/wire/cmd_delete \
+		unit/mongo/wire/cmd_custom
+
+UNIT_TESTS	= ${bson_unit_tests} ${bson_oid_unit_tests} \
+		${mongo_wire_unit_tests}
 FUNC_TESTS	= ${bson_func_tests}
 PERF_TESTS	= ${bson_perf_tests}
 TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}

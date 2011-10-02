@@ -63,12 +63,8 @@ void test_env_free (void);
 
 bson_t *test_bson_generate_full (void);
 
-#if 0
-mongo_packet *test_mongo_wire_generate_reply (gboolean valid,
-					      gint32 nreturn,
-					      gboolean with_docs);
-mongo_sync_connection *test_make_fake_sync_conn (gint fd,
-						 gboolean slaveok);
-#endif
+mongo_wire_packet_t *test_mongo_wire_generate_reply (lmc_bool_t valid,
+						     int32_t nreturn,
+						     lmc_bool_t with_docs);
 
 #endif

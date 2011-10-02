@@ -1,3 +1,9 @@
+LMC_0.2.0_PRIVATE {
+  mongo_wire_cmd_kill_cursors_va;
+  mongo_wire_packet_get_header_raw;
+  mongo_wire_packet_set_header_raw;
+};
+
 LMC_0.2.0 {
   bson_new;
   bson_new_sized;
@@ -58,4 +64,24 @@ LMC_0.2.0 {
   bson_oid_new;
   bson_oid_new_with_time;
   bson_oid_as_string;
-};
+
+  mongo_wire_packet_new;
+  mongo_wire_packet_get_header;
+  mongo_wire_packet_set_header;
+  mongo_wire_packet_get_data;
+  mongo_wire_packet_set_data;
+  mongo_wire_packet_free;
+
+  mongo_wire_reply_packet_get_header;
+  mongo_wire_reply_packet_get_data;
+  mongo_wire_reply_packet_get_nth_document;
+
+  mongo_wire_cmd_update;
+  mongo_wire_cmd_insert;
+  mongo_wire_cmd_insert_n;
+  mongo_wire_cmd_query;
+  mongo_wire_cmd_get_more;
+  mongo_wire_cmd_delete;
+  mongo_wire_cmd_kill_cursors;
+  mongo_wire_cmd_custom;
+} LMC_0.2.0_PRIVATE;

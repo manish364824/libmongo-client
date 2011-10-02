@@ -1,20 +1,16 @@
 #include "test.h"
-#include "tap.h"
-#include "mongo-wire.h"
 
-#include <string.h>
-
-void
+static void
 test_mongo_wire_reply_packet_get_header (void)
 {
-  mongo_packet *p;
-  mongo_packet_header h;
-  mongo_reply_packet_header rh;
+  mongo_wire_packet_t *p;
+  mongo_wire_packet_header_t h;
+  mongo_wire_reply_packet_header_t rh;
 
   p = mongo_wire_packet_new ();
-  memset (&h, 0, sizeof (mongo_packet_header));
+  memset (&h, 0, sizeof (mongo_wire_packet_header_t));
   h.opcode = 1;
-  h.length = sizeof (mongo_packet_header);
+  h.length = sizeof (mongo_wire_packet_header_t);
 
   mongo_wire_packet_set_header (p, &h);
 
@@ -41,7 +37,7 @@ test_mongo_wire_reply_packet_get_header (void)
       "mongo_wire_reply_packet_get_header() works");
   cmp_ok (rh.flags, "==", 0,
 	  "Reply flags are correct");
-  ok (rh.cursor_id == (gint64)12345,
+  ok (rh.cursor_id == (int64_t)12345,
       "Cursor ID is correct");
   cmp_ok (rh.start, "==", 0,
 	  "Reply start document is OK");

@@ -1,21 +1,16 @@
 #include "test.h"
-#include "tap.h"
-#include "mongo-wire.h"
-#include "bson.h"
 
-#include <string.h>
-
-void
+static void
 test_mongo_wire_reply_packet_get_nth_document (void)
 {
-  mongo_packet *p;
-  bson *b, *doc;
-  mongo_packet_header h;
+  mongo_wire_packet_t *p;
+  bson_t *b, *doc;
+  mongo_wire_packet_header_t h;
 
   p = mongo_wire_packet_new ();
-  memset (&h, 0, sizeof (mongo_packet_header));
+  memset (&h, 0, sizeof (mongo_wire_packet_header_t));
   h.opcode = 2;
-  h.length = sizeof (mongo_packet_header);
+  h.length = sizeof (mongo_wire_packet_header_t);
   mongo_wire_packet_set_header (p, &h);
 
   ok (mongo_wire_reply_packet_get_nth_document (NULL, 1, &doc) == FALSE,

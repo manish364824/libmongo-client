@@ -38,6 +38,18 @@
 #define lmc_alloc(type, num) \
   (type *)_lmc_malloc (sizeof (type) * num)
 
+#define lmc_new0(type) \
+  (type *)_lmc_malloc0 (sizeof (type))
+
+static inline void *_lmc_malloc0 (size_t size)
+{
+  void *m;
+
+  m = calloc (size, 1);
+  assert (m != NULL);
+  return m;
+}
+
 static inline void *_lmc_malloc (size_t size)
 {
   void *m;
@@ -55,5 +67,11 @@ static inline void *lmc_realloc (void *p, size_t size)
   assert (m != NULL);
   return m;
 }
+
+/* Mongo wire private functions */
+lmc_bool_t mongo_wire_packet_get_header_raw (const mongo_wire_packet_t *p,
+					     mongo_wire_packet_header_t *header);
+lmc_bool_t mongo_wire_packet_set_header_raw (mongo_wire_packet_t *p,
+					     const mongo_wire_packet_header_t *header);
 
 #endif

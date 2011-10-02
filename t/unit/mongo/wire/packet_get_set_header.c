@@ -1,14 +1,10 @@
-#include "tap.h"
 #include "test.h"
-#include "mongo-wire.h"
 
-#include <string.h>
-
-void
+static void
 test_mongo_wire_packet_get_set_header (void)
 {
-  mongo_packet *p;
-  mongo_packet_header ph1, ph2;
+  mongo_wire_packet_t *p;
+  mongo_wire_packet_header_t ph1, ph2;
 
   p = mongo_wire_packet_new ();
 
@@ -23,15 +19,15 @@ test_mongo_wire_packet_get_set_header (void)
 
   ok (mongo_wire_packet_get_header (p, &ph2),
       "mongo_wire_packet_get_header() works on a fresh packet");
-  cmp_ok (ph2.length, "==", sizeof (mongo_packet_header),
+  cmp_ok (ph2.length, "==", sizeof (mongo_wire_packet_header_t),
 	  "Initial packet length is the length of the header");
 
-  ph1.length = sizeof (mongo_packet_header);
+  ph1.length = sizeof (mongo_wire_packet_header_t);
   ph1.id = 1;
   ph1.resp_to = 0;
   ph1.opcode = 1000;
 
-  memset (&ph2, 0, sizeof (mongo_packet_header));
+  memset (&ph2, 0, sizeof (mongo_wire_packet_header_t));
 
   ok (mongo_wire_packet_set_header (p, &ph1),
       "mongo_wire_packet_set_header() works");
@@ -47,7 +43,7 @@ test_mongo_wire_packet_get_set_header (void)
   cmp_ok (ph1.opcode, "==", ph2.opcode,
 	  "OPCodes match");
 
-  ph1.length = GINT32_TO_LE (1);
+  ph1.length = LMC_INT32_TO_LE (1);
   ok (mongo_wire_packet_set_header (p, &ph1) == FALSE,
       "Setting a packet with length shorter than the header "
       "returns an error");
