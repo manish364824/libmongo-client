@@ -11,8 +11,9 @@ libmongo_client_la_SOURCES	= 		\
 	\
 	bson.c bson_oid.c
 
-libmongo_client_includedir	= $(includedir)/mongo-client
-libmongo_client_include_HEADERS	= \
+includedir			= $(prefix)/include/mongo-client
+nobase_include_HEADERS		= \
+	lmc.h \
 	lmc/common.h lmc/error.h lmc/bson.h lmc/bson_oid.h
 
 pkgconfigdir			= $(libdir)/pkgconfig
