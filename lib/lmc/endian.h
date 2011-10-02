@@ -26,18 +26,46 @@
 
 #include <lmc/common.h>
 
+#include <endian.h>
+
 LMC_BEGIN_DECLS
 
-#define LMC_INT32_TO_LE(i) (i)
-#define LMC_INT32_FROM_LE(i) (i)
+#define LMC_INT32_TO_LE(i) htole32(i)
+#define LMC_INT32_FROM_LE(i) le32toh(i)
 
-#define LMC_DOUBLE_TO_LE(d) (d)
-#define LMC_DOUBLE_FROM_LE(d) (d)
+#define LMC_INT64_TO_LE(i) htole64(i)
+#define LMC_INT64_FROM_LE(i) le64toh(i)
 
-#define LMC_INT64_TO_LE(i) (i)
-#define LMC_INT64_FROM_LE(i) (i)
+#define LMC_INT32_TO_BE(i) htobe32(i)
 
-#define LMC_INT32_TO_BE(i) (i)
+inline static double
+LMC_DOUBLE_SWAP_LE_BE(double in)
+{
+  union
+  {
+    uint64_t i;
+    double d;
+  } u;
+
+  u.d = in;
+  u.i = __bswap_64 (u.i);
+  return u.d;
+}
+
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+#define LMC_DOUBLE_TO_LE(val)   ((double) (val))
+#define LMC_DOUBLE_TO_BE(val)   (LMC_DOUBLE_SWAP_LE_BE (val))
+
+#elif __BYTE_ORDER == __BIG_ENDIAN
+#define LMC_DOUBLE_TO_LE(val)   (LMC_DOUBLE_SWAP_LE_BE (val))
+#define LMC_DOUBLE_TO_BE(val)   ((double) (val))
+
+#else /* !__LITTLE_ENDIAN && !__BIG_ENDIAN */
+#error unknown ENDIAN type
+#endif /* !__LITTLE_ENDIAN && !__BIG_ENDIAN */
+
+#define LMC_DOUBLE_FROM_LE(val) (LMC_DOUBLE_TO_LE (val))
+#define LMC_DOUBLE_FROM_BE(val) (LMC_DOUBLE_TO_BE (val))
 
 LMC_END_DECLS
 
