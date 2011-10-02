@@ -49,6 +49,12 @@ bson_unit_tests		= \
 		unit/bson/bson_cursor_get_timestamp \
 		unit/bson/bson_cursor_get_utc_datetime
 
+bson_oid_unit_tests	= \
+		unit/bson/oid/bson_oid_init \
+		unit/bson/oid/bson_oid_new \
+		unit/bson/oid/bson_oid_new_with_time \
+		unit/bson/oid/bson_oid_as_string
+
 bson_func_tests		= \
 		func/bson/f_bson_empty \
 		func/bson/f_bson_chained \
@@ -58,7 +64,7 @@ bson_func_tests		= \
 bson_perf_tests		= \
 		perf/bson/p_bson_find
 
-UNIT_TESTS	= ${bson_unit_tests}
+UNIT_TESTS	= ${bson_unit_tests} ${bson_oid_unit_tests}
 FUNC_TESTS	= ${bson_func_tests}
 PERF_TESTS	= ${bson_perf_tests}
 TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}

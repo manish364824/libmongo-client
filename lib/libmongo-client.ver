@@ -53,4 +53,9 @@ LMC_0.2.0 {
   bson_cursor_get_int32;
   bson_cursor_get_timestamp;
   bson_cursor_get_int64;
+
+  bson_oid_init;
+  bson_oid_new;
+  bson_oid_new_with_time;
+  bson_oid_as_string;
 };

@@ -37,6 +37,8 @@ LMC_BEGIN_DECLS
 #define LMC_INT64_TO_LE(i) (i)
 #define LMC_INT64_FROM_LE(i) (i)
 
+#define LMC_INT32_TO_BE(i) (i)
+
 LMC_END_DECLS
 
 #endif

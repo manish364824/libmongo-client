@@ -32,5 +32,6 @@
 #include <lmc/error.h>
 
 #include <lmc/bson.h>
+#include <lmc/bson_oid.h>
 
 #endif

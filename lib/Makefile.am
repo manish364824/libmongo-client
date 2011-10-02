@@ -9,11 +9,11 @@ libmongo_client_la_SOURCES	= 		\
 	${libmongo_client_include_HEADERS}	\
 	lmc/private.h				\
 	\
-	bson.c
+	bson.c bson_oid.c
 
 libmongo_client_includedir	= $(includedir)/mongo-client
 libmongo_client_include_HEADERS	= \
-	lmc/common.h lmc/error.h lmc/bson.h
+	lmc/common.h lmc/error.h lmc/bson.h lmc/bson_oid.h
 
 pkgconfigdir			= $(libdir)/pkgconfig
 pkgconfig_DATA			= libmongo-client.pc
