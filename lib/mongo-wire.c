@@ -30,17 +30,35 @@
 /** @internal Constant zero value. */
 static const gint32 zero = 0;
 
+
+/** @internal Mongo packet header.
+ *
+ * Every mongo packet has a header like this. Normally, one does not
+ * need to touch it, though.
+ */
+struct _mongo_wire_packet_header_t
+{
+  int32_t length; /**< Full length of the packet, including the
+		     header. */
+  int32_t id; /**< Sequence ID, used when MongoDB responds to a
+		 command. */
+  int32_t resp_to; /**< ID the response is an answer to. Only sent by
+		      the MongoDB server, never set on client-side. */
+  int32_t opcode; /**< The opcode of the command. @see
+		     mongo_wire_opcode. <*/
+};
+
 /** @internal A MongoDB command, as it appears on the wire.
  *
  * For the sake of clarity, and sanity of the library, the header and
  * data parts are stored separately, and as such, will need to be sent
  * separately aswell.
  */
-struct _mongo_packet
+struct _mongo_wire_packet_t
 {
-  mongo_packet_header header; /**< The packet header. */
-  guint8 *data; /**< The actual data of the packet. */
-  gint32 data_size; /**< Size of the data payload. */
+  mongo_wire_packet_header_t header; /**< The packet header. */
+  uint8_t *data; /**< The actual data of the packet. */
+  int32_t data_size; /**< Size of the data payload. */
 };
 
 /** @internal Mongo command opcodes. */

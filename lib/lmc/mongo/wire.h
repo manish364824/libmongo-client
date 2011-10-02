@@ -46,36 +46,16 @@ LMC_BEGIN_DECLS
  * @{
  */
 
-/** Mongo packet header.
- *
- * Every mongo packet has a header like this. Normally, one does not
- * need to touch it, though.
- */
-typedef struct
-{
-  int32_t length; /**< Full length of the packet, including the
-		     header. */
-  int32_t id; /**< Sequence ID, used when MongoDB responds to a
-		 command. */
-  int32_t resp_to; /**< ID the response is an answer to. Only sent by
-		      the MongoDB server, never set on client-side. */
-  int32_t opcode; /**< The opcode of the command. @see
-		     mongo_wire_opcode. <*/
-} mongo_wire_packet_header_t;
-
 /** An opaque Mongo Packet on the wire.
  *
  * This structure contains the binary data that can be written
  * straight to the wire.
  */
-struct _mongo_wire_packet_t
-{
-  mongo_wire_packet_header_t header; /**< The packet header. */
-  uint8_t *data; /**< The actual data of the packet. */
-  int32_t data_size; /**< Size of the data payload. */
-};
-
 typedef struct _mongo_wire_packet_t mongo_wire_packet_t;
+
+/** An opaque Mongo Packet header on the wire
+ */
+typedef struct _mongo_wire_packet_header_t mongo_wire_packet_header_t;
 
 /** Create an empty packet.
  *
