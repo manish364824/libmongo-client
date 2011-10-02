@@ -1,39 +1,40 @@
-/* mongo-wire.h - libmongo-client's MongoDB wire protocoll implementation.
- * Copyright 2011 Gergely Nagy <algernon@balabit.hu>
+/* mongo/wire.h - libmongo-client's MongoDB wire protocol implementation.
+ * Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
+ * This file is part of the libmongo-client library.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA.
  */
 
-/** @file src/mongo-wire.h
+/** @file lib/lmc/mongo/wire.h
  *  MongoDB Wire Protocol API public header.
  */
 
-#ifndef LIBMONGO_CLIENT_MONGO_WIRE_H
-#define LIBMONGO_CLIENT_MONGO_WIRE_H 1
+#ifndef LMC_MONGO_WIRE_H
+#define LMC_MONGO_WIRE_H 1
 
-#include <glib.h>
+#include <lmc/common.h>
+#include <lmc/bson.h>
 
-#include <bson.h>
-
-G_BEGIN_DECLS
+LMC_BEGIN_DECLS
 
 /** @defgroup mongo_wire Mongo Wire Protocol
  *
  * The structures and functions within this module implement the
  * MongoDB wire protocol: functions to assemble various commands into
  * binary blobs that can be sent over the wire.
- *
- * @see mongo_client
  *
  * @addtogroup mongo_wire
  * @{
@@ -52,31 +53,38 @@ G_BEGIN_DECLS
  */
 typedef struct
 {
-  gint32 length; /**< Full length of the packet, including the
-		    header. */
-  gint32 id; /**< Sequence ID, used when MongoDB responds to a
-		command. */
-  gint32 resp_to; /**< ID the response is an answer to. Only sent by
-		     the MongoDB server, never set on client-side. */
-  gint32 opcode; /**< The opcode of the command. @see
-		    mongo_wire_opcode. <*/
-} mongo_packet_header;
+  int32_t length; /**< Full length of the packet, including the
+		     header. */
+  int32_t id; /**< Sequence ID, used when MongoDB responds to a
+		 command. */
+  int32_t resp_to; /**< ID the response is an answer to. Only sent by
+		      the MongoDB server, never set on client-side. */
+  int32_t opcode; /**< The opcode of the command. @see
+		     mongo_wire_opcode. <*/
+} mongo_wire_packet_header_t;
 
 /** An opaque Mongo Packet on the wire.
  *
  * This structure contains the binary data that can be written
  * straight to the wire.
  */
-typedef struct _mongo_packet mongo_packet;
+struct _mongo_wire_packet_t
+{
+  mongo_wire_packet_header_t header; /**< The packet header. */
+  uint8_t *data; /**< The actual data of the packet. */
+  int32_t data_size; /**< Size of the data payload. */
+};
+
+typedef struct _mongo_wire_packet_t mongo_wire_packet_t;
 
 /** Create an empty packet.
  *
  * Creates an empty packet to be filled in later with
- * mongo_wire_packet_set_header() and mongo_packet_set_data().
+ * mongo_wire_packet_set_header() and mongo_wire_packet_set_data().
  *
  * @returns A newly allocated packet, or NULL on error.
  */
-mongo_packet *mongo_wire_packet_new (void);
+mongo_wire_packet_t *mongo_wire_packet_new (void);
 
 /** Get the header data of a packet.
  *
@@ -89,8 +97,8 @@ mongo_packet *mongo_wire_packet_new (void);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean mongo_wire_packet_get_header (const mongo_packet *p,
-				       mongo_packet_header *header);
+lmc_bool_t mongo_wire_packet_get_header (const mongo_wire_packet_t *p,
+					 mongo_wire_packet_header_t *header);
 
 /** Set the header data of a packet.
  *
@@ -103,8 +111,8 @@ gboolean mongo_wire_packet_get_header (const mongo_packet *p,
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean mongo_wire_packet_set_header (mongo_packet *p,
-				       const mongo_packet_header *header);
+lmc_bool_t mongo_wire_packet_set_header (mongo_wire_packet_t *p,
+					 const mongo_wire_packet_header_t *header);
 
 /** Get the data part of a packet.
  *
@@ -118,7 +126,8 @@ gboolean mongo_wire_packet_set_header (mongo_packet *p,
  *
  * @returns The size of the data, or -1 on error.
  */
-gint32 mongo_wire_packet_get_data (const mongo_packet *p, const guint8 **data);
+int32_t mongo_wire_packet_get_data (const mongo_wire_packet_t *p,
+				    const uint8_t **data);
 
 /** Set the data part of a packet.
  *
@@ -134,8 +143,9 @@ gint32 mongo_wire_packet_get_data (const mongo_packet *p, const guint8 **data);
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean mongo_wire_packet_set_data (mongo_packet *p, const guint8 *data,
-				     gint32 size);
+lmc_bool_t mongo_wire_packet_set_data (mongo_wire_packet_t *p,
+				       const uint8_t *data,
+				       int32_t size);
 
 /** Free up a mongo packet.
  *
@@ -143,7 +153,7 @@ gboolean mongo_wire_packet_set_data (mongo_packet *p, const guint8 *data,
  *
  * @note The packet shall not be used afterwards.
  */
-void mongo_wire_packet_free (mongo_packet *p);
+void mongo_wire_packet_free (mongo_wire_packet_t *p);
 
 /** @} */
 
@@ -155,31 +165,31 @@ void mongo_wire_packet_free (mongo_packet *p);
 
 /** Flags the server can set in replies. */
 enum
-  {
-    /** Set when get_more is called but the cursor id is invalid. */
-    MONGO_REPLY_FLAG_NO_CURSOR = 0x1,
-    /** Set when the query failed. */
-    MONGO_REPLY_FLAG_QUERY_FAIL = 0x2,
-    /** Set when the server suppots the AwaitData query option.
-     * If not set, the client should sleep a little between get_more
-     * calls on a tailable cursor. On Mongo >= 1.6, this flag is
-     * always set.
-     */
-    MONGO_REPLY_FLAG_AWAITCAPABLE = 0x8,
-  };
+{
+  /** Set when get_more is called but the cursor id is invalid. */
+  MONGO_WIRE_REPLY_FLAG_NO_CURSOR = 0x1,
+  /** Set when the query failed. */
+  MONGO_WIRE_REPLY_FLAG_QUERY_FAIL = 0x2,
+  /** Set when the server suppots the AwaitData query option.
+   * If not set, the client should sleep a little between get_more
+   * calls on a tailable cursor. On Mongo >= 1.6, this flag is
+   * always set.
+   */
+  MONGO_WIRE_REPLY_FLAG_AWAITCAPABLE = 0x8,
+};
 
 /** Mongo reply packet header.
  */
 #pragma pack(1)
 typedef struct
 {
-  gint32 flags; /**< Response flags. */
-  gint64 cursor_id; /**< Cursor ID, in case the client needs to do
-		       get_more requests. */
-  gint32 start; /**< Starting position of the reply within the
-		   cursor. */
-  gint32 returned; /**< Number of documents returned in the reply. */
-} mongo_reply_packet_header;
+  int32_t flags; /**< Response flags. */
+  int64_t cursor_id; /**< Cursor ID, in case the client needs to do
+			get_more requests. */
+  int32_t start; /**< Starting position of the reply within the
+		    cursor. */
+  int32_t returned; /**< Number of documents returned in the reply. */
+} mongo_wire_reply_packet_header_t;
 #pragma pack()
 
 /** Get the header of a reply packet.
@@ -193,8 +203,8 @@ typedef struct
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean mongo_wire_reply_packet_get_header (const mongo_packet *p,
-					     mongo_reply_packet_header *hdr);
+lmc_bool_t mongo_wire_reply_packet_get_header (const mongo_wire_packet_t *p,
+					       mongo_wire_reply_packet_header_t *hdr);
 
 /** Get the full data part of a reply packet.
  *
@@ -209,8 +219,8 @@ gboolean mongo_wire_reply_packet_get_header (const mongo_packet *p,
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean mongo_wire_reply_packet_get_data (const mongo_packet *p,
-					   const guint8 **data);
+lmc_bool_t mongo_wire_reply_packet_get_data (const mongo_wire_packet_t *p,
+					     const uint8_t **data);
 
 /** Get the Nth document from a reply packet.
  *
@@ -224,9 +234,9 @@ gboolean mongo_wire_reply_packet_get_data (const mongo_packet *p,
  *
  * @returns TRUE on success, FALSE otherwise.
  */
-gboolean mongo_wire_reply_packet_get_nth_document (const mongo_packet *p,
-						   gint32 n,
-						   bson **doc);
+lmc_bool_t mongo_wire_reply_packet_get_nth_document (const mongo_wire_packet_t *p,
+						     int32_t n,
+						     bson_t **doc);
 
 /** @}*/
 
@@ -244,13 +254,13 @@ gboolean mongo_wire_reply_packet_get_nth_document (const mongo_packet *p,
  * @see mongo_wire_cmd_update().
  */
 enum
-  {
-    /** When set, inserts if no matching document was found. */
-    MONGO_WIRE_FLAG_UPDATE_UPSERT = 0x1,
-    /** When set, all matching documents will be updated, not just
-	the first. */
-    MONGO_WIRE_FLAG_UPDATE_MULTI = 0x2,
-  };
+{
+  /** When set, inserts if no matching document was found. */
+  MONGO_WIRE_FLAG_UPDATE_UPSERT = 0x1,
+  /** When set, all matching documents will be updated, not just
+      the first. */
+  MONGO_WIRE_FLAG_UPDATE_MULTI = 0x2,
+};
 
 /** Construct an update command.
  *
@@ -267,9 +277,9 @@ enum
  * responsibility of the caller to free the packet once it is not used
  * anymore.
  */
-mongo_packet *mongo_wire_cmd_update (gint32 id, const gchar *ns,
-				     gint32 flags, const bson *selector,
-				     const bson *update);
+mongo_wire_packet_t *mongo_wire_cmd_update (int32_t id, const char *ns,
+					    int32_t flags, const bson_t *selector,
+					    const bson_t *update);
 
 /** Construct an insert command.
  *
@@ -283,8 +293,7 @@ mongo_packet *mongo_wire_cmd_update (gint32 id, const gchar *ns,
  * responsibility of the caller to free the packet once it is not used
  * anymore.
  */
-mongo_packet *mongo_wire_cmd_insert (gint32 id, const gchar *ns, ...)
-  G_GNUC_NULL_TERMINATED;
+mongo_wire_packet_t *mongo_wire_cmd_insert (int32_t id, const char *ns, ...);
 
 /** Construct an insert command with N documents.
  *
@@ -298,35 +307,36 @@ mongo_packet *mongo_wire_cmd_insert (gint32 id, const gchar *ns, ...)
  * responsibility of the caller to free the packet once it is not used
  * anymore.
  */
-mongo_packet *mongo_wire_cmd_insert_n (gint32 id, const gchar *ns, gint32 n,
-				       const bson **docs);
+mongo_wire_packet_t *mongo_wire_cmd_insert_n (int32_t id, const char *ns,
+					      int32_t n,
+					      const bson_t **docs);
 
 /** Flags available for the query command.
  * @see mongo_wire_cmd_query().
  */
 enum
-  {
-    /** Set the TailableCursor flag on the query. */
-    MONGO_WIRE_FLAG_QUERY_TAILABLE_CURSOR = 1 << 1,
-    /** Allow queries made against a replica slave. */
-    MONGO_WIRE_FLAG_QUERY_SLAVE_OK = 1 << 2,
-    /** Disable cursor timeout. */
-    MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT = 1 << 4,
-    /** Block if at the end of the data block, awaiting data.
-     * Use only with #MONGO_WIRE_FLAG_QUERY_TAILABLE_CURSOR!
-     */
-    MONGO_WIRE_FLAG_QUERY_AWAIT_DATA = 1 << 5,
-    /** Stream the data down full blast in multiple packages.
-     * When set, the client is not allowed not to read all the data,
-     * unless it closes connection.
-     */
-    MONGO_WIRE_FLAG_QUERY_EXHAUST = 1 << 6,
-    /** Allow partial results in a sharded environment.
-     * In case one or more required shards are down, with this flag
-     * set, partial results will be returned instead of failing.
-     */
-    MONGO_WIRE_FLAG_QUERY_PARTIAL_RESULTS = 1 << 7
-  };
+{
+  /** Set the TailableCursor flag on the query. */
+  MONGO_WIRE_FLAG_QUERY_TAILABLE_CURSOR = 1 << 1,
+  /** Allow queries made against a replica slave. */
+  MONGO_WIRE_FLAG_QUERY_SLAVE_OK = 1 << 2,
+  /** Disable cursor timeout. */
+  MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT = 1 << 4,
+  /** Block if at the end of the data block, awaiting data.
+   * Use only with #MONGO_WIRE_FLAG_QUERY_TAILABLE_CURSOR!
+   */
+  MONGO_WIRE_FLAG_QUERY_AWAIT_DATA = 1 << 5,
+  /** Stream the data down full blast in multiple packages.
+   * When set, the client is not allowed not to read all the data,
+   * unless it closes connection.
+   */
+  MONGO_WIRE_FLAG_QUERY_EXHAUST = 1 << 6,
+  /** Allow partial results in a sharded environment.
+   * In case one or more required shards are down, with this flag
+   * set, partial results will be returned instead of failing.
+   */
+  MONGO_WIRE_FLAG_QUERY_PARTIAL_RESULTS = 1 << 7
+};
 
 /** Construct a query command.
  *
@@ -348,9 +358,10 @@ enum
  * responsibility of the caller to free the packet once it is not used
  * anymore.
  */
-mongo_packet *mongo_wire_cmd_query (gint32 id, const gchar *ns, gint32 flags,
-				    gint32 skip, gint32 ret, const bson *query,
-				    const bson *sel);
+mongo_wire_packet_t *mongo_wire_cmd_query (int32_t id, const char *ns,
+					   int32_t flags, int32_t skip,
+					   int32_t ret, const bson_t *query,
+					   const bson_t *sel);
 
 /** Construct a get more command.
  *
@@ -364,16 +375,16 @@ mongo_packet *mongo_wire_cmd_query (gint32 id, const gchar *ns, gint32 flags,
  * responsibility of the caller to free the packet once it is not used
  * anymore.
  */
-mongo_packet *mongo_wire_cmd_get_more (gint32 id, const gchar *ns,
-				       gint32 ret, gint64 cursor_id);
+mongo_wire_packet_t *mongo_wire_cmd_get_more (int32_t id, const char *ns,
+					      int32_t ret, int64_t cursor_id);
 
 /** Flags available for the delete command.
  */
 enum
-  {
-    /** Only remove the first match. */
-    MONGO_WIRE_FLAG_DELETE_SINGLE = 0x1
-  };
+{
+  /** Only remove the first match. */
+  MONGO_WIRE_FLAG_DELETE_SINGLE = 0x1
+};
 
 /** Construct a delete command.
  *
@@ -388,8 +399,8 @@ enum
  * responsibility of the caller to free the packet once it is not used
  * anymore.
  */
-mongo_packet *mongo_wire_cmd_delete (gint32 id, const gchar *ns,
-				     gint32 flags, const bson *sel);
+mongo_wire_packet_t *mongo_wire_cmd_delete (int32_t id, const char *ns,
+					    int32_t flags, const bson_t *sel);
 
 /** Construct a kill cursors command.
  *
@@ -403,7 +414,7 @@ mongo_packet *mongo_wire_cmd_delete (gint32 id, const gchar *ns,
  * responsibility of the caller to free the packet once it is not used
  * anymore.
  */
-mongo_packet *mongo_wire_cmd_kill_cursors (gint32 id, gint32 n, ...);
+mongo_wire_packet_t *mongo_wire_cmd_kill_cursors (int32_t id, int32_t n, ...);
 
 /** Construct a custom command.
  *
@@ -420,14 +431,14 @@ mongo_packet *mongo_wire_cmd_kill_cursors (gint32 id, gint32 n, ...);
  * responsibility of the caller to free the packet once it is not used
  * anymore.
  */
-mongo_packet *mongo_wire_cmd_custom (gint32 id, const gchar *db,
-				     gint32 flags,
-				     const bson *command);
+mongo_wire_packet_t *mongo_wire_cmd_custom (int32_t id, const char *db,
+					    int32_t flags,
+					    const bson_t *command);
 
 /** @} */
 
 /** @} */
 
-G_END_DECLS
+LMC_END_DECLS
 
 #endif

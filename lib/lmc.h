@@ -34,4 +34,6 @@
 #include <lmc/bson.h>
 #include <lmc/bson_oid.h>
 
+#include <lmc/mongo/wire.h>
+
 #endif
