@@ -25,15 +25,11 @@
 #include <lmc.h>
 #include "lmc/private.h"
 
-#include <errno.h>
-
 #include <sys/types.h>
 #include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include <unistd.h>
-#include <errno.h>
 
 static uint32_t machine_id = 0;
 static int16_t pid = 0;

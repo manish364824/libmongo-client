@@ -33,69 +33,6 @@ G_BEGIN_DECLS
  * @{
  */
 
-/** Intitialize the static ObjectID components.
- *
- * @param machine_id is the machine id to use, or zero to generate one
- * automatically.
- *
- * This function needs to be called once, before any OIDs are
- * generated. It is also a good idea to call it whenever the calling
- * program's PID might change.
- */
-void mongo_util_oid_init (gint32 machine_id);
-
-/** Generate a new ObjectID.
- *
- * Based on the current time, the pre-determined pid and machine ID
- * and a supplied sequence number, generate a new ObjectID.
- *
- * The machine id and the PID are updated whenever
- * mongo_util_oid_init() is called.
- *
- * @param seq is the sequence number to use.
- *
- * @note The ObjectID has space for only 24 bits of sequence bytes, so
- * it should be noted that while @a seq is 32 bits wide, only 24 of
- * that will be used.
- *
- * @returns A newly allocated ObjectID or NULL on error. Freeing it is
- * the responsibility of the caller.
- */
-guint8 *mongo_util_oid_new (gint32 seq);
-
-/** Generate a new ObjectID, with a predefined timestamp.
- *
- * Based on the suppiled time and sequence number, and the
- * pre-determined pid and machine ID, generate a new ObjectID.
- *
- * The machine id and the PID are updated whenever
- * mongo_util_oid_init() is called.
- *
- * @param time is the timestamp to use.
- * @param seq is the sequence number to use.
- *
- *
- * @note The ObjectID has space for only 24 bits of sequence bytes, so
- * it should be noted that while @a seq is 32 bits wide, only 24 of
- * that will be used.
- *
- * @returns A newly allocated ObjectID or NULL on error. Freeing it is
- * the responsibility of the caller.
- */
-guint8 *mongo_util_oid_new_with_time (gint32 time, gint32 seq);
-
-/** Convert an ObjectID to its string representation.
- *
- * Turns a binary ObjectID into a hexadecimal string.
- *
- * @param oid is the binary ObjectID.
- *
- * @returns A newly allocated string representation of the ObjectID,
- * or NULL on error. It is the responsibility of the caller to free it
- * once it is no longer needed.
- */
-gchar *mongo_util_oid_as_string (const guint8 *oid);
-
 /** Parse a HOST:IP pair.
  *
  * Given a HOST:IP pair, split it up into a host and a port. IPv6
