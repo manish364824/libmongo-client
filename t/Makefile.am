@@ -93,7 +93,7 @@ check_PROGRAMS	= ${TESTCASES}
 noinst_PROGRAMS= test_cleanup
 
 AM_CFLAGS = -I$(top_srcdir)/lib/ -I${top_srcdir}/t/libtap/
-LDADD = $(top_builddir)/lib/libmongo-client.la ${top_builddir}/t/libtap/libtap.la
+LDADD = $(top_builddir)/lib/libmongo-client-internal.la ${top_builddir}/t/libtap/libtap.la
 
 EXTRA_DIST = README \
 	     coverage.sh \

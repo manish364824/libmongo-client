@@ -5,12 +5,16 @@ LMC_AGE				= 0
 lib_LTLIBRARIES			= libmongo-client.la
 libmongo_client_la_LDFLAGS	= -version-info ${LMC_CURRENT}:${LMC_REVISION}:${LMC_AGE} @vsymldflags@
 
+noinst_LTLIBRARIES		= libmongo-client-internal.la
+
 libmongo_client_la_SOURCES	= 		\
-	${libmongo_client_include_HEADERS}	\
+	${nobase_include_HEADERS}		\
 	lmc/private.h				\
-	\
+						\
 	bson.c bson_oid.c			\
 	mongo-wire.c
+
+libmongo_client_internal_la_SOURCES	= ${libmongo_client_la_SOURCES}
 
 includedir			= $(prefix)/include/mongo-client
 nobase_include_HEADERS		= \
