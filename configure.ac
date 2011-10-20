@@ -39,6 +39,9 @@ AC_CHECK_HEADERS([arpa/inet.h fcntl.h netinet/in.h sys/socket.h netdb.h])
 
 dnl ***************************************************************************
 dnl Checks for libraries
+dnl ***************************************************************************
+PKG_CHECK_MODULES(CHECK, check,,)
+
 AC_CHECK_FUNC(socket,,
  AC_CHECK_LIB(socket, socket))
 
