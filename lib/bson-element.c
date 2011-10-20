@@ -35,7 +35,11 @@ struct _bson_element_t
 bson_element_t *
 bson_element_new (void)
 {
-  return NULL;
+  bson_element_t *e;
+
+  e = (bson_element_t *)malloc (sizeof (bson_element_t));
+  e->ref = 1;
+  return e;
 }
 
 bson_element_t *
