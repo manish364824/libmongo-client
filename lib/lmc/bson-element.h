@@ -28,6 +28,13 @@
 
 LMC_BEGIN_DECLS
 
+/** @addtogroup lmc_bson
+ * @{
+ *  @defgroup lmc_bson_element BSON elements
+ *  @addtogroup lmc_bson_element
+ *  @{
+ */
+
 /** A BSON element container.
  *
  * This type can hold any type of BSON element.
@@ -57,6 +64,10 @@ bson_element_t *bson_element_ref (bson_element_t *e);
  * @param e is the BSON element to decrease the refcount of.
  */
 void bson_element_unref (bson_element_t *e);
+
+/** @}
+ * @}
+ */
 
 LMC_END_DECLS
 

@@ -30,6 +30,7 @@
 
 #include <lmc/common.h>
 
+/** @defgroup lmc_bson BSON */
 #include <lmc/bson-element.h>
 
 #endif
