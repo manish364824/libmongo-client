@@ -1,5 +1,7 @@
 #! /bin/sh
 
+set -e
+
 install -d coverage
 rm -f coverage/report.txt
 

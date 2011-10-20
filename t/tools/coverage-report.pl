@@ -86,12 +86,12 @@ foreach my $type ("function", "file") {
 	    my $miss = $got * $coverage{function}->{$func}->{$m ."Coverage"} / 100;
 	    $totalMiss += $miss;
 	}
-	$summary{$type}->{$m} = sprintf("%d", $totalGot);
-	$summary{$type}->{$m . "Coverage"} = sprintf("%.2f", $totalMiss / $totalGot * 100);
+	if ($totalGot > 0) {
+	    $summary{$type}->{$m} = sprintf("%d", $totalGot);
+	    $summary{$type}->{$m . "Coverage"} = sprintf("%.2f", $totalMiss / $totalGot * 100);
+	}
     }
 }
-
-
 
 print "<coverage>\n";
 
@@ -117,7 +117,9 @@ foreach my $type ("function", "file") {
     printf "    <lines count=\"%s\" coverage=\"%s\"/>\n", $summary{$type}->{lines}, $summary{$type}->{linesCoverage};
     printf "    <branches count=\"%s\" coverage=\"%s\"/>\n", $summary{$type}->{branches}, $summary{$type}->{branchesCoverage};
     printf "    <conditions count=\"%s\" coverage=\"%s\"/>\n", $summary{$type}->{conds}, $summary{$type}->{condsCoverage};
-    printf "    <calls count=\"%s\" coverage=\"%s\"/>\n", $summary{$type}->{calls}, $summary{$type}->{callsCoverage};
+    if (defined ($summary{$type}->{callsCoverage})) {
+        printf "    <calls count=\"%s\" coverage=\"%s\"/>\n", $summary{$type}->{calls}, $summary{$type}->{callsCoverage};
+    }
     printf  "  </summary>\n";
     printf "</%ss>\n", $type;
 }
