@@ -94,8 +94,11 @@ bson_element_t *bson_element_ref (bson_element_t *e);
  * up.
  *
  * @param e is the BSON element to decrease the refcount of.
+ *
+ * @returns The BSON element, or NULL if it was freed, or an error
+ * occurred.
  */
-void bson_element_unref (bson_element_t *e);
+bson_element_t *bson_element_unref (bson_element_t *e);
 
 /** Get the type of a BSON element.
  *

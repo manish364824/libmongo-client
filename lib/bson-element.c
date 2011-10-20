@@ -64,15 +64,19 @@ bson_element_ref (bson_element_t *e)
   return e;
 }
 
-void
+bson_element_t *
 bson_element_unref (bson_element_t *e)
 {
   if (!e)
-    return;
+    return NULL;
 
   e->ref--;
   if (e->ref <= 0)
-    free (e);
+    {
+      free (e);
+      return NULL;
+    }
+  return e;
 }
 
 bson_element_type_t

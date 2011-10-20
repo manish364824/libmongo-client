@@ -26,12 +26,10 @@ START_TEST (test_bson_element_ref)
 
   fail_unless (e == e2);
 
-  mark_point ();
-  bson_element_unref (e);
-  bson_element_unref (e);
+  fail_if (bson_element_unref (e) == NULL);
+  fail_unless (bson_element_unref (e) == NULL);
 
-  mark_point ();
-  bson_element_unref (NULL);
+  fail_unless (bson_element_unref (NULL) == NULL);
 }
 END_TEST
 
