@@ -41,6 +41,36 @@ LMC_BEGIN_DECLS
  */
 typedef struct _bson_element_t bson_element_t;
 
+/** Supported BSON object types.
+ */
+typedef enum
+{
+  BSON_TYPE_NONE = 0, /**< Only used for errors */
+  BSON_TYPE_DOUBLE = 0x01, /**< 8byte double */
+  BSON_TYPE_STRING, /**< 4byte length + NULL terminated string */
+  BSON_TYPE_DOCUMENT, /**< 4byte length + NULL terminated document */
+  BSON_TYPE_ARRAY, /**< 4byte length + NULL terminated document */
+  BSON_TYPE_BINARY, /**< 4byte length + 1byte subtype + data */
+  BSON_TYPE_UNDEFINED, /**< Deprecated type. */
+  BSON_TYPE_OID, /**< 12byte ObjectID */
+  BSON_TYPE_BOOLEAN, /**< 1byte boolean value */
+  BSON_TYPE_UTC_DATETIME, /**< 8byte timestamp; milliseconds since
+                             Unix epoch */
+  BSON_TYPE_NULL, /**< NULL value, No following data. */
+  BSON_TYPE_REGEXP, /**< Two NULL terminated C strings, the regex
+                       itself, and the options. */
+  BSON_TYPE_DBPOINTER, /**< Deprecated type. */
+  BSON_TYPE_JS_CODE, /**< 4byte length + NULL terminated string */
+  BSON_TYPE_SYMBOL, /**< 4byte length + NULL terminated string */
+  BSON_TYPE_JS_CODE_W_SCOPE, /**< 4byte length, followed by a string
+                                and a document */
+  BSON_TYPE_INT32, /**< 4byte integer */
+  BSON_TYPE_TIMESTAMP, /**< 4bytes increment + 4bytes timestamp */
+  BSON_TYPE_INT64, /**< 8byte integer */
+  BSON_TYPE_MIN = 0xff,
+  BSON_TYPE_MAX = 0x7f
+} bson_element_type_t;
+
 /** Create a new BSON element.
  *
  * Creates a new BSON element, without a type assigned, and a
@@ -49,6 +79,7 @@ typedef struct _bson_element_t bson_element_t;
  * @returns A newly allocated element.
  */
 bson_element_t *bson_element_new (void);
+
 /** Increase the reference count of a BSON element.
  *
  * @param e is the element to increase the refcount of.
@@ -56,6 +87,7 @@ bson_element_t *bson_element_new (void);
  * @returns The BSON element itself.
  */
 bson_element_t *bson_element_ref (bson_element_t *e);
+
 /** Decrease the reference count of a BSON element.
  *
  * Whenever the reference count reaches zero, the object will be freed
@@ -64,6 +96,14 @@ bson_element_t *bson_element_ref (bson_element_t *e);
  * @param e is the BSON element to decrease the refcount of.
  */
 void bson_element_unref (bson_element_t *e);
+
+/** Get the type of a BSON element.
+ *
+ * @param e is the BSON element to check the type of.
+ *
+ * @returns The type, or #BSON_TYPE_NONE on error.
+ */
+bson_element_type_t bson_element_type_get (bson_element_t *e);
 
 /** @}
  * @}

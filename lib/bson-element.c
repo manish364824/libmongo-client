@@ -30,6 +30,17 @@
 struct _bson_element_t
 {
   sig_atomic_t ref;
+  uint32_t len;
+
+  union
+  {
+    struct
+    {
+      uint8_t type;
+      uint8_t data[0];
+    } as_typed;
+    uint8_t bytestream[0];
+  };
 };
 
 bson_element_t *
@@ -39,6 +50,9 @@ bson_element_new (void)
 
   e = (bson_element_t *)malloc (sizeof (bson_element_t));
   e->ref = 1;
+  e->as_typed.type = BSON_TYPE_NONE;
+  e->len = 0;
+
   return e;
 }
 
@@ -59,4 +73,12 @@ bson_element_unref (bson_element_t *e)
   e->ref--;
   if (e->ref <= 0)
     free (e);
+}
+
+bson_element_type_t
+bson_element_type_get (bson_element_t *e)
+{
+  if (!e)
+    return BSON_TYPE_NONE;
+  return e->as_typed.type;
 }

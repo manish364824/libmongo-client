@@ -35,6 +35,18 @@ START_TEST (test_bson_element_ref)
 }
 END_TEST
 
+START_TEST (test_bson_element_type_get)
+{
+  bson_element_t *e;
+
+  fail_unless (bson_element_type_get (NULL) == BSON_TYPE_NONE);
+
+  e = bson_element_new ();
+  fail_unless (bson_element_type_get (e) == BSON_TYPE_NONE);
+  bson_element_unref (e);
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -46,6 +58,7 @@ bson_element_suite (void)
   tc_creat = tcase_create ("Constructor / Destructor");
   tcase_add_test (tc_creat, test_bson_element_new);
   tcase_add_test (tc_creat, test_bson_element_ref);
+  tcase_add_test (tc_creat, test_bson_element_type_get);
   suite_add_tcase (s, tc_creat);
 
   return s;
