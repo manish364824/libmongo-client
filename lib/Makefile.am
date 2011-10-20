@@ -8,12 +8,19 @@ libmongo_client_la_LDFLAGS	= -version-info ${LMC_CURRENT}:${LMC_REVISION}:${LMC_
 noinst_LTLIBRARIES		= libmongo-client-internal.la
 
 libmongo_client_la_SOURCES	= 		\
-	${nobase_include_HEADERS}
+	${nobase_include_HEADERS}		\
+	\
+	bson-element.c
 
 libmongo_client_internal_la_SOURCES	= ${libmongo_client_la_SOURCES}
 
 includedir			= $(prefix)/include/mongo-client
-nobase_include_HEADERS		=
+nobase_include_HEADERS		=	\
+	lmc.h				\
+	lmc/common.h			\
+	lmc/endian.h			\
+	\
+	lmc/bson-element.h
 
 pkgconfigdir			= $(libdir)/pkgconfig
 pkgconfig_DATA			= libmongo-client.pc
