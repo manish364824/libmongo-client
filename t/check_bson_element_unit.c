@@ -18,6 +18,9 @@ START_TEST (test_bson_element_ref)
 {
   bson_element_t *e, *e2;
 
+  e = bson_element_ref (NULL);
+  fail_unless (e == NULL);
+
   e = bson_element_new ();
   e2 = bson_element_ref (e);
 
@@ -26,6 +29,9 @@ START_TEST (test_bson_element_ref)
   mark_point ();
   bson_element_unref (e);
   bson_element_unref (e);
+
+  mark_point ();
+  bson_element_unref (NULL);
 }
 END_TEST
 

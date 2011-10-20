@@ -45,11 +45,18 @@ bson_element_new (void)
 bson_element_t *
 bson_element_ref (bson_element_t *e)
 {
-  return NULL;
+  if (e)
+    e->ref++;
+  return e;
 }
 
 void
 bson_element_unref (bson_element_t *e)
 {
-  return;
+  if (!e)
+    return;
+
+  e->ref--;
+  if (e->ref <= 0)
+    free (e);
 }
