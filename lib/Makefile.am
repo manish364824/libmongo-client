@@ -23,7 +23,7 @@ CLEANDIRS			= coverage
 
 coverage:
 	$(AM_V_GEN)
-	$(AM_V_at) SOURCES="$(SOURCES)" builddir="$(builddir)" srcdir="$(srcdir)" top_srcdir="$(top_srcdir)" $(top_srcdir)/t/coverage.sh
+	$(AM_V_at) SOURCES="$(SOURCES)" builddir="$(builddir)" srcdir="$(srcdir)" top_srcdir="$(top_srcdir)" $(top_srcdir)/t/tools/coverage.sh
 
 clean-local:
 	-test -z "$(CLEANDIRS)" || rm -rf "$(CLEANDIRS)"
