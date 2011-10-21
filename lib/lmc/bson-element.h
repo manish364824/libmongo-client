@@ -143,6 +143,39 @@ const char *bson_element_name_get (bson_element_t *e);
 bson_element_t *bson_element_name_set (bson_element_t *e,
 				       const char *name);
 
+/** Get the raw data part of a BSON element.
+ *
+ * The data part of the BSON object contains only the data, neither
+ * the type, nor the name is included.
+ *
+ * @param e is the element whose data part we want to retrieve.
+ *
+ * @returns The data part, or NULL on error.
+ */
+const uint8_t *bson_element_data_get (bson_element_t *e);
+
+/** Get the size of the raw data part of a BSON element.
+ *
+ * @param e is the element whose data part's size we're interested in.
+ *
+ * @returns The size of the data part only, or -1 on error.
+ */
+int32_t bson_element_data_get_size (bson_element_t *e);
+
+/** Set the raw data part of a BSON element.
+ *
+ * @param e is the element whose data to set.
+ * @param data is the data to copy into the element.
+ * @param size is the size of the data.
+ *
+ * If @a data is NULL, or @a size is zero, the data part of the
+ * element is cleared.
+ *
+ * @returns The element with its data part set.
+ */
+bson_element_t *bson_element_data_set (bson_element_t *e, const uint8_t *data,
+				       uint32_t size);
+
 /** @}
  * @}
  */

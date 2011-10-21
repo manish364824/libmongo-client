@@ -7,4 +7,8 @@ global:
   bson_element_type_set;
   bson_element_name_set;
   bson_element_name_get;
+
+  bson_element_data_set;
+  bson_element_data_get;
+  bson_element_data_get_size;
 };
