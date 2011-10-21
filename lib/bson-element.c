@@ -28,11 +28,12 @@
 #include <signal.h>
 #include <string.h>
 
+#define BSON_ELEMENT_NAME(e) ((char *)(e->as_typed.data))
+
 struct _bson_element_t
 {
   sig_atomic_t ref;
   uint32_t len;
-  const char *name;
   uint32_t name_len;
 
   union
@@ -57,7 +58,6 @@ bson_element_new (void)
   e->ref = 1;
   e->as_typed.type = BSON_TYPE_NONE;
   e->len = 0;
-  e->name = (const char *)e->as_typed.data;
   e->name_len = 0;
 
   return e;
@@ -110,7 +110,7 @@ bson_element_name_get (bson_element_t *e)
 {
   if (!e)
     return NULL;
-  return e->name;
+  return BSON_ELEMENT_NAME (e);
 }
 
 bson_element_t *
@@ -128,7 +128,8 @@ bson_element_name_set (bson_element_t *e,
       if (name_len > e->name_len)
 	e = realloc (e, sizeof (bson_element_t) + size + name_len);
 
-      memmove (e->as_typed.data + name_len, e->as_typed.data + e->name_len + 1,
+      memmove (e->as_typed.data + name_len + 1,
+	       e->as_typed.data + e->name_len + 1,
 	       e->len - e->name_len);
       memcpy (e->as_typed.data, name, name_len + 1);
       e->name_len = name_len;
