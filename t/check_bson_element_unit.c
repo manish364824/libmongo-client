@@ -49,15 +49,15 @@ Suite *
 bson_element_suite (void)
 {
   Suite *s;
-  TCase *tc_creat;
+  TCase *tc_core;
 
   s = suite_create ("BSON Elements");
 
-  tc_creat = tcase_create ("Constructor / Destructor");
-  tcase_add_test (tc_creat, test_bson_element_new);
-  tcase_add_test (tc_creat, test_bson_element_ref);
-  tcase_add_test (tc_creat, test_bson_element_type_get);
-  suite_add_tcase (s, tc_creat);
+  tc_core = tcase_create ("Core");
+  tcase_add_test (tc_core, test_bson_element_new);
+  tcase_add_test (tc_core, test_bson_element_ref);
+  tcase_add_test (tc_core, test_bson_element_type_get);
+  suite_add_tcase (s, tc_core);
 
   return s;
 }
