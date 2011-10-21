@@ -108,6 +108,16 @@ bson_element_t *bson_element_unref (bson_element_t *e);
  */
 bson_element_type_t bson_element_type_get (bson_element_t *e);
 
+/** Set the type of a BSON element.
+ *
+ * @param e is the BSON element to set the type of.
+ * @param type is the type to set.
+ *
+ * @returns The BSON element with the type set, or NULL on error.
+ */
+bson_element_t *bson_element_type_set (bson_element_t *e,
+				       bson_element_type_t type);
+
 /** @}
  * @}
  */

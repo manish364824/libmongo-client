@@ -86,3 +86,14 @@ bson_element_type_get (bson_element_t *e)
     return BSON_TYPE_NONE;
   return e->as_typed.type;
 }
+
+bson_element_t *
+bson_element_type_set (bson_element_t *e,
+		       bson_element_type_t type)
+{
+  if (!e)
+    return NULL;
+
+  e->as_typed.type = type;
+  return e;
+}

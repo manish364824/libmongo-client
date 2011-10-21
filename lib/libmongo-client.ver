@@ -4,4 +4,5 @@ global:
   bson_element_ref;
   bson_element_unref;
   bson_element_type_get;
+  bson_element_type_set;
 };
