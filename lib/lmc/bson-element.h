@@ -118,6 +118,31 @@ bson_element_type_t bson_element_type_get (bson_element_t *e);
 bson_element_t *bson_element_type_set (bson_element_t *e,
 				       bson_element_type_t type);
 
+/** Get the name of a BSON element.
+ *
+ * @param e is the BSON element whose name to retrieve.
+ *
+ * @returns The name of the element, or NULL.
+ *
+ * @note The returned string points to an internal structure, and must
+ * not be modified! It's only valid as long as the element is.
+ *
+ * @note Also note that an unnamed element can be identified by an
+ * empty string, not NULL!
+ */
+const char *bson_element_name_get (bson_element_t *e);
+
+/** Set the name of a BSON element.
+ *
+ * @param e is the element whose name to set.
+ * @param name is the name to set. If it is NULL, the element's name
+ * will be cleared instead.
+ *
+ * @returns The BSON element with the name set, or NULL on error.
+ */
+bson_element_t *bson_element_name_set (bson_element_t *e,
+				       const char *name);
+
 /** @}
  * @}
  */

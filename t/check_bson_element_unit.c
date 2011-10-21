@@ -58,6 +58,43 @@ START_TEST (test_bson_element_type_set)
 }
 END_TEST
 
+START_TEST (test_bson_element_name_set)
+{
+  bson_element_t *e;
+
+  fail_unless (bson_element_name_set (NULL, "test-name") == NULL);
+
+  e = bson_element_new ();
+  fail_unless (bson_element_name_set (e, NULL) == e);
+  fail_unless (bson_element_name_set (e, "test-name") == e);
+  bson_element_unref (e);
+}
+END_TEST
+
+START_TEST (test_bson_element_name_get)
+{
+  bson_element_t *e;
+
+  fail_unless (bson_element_name_get (NULL) == NULL);
+
+  e = bson_element_new ();
+  ck_assert_str_eq (bson_element_name_get (e), "");
+
+  bson_element_name_set (e, "test-name");
+  ck_assert_str_eq (bson_element_name_get (e), "test-name");
+
+  bson_element_name_set (e, "foo");
+  ck_assert_str_eq (bson_element_name_get (e), "foo");
+
+  bson_element_name_set (e, "really-long-name");
+  ck_assert_str_eq (bson_element_name_get (e), "really-long-name");
+
+  bson_element_name_set (e, NULL);
+  ck_assert_str_eq (bson_element_name_get (e), "");
+  bson_element_unref (e);
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -71,6 +108,8 @@ bson_element_suite (void)
   tcase_add_test (tc_core, test_bson_element_ref);
   tcase_add_test (tc_core, test_bson_element_type_get);
   tcase_add_test (tc_core, test_bson_element_type_set);
+  tcase_add_test (tc_core, test_bson_element_name_set);
+  tcase_add_test (tc_core, test_bson_element_name_get);
   suite_add_tcase (s, tc_core);
 
   return s;
