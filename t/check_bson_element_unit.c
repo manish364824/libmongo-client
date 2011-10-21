@@ -65,8 +65,13 @@ START_TEST (test_bson_element_name_set)
   fail_unless (bson_element_name_set (NULL, "test-name") == NULL);
 
   e = bson_element_new ();
-  fail_unless (bson_element_name_set (e, NULL) == e);
-  fail_unless (bson_element_name_set (e, "test-name") == e);
+
+  e = bson_element_name_set (e, NULL);
+  fail_if (e == NULL);
+
+  e = bson_element_name_set (e, "test-name");
+  fail_if (e == NULL);
+
   bson_element_unref (e);
 }
 END_TEST
