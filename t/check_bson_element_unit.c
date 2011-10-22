@@ -133,7 +133,7 @@ START_TEST (test_bson_element_data_get)
 
   e = bson_element_new ();
 
-  fail_if (bson_element_data_get (e) == NULL);
+  ck_assert (bson_element_data_get (e) == NULL);
   ck_assert_int_eq (bson_element_data_get_size (e), 0);
 
   e = bson_element_data_set (e, (uint8_t *)str, strlen (str) + 1);

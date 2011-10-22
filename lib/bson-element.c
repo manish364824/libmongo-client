@@ -149,7 +149,7 @@ bson_element_name_set (bson_element_t *e,
 const uint8_t *
 bson_element_data_get (bson_element_t *e)
 {
-  if (!e)
+  if (!e || e->len == 0)
     return NULL;
   return e->as_typed.data + e->name_len + 1;
 }
