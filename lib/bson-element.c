@@ -267,3 +267,38 @@ bson_element_value_get_int32 (bson_element_t *e,
   return bson_element_data_type_get (e, BSON_TYPE_INT32, (uint8_t *)oval,
 				     sizeof (int32_t));
 }
+
+bson_element_t *
+bson_element_value_set_string (bson_element_t *e,
+			       const char *val,
+			       int32_t length)
+{
+  int32_t l = length;
+  bson_element_t *ne;
+
+  if (l < 0)
+    l = strlen (val);
+
+  ne = bson_element_data_type_set (e, BSON_TYPE_STRING, (uint8_t *)&l,
+				   sizeof (int32_t));
+  ne = bson_element_data_append (ne, (uint8_t *)val, l);
+  return bson_element_data_append (ne, (uint8_t *)"\0", 1);
+}
+
+lmc_bool_t
+bson_element_value_get_string (bson_element_t *e,
+			       const char **oval)
+{
+  const uint8_t *v;
+
+  if (!oval)
+    return FALSE;
+
+  if (bson_element_type_get (e) != BSON_TYPE_STRING)
+    return FALSE;
+
+  v = bson_element_data_get (e);
+  if (v)
+    *oval = (char *)(v + sizeof (int32_t));
+  return (v != NULL);
+}

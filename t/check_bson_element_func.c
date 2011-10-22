@@ -65,11 +65,15 @@ START_TEST (test_func_bson_element_value_manip)
 {
   bson_element_t *e;
   double d;
+  const char *s;
 
   e = bson_element_new ();
 
   e = bson_element_type_set (e, BSON_TYPE_DOUBLE);
   ck_assert (bson_element_value_get_double (e, &d) == FALSE);
+
+  e = bson_element_type_set (e, BSON_TYPE_STRING);
+  ck_assert (bson_element_value_get_string (e, &s) == FALSE);
 
   bson_element_unref (e);
 }

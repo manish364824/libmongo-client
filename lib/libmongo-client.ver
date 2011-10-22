@@ -20,4 +20,6 @@ global:
   bson_element_value_get_double;
   bson_element_value_set_int32;
   bson_element_value_get_int32;
+  bson_element_value_set_string;
+  bson_element_value_get_string;
 };
