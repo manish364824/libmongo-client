@@ -102,8 +102,27 @@ uint32_t bson_length (bson_t *b);
  * #BSON_END, and all of them will be appended to the object.
  *
  * @returns The BSON object with the elements appended.
+ *
+ * @note The elements' refcount is NOT incremented by this function,
+ * if one wishes to use them after unrefing the BSON object, the
+ * refcount must be incremented manually.
  */
 bson_t *bson_append (bson_t *b, ...);
+
+/** Build a new BSON object from elements.
+ *
+ * @param e is the first element to add.
+ *
+ * The rest of the arguments are #bson_element_t objects aswell,
+ * terminated by a #BSON_END.
+ *
+ * @returns A new BSON object with the elements appended.
+ *
+ * @note The elements' refcount is NOT incremented by this function,
+ * if one wishes to use them after unrefing the BSON object, the
+ * refcount must be incremented manually.
+ */
+bson_t *bson_new_build (bson_element_t *e, ...);
 
 /** @}
  * @}

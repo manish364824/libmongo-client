@@ -182,3 +182,21 @@ bson_append (bson_t *b, ...)
   va_end (ap);
   return b;
 }
+
+bson_t *
+bson_new_build (bson_element_t *e, ...)
+{
+  va_list ap;
+  bson_t *b;
+
+  b = bson_new ();
+  va_start (ap, e);
+  b = bson_append (b, e, BSON_END);
+  b = bson_append_va (b, ap);
+  va_end (ap);
+
+  if (bson_length (b) == 0)
+    b = bson_unref (b);
+
+  return b;
+}
