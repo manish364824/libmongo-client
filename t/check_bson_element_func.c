@@ -3,7 +3,7 @@
 
 #include <lmc/bson-element.h>
 
-START_TEST (test_func_bson_element)
+START_TEST (test_func_bson_element_data_move)
 {
   bson_element_t *e;
   char *v1 = "test-value";
@@ -42,7 +42,7 @@ bson_element_suite (void)
   s = suite_create ("BSON Elements functional tests");
 
   tc = tcase_create ("Core");
-  tcase_add_test (tc, test_func_bson_element);
+  tcase_add_test (tc, test_func_bson_element_data_move);
   suite_add_tcase (s, tc);
 
   return s;
