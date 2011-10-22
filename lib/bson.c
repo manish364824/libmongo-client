@@ -46,6 +46,12 @@ struct _bson_t
   {
     uint32_t len;
     bson_node_t *head;
+
+    struct
+    {
+      bson_node_t **ptrs;
+      uint32_t alloc;
+    } index;
   } elements;
   struct
   {
@@ -132,6 +138,8 @@ bson_unref (bson_t *b)
   if (b->ref <= 0)
     {
       _bson_elements_drop (b);
+      if (b->elements.index.ptrs)
+	free (b->elements.index.ptrs);
       free (b);
       return NULL;
     }
@@ -142,13 +150,21 @@ static inline bson_t *
 bson_flatten (bson_t *b)
 {
   uint32_t size = sizeof (int32_t) + sizeof (uint8_t), i = 0, pos = 0;
-  bson_node_t *t = b->elements.head;
-  bson_element_t **nodes =
-    malloc (b->elements.len * sizeof (bson_element_t *) + 1);
+  bson_node_t *t = b->elements.head, **index;
+
+  if (bson_length (b) > b->elements.index.alloc)
+    {
+      b->elements.index.alloc = bson_length (b);
+      b->elements.index.ptrs =
+	(bson_node_t **)realloc (b->elements.index.ptrs,
+				 bson_length (b) *
+				 sizeof (bson_node_t *));
+    }
+  index = b->elements.index.ptrs;
 
   while (t)
     {
-      nodes[i] = t->e;
+      index[i] = t;
       size += bson_element_data_get_size (t->e);
       i++;
       t = t->next;
@@ -165,13 +181,11 @@ bson_flatten (bson_t *b)
   for (i = 1; i <= b->elements.len; i++)
     {
       memcpy (b->stream.with_size.data + pos,
-	      bson_element_data_get (nodes[i - 1]),
-	      bson_element_data_get_size (nodes[i - 1]));
-      pos += bson_element_data_get_size (nodes[i - 1]);
+	      bson_element_data_get (index[i - 1]->e),
+	      bson_element_data_get_size (index[i - 1]->e));
+      pos += bson_element_data_get_size (index[i - 1]->e);
     }
   b->stream.with_size.data[size] = 0;
-
-  free (nodes);
 
   return b;
 }
@@ -223,7 +237,9 @@ static inline bson_node_t *
 _bson_node_get_nth (bson_t *b, uint32_t n)
 {
   uint32_t i;
-  bson_node_t *node = b->elements.head;
+  bson_node_t *node;
+
+  node = b->elements.head;
 
   for (i = 1; i < n; i++)
     node = node->next;
