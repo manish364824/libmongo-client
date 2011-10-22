@@ -119,7 +119,7 @@ bson_flatten (bson_t *b)
   uint32_t size = sizeof (int32_t) + sizeof (uint8_t), i = 0, pos = 0;
   bson_node_t *t = b->elements.head;
   bson_element_t **nodes =
-    malloc (b->elements.len * sizeof (bson_element_t *));
+    malloc (b->elements.len * sizeof (bson_element_t *) + 1);
 
   while (t)
     {
@@ -146,8 +146,7 @@ bson_flatten (bson_t *b)
     }
   b->stream.with_size.data[size] = 0;
 
-  if (nodes)
-    free (nodes);
+  free (nodes);
 
   return b;
 }
