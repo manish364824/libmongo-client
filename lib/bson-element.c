@@ -22,6 +22,7 @@
  */
 
 #include <lmc/common.h>
+#include <lmc/endian.h>
 #include <lmc/bson-element.h>
 
 #include <stdlib.h>
@@ -242,7 +243,7 @@ bson_element_value_set_double (bson_element_t *e,
     return NULL;
 
   ne = bson_element_type_set (e, BSON_TYPE_DOUBLE);
-  BSON_ELEMENT_VALUE (e)->dbl = val;
+  BSON_ELEMENT_VALUE (e)->dbl = LMC_DOUBLE_TO_LE (val);
   ne->len = sizeof (double);
   return ne;
 }
@@ -256,7 +257,7 @@ bson_element_value_get_double (bson_element_t *e,
   if (!v || !oval)
     return FALSE;
 
-  *oval = v->dbl;
+  *oval = LMC_DOUBLE_FROM_LE (v->dbl);
   return TRUE;
 }
 
@@ -270,7 +271,7 @@ bson_element_value_set_int32 (bson_element_t *e,
     return NULL;
 
   ne = bson_element_type_set (e, BSON_TYPE_INT32);
-  BSON_ELEMENT_VALUE (e)->i32 = val;
+  BSON_ELEMENT_VALUE (e)->i32 = LMC_INT32_TO_LE (val);
   ne->len = sizeof (int32_t);
   return ne;
 }
@@ -284,7 +285,7 @@ bson_element_value_get_int32 (bson_element_t *e,
   if (!v || !oval)
     return FALSE;
 
-  *oval = v->i32;
+  *oval = LMC_INT32_FROM_LE (v->i32);
   return TRUE;
 }
 
@@ -303,7 +304,7 @@ bson_element_value_set_string (bson_element_t *e,
     l = strlen (val);
 
   ne = bson_element_type_set (e, BSON_TYPE_STRING);
-  BSON_ELEMENT_VALUE (e)->str.len = l;
+  BSON_ELEMENT_VALUE (e)->str.len = LMC_INT32_TO_LE (l);
   ne->len = sizeof (int32_t) - 1;
 
   ne = bson_element_data_append (ne, (uint8_t *)val, l);
