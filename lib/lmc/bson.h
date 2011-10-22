@@ -78,6 +78,14 @@ bson_t *bson_open (bson_t *b);
  */
 bson_t *bson_close (bson_t *b);
 
+/** Get the number of elements in a BSON object.
+ *
+ * @param b is the object to count elements in.
+ *
+ * @returns The number of elements in the object.
+ */
+uint32_t bson_length (bson_t *b);
+
 /** @}
  */
 

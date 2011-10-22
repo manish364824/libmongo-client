@@ -34,4 +34,6 @@ global:
 
   bson_open;
   bson_close;
+
+  bson_length;
 };

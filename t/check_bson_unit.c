@@ -46,6 +46,18 @@ START_TEST (test_bson_open_close)
 }
 END_TEST
 
+START_TEST (test_bson_length)
+{
+  bson_t *b;
+
+  ck_assert_int_eq (bson_length (NULL), 0);
+
+  b = bson_new ();
+  ck_assert_int_eq (bson_length (b), 0);
+  bson_unref (b);
+}
+END_TEST
+
 Suite *
 bson_suite (void)
 {
@@ -59,6 +71,7 @@ bson_suite (void)
   tcase_add_test (tc_core, test_bson_new);
   tcase_add_test (tc_core, test_bson_ref);
   tcase_add_test (tc_core, test_bson_open_close);
+  tcase_add_test (tc_core, test_bson_length);
   suite_add_tcase (s, tc_core);
 
   return s;

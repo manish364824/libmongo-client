@@ -103,3 +103,11 @@ bson_close (bson_t *b)
     b->closed = TRUE;
   return b;
 }
+
+uint32_t
+bson_length (bson_t *b)
+{
+  if (!b)
+    return 0;
+  return b->elements.len;
+}
