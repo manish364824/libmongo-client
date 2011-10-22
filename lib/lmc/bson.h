@@ -1,4 +1,4 @@
-/* lmc.h - libmongo-client meta-header
+/* lmc/bson.h - BSON API
  * Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
  * This file is part of the libmongo-client library.
  *
@@ -18,20 +18,53 @@
  * USA.
  */
 
-/** @file lib/lmc.h
- * libmongo-client meta-header.
- *
- * This header includes all the rest, it is advised for applications
- * to include this header, and this header only.
+/** @file lib/lmc/bson.h
  */
 
-#ifndef LMC_H
-#define LMC_H 1
+#ifndef LMC_BSON_H
+#define LMC_BSON_H
 
 #include <lmc/common.h>
-
-/** @defgroup lmc_bson BSON */
 #include <lmc/bson-element.h>
-#include <lmc/bson.h>
+
+LMC_BEGIN_DECLS
+
+/** @addtogroup lmc_bson
+ * @{
+ */
+
+/** A BSON container.
+ */
+typedef struct _bson_t bson_t;
+
+/** Create a new BSON object.
+ *
+ * @returns A newly allocate BSON object.
+ */
+bson_t *bson_new (void);
+
+/** Increase the reference count of a BSON object.
+ *
+ * @param b is the object to increase the refcount of.
+ *
+ * @returns The BSON object with its refcount changed.
+ */
+bson_t *bson_ref (bson_t *b);
+
+/** Decrease the reference count of a BSON object.
+ *
+ * Whenever the refcount reaches zero, the object will be freed, and
+ * all associated elements unrefed.
+ *
+ * @param b is the object to decrease the refcount of.
+ *
+ * @returns The BSON object, or NULL if it was freed.
+ */
+bson_t *bson_unref (bson_t *b);
+
+/** @}
+ */
+
+LMC_END_DECLS
 
 #endif

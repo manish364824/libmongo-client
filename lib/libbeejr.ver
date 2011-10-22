@@ -27,4 +27,8 @@ global:
   bson_element_value_set;
   bson_element_set;
   bson_element_create;
+
+  bson_new;
+  bson_ref;
+  bson_unref;
 };

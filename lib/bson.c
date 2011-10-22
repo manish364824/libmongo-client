@@ -1,4 +1,4 @@
-/* lmc.h - libmongo-client meta-header
+/* lib/bson.c - BSON API
  * Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
  * This file is part of the libmongo-client library.
  *
@@ -18,20 +18,72 @@
  * USA.
  */
 
-/** @file lib/lmc.h
- * libmongo-client meta-header.
- *
- * This header includes all the rest, it is advised for applications
- * to include this header, and this header only.
+/** @file lib/bson.c
  */
 
-#ifndef LMC_H
-#define LMC_H 1
-
 #include <lmc/common.h>
-
-/** @defgroup lmc_bson BSON */
-#include <lmc/bson-element.h>
+#include <lmc/endian.h>
 #include <lmc/bson.h>
 
-#endif
+#include <stdlib.h>
+#include <signal.h>
+
+typedef struct _bson_node_t bson_node_t;
+
+struct _bson_node_t
+{
+  bson_element_t *e;
+  bson_node_t *next;
+};
+
+struct _bson_t
+{
+  sig_atomic_t ref;
+  lmc_bool_t closed;
+
+  struct
+  {
+    uint32_t len;
+    bson_node_t *head;
+  } elements;
+  struct
+  {
+    uint32_t alloc;
+    uint32_t len;
+    uint8_t data[0];
+  } stream;
+};
+
+bson_t *
+bson_new (void)
+{
+  bson_t *b;
+
+  b = (bson_t *)calloc (1, sizeof (bson_t));
+
+  b->ref = 1;
+
+  return b;
+}
+
+bson_t *
+bson_ref (bson_t *b)
+{
+  if (b)
+    b->ref++;
+  return b;
+}
+
+bson_t *
+bson_unref (bson_t *b)
+{
+  if (!b)
+    return NULL;
+  b->ref--;
+  if (b->ref <= 0)
+    {
+      free (b);
+      return NULL;
+    }
+  return b;
+}

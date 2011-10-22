@@ -24,11 +24,13 @@ noinst_LTLIBRARIES		= libmongo-client-internal.la libbeejr-internal.la
 libmongo_client_la_SOURCES	= \
 	${commonHEADERS}
 
-libbeejr_la_SOURCES	= \
+libbeejr_la_SOURCES	=	  \
 	${commonHEADERS}	  \
 	lmc/bson-element.h	  \
+	lmc/bson.h		  \
 	\
-	bson-element.c
+	bson-element.c		  \
+	bson.c
 
 libmongo_client_internal_la_SOURCES	= ${libmongo_client_la_SOURCES}
 libmongo_client_internal_la_LIBADD	= libbeejr-internal.la
@@ -43,6 +45,7 @@ includedir			= $(prefix)/include/mongo-client
 nobase_include_HEADERS		= \
 	${commonHEADERS}	  \
 	\
+	lmc/bson.h		  \
 	lmc/bson-element.h
 
 pkgconfigdir			= $(libdir)/pkgconfig

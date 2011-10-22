@@ -1,4 +1,4 @@
-UNIT_TESTS	= check_bson_element_unit
+UNIT_TESTS	= check_bson_element_unit check_bson_unit
 FUNC_TESTS	= check_bson_element_func
 PERF_TESTS	=
 
