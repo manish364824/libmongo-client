@@ -199,7 +199,7 @@ bson_element_data_get (bson_element_t *e)
 {
   if (!e || e->len == 0)
     return NULL;
-  return e->as_typed.data + e->name_len + 1;
+  return e->as_typed.data + e->name_len;
 }
 
 int32_t
@@ -227,7 +227,7 @@ bson_element_data_append (bson_element_t *e, const uint8_t *data,
     return e;
 
   e = bson_element_ensure_space (e, e->len + size);
-  memcpy (e->as_typed.data + e->len - size + 1, data, size);
+  memcpy (e->as_typed.data + e->len - size, data, size);
   return e;
 }
 
@@ -342,7 +342,6 @@ bson_element_value_set_string (bson_element_t *e,
   e = bson_element_type_set (e, BSON_TYPE_STRING);
   e = bson_element_ensure_space (e, sizeof (int32_t));
   BSON_ELEMENT_VALUE (e)->str.len = LMC_INT32_TO_LE (l);
-  e->len--;
 
   e = bson_element_data_append (e, (uint8_t *)val, l);
   return bson_element_data_append (e, (uint8_t *)"\0", 1);
