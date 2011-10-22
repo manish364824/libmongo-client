@@ -149,6 +149,22 @@ START_TEST (test_bson_element_data_get)
 }
 END_TEST
 
+START_TEST (test_bson_element_stream)
+{
+  bson_element_t *e;
+
+  ck_assert (bson_element_stream_get (NULL) == NULL);
+  ck_assert (bson_element_stream_get_size (NULL) == -1);
+
+  e = bson_element_new ();
+
+  ck_assert (bson_element_stream_get (e) != NULL);
+  ck_assert (bson_element_stream_get_size (e) > 0);
+
+  bson_element_unref (e);
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -166,6 +182,7 @@ bson_element_suite (void)
   tcase_add_test (tc_core, test_bson_element_name_get);
   tcase_add_test (tc_core, test_bson_element_data_set);
   tcase_add_test (tc_core, test_bson_element_data_get);
+  tcase_add_test (tc_core, test_bson_element_stream);
   suite_add_tcase (s, tc_core);
 
   return s;

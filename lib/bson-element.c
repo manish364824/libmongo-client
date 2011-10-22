@@ -183,3 +183,19 @@ bson_element_data_set (bson_element_t *e, const uint8_t *data,
   e->len = new_size;
   return e;
 }
+
+const uint8_t *
+bson_element_stream_get (bson_element_t *e)
+{
+  if (!e)
+    return NULL;
+  return e->bytestream;
+}
+
+int32_t
+bson_element_stream_get_size (bson_element_t *e)
+{
+  if (!e)
+    return -1;
+  return e->len + e->name_len + 1;
+}

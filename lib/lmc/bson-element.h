@@ -176,6 +176,27 @@ int32_t bson_element_data_get_size (bson_element_t *e);
 bson_element_t *bson_element_data_set (bson_element_t *e, const uint8_t *data,
 				       uint32_t size);
 
+/** Get the raw bytestream of the full BSON element.
+ *
+ * @param e is the BSON element to get the bytestream from.
+ *
+ * @returns A pointer to the beginning of the bytestream, or NULL on
+ * error.
+ *
+ * @note The returned pointer is owned by the BSON element object, and
+ * is only valid as long as the element is. It must not be freed or
+ * modified!
+ */
+const uint8_t *bson_element_stream_get (bson_element_t *e);
+
+/** Get the size of a BSON element's raw bytestream.
+ *
+ * @param e is the BSON element to get the size of.
+ *
+ * @returns The lenght of the bytestream, or -1 on error.
+ */
+int32_t bson_element_stream_get_size (bson_element_t *e);
+
 /** @}
  * @}
  */
