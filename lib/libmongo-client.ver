@@ -13,4 +13,7 @@ global:
   bson_element_data_get_size;
   bson_element_stream_get;
   bson_element_stream_get_size;
+
+  bson_element_value_set_double;
+  bson_element_value_get_double;
 };

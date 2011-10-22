@@ -197,8 +197,34 @@ const uint8_t *bson_element_stream_get (bson_element_t *e);
  */
 int32_t bson_element_stream_get_size (bson_element_t *e);
 
+/** @defgroup lmc_bson_element_accessors Accessors
+ * @addtogroup lmc_bson_element_accessors
+ * @{
+ */
+
+/** Set the value of a BSON element to a double.
+ *
+ * @param e is the element whose value to set.
+ * @param val is the value to set.
+ *
+ * @returns The BSON element with the value set, or NULL on error.
+ */
+bson_element_t *bson_element_value_set_double (bson_element_t *e,
+					       double val);
+
+/** Get the value of a BSON element, as a double type.
+ *
+ * @param e is the element whose value we want to retrieve.
+ * @param oval is the output variable to put the value into.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+lmc_bool_t bson_element_value_get_double (bson_element_t *e,
+					  double *oval);
+
 /** @}
  * @}
+ *@}
  */
 
 LMC_END_DECLS

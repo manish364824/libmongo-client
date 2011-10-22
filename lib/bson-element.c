@@ -199,3 +199,25 @@ bson_element_stream_get_size (bson_element_t *e)
     return -1;
   return e->len + e->name_len + 1;
 }
+
+bson_element_t *
+bson_element_value_set_double (bson_element_t *e,
+			       double val)
+{
+  return bson_element_data_set (e, (uint8_t *)&val, sizeof (double));
+}
+
+lmc_bool_t
+bson_element_value_get_double (bson_element_t *e,
+			       double *oval)
+{
+  double *d;
+
+  if (!oval)
+    return FALSE;
+
+  d = (double *)bson_element_data_get (e);
+  if (d)
+    *oval = *d;
+  return (d != NULL);
+}

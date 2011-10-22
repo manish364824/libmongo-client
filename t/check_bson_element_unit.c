@@ -165,11 +165,35 @@ START_TEST (test_bson_element_stream)
 }
 END_TEST
 
+START_TEST (test_bson_element_value_double)
+{
+  bson_element_t *e;
+  double d = 3.14, v = 0;
+
+  ck_assert (bson_element_value_set_double (NULL, d) == NULL);
+  ck_assert (bson_element_value_get_double (NULL, &v) == FALSE);
+
+  e = bson_element_new ();
+
+  ck_assert (bson_element_value_get_double (e, &v) == FALSE);
+
+  e = bson_element_value_set_double (e, d);
+  ck_assert (e != NULL);
+
+  ck_assert (bson_element_value_get_double (e, &v) == TRUE);
+  ck_assert (d == v);
+
+  ck_assert (bson_element_value_get_double (e, NULL) == FALSE);
+
+  bson_element_unref (e);
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
   Suite *s;
-  TCase *tc_core;
+  TCase *tc_core, *tc_access;
 
   s = suite_create ("BSON Elements unit tests");
 
@@ -184,6 +208,10 @@ bson_element_suite (void)
   tcase_add_test (tc_core, test_bson_element_data_get);
   tcase_add_test (tc_core, test_bson_element_stream);
   suite_add_tcase (s, tc_core);
+
+  tc_access = tcase_create ("Accessors");
+  tcase_add_test (tc_access, test_bson_element_value_double);
+  suite_add_tcase (s, tc_access);
 
   return s;
 }
