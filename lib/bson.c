@@ -288,8 +288,5 @@ bson_new_build (bson_element_t *e, ...)
   b = bson_add_elements_va (b, ap);
   va_end (ap);
 
-  if (bson_length (b) == 0)
-    b = bson_unref (b);
-
   return b;
 }
