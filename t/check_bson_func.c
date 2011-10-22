@@ -26,6 +26,30 @@ START_TEST (test_func_bson_close)
 }
 END_TEST
 
+START_TEST (test_func_bson_flatten)
+{
+  bson_t *b;
+  uint32_t size;
+
+  b = bson_new_build
+    (bson_element_create ("hello", BSON_TYPE_STRING, "world", -1),
+     bson_element_create ("answer", BSON_TYPE_INT32, 42),
+     BSON_END);
+  b = bson_close (b);
+  size = bson_data_get_size (b);
+  _ck_assert_int (size, >, 5);
+
+  b = bson_open (b);
+  b = bson_add_elements (b, bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14),
+			 BSON_END);
+  b = bson_close (b);
+
+  _ck_assert_int (bson_data_get_size (b), >, size);
+
+  bson_unref (b);
+}
+END_TEST
+
 Suite *
 bson_func_suite (void)
 {
@@ -37,6 +61,7 @@ bson_func_suite (void)
 
   tc_manip = tcase_create ("BSON manipulation");
   tcase_add_test (tc_manip, test_func_bson_close);
+  tcase_add_test (tc_manip, test_func_bson_flatten);
   suite_add_tcase (s, tc_manip);
 
   return s;
