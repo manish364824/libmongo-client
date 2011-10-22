@@ -62,6 +62,22 @@ bson_t *bson_ref (bson_t *b);
  */
 bson_t *bson_unref (bson_t *b);
 
+/** Open a BSON object, so that elements can be added.
+ *
+ * @param b is the object to open.
+ *
+ * @returns The opened BSON object.
+ */
+bson_t *bson_open (bson_t *b);
+
+/** Close a BSON object, so that elements cannot be added.
+ *
+ * @param b is the object to close.
+ *
+ * @returns The closed BSON object.
+ */
+bson_t *bson_close (bson_t *b);
+
 /** @}
  */
 

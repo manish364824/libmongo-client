@@ -28,6 +28,24 @@ START_TEST (test_bson_ref)
 }
 END_TEST
 
+START_TEST (test_bson_open_close)
+{
+  bson_t *b;
+
+  ck_assert (bson_open (NULL) == NULL);
+  ck_assert (bson_close (NULL) == NULL);
+
+  b = bson_new ();
+
+  ck_assert (bson_open (b) == b);
+  ck_assert (bson_open (b) == b);
+  ck_assert (bson_close (b) == b);
+  ck_assert (bson_close (b) == b);
+
+  bson_unref (b);
+}
+END_TEST
+
 Suite *
 bson_suite (void)
 {
@@ -40,6 +58,7 @@ bson_suite (void)
   tc_core = tcase_create ("Core");
   tcase_add_test (tc_core, test_bson_new);
   tcase_add_test (tc_core, test_bson_ref);
+  tcase_add_test (tc_core, test_bson_open_close);
   suite_add_tcase (s, tc_core);
 
   return s;

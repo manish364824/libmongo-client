@@ -31,4 +31,7 @@ global:
   bson_new;
   bson_ref;
   bson_unref;
+
+  bson_open;
+  bson_close;
 };
