@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <stdarg.h>
+#include <string.h>
 
 typedef struct _bson_node_t bson_node_t;
 
@@ -51,7 +52,16 @@ struct _bson_t
   {
     uint32_t alloc;
     uint32_t len;
-    uint8_t data[0];
+
+    union
+    {
+      struct
+      {
+	uint32_t size;
+	uint8_t data[0];
+      } with_size;
+      uint8_t data[0];
+    };
   } stream;
 };
 
@@ -104,12 +114,52 @@ bson_unref (bson_t *b)
   return b;
 }
 
+static inline bson_t *
+bson_flatten (bson_t *b)
+{
+  uint32_t size = sizeof (int32_t) + sizeof (uint8_t), i = 0, pos = 0;
+  bson_node_t *t = b->elements.head;
+  bson_element_t **nodes =
+    malloc (b->elements.len * sizeof (bson_element_t *));
+
+  while (t)
+    {
+      nodes[i] = t->e;
+      size += bson_element_data_get_size (t->e);
+      i++;
+      t = t->next;
+    }
+
+  if (size > b->stream.alloc)
+    {
+      b = (bson_t *)realloc (b, sizeof (bson_t) + size);
+      b->stream.alloc = size;
+    }
+  b->stream.len = size;
+  b->stream.with_size.size = LMC_INT32_TO_LE (size);
+
+  for (i = 1; i <= b->elements.len; i++)
+    {
+      memcpy (b->stream.with_size.data + pos,
+	      bson_element_data_get (nodes[i - 1]),
+	      bson_element_data_get_size (nodes[i - 1]));
+      pos += bson_element_data_get_size (nodes[i - 1]);
+    }
+  b->stream.with_size.data[size] = 0;
+
+  if (nodes)
+    free (nodes);
+
+  return b;
+}
+
 bson_t *
 bson_open (bson_t *b)
 {
   if (!b || !b->closed)
     return b;
 
+  b->stream.len = 0;
   b->closed = FALSE;
   return b;
 }
@@ -121,7 +171,7 @@ bson_close (bson_t *b)
     return b;
 
   b->closed = TRUE;
-  return b;
+  return bson_flatten (b);
 }
 
 uint32_t

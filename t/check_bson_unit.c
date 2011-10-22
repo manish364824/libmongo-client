@@ -39,7 +39,8 @@ START_TEST (test_bson_open_close)
 
   ck_assert (bson_open (b) == b);
   ck_assert (bson_open (b) == b);
-  ck_assert (bson_close (b) == b);
+  b = bson_close (b);
+  ck_assert (b != NULL);
   ck_assert (bson_close (b) == b);
 
   bson_unref (b);
