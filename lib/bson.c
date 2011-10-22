@@ -233,23 +233,6 @@ bson_data_get_size (bson_t *b)
   return b->stream.len;
 }
 
-static inline bson_node_t *
-_bson_node_get_nth (bson_t *b, uint32_t n)
-{
-  uint32_t i;
-  bson_node_t *node;
-
-  if (b->stream.len != 0)
-    return b->elements.index.ptrs[n - 1];
-
-  node = b->elements.head;
-
-  for (i = 1; i < n; i++)
-    node = node->next;
-
-  return node;
-}
-
 static inline bson_t *
 bson_add_elements_va (bson_t *b, va_list ap)
 {
