@@ -61,18 +61,36 @@ START_TEST (test_func_bson_element_data_manip)
 }
 END_TEST
 
+START_TEST (test_func_bson_element_value_manip)
+{
+  bson_element_t *e;
+  double d;
+
+  e = bson_element_new ();
+
+  e = bson_element_type_set (e, BSON_TYPE_DOUBLE);
+  ck_assert (bson_element_value_get_double (e, &d) == FALSE);
+
+  bson_element_unref (e);
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
   Suite *s;
-  TCase *tc;
+  TCase *tc_core, *tc_value;
 
   s = suite_create ("BSON Elements functional tests");
 
-  tc = tcase_create ("Core");
-  tcase_add_test (tc, test_func_bson_element_data_move);
-  tcase_add_test (tc, test_func_bson_element_data_manip);
-  suite_add_tcase (s, tc);
+  tc_core = tcase_create ("Core");
+  tcase_add_test (tc_core, test_func_bson_element_data_move);
+  tcase_add_test (tc_core, test_func_bson_element_data_manip);
+  suite_add_tcase (s, tc_core);
+
+  tc_value = tcase_create ("Value manipulations");
+  tcase_add_test (tc_value, test_func_bson_element_value_manip);
+  suite_add_tcase (s, tc_value);
 
   return s;
 }

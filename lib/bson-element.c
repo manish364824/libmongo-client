@@ -211,24 +211,43 @@ bson_element_stream_get_size (bson_element_t *e)
   return e->len + e->name_len + 1;
 }
 
+static inline bson_element_t *
+bson_element_data_type_set (bson_element_t *e, bson_element_type_t type,
+			    const uint8_t *data, uint32_t size)
+{
+  return bson_element_data_set (bson_element_type_set (e, type), data, size);
+}
+
+static inline lmc_bool_t
+bson_element_data_type_get (bson_element_t *e, bson_element_type_t type,
+			    uint8_t *oval, uint32_t size)
+{
+  const uint8_t *v;
+
+  if (!oval)
+    return FALSE;
+
+  if (bson_element_type_get (e) != type)
+    return FALSE;
+
+  v = bson_element_data_get (e);
+  if (v)
+    memcpy (oval, v, size);
+  return (v != NULL);
+}
+
 bson_element_t *
 bson_element_value_set_double (bson_element_t *e,
 			       double val)
 {
-  return bson_element_data_set (e, (uint8_t *)&val, sizeof (double));
+  return bson_element_data_type_set (e, BSON_TYPE_DOUBLE,
+				     (uint8_t *)&val, sizeof (double));
 }
 
 lmc_bool_t
 bson_element_value_get_double (bson_element_t *e,
 			       double *oval)
 {
-  double *d;
-
-  if (!oval)
-    return FALSE;
-
-  d = (double *)bson_element_data_get (e);
-  if (d)
-    *oval = *d;
-  return (d != NULL);
+  return bson_element_data_type_get (e, BSON_TYPE_DOUBLE, (uint8_t *)oval,
+				     sizeof (double));
 }

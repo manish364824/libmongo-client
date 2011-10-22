@@ -219,6 +219,7 @@ START_TEST (test_bson_element_value_double)
 
   e = bson_element_value_set_double (e, d);
   ck_assert (e != NULL);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_DOUBLE);
 
   ck_assert (bson_element_value_get_double (e, &v) == TRUE);
   ck_assert (d == v);
