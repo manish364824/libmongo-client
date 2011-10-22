@@ -134,7 +134,7 @@ bson_element_ensure_space (bson_element_t *e, uint32_t size)
 {
   if (e->alloc < size)
     {
-      e = (bson_element_t *)realloc (e, sizeof (bson_element_t) + size + 1);
+      e = (bson_element_t *)realloc (e, sizeof (bson_element_t) + size);
       e->alloc = size;
     }
   e->len = size;
@@ -150,25 +150,25 @@ bson_element_name_set (bson_element_t *e,
 
   if (name)
     {
-      size_t name_len = strlen (name);
+      size_t name_len = strlen (name) + 1;
       uint32_t size = e->len - e->name_len;
 
       e = bson_element_ensure_space (e, size + name_len);
 
-      memmove (e->as_typed.data + name_len + 1,
-	       e->as_typed.data + e->name_len + 1,
-	       size);
-      memcpy (e->as_typed.data, name, name_len + 1);
+      memmove (e->as_typed.data + name_len,
+	       e->as_typed.data + e->name_len,
+	       size + 1);
+      memcpy (e->as_typed.data, name, name_len);
       e->name_len = name_len;
-    }
-  else
-    {
-      memmove (e->as_typed.data, e->as_typed.data + e->name_len,
-	       e->len - e->name_len + 1);
-      e->len -= e->name_len;
-      e->name_len = 0;
+
+      return e;
     }
 
+  memmove (e->as_typed.data,
+	   e->as_typed.data + e->name_len - 1,
+	   e->len - e->name_len + 1);
+  e->len -= e->name_len;
+  e->name_len = 0;
   return e;
 }
 
