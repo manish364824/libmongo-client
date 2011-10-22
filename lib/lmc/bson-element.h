@@ -288,6 +288,53 @@ bson_element_t *bson_element_value_set_string (bson_element_t *e,
 lmc_bool_t bson_element_value_get_string (bson_element_t *e,
 					  const char **oval);
 
+/** @} */
+
+/** @defgroup lmc_bson_element_builder Builder
+ * @addtogroup lmc_bson_element_builder
+ * @{
+ */
+
+/** Set the type and the value of a BSON element.
+ *
+ * @param e is the element to modify.
+ * @param type is the BSON type to use.
+ *
+ * The rest of the parameters depend on the @a type. Whatever the
+ * types setter takes, must be passed along here.
+ *
+ * @returns The BSON element with its type and value set.
+ */
+bson_element_t *bson_element_value_set (bson_element_t *e,
+					bson_element_type_t type, ...);
+
+/** Set all properties of a BSON element.
+ *
+ * @param e is the element to modify.
+ * @param name is the name of the element.
+ * @param type is the BSON type to use.
+ *
+ * The rest of the parameters depend on the @a type. Whatever the
+ * types setter takes, must be passed along here.
+ *
+ * @returns The BSON element with its name, type and value set.
+ */
+bson_element_t *bson_element_set (bson_element_t *e, const char *name,
+				  bson_element_type_t type, ...);
+
+/** Create a new BSON element.
+ *
+ * @param name is the name of the element.
+ * @param type is the BSON type to use.
+ *
+ * The rest of the parameters depend on the @a type. Whatever the
+ * types setter takes, must be passed along here.
+ *
+ * @returns A new BSON element with its name, type and value set.
+ */
+bson_element_t *bson_element_create (const char *name,
+				     bson_element_type_t type, ...);
+
 /** @}
  * @}
  *@}

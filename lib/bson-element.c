@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define BSON_ELEMENT_NAME(e) ((char *)(e->as_typed.data))
 #define BSON_ELEMENT_VALUE(e) \
@@ -328,4 +329,81 @@ bson_element_value_get_string (bson_element_t *e,
 
   *oval = v->str.str;
   return TRUE;
+}
+
+static bson_element_t *
+bson_element_value_set_va (bson_element_t *e, bson_element_type_t type,
+			   va_list ap)
+{
+  switch (type)
+    {
+    case BSON_TYPE_NONE:
+    case BSON_TYPE_MIN:
+    case BSON_TYPE_MAX:
+      break;
+    case BSON_TYPE_DOUBLE:
+      e = bson_element_value_set_double (e, va_arg (ap, double));
+      break;
+    case BSON_TYPE_STRING:
+      {
+	char *s = va_arg (ap, char *);
+	e = bson_element_value_set_string (e, s, va_arg (ap, int32_t));
+	break;
+      }
+    case BSON_TYPE_INT32:
+      e = bson_element_value_set_int32 (e, va_arg (ap, int32_t));
+      break;
+    default:
+      break;
+    }
+  return e;
+}
+
+bson_element_t *
+bson_element_value_set (bson_element_t *e,
+			bson_element_type_t type, ...)
+{
+  va_list ap;
+
+  if (!e)
+    return NULL;
+
+  va_start (ap, type);
+  e = bson_element_value_set_va (e, type, ap);
+  va_end (ap);
+  return e;
+}
+
+bson_element_t *
+bson_element_set (bson_element_t *e, const char *name,
+		  bson_element_type_t type, ...)
+{
+  va_list ap;
+
+  if (!e)
+    return NULL;
+
+  e = bson_element_name_set (e, name);
+  va_start (ap, type);
+  e = bson_element_value_set_va (e, type, ap);
+  va_end (ap);
+  return e;
+}
+
+bson_element_t *
+bson_element_create (const char *name,
+		     bson_element_type_t type, ...)
+{
+  va_list ap;
+  bson_element_t *e;
+
+  e = bson_element_name_set (bson_element_new (), name);
+  va_start (ap, type);
+  e = bson_element_value_set_va (e, type, ap);
+  va_end (ap);
+
+  if (bson_element_type_get (e) != type)
+    e = bson_element_unref (e);
+
+  return e;
 }

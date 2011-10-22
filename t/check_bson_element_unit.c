@@ -284,11 +284,86 @@ START_TEST (test_bson_element_value_string)
 }
 END_TEST
 
+START_TEST (test_bson_element_value)
+{
+  bson_element_t *e;
+  const char *str = NULL;
+  int32_t i = 0;
+  double d = 0;
+
+  ck_assert (bson_element_value_set (NULL, BSON_TYPE_INT32, 42) == NULL);
+
+  e = bson_element_new ();
+
+  e = bson_element_value_set (e, BSON_TYPE_MAX);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_NONE);
+  e = bson_element_value_set (e, 42);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_NONE);
+
+  e = bson_element_value_set (e, BSON_TYPE_STRING, "hello world",
+			      strlen ("hello world"));
+  ck_assert (e != NULL);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_STRING);
+  ck_assert (bson_element_value_get_string (e, &str) == TRUE);
+  ck_assert_str_eq (str, "hello world");
+
+  e = bson_element_value_set (e, BSON_TYPE_INT32, 42);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_INT32);
+  ck_assert (bson_element_value_get_int32 (e, &i) == TRUE);
+  ck_assert_int_eq (i, 42);
+
+  e = bson_element_value_set (e, BSON_TYPE_DOUBLE, 3.14);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_DOUBLE);
+  ck_assert (bson_element_value_get_double (e, &d) == TRUE);
+  ck_assert_int_eq (d, 3.14);
+
+  bson_element_unref (e);
+}
+END_TEST
+
+START_TEST (test_bson_element_set)
+{
+  bson_element_t *e;
+  int32_t i = 0;
+
+  ck_assert (bson_element_set (NULL, "test-field",
+			       BSON_TYPE_INT32, 42) == NULL);
+
+  e = bson_element_new ();
+
+  e = bson_element_set (e, "test-field", BSON_TYPE_INT32, 42);
+  ck_assert_str_eq (bson_element_name_get (e), "test-field");
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_INT32);
+  ck_assert (bson_element_value_get_int32 (e, &i) == TRUE);
+  ck_assert_int_eq (i, 42);
+
+  bson_element_unref (e);
+}
+END_TEST
+
+START_TEST (test_bson_element_create)
+{
+  bson_element_t *e;
+  int32_t i = 0;
+
+  ck_assert (bson_element_create ("test-field",
+				  BSON_TYPE_UNDEFINED) == NULL);
+
+  e = bson_element_create ("test-field", BSON_TYPE_INT32, 42);
+  ck_assert_str_eq (bson_element_name_get (e), "test-field");
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_INT32);
+  ck_assert (bson_element_value_get_int32 (e, &i) == TRUE);
+  ck_assert_int_eq (i, 42);
+
+  bson_element_unref (e);
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
   Suite *s;
-  TCase *tc_core, *tc_access;
+  TCase *tc_core, *tc_access, *tc_builder;
 
   s = suite_create ("BSON Elements unit tests");
 
@@ -311,6 +386,12 @@ bson_element_suite (void)
   tcase_add_test (tc_access, test_bson_element_value_int32);
   tcase_add_test (tc_access, test_bson_element_value_string);
   suite_add_tcase (s, tc_access);
+
+  tc_builder = tcase_create ("Builder");
+  tcase_add_test (tc_builder, test_bson_element_value);
+  tcase_add_test (tc_builder, test_bson_element_set);
+  tcase_add_test (tc_builder, test_bson_element_create);
+  suite_add_tcase (s, tc_builder);
 
   return s;
 }
