@@ -64,20 +64,26 @@ struct _bson_element_t
 };
 
 bson_element_t *
-bson_element_new (void)
+bson_element_new_sized (uint32_t size)
 {
   bson_element_t *e;
 
-  e = (bson_element_t *)malloc (sizeof (bson_element_t));
+  e = (bson_element_t *)malloc (sizeof (bson_element_t) + size);
   memset (e, 0, sizeof (bson_element_t));
 
   e->ref = 1;
   e->as_typed.type = BSON_TYPE_NONE;
-  e->alloc = 0;
+  e->alloc = size;
   e->len = 0;
   e->name_len = 0;
 
   return e;
+}
+
+bson_element_t *
+bson_element_new (void)
+{
+  return bson_element_new_sized (0);
 }
 
 bson_element_t *

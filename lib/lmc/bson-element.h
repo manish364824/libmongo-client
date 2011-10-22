@@ -80,6 +80,14 @@ typedef enum
  */
 bson_element_t *bson_element_new (void);
 
+/** Create a BSON element, with preallocated space.
+ *
+ * @param size is the initial size of the element.
+ *
+ * @returns A newly allocated element.
+ */
+bson_element_t *bson_element_new_sized (uint32_t size);
+
 /** Increase the reference count of a BSON element.
  *
  * @param e is the element to increase the refcount of.

@@ -1,6 +1,7 @@
 LMC_0.2.0 {
 global:
   bson_element_new;
+  bson_element_new_sized;
   bson_element_ref;
   bson_element_unref;
   bson_element_type_get;

@@ -14,6 +14,17 @@ START_TEST (test_bson_element_new)
 }
 END_TEST
 
+START_TEST (test_bson_element_new_sized)
+{
+  bson_element_t *e;
+
+  e = bson_element_new_sized (1024);
+  fail_if (e == NULL);
+  mark_point ();
+  bson_element_unref (e);
+}
+END_TEST
+
 START_TEST (test_bson_element_ref)
 {
   bson_element_t *e, *e2;
@@ -369,6 +380,7 @@ bson_element_suite (void)
 
   tc_core = tcase_create ("Core");
   tcase_add_test (tc_core, test_bson_element_new);
+  tcase_add_test (tc_core, test_bson_element_new_sized);
   tcase_add_test (tc_core, test_bson_element_ref);
   tcase_add_test (tc_core, test_bson_element_type_get);
   tcase_add_test (tc_core, test_bson_element_type_set);
