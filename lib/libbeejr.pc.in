@@ -3,10 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: libmongo-client
+Name: libbeejr
 Version: @VERSION@
-Description: MongoDB client library
+Description: BSON processing library
 URL: https://github.com/algernon/libmongo-client
-Libs: -L${libdir} -lmongo-client
+Libs: -L${libdir} -lbeejr
 Cflags: -I${includedir}/mongo-client
-Requires.private: libbeejr

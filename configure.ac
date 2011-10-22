@@ -68,6 +68,7 @@ AC_OUTPUT(
 	Makefile
 	doc/Makefile
 	lib/Makefile
+	lib/libbeejr.pc
 	lib/libmongo-client.pc
 	t/Makefile
 )
