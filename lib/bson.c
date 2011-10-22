@@ -189,6 +189,9 @@ bson_new_build (bson_element_t *e, ...)
   va_list ap;
   bson_t *b;
 
+  if (!e)
+    return NULL;
+
   b = bson_new ();
   va_start (ap, e);
   b = bson_append (b, e, BSON_END);
