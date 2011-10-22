@@ -8,7 +8,7 @@ START_TEST (test_func_bson_close)
   bson_t *b;
   bson_element_t *e;
 
-  b = bson_new();
+  b = bson_new ();
   e = bson_element_create ("hello", BSON_TYPE_STRING, "world", -1);
 
   b = bson_add_elements (b, e, bson_element_ref (e), BSON_END);
