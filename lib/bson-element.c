@@ -29,6 +29,19 @@
 #include <string.h>
 
 #define BSON_ELEMENT_NAME(e) ((char *)(e->as_typed.data))
+#define BSON_ELEMENT_VALUE(e) \
+  ((bson_element_value_t *)(e->as_typed.data + e->name_len))
+
+typedef union
+{
+  double dbl;
+  int32_t i32;
+  struct
+  {
+    int32_t len;
+    char str[0];
+  } str;
+} bson_element_value_t;
 
 struct _bson_element_t
 {
@@ -211,61 +224,68 @@ bson_element_stream_get_size (bson_element_t *e)
   return e->len + e->name_len + 1;
 }
 
-static inline bson_element_t *
-bson_element_data_type_set (bson_element_t *e, bson_element_type_t type,
-			    const uint8_t *data, uint32_t size)
+static inline bson_element_value_t *
+bson_element_data_type_get (bson_element_t *e, bson_element_type_t type)
 {
-  return bson_element_data_set (bson_element_type_set (e, type), data, size);
-}
-
-static inline lmc_bool_t
-bson_element_data_type_get (bson_element_t *e, bson_element_type_t type,
-			    uint8_t *oval, uint32_t size)
-{
-  const uint8_t *v;
-
-  if (!oval)
-    return FALSE;
-
-  if (bson_element_type_get (e) != type)
-    return FALSE;
-
-  v = bson_element_data_get (e);
-  if (v)
-    memcpy (oval, v, size);
-  return (v != NULL);
+  if (bson_element_type_get (e) != type || e->len == 0)
+    return NULL;
+  return BSON_ELEMENT_VALUE (e);
 }
 
 bson_element_t *
 bson_element_value_set_double (bson_element_t *e,
 			       double val)
 {
-  return bson_element_data_type_set (e, BSON_TYPE_DOUBLE,
-				     (uint8_t *)&val, sizeof (double));
+  bson_element_t *ne;
+
+  if (!e)
+    return NULL;
+
+  ne = bson_element_type_set (e, BSON_TYPE_DOUBLE);
+  BSON_ELEMENT_VALUE (e)->dbl = val;
+  ne->len = sizeof (double);
+  return ne;
 }
 
 lmc_bool_t
 bson_element_value_get_double (bson_element_t *e,
 			       double *oval)
 {
-  return bson_element_data_type_get (e, BSON_TYPE_DOUBLE, (uint8_t *)oval,
-				     sizeof (double));
+  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_DOUBLE);
+
+  if (!v || !oval)
+    return FALSE;
+
+  *oval = v->dbl;
+  return TRUE;
 }
 
 bson_element_t *
 bson_element_value_set_int32 (bson_element_t *e,
 			      int32_t val)
 {
-  return bson_element_data_type_set (e, BSON_TYPE_INT32,
-				     (uint8_t *)&val, sizeof (double));
+  bson_element_t *ne;
+
+  if (!e)
+    return NULL;
+
+  ne = bson_element_type_set (e, BSON_TYPE_INT32);
+  BSON_ELEMENT_VALUE (e)->i32 = val;
+  ne->len = sizeof (int32_t);
+  return ne;
 }
 
 lmc_bool_t
 bson_element_value_get_int32 (bson_element_t *e,
 			      int32_t *oval)
 {
-  return bson_element_data_type_get (e, BSON_TYPE_INT32, (uint8_t *)oval,
-				     sizeof (int32_t));
+  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_INT32);
+
+  if (!v || !oval)
+    return FALSE;
+
+  *oval = v->i32;
+  return TRUE;
 }
 
 bson_element_t *
@@ -276,11 +296,16 @@ bson_element_value_set_string (bson_element_t *e,
   int32_t l = length;
   bson_element_t *ne;
 
+  if (!e)
+    return NULL;
+
   if (l < 0)
     l = strlen (val);
 
-  ne = bson_element_data_type_set (e, BSON_TYPE_STRING, (uint8_t *)&l,
-				   sizeof (int32_t));
+  ne = bson_element_type_set (e, BSON_TYPE_STRING);
+  BSON_ELEMENT_VALUE (e)->str.len = l;
+  ne->len = sizeof (int32_t) - 1;
+
   ne = bson_element_data_append (ne, (uint8_t *)val, l);
   return bson_element_data_append (ne, (uint8_t *)"\0", 1);
 }
@@ -289,16 +314,11 @@ lmc_bool_t
 bson_element_value_get_string (bson_element_t *e,
 			       const char **oval)
 {
-  const uint8_t *v;
+  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_STRING);
 
-  if (!oval)
+  if (!v || !oval)
     return FALSE;
 
-  if (bson_element_type_get (e) != BSON_TYPE_STRING)
-    return FALSE;
-
-  v = bson_element_data_get (e);
-  if (v)
-    *oval = (char *)(v + sizeof (int32_t));
-  return (v != NULL);
+  *oval = v->str.str;
+  return TRUE;
 }
