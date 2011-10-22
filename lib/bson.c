@@ -65,15 +65,22 @@ struct _bson_t
 };
 
 bson_t *
-bson_new (void)
+bson_new_sized (uint32_t size)
 {
   bson_t *b;
 
-  b = (bson_t *)calloc (1, sizeof (bson_t));
+  b = (bson_t *)calloc (1, sizeof (bson_t) + size);
 
   b->ref = 1;
+  b->stream.alloc = size;
 
   return b;
+}
+
+bson_t *
+bson_new (void)
+{
+  return bson_new_sized (0);
 }
 
 bson_t *

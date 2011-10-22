@@ -39,9 +39,18 @@ typedef struct _bson_t bson_t;
 
 /** Create a new BSON object.
  *
- * @returns A newly allocate BSON object.
+ * @returns A newly allocated BSON object.
  */
 bson_t *bson_new (void);
+
+/** Create a new BSON object, with preallocated space.
+ *
+ * @param size is the amount of space to preallocate for the final
+ * representation.
+ *
+ * @returns A newly allocated BSON object, with preallocated space.
+ */
+bson_t *bson_new_sized (uint32_t size);
 
 /** Increase the reference count of a BSON object.
  *

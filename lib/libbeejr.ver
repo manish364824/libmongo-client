@@ -29,6 +29,7 @@ global:
   bson_element_create;
 
   bson_new;
+  bson_new_sized;
   bson_ref;
   bson_unref;
 

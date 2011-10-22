@@ -13,6 +13,16 @@ START_TEST (test_bson_new)
 }
 END_TEST
 
+START_TEST (test_bson_new_sized)
+{
+  bson_t *b;
+
+  b = bson_new_sized (1024);
+  ck_assert (b != NULL);
+  bson_unref (b);
+}
+END_TEST
+
 START_TEST (test_bson_ref)
 {
   bson_t *b;
@@ -128,6 +138,7 @@ bson_suite (void)
 
   tc_core = tcase_create ("Core");
   tcase_add_test (tc_core, test_bson_new);
+  tcase_add_test (tc_core, test_bson_new_sized);
   tcase_add_test (tc_core, test_bson_ref);
   tcase_add_test (tc_core, test_bson_open_close);
   tcase_add_test (tc_core, test_bson_length);
