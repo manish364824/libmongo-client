@@ -46,6 +46,7 @@ struct _bson_t
   {
     uint32_t len;
     bson_node_t *head;
+    bson_node_t *tail;
 
     struct
     {
@@ -118,6 +119,7 @@ bson_reset (bson_t *b)
   b->stream.len = 0;
   b->elements.len = 0;
   b->elements.head = NULL;
+  b->elements.tail = NULL;
   return b;
 }
 
@@ -239,6 +241,9 @@ _bson_node_get_nth (bson_t *b, uint32_t n)
   uint32_t i;
   bson_node_t *node;
 
+  if (b->stream.len != 0)
+    return b->elements.index.ptrs[n - 1];
+
   node = b->elements.head;
 
   for (i = 1; i < n; i++)
@@ -257,7 +262,7 @@ bson_append_va (bson_t *b, va_list ap)
   if (!b || b->stream.len != 0)
     return b;
 
-  s = _bson_node_get_nth (b, b->elements.len);
+  s = b->elements.tail;
   if (!s)
     s = &dummy;
   t = s;
@@ -275,6 +280,7 @@ bson_append_va (bson_t *b, va_list ap)
   b->elements.len += c;
   if (!b->elements.head)
     b->elements.head = s->next;
+  b->elements.tail = t;
 
   return b;
 }
