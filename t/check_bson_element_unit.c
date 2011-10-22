@@ -85,16 +85,16 @@ START_TEST (test_bson_element_name_get)
   e = bson_element_new ();
   ck_assert_str_eq (bson_element_name_get (e), "");
 
-  bson_element_name_set (e, "test-name");
+  e = bson_element_name_set (e, "test-name");
   ck_assert_str_eq (bson_element_name_get (e), "test-name");
 
-  bson_element_name_set (e, "foo");
+  e = bson_element_name_set (e, "foo");
   ck_assert_str_eq (bson_element_name_get (e), "foo");
 
-  bson_element_name_set (e, "really-long-name");
+  e = bson_element_name_set (e, "really-long-name");
   ck_assert_str_eq (bson_element_name_get (e), "really-long-name");
 
-  bson_element_name_set (e, NULL);
+  e = bson_element_name_set (e, NULL);
   ck_assert_str_eq (bson_element_name_get (e), "");
   bson_element_unref (e);
 }
