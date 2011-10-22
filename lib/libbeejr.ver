@@ -36,6 +36,8 @@ global:
   bson_close;
 
   bson_length;
+  bson_data_get;
+  bson_data_get_size;
 
   bson_append;
   bson_new_build;

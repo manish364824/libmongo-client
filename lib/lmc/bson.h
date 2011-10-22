@@ -86,6 +86,28 @@ bson_t *bson_close (bson_t *b);
  */
 uint32_t bson_length (bson_t *b);
 
+/** Get the data stream of the BSON object.
+ *
+ * @param b is the BSON object whose data we want to retrieve.
+ *
+ * @returns The raw BSON data stream for the object. The returned data
+ * is a pointer to an internal structure, and must not be freed or
+ * modified. It is also only valid until the BSON object exists.
+ *
+ * @note The object must be closed!
+ */
+const uint8_t *bson_data_get (bson_t *b);
+
+/** Get the size of the BSON object's data stream.
+ *
+ * @param b is the BSON object whose data's length we want to see.
+ *
+ * @returns The length of the raw BSON data stream.
+ *
+ * @note The object must be closed!
+ */
+uint32_t bson_data_get_size (bson_t *b);
+
 /** @defgroup lmc_bson_builder Builder
  * @addtogroup lmc_bson_builder
  * @{

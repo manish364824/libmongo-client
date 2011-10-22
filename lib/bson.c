@@ -132,6 +132,22 @@ bson_length (bson_t *b)
   return b->elements.len;
 }
 
+const uint8_t *
+bson_data_get (bson_t *b)
+{
+  if (!b || !b->closed)
+    return NULL;
+  return b->stream.data;
+}
+
+uint32_t
+bson_data_get_size (bson_t *b)
+{
+  if (!b || !b->closed)
+    return 0;
+  return b->stream.len;
+}
+
 static inline bson_node_t *
 _bson_node_get_nth (bson_t *b, uint32_t n)
 {
