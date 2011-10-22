@@ -280,7 +280,7 @@ bson_element_value_set_double (bson_element_t *e,
   e = bson_element_type_set (e, BSON_TYPE_DOUBLE);
   e = bson_element_add_space (e, sizeof (double));
   BSON_ELEMENT_VALUE (e)->dbl = LMC_DOUBLE_TO_LE (val);
-  e->len = sizeof (double);
+  e->len = e->name_len + sizeof (double);
   return e;
 }
 
@@ -310,7 +310,7 @@ bson_element_value_set_int32 (bson_element_t *e,
   e = bson_element_type_set (e, BSON_TYPE_INT32);
   e = bson_element_add_space (e, sizeof (int32_t));
   BSON_ELEMENT_VALUE (e)->i32 = LMC_INT32_TO_LE (val);
-  e->len = sizeof (int32_t);
+  e->len = e->name_len + sizeof (int32_t);
   return e;
 }
 
