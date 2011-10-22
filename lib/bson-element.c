@@ -38,9 +38,15 @@ typedef bson_element_t *(*bson_element_value_set_va_cb) (bson_element_t *e,
 							 va_list ap);
 #define BSON_ELEMENT_VALUE_SET_VA(setter,type,args...)			\
   static bson_element_t *						\
-  _bson_element_value_set_##type##_va (bson_element_t *e, va_list ap)	\
+  _bson_element_value_set_##type##_va (bson_element_t *e, va_list aq)	\
   {									\
-    return bson_element_value_set_##setter (e, ## args );		\
+    bson_element_t *n;							\
+    va_list ap;								\
+									\
+    va_copy (ap, aq);							\
+    n = bson_element_value_set_##setter (e, ## args );			\
+    va_end (aq);							\
+    return n;								\
   }
 
 typedef union
@@ -345,8 +351,15 @@ bson_element_value_set_string (bson_element_t *e,
 static bson_element_t *
 _bson_element_value_set_STRING_va (bson_element_t *e, va_list ap)
 {
-  char *s = va_arg (ap, char *);
-  return bson_element_value_set_string (e, s, va_arg (ap, int32_t));
+  va_list aq;
+  char *s;
+  bson_element_t *n;
+
+  va_copy (aq, ap);
+  s = va_arg (aq, char *);
+  n = bson_element_value_set_string (e, s, va_arg (aq, int32_t));
+  va_end (aq);
+  return n;
 }
 
 lmc_bool_t

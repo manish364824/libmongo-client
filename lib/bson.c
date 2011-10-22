@@ -239,13 +239,15 @@ bson_add_elements_va (bson_t *b, va_list ap)
   bson_node_t *t, dummy;
   bson_element_t *e;
   uint32_t c = 0;
+  va_list aq;
 
   if (!b || b->stream.len != 0)
     return b;
 
   t = &dummy;
 
-  while ((e = va_arg (ap, bson_element_t *)) != NULL)
+  va_copy (aq, ap);
+  while ((e = va_arg (aq, bson_element_t *)) != NULL)
     {
       bson_node_t *n = (bson_node_t *)malloc (sizeof (bson_node_t));
       n->e = e;
@@ -255,6 +257,8 @@ bson_add_elements_va (bson_t *b, va_list ap)
       t = t->next;
       c++;
     }
+  va_end (aq);
+
   b->elements.len += c;
   t->next = b->elements.head;
   b->elements.head = dummy.next;
