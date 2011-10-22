@@ -39,9 +39,9 @@ bson_element_suite (void)
   Suite *s;
   TCase *tc;
 
-  s = suite_create ("BSON Elements");
+  s = suite_create ("BSON Elements functional tests");
 
-  tc = tcase_create ("Functional");
+  tc = tcase_create ("Core");
   tcase_add_test (tc, test_func_bson_element);
   suite_add_tcase (s, tc);
 
