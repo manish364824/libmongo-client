@@ -41,7 +41,6 @@ struct _bson_node_t
 struct _bson_t
 {
   sig_atomic_t ref;
-  lmc_bool_t closed;
 
   struct
   {
@@ -156,21 +155,19 @@ bson_flatten (bson_t *b)
 bson_t *
 bson_open (bson_t *b)
 {
-  if (!b || !b->closed)
+  if (!b || b->stream.len == 0)
     return b;
 
   b->stream.len = 0;
-  b->closed = FALSE;
   return b;
 }
 
 bson_t *
 bson_close (bson_t *b)
 {
-  if (!b || b->closed)
+  if (!b || b->stream.len != 0)
     return b;
 
-  b->closed = TRUE;
   return bson_flatten (b);
 }
 
@@ -185,7 +182,7 @@ bson_length (bson_t *b)
 const uint8_t *
 bson_data_get (bson_t *b)
 {
-  if (!b || !b->closed)
+  if (!b || b->stream.len == 0)
     return NULL;
   return b->stream.data;
 }
@@ -193,7 +190,7 @@ bson_data_get (bson_t *b)
 uint32_t
 bson_data_get_size (bson_t *b)
 {
-  if (!b || !b->closed)
+  if (!b)
     return 0;
   return b->stream.len;
 }
@@ -217,7 +214,7 @@ bson_append_va (bson_t *b, va_list ap)
   bson_element_t *e;
   uint32_t c = 0;
 
-  if (!b || b->closed)
+  if (!b || b->stream.len != 0)
     return b;
 
   s = _bson_node_get_nth (b, b->elements.len);
