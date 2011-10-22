@@ -242,6 +242,27 @@ bson_element_t *bson_element_value_set_double (bson_element_t *e,
 lmc_bool_t bson_element_value_get_double (bson_element_t *e,
 					  double *oval);
 
+
+/** Set the value of a BSON element to a 32bit integer.
+ *
+ * @param e is the element whose value to set.
+ * @param val is the value to set.
+ *
+ * @returns The BSON element with the value set, or NULL on error.
+ */
+bson_element_t *bson_element_value_set_int32 (bson_element_t *e,
+					      int32_t val);
+
+/** Get the value of a BSON element, as a 32bit integer type.
+ *
+ * @param e is the element whose value we want to retrieve.
+ * @param oval is the output variable to put the value into.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+lmc_bool_t bson_element_value_get_int32 (bson_element_t *e,
+					 int32_t *oval);
+
 /** @}
  * @}
  *@}

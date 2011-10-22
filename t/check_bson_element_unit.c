@@ -230,6 +230,31 @@ START_TEST (test_bson_element_value_double)
 }
 END_TEST
 
+START_TEST (test_bson_element_value_int32)
+{
+  bson_element_t *e;
+  int32_t d = 42, v = 0;
+
+  ck_assert (bson_element_value_set_int32 (NULL, d) == NULL);
+  ck_assert (bson_element_value_get_int32 (NULL, &v) == FALSE);
+
+  e = bson_element_new ();
+
+  ck_assert (bson_element_value_get_int32 (e, &v) == FALSE);
+
+  e = bson_element_value_set_int32 (e, d);
+  ck_assert (e != NULL);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_INT32);
+
+  ck_assert (bson_element_value_get_int32 (e, &v) == TRUE);
+  ck_assert (d == v);
+
+  ck_assert (bson_element_value_get_int32 (e, NULL) == FALSE);
+
+  bson_element_unref (e);
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -254,6 +279,7 @@ bson_element_suite (void)
 
   tc_access = tcase_create ("Accessors");
   tcase_add_test (tc_access, test_bson_element_value_double);
+  tcase_add_test (tc_access, test_bson_element_value_int32);
   suite_add_tcase (s, tc_access);
 
   return s;

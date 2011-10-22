@@ -251,3 +251,19 @@ bson_element_value_get_double (bson_element_t *e,
   return bson_element_data_type_get (e, BSON_TYPE_DOUBLE, (uint8_t *)oval,
 				     sizeof (double));
 }
+
+bson_element_t *
+bson_element_value_set_int32 (bson_element_t *e,
+			      int32_t val)
+{
+  return bson_element_data_type_set (e, BSON_TYPE_INT32,
+				     (uint8_t *)&val, sizeof (double));
+}
+
+lmc_bool_t
+bson_element_value_get_int32 (bson_element_t *e,
+			      int32_t *oval)
+{
+  return bson_element_data_type_get (e, BSON_TYPE_INT32, (uint8_t *)oval,
+				     sizeof (int32_t));
+}
