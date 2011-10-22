@@ -163,25 +163,36 @@ bson_element_data_get_size (bson_element_t *e)
 }
 
 bson_element_t *
+bson_element_data_reset (bson_element_t *e)
+{
+  if (!e)
+    return NULL;
+  e->len = e->name_len;
+  return e;
+}
+
+bson_element_t *
+bson_element_data_append (bson_element_t *e, const uint8_t *data,
+			  uint32_t size)
+{
+  if (!e || !data || size == 0)
+    return e;
+
+  e = (bson_element_t *)realloc (e, sizeof (bson_element_t) +
+				 e->len + size + 1);
+  memcpy (e->as_typed.data + e->len + 1, data, size);
+  e->len += size;
+  return e;
+}
+
+bson_element_t *
 bson_element_data_set (bson_element_t *e, const uint8_t *data,
 		       uint32_t size)
 {
-  uint32_t new_size;
-
   if (!e)
     return NULL;
-  if (size == 0 || data == NULL)
-    {
-      e->len = e->name_len;
-      return e;
-    }
-
-  new_size = e->name_len + size;
-  if (new_size > e->len)
-    e = (bson_element_t *)realloc (e, sizeof (bson_element_t) + new_size + 1);
-  memcpy (e->as_typed.data + e->name_len + 1, data, size);
-  e->len = new_size;
-  return e;
+  bson_element_data_reset (e);
+  return bson_element_data_append (e, data, size);
 }
 
 const uint8_t *

@@ -162,6 +162,26 @@ const uint8_t *bson_element_data_get (bson_element_t *e);
  */
 int32_t bson_element_data_get_size (bson_element_t *e);
 
+/** Reset the raw data part of a BSON element.
+ *
+ * @param e is the element whose data to truncate.
+ *
+ * @returns The element with its data part truncated.
+ */
+bson_element_t *bson_element_data_reset (bson_element_t *e);
+
+/** Append to the raw data part of a BSON element.
+ *
+ * @param e is the element whose data to append to.
+ * @param data is the data to append to the element.
+ * @param size is the size of the data.
+ *
+ * @returns The element with its data part appended to.
+ */
+bson_element_t *bson_element_data_append (bson_element_t *e,
+					  const uint8_t *data,
+					  uint32_t size);
+
 /** Set the raw data part of a BSON element.
  *
  * @param e is the element whose data to set.

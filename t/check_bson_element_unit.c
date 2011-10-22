@@ -123,6 +123,46 @@ START_TEST (test_bson_element_data_set)
 }
 END_TEST
 
+START_TEST (test_bson_element_data_reset)
+{
+  bson_element_t *e;
+  char *str = "test string";
+
+  ck_assert (bson_element_data_reset (NULL) == NULL);
+
+  e = bson_element_new ();
+  e = bson_element_data_set (e, (uint8_t *)str, strlen (str) + 1);
+
+  e = bson_element_data_reset (e);
+  ck_assert_int_eq (bson_element_data_get_size (e), 0);
+
+  bson_element_unref (e);
+}
+END_TEST
+
+START_TEST (test_bson_element_data_append)
+{
+  bson_element_t *e;
+  char *str1 = "test ", *str2 = "string";
+
+  ck_assert (bson_element_data_append (NULL, (uint8_t *)str1,
+				       strlen (str1)) == NULL);
+
+  e = bson_element_new ();
+
+  e = bson_element_data_append (e, (uint8_t *)str1, strlen (str1));
+  ck_assert (e != NULL);
+  ck_assert_int_eq (bson_element_data_get_size (e), (int32_t)strlen (str1));
+
+  e = bson_element_data_append (e, (uint8_t *)str2, strlen (str2) + 1);
+  ck_assert (e != NULL);
+  ck_assert_int_eq (bson_element_data_get_size (e),
+		    (int32_t)(strlen (str1) + strlen (str2) + 1));
+
+  bson_element_unref (e);
+}
+END_TEST
+
 START_TEST (test_bson_element_data_get)
 {
   bson_element_t *e;
@@ -205,6 +245,8 @@ bson_element_suite (void)
   tcase_add_test (tc_core, test_bson_element_name_set);
   tcase_add_test (tc_core, test_bson_element_name_get);
   tcase_add_test (tc_core, test_bson_element_data_set);
+  tcase_add_test (tc_core, test_bson_element_data_reset);
+  tcase_add_test (tc_core, test_bson_element_data_append);
   tcase_add_test (tc_core, test_bson_element_data_get);
   tcase_add_test (tc_core, test_bson_element_stream);
   suite_add_tcase (s, tc_core);

@@ -8,6 +8,8 @@ global:
   bson_element_name_set;
   bson_element_name_get;
 
+  bson_element_data_reset;
+  bson_element_data_append;
   bson_element_data_set;
   bson_element_data_get;
   bson_element_data_get_size;
