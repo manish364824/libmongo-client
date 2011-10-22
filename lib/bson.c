@@ -46,7 +46,6 @@ struct _bson_t
   {
     uint32_t len;
     bson_node_t *head;
-    bson_node_t *tail;
 
     struct
     {
@@ -110,7 +109,7 @@ _bson_elements_drop (bson_t *b)
 }
 
 bson_t *
-bson_reset (bson_t *b)
+bson_reset_elements (bson_t *b)
 {
   if (!b)
     return NULL;
@@ -119,7 +118,6 @@ bson_reset (bson_t *b)
   b->stream.len = 0;
   b->elements.len = 0;
   b->elements.head = NULL;
-  b->elements.tail = NULL;
   return b;
 }
 
@@ -253,19 +251,16 @@ _bson_node_get_nth (bson_t *b, uint32_t n)
 }
 
 static inline bson_t *
-bson_append_va (bson_t *b, va_list ap)
+bson_add_elements_va (bson_t *b, va_list ap)
 {
-  bson_node_t *s, *t, dummy;
+  bson_node_t *t, dummy;
   bson_element_t *e;
   uint32_t c = 0;
 
   if (!b || b->stream.len != 0)
     return b;
 
-  s = b->elements.tail;
-  if (!s)
-    s = &dummy;
-  t = s;
+  t = &dummy;
 
   while ((e = va_arg (ap, bson_element_t *)) != NULL)
     {
@@ -278,20 +273,19 @@ bson_append_va (bson_t *b, va_list ap)
       c++;
     }
   b->elements.len += c;
-  if (!b->elements.head)
-    b->elements.head = s->next;
-  b->elements.tail = t;
+  t->next = b->elements.head;
+  b->elements.head = dummy.next;
 
   return b;
 }
 
 bson_t *
-bson_append (bson_t *b, ...)
+bson_add_elements (bson_t *b, ...)
 {
   va_list ap;
 
   va_start (ap, b);
-  b = bson_append_va (b, ap);
+  b = bson_add_elements_va (b, ap);
   va_end (ap);
   return b;
 }
@@ -307,8 +301,8 @@ bson_new_build (bson_element_t *e, ...)
 
   b = bson_new ();
   va_start (ap, e);
-  b = bson_append (b, e, BSON_END);
-  b = bson_append_va (b, ap);
+  b = bson_add_elements (b, e, BSON_END);
+  b = bson_add_elements_va (b, ap);
   va_end (ap);
 
   if (bson_length (b) == 0)

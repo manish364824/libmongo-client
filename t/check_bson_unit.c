@@ -89,7 +89,7 @@ START_TEST (test_bson_data)
 }
 END_TEST
 
-START_TEST (test_bson_append)
+START_TEST (test_bson_add_elements)
 {
   bson_t *b;
   bson_element_t *e;
@@ -98,12 +98,12 @@ START_TEST (test_bson_append)
 
   b = bson_new ();
 
-  ck_assert (bson_append (NULL, e, BSON_END) == NULL);
+  ck_assert (bson_add_elements (NULL, e, BSON_END) == NULL);
 
-  b = bson_append (b, e, bson_element_ref (e), BSON_END);
+  b = bson_add_elements (b, e, bson_element_ref (e), BSON_END);
   ck_assert_int_eq (bson_length (b), 2);
 
-  b = bson_append (b, bson_element_ref (e), BSON_END);
+  b = bson_add_elements (b, bson_element_ref (e), BSON_END);
   ck_assert_int_eq (bson_length (b), 3);
 
   bson_unref (b);
@@ -127,21 +127,21 @@ START_TEST (test_bson_new_build)
 }
 END_TEST
 
-START_TEST (test_bson_reset)
+START_TEST (test_bson_reset_elements)
 {
   bson_t *b;
 
-  ck_assert (bson_reset (NULL) == NULL);
+  ck_assert (bson_reset_elements (NULL) == NULL);
 
   b = bson_new ();
-  ck_assert (bson_reset (b) == b);
+  ck_assert (bson_reset_elements (b) == b);
 
-  b = bson_append (b, bson_element_create ("hello",
-					   BSON_TYPE_STRING, "world", -1),
-		   BSON_END);
+  b = bson_add_elements
+    (b, bson_element_create ("hello", BSON_TYPE_STRING, "world", -1),
+     BSON_END);
   b = bson_close (b);
 
-  ck_assert (bson_reset (b) == b);
+  ck_assert (bson_reset_elements (b) == b);
   ck_assert_int_eq (bson_length (b), 0);
 
   bson_unref (b);
@@ -167,9 +167,9 @@ bson_suite (void)
   suite_add_tcase (s, tc_core);
 
   tc_manip = tcase_create ("BSON manipulation");
-  tcase_add_test (tc_manip, test_bson_append);
+  tcase_add_test (tc_manip, test_bson_add_elements);
   tcase_add_test (tc_manip, test_bson_new_build);
-  tcase_add_test (tc_manip, test_bson_reset);
+  tcase_add_test (tc_manip, test_bson_reset_elements);
   suite_add_tcase (s, tc_manip);
 
   return s;

@@ -52,17 +52,6 @@ bson_t *bson_new (void);
  */
 bson_t *bson_new_sized (uint32_t size);
 
-/** Reset a BSON object.
- *
- * Removes all elements from the object, without completely destroying
- * it.
- *
- * @param b is the BSON object to drop elements from.
- *
- * @returns The BSON object with its elements removed.
- */
-bson_t *bson_reset (bson_t *b);
-
 /** Increase the reference count of a BSON object.
  *
  * @param b is the object to increase the refcount of.
@@ -136,20 +125,31 @@ uint32_t bson_data_get_size (bson_t *b);
 /** End of element list signal. */
 #define BSON_END NULL
 
-/** Append elements to a BSON object.
+/** Add elements to a BSON object.
  *
  * @param b is the BSON object to append to.
  *
  * It must be followed by #bson_element_t objects, terminated by
- * #BSON_END, and all of them will be appended to the object.
+ * #BSON_END, and all of them will be added to the object.
  *
- * @returns The BSON object with the elements appended.
+ * @returns The BSON object with the elements added.
  *
  * @note The elements' refcount is NOT incremented by this function,
  * if one wishes to use them after unrefing the BSON object, the
  * refcount must be incremented manually.
  */
-bson_t *bson_append (bson_t *b, ...);
+bson_t *bson_add_elements (bson_t *b, ...);
+
+/** Reset a BSON object.
+ *
+ * Removes all elements from the object, without completely destroying
+ * it.
+ *
+ * @param b is the BSON object to drop elements from.
+ *
+ * @returns The BSON object with its elements removed.
+ */
+bson_t *bson_reset_elements (bson_t *b);
 
 /** Build a new BSON object from elements.
  *

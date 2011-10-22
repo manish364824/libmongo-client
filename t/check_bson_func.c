@@ -11,15 +11,15 @@ START_TEST (test_func_bson_close)
   b = bson_new();
   e = bson_element_create ("hello", BSON_TYPE_STRING, "world", -1);
 
-  b = bson_append (b, e, bson_element_ref (e), BSON_END);
+  b = bson_add_elements (b, e, bson_element_ref (e), BSON_END);
   ck_assert_int_eq (bson_length (b), 2);
 
   b = bson_close (b);
-  b = bson_append (b, e, BSON_END);
+  b = bson_add_elements (b, e, BSON_END);
   ck_assert_int_eq (bson_length (b), 2);
 
   b = bson_open (b);
-  b = bson_append (b, bson_element_ref (e), BSON_END);
+  b = bson_add_elements (b, bson_element_ref (e), BSON_END);
   ck_assert_int_eq (bson_length (b), 3);
 
   bson_unref (b);
