@@ -247,15 +247,13 @@ bson_element_t *
 bson_element_value_set_double (bson_element_t *e,
 			       double val)
 {
-  bson_element_t *ne;
-
   if (!e)
     return NULL;
 
-  ne = bson_element_type_set (e, BSON_TYPE_DOUBLE);
-  bson_element_ensure_space (e, sizeof (double));
+  e = bson_element_type_set (e, BSON_TYPE_DOUBLE);
+  e = bson_element_ensure_space (e, sizeof (double));
   BSON_ELEMENT_VALUE (e)->dbl = LMC_DOUBLE_TO_LE (val);
-  return ne;
+  return e;
 }
 
 lmc_bool_t
@@ -275,15 +273,13 @@ bson_element_t *
 bson_element_value_set_int32 (bson_element_t *e,
 			      int32_t val)
 {
-  bson_element_t *ne;
-
   if (!e)
     return NULL;
 
-  ne = bson_element_type_set (e, BSON_TYPE_INT32);
-  bson_element_ensure_space (e, sizeof (int32_t));
+  e = bson_element_type_set (e, BSON_TYPE_INT32);
+  e = bson_element_ensure_space (e, sizeof (int32_t));
   BSON_ELEMENT_VALUE (e)->i32 = LMC_INT32_TO_LE (val);
-  return ne;
+  return e;
 }
 
 lmc_bool_t
@@ -305,7 +301,6 @@ bson_element_value_set_string (bson_element_t *e,
 			       int32_t length)
 {
   int32_t l = length;
-  bson_element_t *ne;
 
   if (!e)
     return NULL;
@@ -313,13 +308,13 @@ bson_element_value_set_string (bson_element_t *e,
   if (l < 0)
     l = strlen (val);
 
-  ne = bson_element_type_set (e, BSON_TYPE_STRING);
-  bson_element_ensure_space (e, sizeof (int32_t));
+  e = bson_element_type_set (e, BSON_TYPE_STRING);
+  e = bson_element_ensure_space (e, sizeof (int32_t));
   BSON_ELEMENT_VALUE (e)->str.len = LMC_INT32_TO_LE (l);
-  ne->len--;
+  e->len--;
 
-  ne = bson_element_data_append (ne, (uint8_t *)val, l);
-  return bson_element_data_append (ne, (uint8_t *)"\0", 1);
+  e = bson_element_data_append (e, (uint8_t *)val, l);
+  return bson_element_data_append (e, (uint8_t *)"\0", 1);
 }
 
 lmc_bool_t
