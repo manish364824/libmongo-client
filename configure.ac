@@ -14,9 +14,8 @@ AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_CONFIG_HEADER(config.h)
 
-AC_ARG_WITH([versioned-symbols], AC_HELP_STRING([--with-versioned-symbols],[Use versioned symbols]),[dnl
-vsymldflags="-Wl,--version-script,\${srcdir}/libmongo-client.ver -Wl,-O1"
-],[vsymldflags=])
+AC_ARG_WITH([versioned-symbols], AC_HELP_STRING([--with-versioned-symbols],[Use versioned symbols]),
+            [with_symver="yes"], [with_symver="no"])
 
 dnl ***************************************************************************
 dnl Checks for programs.
@@ -57,12 +56,9 @@ dnl ***************************************************************************
 AC_C_INLINE
 
 AC_MSG_CHECKING([whether to enable symbol versioning])
-AC_SUBST(vsymldflags)
-if test -z "${vsymldflags}"; then
-   AC_MSG_RESULT([no])
-else
-   AC_MSG_RESULT([yes, ${vsymldflags}])
-fi
+AC_MSG_RESULT([$with_symver])
+
+AM_CONDITIONAL(WITH_SYMVER, [test "$with_symver" = "yes"])
 
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [package name])
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [version number])

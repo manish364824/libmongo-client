@@ -2,8 +2,14 @@ LMC_CURRENT			= 4
 LMC_REVISION			= 0
 LMC_AGE				= 0
 
+if WITH_SYMVER
+LMC_SYMVER			= -Wl,--version-script,${srcdir}/libmongo-client.ver
+else
+LMC_SYMVER			=
+endif
+
 lib_LTLIBRARIES			= libmongo-client.la
-libmongo_client_la_LDFLAGS	= -version-info ${LMC_CURRENT}:${LMC_REVISION}:${LMC_AGE} @vsymldflags@
+libmongo_client_la_LDFLAGS	= -version-info ${LMC_CURRENT}:${LMC_REVISION}:${LMC_AGE} ${LMC_SYMVER}
 
 noinst_LTLIBRARIES		= libmongo-client-internal.la
 
