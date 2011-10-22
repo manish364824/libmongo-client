@@ -152,14 +152,14 @@ bson_element_name_get (bson_element_t *e)
 }
 
 static inline bson_element_t *
-bson_element_ensure_space (bson_element_t *e, uint32_t size)
+bson_element_add_space (bson_element_t *e, int32_t size)
 {
-  if (e->alloc < size)
+  if (size > 0)
     {
-      e = (bson_element_t *)realloc (e, sizeof (bson_element_t) + size);
-      e->alloc = size;
+      e = (bson_element_t *)realloc (e, sizeof (bson_element_t) +
+				     e->alloc + size);
+      e->alloc += size;
     }
-  e->len = size;
   return e;
 }
 
@@ -175,7 +175,8 @@ bson_element_name_set (bson_element_t *e,
       size_t name_len = strlen (name) + 1;
       uint32_t size = e->len - e->name_len;
 
-      e = bson_element_ensure_space (e, size + name_len);
+      e = bson_element_add_space (e, name_len - e->name_len);
+      e->len = size + name_len;
 
       memmove (e->as_typed.data + name_len,
 	       e->as_typed.data + e->name_len,
@@ -226,8 +227,9 @@ bson_element_data_append (bson_element_t *e, const uint8_t *data,
   if (!e || !data || size == 0)
     return e;
 
-  e = bson_element_ensure_space (e, e->len + size);
-  memcpy (e->as_typed.data + e->len - size, data, size);
+  e = bson_element_add_space (e, size);
+  memcpy (e->as_typed.data + e->len, data, size);
+  e->len += size;
   return e;
 }
 
@@ -276,8 +278,9 @@ bson_element_value_set_double (bson_element_t *e,
     return NULL;
 
   e = bson_element_type_set (e, BSON_TYPE_DOUBLE);
-  e = bson_element_ensure_space (e, e->name_len + sizeof (double));
+  e = bson_element_add_space (e, sizeof (double));
   BSON_ELEMENT_VALUE (e)->dbl = LMC_DOUBLE_TO_LE (val);
+  e->len = sizeof (double);
   return e;
 }
 
@@ -305,8 +308,9 @@ bson_element_value_set_int32 (bson_element_t *e,
     return NULL;
 
   e = bson_element_type_set (e, BSON_TYPE_INT32);
-  e = bson_element_ensure_space (e, e->name_len + sizeof (int32_t));
+  e = bson_element_add_space (e, sizeof (int32_t));
   BSON_ELEMENT_VALUE (e)->i32 = LMC_INT32_TO_LE (val);
+  e->len = sizeof (int32_t);
   return e;
 }
 
@@ -340,8 +344,9 @@ bson_element_value_set_string (bson_element_t *e,
     l = strlen (val);
 
   e = bson_element_type_set (e, BSON_TYPE_STRING);
-  e = bson_element_ensure_space (e, e->name_len + sizeof (int32_t));
+  e = bson_element_add_space (e, sizeof (int32_t));
   BSON_ELEMENT_VALUE (e)->str.len = LMC_INT32_TO_LE (l + 1);
+  e->len = sizeof (int32_t);
 
   e = bson_element_data_append (e, (uint8_t *)val, l);
   return bson_element_data_append (e, (uint8_t *)"\0", 1);
