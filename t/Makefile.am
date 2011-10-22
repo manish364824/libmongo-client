@@ -1,5 +1,5 @@
 UNIT_TESTS	= check_bson_element_unit check_bson_unit
-FUNC_TESTS	= check_bson_element_func
+FUNC_TESTS	= check_bson_element_func check_bson_func
 PERF_TESTS	=
 
 TESTS		= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}

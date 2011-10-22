@@ -36,4 +36,6 @@ global:
   bson_close;
 
   bson_length;
+
+  bson_append;
 };

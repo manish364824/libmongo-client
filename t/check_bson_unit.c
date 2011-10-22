@@ -58,12 +58,33 @@ START_TEST (test_bson_length)
 }
 END_TEST
 
+START_TEST (test_bson_append)
+{
+  bson_t *b;
+  bson_element_t *e;
+
+  e = bson_element_create ("hello", BSON_TYPE_STRING, "world", -1);
+
+  b = bson_new ();
+
+  ck_assert (bson_append (NULL, e, BSON_END) == NULL);
+
+  b = bson_append (b, e, bson_element_ref (e), BSON_END);
+  ck_assert_int_eq (bson_length (b), 2);
+
+  b = bson_append (b, bson_element_ref (e), BSON_END);
+  ck_assert_int_eq (bson_length (b), 3);
+
+  bson_unref (b);
+}
+END_TEST
+
 Suite *
 bson_suite (void)
 {
   Suite *s;
 
-  TCase *tc_core;
+  TCase *tc_core, *tc_manip;
 
   s = suite_create ("BSON unit tests");
 
@@ -73,6 +94,10 @@ bson_suite (void)
   tcase_add_test (tc_core, test_bson_open_close);
   tcase_add_test (tc_core, test_bson_length);
   suite_add_tcase (s, tc_core);
+
+  tc_manip = tcase_create ("BSON manipulation");
+  tcase_add_test (tc_manip, test_bson_append);
+  suite_add_tcase (s, tc_manip);
 
   return s;
 }

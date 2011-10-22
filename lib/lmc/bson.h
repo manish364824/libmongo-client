@@ -86,7 +86,27 @@ bson_t *bson_close (bson_t *b);
  */
 uint32_t bson_length (bson_t *b);
 
+/** @defgroup lmc_bson_builder Builder
+ * @addtogroup lmc_bson_builder
+ * @{
+ */
+
+/** End of element list signal. */
+#define BSON_END NULL
+
+/** Append elements to a BSON object.
+ *
+ * @param b is the BSON object to append to.
+ *
+ * It must be followed by #bson_element_t objects, terminated by
+ * #BSON_END, and all of them will be appended to the object.
+ *
+ * @returns The BSON object with the elements appended.
+ */
+bson_t *bson_append (bson_t *b, ...);
+
 /** @}
+ * @}
  */
 
 LMC_END_DECLS
