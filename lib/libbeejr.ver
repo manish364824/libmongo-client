@@ -30,6 +30,7 @@ global:
 
   bson_new;
   bson_new_sized;
+  bson_reset;
   bson_ref;
   bson_unref;
 

@@ -52,6 +52,17 @@ bson_t *bson_new (void);
  */
 bson_t *bson_new_sized (uint32_t size);
 
+/** Reset a BSON object.
+ *
+ * Removes all elements from the object, without completely destroying
+ * it.
+ *
+ * @param b is the BSON object to drop elements from.
+ *
+ * @returns The BSON object with its elements removed.
+ */
+bson_t *bson_reset (bson_t *b);
+
 /** Increase the reference count of a BSON object.
  *
  * @param b is the object to increase the refcount of.

@@ -83,6 +83,38 @@ bson_new (void)
   return bson_new_sized (0);
 }
 
+static inline void
+_bson_elements_drop (bson_t *b)
+{
+  if (b->elements.len > 0)
+    {
+      bson_node_t *o = b->elements.head;
+
+      do
+	{
+	  bson_node_t *n = o->next;
+
+	  bson_element_unref (o->e);
+	  free (o);
+	  o = n;
+	}
+      while (o);
+    }
+}
+
+bson_t *
+bson_reset (bson_t *b)
+{
+  if (!b)
+    return NULL;
+
+  _bson_elements_drop (b);
+  b->stream.len = 0;
+  b->elements.len = 0;
+  b->elements.head = NULL;
+  return b;
+}
+
 bson_t *
 bson_ref (bson_t *b)
 {
@@ -99,21 +131,7 @@ bson_unref (bson_t *b)
   b->ref--;
   if (b->ref <= 0)
     {
-      if (b->elements.len > 0)
-	{
-	  bson_node_t *o = b->elements.head;
-
-	  do
-	    {
-	      bson_node_t *n = o->next;
-
-	      bson_element_unref (o->e);
-	      free (o);
-	      o = n;
-	    }
-	  while (o);
-	}
-
+      _bson_elements_drop (b);
       free (b);
       return NULL;
     }
