@@ -29,7 +29,7 @@ END_TEST
 START_TEST (test_func_bson_flatten)
 {
   bson_t *b;
-  uint32_t size;
+  uint32_t size, size2;
 
   b = bson_new_build
     (bson_element_create ("hello", BSON_TYPE_STRING, "world", -1),
@@ -43,8 +43,15 @@ START_TEST (test_func_bson_flatten)
   b = bson_add_elements (b, bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14),
 			 BSON_END);
   b = bson_close (b);
+  size2 = bson_data_get_size (b);
+  _ck_assert_int (size2, >, size);
 
-  _ck_assert_int (bson_data_get_size (b), >, size);
+  b = bson_reset_elements (b);
+  b = bson_add_elements (b, bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14),
+			 BSON_END);
+  b = bson_close (b);
+
+  _ck_assert_int (bson_data_get_size (b), <, size2);
 
   bson_unref (b);
 }
