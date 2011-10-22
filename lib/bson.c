@@ -107,16 +107,20 @@ bson_unref (bson_t *b)
 bson_t *
 bson_open (bson_t *b)
 {
-  if (b)
-    b->closed = FALSE;
+  if (!b || !b->closed)
+    return b;
+
+  b->closed = FALSE;
   return b;
 }
 
 bson_t *
 bson_close (bson_t *b)
 {
-  if (b)
-    b->closed = TRUE;
+  if (!b || b->closed)
+    return b;
+
+  b->closed = TRUE;
   return b;
 }
 
