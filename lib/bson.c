@@ -114,6 +114,13 @@ _bson_index_rebuild (bson_t *b)
     }
 }
 
+static inline void
+_bson_index_add (bson_t *b, uint32_t n, bson_node_t *node)
+{
+  _bson_index_ensure_size (b);
+  b->elements.index.ptrs[n] = node;
+}
+
 bson_t *
 bson_new_sized (uint32_t size)
 {
@@ -212,7 +219,6 @@ bson_flatten (bson_t *b)
   b->stream.len = size;
   b->stream.with_size.size = LMC_INT32_TO_LE (size);
 
-  _bson_index_rebuild (b);
   index = b->elements.index.ptrs;
   for (i = 1; i <= bson_length (b); i++)
     {
@@ -289,6 +295,8 @@ bson_add_elements_va (bson_t *b, va_list ap)
       n->e = e;
       n->next = NULL;
 
+      _bson_index_add (b, b->elements.len + c, n);
+
       t->next = n;
       t = t->next;
       c++;
@@ -334,19 +342,8 @@ bson_new_build (bson_element_t *e, ...)
 bson_element_t *
 bson_get_nth_element (bson_t *b, uint32_t n)
 {
-  uint32_t i;
-  bson_node_t *node;
-
   if (!b || n > bson_length (b))
     return NULL;
 
-  if (b->stream.len != 0)
-    return b->elements.index.ptrs[n - 1]->e;
-
-  node = b->elements.head;
-
-  for (i = 1; i < n; i++)
-    node = node->next;
-
-  return node->e;
+  return b->elements.index.ptrs[n - 1]->e;
 }
