@@ -192,8 +192,7 @@ bson_unref (bson_t *b)
   if (b->ref <= 0)
     {
       _bson_elements_drop (b);
-      if (b->elements.index.ptrs)
-	free (b->elements.index.ptrs);
+      free (b->elements.index.ptrs);
       free (b);
       return NULL;
     }
