@@ -387,3 +387,33 @@ bson_key_get (bson_t *b, const char *key)
 {
   return bson_get_nth_element (b, bson_key_find (b, key));
 }
+
+bson_t *
+bson_data_parse (bson_t *b, const uint8_t *data)
+{
+  const uint8_t *t;
+  uint32_t *size;
+
+  if (!b || !data)
+    return NULL;
+
+  b = bson_reset_elements (b);
+
+  size = (uint32_t *)data;
+  *size -= sizeof (int32_t) + 1;
+
+  t = data + sizeof (int32_t);
+
+  while ((t - data) < *size)
+    {
+      bson_element_t *e = bson_element_new_from_data (t);
+
+      if (!e)
+	break;
+
+      b = bson_add_elements (b, e, BSON_END);
+      t += bson_element_stream_get_size (e);
+    }
+
+  return b;
+}

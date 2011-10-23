@@ -40,6 +40,7 @@ global:
   bson_length;
   bson_data_get;
   bson_data_get_size;
+  bson_data_parse;
 
   bson_add_elements;
   bson_reset_elements;

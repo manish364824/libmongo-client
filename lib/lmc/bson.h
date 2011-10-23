@@ -166,6 +166,19 @@ bson_t *bson_reset_elements (bson_t *b);
  */
 bson_t *bson_new_build (bson_element_t *e, ...);
 
+/** Replace the BSON contents with data from a stream.
+ *
+ * @param b is the BSON object whose data to replace.
+ * @param data is the raw BSON datastream.
+ *
+ * @returns A BSON object with its contents replaced.
+ *
+ * @note If the datastream contains unparsable BSON elements, it will
+ * only be parsed up to that point, and no rollback will be attempted,
+ * thus one can end up with partial results.
+ */
+bson_t *bson_data_parse (bson_t *b, const uint8_t *data);
+
 /** @} */
 
 /** @defgroup lmc_bson_accessors Accessors

@@ -263,12 +263,61 @@ START_TEST (test_bson_key_get)
 }
 END_TEST
 
+START_TEST (test_bson_data_parse)
+{
+  bson_t *old, *new;
+  bson_element_t *e;
+
+  old = bson_new_build
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
+     bson_element_create ("answer", BSON_TYPE_INT32, 42),
+     bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14),
+     BSON_END);
+  old = bson_close (old);
+
+  ck_assert (bson_data_parse (NULL, bson_data_get (old)) == NULL);
+
+  new = bson_new_sized (bson_data_get_size (old));
+  ck_assert (bson_data_parse (new, NULL) == NULL);
+
+  new = bson_data_parse (new, bson_data_get (old));
+  new = bson_close (new);
+
+  ck_assert_int_eq (bson_data_get_size (old),
+		    bson_data_get_size (new));
+
+  bson_unref (new);
+
+  /* Add an invalid element... */
+  old = bson_open (old);
+  e = bson_element_new ();
+  e = bson_element_type_set (e, 42);
+  e = bson_element_name_set (e, "invalid");
+  e = bson_element_data_set (e, (uint8_t *)"foobar", strlen ("foobar"));
+
+  old = bson_add_elements (old, e,
+			   bson_element_create ("valid", BSON_TYPE_INT32, 1),
+			   BSON_END);
+  old = bson_close (old);
+
+  new = bson_new_sized (bson_data_get_size (old));
+  new = bson_data_parse (new, bson_data_get (old));
+
+  _ck_assert_int (bson_length (old), >,
+		  bson_length (new));
+
+  bson_unref (old);
+  bson_unref (new);
+}
+END_TEST
+
 Suite *
 bson_suite (void)
 {
   Suite *s;
 
-  TCase *tc_core, *tc_manip, *tc_access;
+  TCase *tc_core, *tc_manip, *tc_access, *tc_parse;
 
   s = suite_create ("BSON unit tests");
 
@@ -292,6 +341,10 @@ bson_suite (void)
   tcase_add_test (tc_access, test_bson_key_find);
   tcase_add_test (tc_access, test_bson_key_get);
   suite_add_tcase (s, tc_access);
+
+  tc_parse = tcase_create ("Parsing");
+  tcase_add_test (tc_parse, test_bson_data_parse);
+  suite_add_tcase (s, tc_parse);
 
   return s;
 }
