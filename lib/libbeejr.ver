@@ -54,6 +54,8 @@ LMC_0.2.0 {
 
 		bson_elements_nth_get;
 		bson_elements_nth_set;
+		bson_elements_nth_remove;
 		bson_elements_key_find;
 		bson_elements_key_get;
+		bson_elements_key_remove;
 };

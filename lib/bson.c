@@ -451,3 +451,46 @@ bson_elements_merge (bson_t *b, bson_t *src)
   bson_unref (src);
   return b;
 }
+
+bson_t *
+bson_elements_nth_remove (bson_t *b, uint32_t n)
+{
+  bson_node_t *old, *cn;
+
+  if (!b)
+    return NULL;
+  if (bson_elements_length (b) < n || n == 0)
+    return b;
+
+  cn = b->elements.index.ptrs[n - 1];
+
+  if (cn == b->elements.head)
+    {
+      old = b->elements.head;
+      b->elements.head = b->elements.head->next;
+    }
+  else
+    {
+      old = b->elements.head;
+
+      while (old->next != cn)
+	old = old->next;
+
+      old->next = cn->next;
+      old = cn;
+    }
+  b->elements.len--;
+  b->elements.total_size -= bson_element_stream_get_size (old->e);
+
+  bson_element_unref (old->e);
+  free (old);
+
+  _bson_index_rebuild (b);
+  return b;
+}
+
+bson_t *
+bson_elements_key_remove (bson_t *b, const char *key)
+{
+  return bson_elements_nth_remove (b, bson_elements_key_find (b, key));
+}

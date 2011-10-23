@@ -422,6 +422,69 @@ START_TEST (test_bson_elements_merge)
 }
 END_TEST
 
+START_TEST (test_bson_elements_nth_remove)
+{
+  bson_t *b;
+  bson_element_type_t type;
+
+  ck_assert (bson_elements_nth_remove (NULL, 1) == NULL);
+
+  b = bson_new_build
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
+     bson_element_create ("answer", BSON_TYPE_INT32, 42),
+     bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14),
+     BSON_END);
+
+  b = bson_elements_nth_remove (b, 0);
+  ck_assert_int_eq (bson_elements_length (b), 3);
+
+  b = bson_elements_nth_remove (b, 10);
+  ck_assert_int_eq (bson_elements_length (b), 3);
+
+  type = bson_element_type_get (bson_elements_nth_get (b, 1));
+  b = bson_elements_nth_remove (b, 1);
+  ck_assert_int_eq (bson_elements_length (b), 2);
+  ck_assert (bson_element_type_get (bson_elements_nth_get (b, 1)) != type);
+
+  b = bson_elements_nth_remove (b, 2);
+  ck_assert_int_eq (bson_elements_length (b), 1);
+  ck_assert (bson_element_type_get (bson_elements_nth_get (b, 1)) != type);
+
+  bson_unref (b);
+}
+END_TEST
+
+START_TEST (test_bson_elements_key_remove)
+{
+  bson_t *b;
+
+  ck_assert (bson_elements_key_remove (NULL, "hello") == NULL);
+
+  b = bson_new_build
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
+     bson_element_create ("answer", BSON_TYPE_INT32, 42),
+     BSON_END);
+
+  b = bson_elements_key_remove (b, "invalid-key");
+  ck_assert_int_eq (bson_elements_length (b), 2);
+
+  b = bson_elements_key_remove (b, "hell");
+  ck_assert_int_eq (bson_elements_length (b), 2);
+
+  b = bson_elements_key_remove (b, "olleh");
+  ck_assert_int_eq (bson_elements_length (b), 2);
+
+  b = bson_elements_key_remove (b, "hello");
+  ck_assert_int_eq (bson_elements_length (b), 1);
+  ck_assert (bson_element_type_get
+	     (bson_elements_key_get (b, "answer")) == BSON_TYPE_INT32);
+
+  bson_unref (b);
+}
+END_TEST
+
 Suite *
 bson_suite (void)
 {
@@ -444,8 +507,10 @@ bson_suite (void)
   tcase_add_test (tc_ele, test_bson_elements_add);
   tcase_add_test (tc_ele, test_bson_elements_reset);
   tcase_add_test (tc_ele, test_bson_elements_nth_get_set);
+  tcase_add_test (tc_ele, test_bson_elements_nth_remove);
   tcase_add_test (tc_ele, test_bson_elements_key_find);
   tcase_add_test (tc_ele, test_bson_elements_key_get);
+  tcase_add_test (tc_ele, test_bson_elements_key_remove);
   tcase_add_test (tc_ele, test_bson_elements_merge);
   suite_add_tcase (s, tc_ele);
 

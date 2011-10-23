@@ -248,6 +248,15 @@ bson_element_t *bson_elements_nth_get (bson_t *b, uint32_t n);
  */
 bson_t *bson_elements_nth_set (bson_t *b, uint32_t n, bson_element_t *e);
 
+/** Remove the Nth element of a BSON object.
+ *
+ * @param b is the object to remove from.
+ * @param n is the index of the element to remove.
+ *
+ * @returns The BSON object with its Nth element removed.
+ */
+bson_t *bson_elements_nth_remove (bson_t *b, uint32_t n);
+
 /** Find the index of a key in a BSON object.
  *
  * @param b is the object to search in.
@@ -266,6 +275,15 @@ uint32_t bson_elements_key_find (bson_t *b, const char *key);
  * found.
  */
 bson_element_t *bson_elements_key_get (bson_t *b, const char *key);
+
+/** Remove a key from a BSON object.
+ *
+ * @param b is the object to remove from.
+ * @param key is the key to remove.
+ *
+ * @returns The BSON object with the key removed.
+ */
+bson_t *bson_elements_key_remove (bson_t *b, const char *key);
 
 /** @}
  * @}
