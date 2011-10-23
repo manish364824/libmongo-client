@@ -105,6 +105,28 @@ START_TEST (test_func_bson_stream)
 }
 END_TEST
 
+START_TEST (test_func_bson_elements_remove_all)
+{
+  bson_t *b;
+  uint32_t i, l;
+
+  b = bson_new_build
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
+     bson_element_create ("answer", BSON_TYPE_INT32, 42),
+     bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14),
+     BSON_END);
+
+  l = bson_elements_length (b);
+  for (i = 1; i <= l; i++)
+    b = bson_elements_nth_remove (b, 1);
+
+  ck_assert_int_eq (bson_elements_length (b), 0);
+
+  bson_unref (b);
+}
+END_TEST
+
 Suite *
 bson_func_suite (void)
 {
@@ -118,6 +140,7 @@ bson_func_suite (void)
   tcase_add_test (tc_manip, test_func_bson_stream_close);
   tcase_add_test (tc_manip, test_func_bson_flatten);
   tcase_add_test (tc_manip, test_func_bson_elements_nth_get);
+  tcase_add_test (tc_manip, test_func_bson_elements_remove_all);
   suite_add_tcase (s, tc_manip);
 
   tc_stream = tcase_create ("Stream");
