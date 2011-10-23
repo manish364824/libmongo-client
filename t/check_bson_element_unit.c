@@ -393,6 +393,8 @@ _test_copy (bson_element_t *orig)
 
 START_TEST (test_bson_element_new_from_data)
 {
+  bson_element_t *e;
+
   ck_assert (bson_element_new_from_data (NULL) == NULL);
 
   _test_copy
@@ -402,6 +404,16 @@ START_TEST (test_bson_element_new_from_data)
     (bson_element_create ("answer", BSON_TYPE_INT32, 42));
   _test_copy
     (bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14));
+
+  e = bson_element_new ();
+  e = bson_element_type_set (e, 142);
+  e = bson_element_name_set (e, "invalid-type");
+  ck_assert (bson_element_new_from_data (bson_element_stream_get (e)) == NULL);
+
+  e = bson_element_type_set (e, 0);
+  ck_assert (bson_element_new_from_data (bson_element_stream_get (e)) == NULL);
+
+  bson_element_unref (e);
 }
 END_TEST
 

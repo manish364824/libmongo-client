@@ -491,7 +491,7 @@ bson_element_new_from_data (const uint8_t *data)
   uint8_t type;
   const char *name;
   const uint8_t *value;
-  int32_t size;
+  int32_t size = -1;
 
   if (!data)
     return NULL;
