@@ -271,14 +271,15 @@ START_TEST (test_bson_element_value_string)
   bson_element_t *e;
   const char *d = "test-string", *v = NULL;
 
-  ck_assert (bson_element_value_set_string (NULL, d, -1) == NULL);
+  ck_assert (bson_element_value_set_string (NULL, d,
+					    BSON_LENGTH_AUTO) == NULL);
   ck_assert (bson_element_value_get_string (NULL, &v) == FALSE);
 
   e = bson_element_new ();
 
   ck_assert (bson_element_value_get_string (e, &v) == FALSE);
 
-  e = bson_element_value_set_string (e, d, -1);
+  e = bson_element_value_set_string (e, d, BSON_LENGTH_AUTO);
   ck_assert (e != NULL);
   ck_assert (bson_element_type_get (e) == BSON_TYPE_STRING);
 

@@ -71,6 +71,14 @@ typedef enum
   BSON_TYPE_MAX = 0x7f
 } bson_element_type_t;
 
+/** Convenience macro for automatic length signalling.
+ *
+ * When an element's length should be computed automatically (not
+ * available for every type, mostly only to string-like types), this
+ * macro can be used to signal this fact, in a readable way.
+ */
+#define BSON_LENGTH_AUTO -1
+
 /** Create a new BSON element.
  *
  * Creates a new BSON element, without a type assigned, and a
@@ -275,7 +283,7 @@ lmc_bool_t bson_element_value_get_int32 (bson_element_t *e,
  * @param e is the element whose value to set.
  * @param val is the value to set.
  * @param length is the lenght of the string to use. A negative number
- * means the length should be autodetected.
+ * (or #BSON_LENGTH_AUTO) means the length should be autodetected.
  *
  * @returns The BSON element with the value set, or NULL on error.
  */

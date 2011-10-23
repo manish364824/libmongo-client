@@ -340,7 +340,7 @@ bson_element_value_set_string (bson_element_t *e,
   if (!e)
     return NULL;
 
-  if (l < 0)
+  if (l <= BSON_LENGTH_AUTO)
     l = strlen (val);
 
   e = bson_element_type_set (e, BSON_TYPE_STRING);

@@ -9,7 +9,8 @@ START_TEST (test_func_bson_close)
   bson_element_t *e;
 
   b = bson_new ();
-  e = bson_element_create ("hello", BSON_TYPE_STRING, "world", -1);
+  e = bson_element_create ("hello", BSON_TYPE_STRING,
+			   "world", BSON_LENGTH_AUTO);
 
   b = bson_add_elements (b, e, bson_element_ref (e), BSON_END);
   ck_assert_int_eq (bson_length (b), 2);
@@ -32,7 +33,8 @@ START_TEST (test_func_bson_flatten)
   uint32_t size, size2;
 
   b = bson_new_build
-    (bson_element_create ("hello", BSON_TYPE_STRING, "world", -1),
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
      bson_element_create ("answer", BSON_TYPE_INT32, 42),
      BSON_END);
   b = bson_close (b);
@@ -63,7 +65,8 @@ START_TEST (test_func_bson_get_nth_element)
   bson_element_t *e1, *e2;
 
   b = bson_new_build
-    (bson_element_create ("hello", BSON_TYPE_STRING, "world", -1),
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
      bson_element_create ("answer", BSON_TYPE_INT32, 42),
      BSON_END);
 

@@ -94,7 +94,8 @@ START_TEST (test_bson_add_elements)
   bson_t *b;
   bson_element_t *e;
 
-  e = bson_element_create ("hello", BSON_TYPE_STRING, "world", -1);
+  e = bson_element_create ("hello", BSON_TYPE_STRING,
+			   "world", BSON_LENGTH_AUTO);
 
   b = bson_new ();
 
@@ -117,7 +118,8 @@ START_TEST (test_bson_new_build)
   ck_assert (bson_new_build (BSON_END) == NULL);
 
   b = bson_new_build
-    (bson_element_create ("hello", BSON_TYPE_STRING, "world", -1),
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
      bson_element_create ("answer", BSON_TYPE_INT32, 42),
      BSON_END);
 
@@ -137,7 +139,8 @@ START_TEST (test_bson_reset_elements)
   ck_assert (bson_reset_elements (b) == b);
 
   b = bson_add_elements
-    (b, bson_element_create ("hello", BSON_TYPE_STRING, "world", -1),
+    (b, bson_element_create ("hello", BSON_TYPE_STRING,
+			     "world", BSON_LENGTH_AUTO),
      BSON_END);
   b = bson_close (b);
 
@@ -156,7 +159,8 @@ START_TEST (test_bson_get_nth_element)
   ck_assert (bson_get_nth_element (NULL, 1) == NULL);
 
   b = bson_new_build
-    (bson_element_create ("hello", BSON_TYPE_STRING, "world", -1),
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
      bson_element_create ("answer", BSON_TYPE_INT32, 42),
      BSON_END);
 
