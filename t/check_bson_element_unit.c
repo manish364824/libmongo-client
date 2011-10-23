@@ -417,6 +417,48 @@ START_TEST (test_bson_element_new_from_data)
 }
 END_TEST
 
+START_TEST (test_bson_element_name_validate)
+{
+  ck_assert (bson_element_name_validate (NULL, BSON_ELEMENT_NAME_OK) == FALSE);
+
+  ck_assert (bson_element_name_validate
+	     ("simple", BSON_ELEMENT_NAME_OK) == TRUE);
+  ck_assert (bson_element_name_validate
+	     ("simple", BSON_ELEMENT_NAME_FORBID_DOTS) == TRUE);
+  ck_assert (bson_element_name_validate
+	     ("simple", BSON_ELEMENT_NAME_FORBID_DOLLAR) == TRUE);
+  ck_assert (bson_element_name_validate
+	     ("simple", BSON_ELEMENT_NAME_STRICT) == TRUE);
+
+  ck_assert (bson_element_name_validate
+	     ("dotted.notation", BSON_ELEMENT_NAME_OK) == TRUE);
+  ck_assert (bson_element_name_validate
+	     ("dotted.notation", BSON_ELEMENT_NAME_FORBID_DOTS) == FALSE);
+  ck_assert (bson_element_name_validate
+	     ("dotted.notation", BSON_ELEMENT_NAME_FORBID_DOLLAR) == TRUE);
+  ck_assert (bson_element_name_validate
+	     ("dotted.notation", BSON_ELEMENT_NAME_STRICT) == FALSE);
+
+  ck_assert (bson_element_name_validate
+	     ("$foo", BSON_ELEMENT_NAME_OK) == TRUE);
+  ck_assert (bson_element_name_validate
+	     ("$foo", BSON_ELEMENT_NAME_FORBID_DOTS) == TRUE);
+  ck_assert (bson_element_name_validate
+	     ("$foo", BSON_ELEMENT_NAME_FORBID_DOLLAR) == FALSE);
+  ck_assert (bson_element_name_validate
+	     ("$foo", BSON_ELEMENT_NAME_STRICT) == FALSE);
+
+  ck_assert (bson_element_name_validate
+	     ("foo$bar", BSON_ELEMENT_NAME_OK) == TRUE);
+  ck_assert (bson_element_name_validate
+	     ("foo$bar", BSON_ELEMENT_NAME_FORBID_DOTS) == TRUE);
+  ck_assert (bson_element_name_validate
+	     ("foo$bar", BSON_ELEMENT_NAME_FORBID_DOLLAR) == TRUE);
+  ck_assert (bson_element_name_validate
+	     ("foo$bar", BSON_ELEMENT_NAME_STRICT) == TRUE);
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -433,6 +475,7 @@ bson_element_suite (void)
   tcase_add_test (tc_core, test_bson_element_type_set);
   tcase_add_test (tc_core, test_bson_element_name_set);
   tcase_add_test (tc_core, test_bson_element_name_get);
+  tcase_add_test (tc_core, test_bson_element_name_validate);
   tcase_add_test (tc_core, test_bson_element_data_set);
   tcase_add_test (tc_core, test_bson_element_data_reset);
   tcase_add_test (tc_core, test_bson_element_data_append);

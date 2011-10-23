@@ -10,6 +10,7 @@ LMC_0.2.0 {
 		bson_element_type_set;
 		bson_element_name_set;
 		bson_element_name_get;
+		bson_element_name_validate;
 
 		bson_element_data_reset;
 		bson_element_data_append;

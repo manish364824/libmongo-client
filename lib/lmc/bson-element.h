@@ -177,6 +177,35 @@ const char *bson_element_name_get (bson_element_t *e);
  */
 bson_element_t *bson_element_name_set (bson_element_t *e,
 				       const char *name);
+
+/** Element name validity flags.
+ *
+ * These flags can be OR'd together when used with
+ * bson_element_name_validate(), to form any desirable combination.
+ */
+enum
+{
+  /** Unless another flag is set, no check is performed on the name. */
+  BSON_ELEMENT_NAME_OK = 0,
+  /** Forbid dots anywhere in the name. */
+  BSON_ELEMENT_NAME_FORBID_DOTS = 1 << 1,
+  /** Forbid dollar signs at the start of the name. */
+  BSON_ELEMENT_NAME_FORBID_DOLLAR = 1 << 2,
+  /** A combination of all other flags, for convenience. */
+  BSON_ELEMENT_NAME_STRICT =
+    BSON_ELEMENT_NAME_FORBID_DOTS | BSON_ELEMENT_NAME_FORBID_DOLLAR};
+
+/** Validate an element name, based on flags.
+ *
+ * @param name is the name to validate.
+ * @param flags is a combination of any of the #BSON_ELEMENT_NAME_OK,
+ * #BSON_ELEMENT_NAME_FORBID_DOTS, #BSON_ELEMENT_NAME_FORBID_DOLLAR
+ * and #BSON_ELEMENT_NAME_STRICT flags.
+ *
+ * @returns TRUE if the name is valid, FALSE otherwise.
+ */
+lmc_bool_t bson_element_name_validate (const char *name, int flags);
+
 /** @} */
 
 /** @defgroup lmc_bson_element_data Data Access

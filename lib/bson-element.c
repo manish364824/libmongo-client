@@ -515,3 +515,20 @@ bson_element_new_from_data (const uint8_t *data)
   e = bson_element_data_set (e, value, size);
   return e;
 }
+
+lmc_bool_t
+bson_element_name_validate (const char *name, int flags)
+{
+  if (!name)
+    return FALSE;
+
+  if ((flags & BSON_ELEMENT_NAME_FORBID_DOTS) &&
+      (strchr (name, '.') != NULL))
+    return FALSE;
+
+  if ((flags & BSON_ELEMENT_NAME_FORBID_DOLLAR) &&
+      (name[0] == '$'))
+    return FALSE;
+
+  return TRUE;
+}
