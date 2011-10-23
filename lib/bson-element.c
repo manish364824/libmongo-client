@@ -256,7 +256,7 @@ bson_element_stream_get_size (bson_element_t *e)
 {
   if (!e)
     return -1;
-  return e->len + e->name_len + 1;
+  return e->len + 1;
 }
 
 static inline bson_element_value_t *
