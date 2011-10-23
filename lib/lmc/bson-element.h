@@ -30,9 +30,14 @@ LMC_BEGIN_DECLS
 
 /** @addtogroup lmc_bson
  * @{
- *  @defgroup lmc_bson_element BSON elements
+ *  @defgroup lmc_bson_element Elements
  *  @addtogroup lmc_bson_element
  *  @{
+ */
+
+/** @defgroup lmc_bson_element_core Core
+ * @addtogroup lmc_bson_element_core
+ * @{
  */
 
 /** A BSON element container.
@@ -71,14 +76,6 @@ typedef enum
   BSON_TYPE_MAX = 0x7f
 } bson_element_type_t;
 
-/** Convenience macro for automatic length signalling.
- *
- * When an element's length should be computed automatically (not
- * available for every type, mostly only to string-like types), this
- * macro can be used to signal this fact, in a readable way.
- */
-#define BSON_LENGTH_AUTO -1
-
 /** Create a new BSON element.
  *
  * Creates a new BSON element, without a type assigned, and a
@@ -95,6 +92,28 @@ bson_element_t *bson_element_new (void);
  * @returns A newly allocated element.
  */
 bson_element_t *bson_element_new_sized (uint32_t size);
+
+/** Create a new BSON element.
+ *
+ * @param name is the name of the element.
+ * @param type is the BSON type to use.
+ *
+ * The rest of the parameters depend on the @a type. Whatever the
+ * types setter takes, must be passed along here.
+ *
+ * @returns A new BSON element with its name, type and value set.
+ */
+bson_element_t *bson_element_create (const char *name,
+				     bson_element_type_t type, ...);
+
+/** Create a new BSON element from raw data.
+ *
+ * @param data is the raw BSON element data.
+ *
+ * @returns A new BSON element, with its properties copied from the
+ * raw data.
+ */
+bson_element_t *bson_element_new_from_data (const uint8_t *data);
 
 /** Increase the reference count of a BSON element.
  *
@@ -158,6 +177,12 @@ const char *bson_element_name_get (bson_element_t *e);
  */
 bson_element_t *bson_element_name_set (bson_element_t *e,
 				       const char *name);
+/** @} */
+
+/** @defgroup lmc_bson_element_data Data Access
+ * @addtogroup lmc_bson_element_data
+ * @{
+ */
 
 /** Get the raw data part of a BSON element.
  *
@@ -212,6 +237,13 @@ bson_element_t *bson_element_data_append (bson_element_t *e,
 bson_element_t *bson_element_data_set (bson_element_t *e, const uint8_t *data,
 				       uint32_t size);
 
+/** @} */
+
+/** @defgroup lmc_bson_element_stream Stream
+ * @addtogroup lmc_bson_element_stream
+ * @{
+ */
+
 /** Get the raw bytestream of the full BSON element.
  *
  * @param e is the BSON element to get the bytestream from.
@@ -233,10 +265,20 @@ const uint8_t *bson_element_stream_get (bson_element_t *e);
  */
 int32_t bson_element_stream_get_size (bson_element_t *e);
 
+/** @} */
+
 /** @defgroup lmc_bson_element_accessors Accessors
  * @addtogroup lmc_bson_element_accessors
  * @{
  */
+
+/** Convenience macro for automatic length signalling.
+ *
+ * When an element's length should be computed automatically (not
+ * available for every type, mostly only to string-like types), this
+ * macro can be used to signal this fact, in a readable way.
+ */
+#define BSON_LENGTH_AUTO -1
 
 /** Set the value of a BSON element to a double.
  *
@@ -304,13 +346,6 @@ bson_element_t *bson_element_value_set_string (bson_element_t *e,
 lmc_bool_t bson_element_value_get_string (bson_element_t *e,
 					  const char **oval);
 
-/** @} */
-
-/** @defgroup lmc_bson_element_builder Builder
- * @addtogroup lmc_bson_element_builder
- * @{
- */
-
 /** Set the type and the value of a BSON element.
  *
  * @param e is the element to modify.
@@ -337,28 +372,6 @@ bson_element_t *bson_element_value_set (bson_element_t *e,
  */
 bson_element_t *bson_element_set (bson_element_t *e, const char *name,
 				  bson_element_type_t type, ...);
-
-/** Create a new BSON element.
- *
- * @param name is the name of the element.
- * @param type is the BSON type to use.
- *
- * The rest of the parameters depend on the @a type. Whatever the
- * types setter takes, must be passed along here.
- *
- * @returns A new BSON element with its name, type and value set.
- */
-bson_element_t *bson_element_create (const char *name,
-				     bson_element_type_t type, ...);
-
-/** Create a new BSON element from raw data.
- *
- * @param data is the raw BSON element data.
- *
- * @returns A new BSON element, with its properties copied from the
- * raw data.
- */
-bson_element_t *bson_element_new_from_data (const uint8_t *data);
 
 /** @}
  * @}

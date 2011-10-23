@@ -31,6 +31,9 @@ LMC_BEGIN_DECLS
 
 /** @addtogroup lmc_bson
  * @{
+ *  @defgroup lmc_bson_core Core
+ *  @addtogroup lmc_bson_core
+ *  @{
  */
 
 /** A BSON container.
@@ -52,6 +55,33 @@ bson_t *bson_new (void);
  */
 bson_t *bson_new_sized (uint32_t size);
 
+/** Build a new BSON object from elements.
+ *
+ * @param e is the first element to add.
+ *
+ * The rest of the arguments are #bson_element_t objects aswell,
+ * terminated by a #BSON_END.
+ *
+ * @returns A new BSON object with the elements appended.
+ *
+ * @note The elements' refcount is NOT incremented by this function,
+ * if one wishes to use them after unrefing the BSON object, the
+ * refcount must be incremented manually.
+ */
+bson_t *bson_new_build (bson_element_t *e, ...);
+
+/** Create a new BSON object from a datastream.
+ *
+ * @param data is the BSON datastream to parse.
+ *
+ * @returns A new BSON object, with its initial data set.
+ *
+ * @note If the datastream contains unparsable BSON elements, it will
+ * only be parsed up to that point, and no rollback will be attempted,
+ * thus one can end up with partial results.
+ */
+bson_t *bson_new_from_data (const uint8_t *data);
+
 /** Increase the reference count of a BSON object.
  *
  * @param b is the object to increase the refcount of.
@@ -71,6 +101,13 @@ bson_t *bson_ref (bson_t *b);
  */
 bson_t *bson_unref (bson_t *b);
 
+/** @}*/
+
+/** @defgroup lmc_bson_stream Stream
+ * @addtogroup lmc_bson_stream
+ * @{
+ */
+
 /** Open a BSON object, so that elements can be added.
  *
  * @param b is the object to open.
@@ -86,14 +123,6 @@ bson_t *bson_stream_open (bson_t *b);
  * @returns The closed BSON object.
  */
 bson_t *bson_stream_close (bson_t *b);
-
-/** Get the number of elements in a BSON object.
- *
- * @param b is the object to count elements in.
- *
- * @returns The number of elements in the object.
- */
-uint32_t bson_elements_length (bson_t *b);
 
 /** Get the data stream of the BSON object.
  *
@@ -116,55 +145,6 @@ const uint8_t *bson_stream_get_data (bson_t *b);
  * @note The object must be closed!
  */
 uint32_t bson_stream_get_size (bson_t *b);
-
-/** @defgroup lmc_bson_builder Builder
- * @addtogroup lmc_bson_builder
- * @{
- */
-
-/** End of element list signal. */
-#define BSON_END NULL
-
-/** Add elements to a BSON object.
- *
- * @param b is the BSON object to append to.
- *
- * It must be followed by #bson_element_t objects, terminated by
- * #BSON_END, and all of them will be added to the object.
- *
- * @returns The BSON object with the elements added.
- *
- * @note The elements' refcount is NOT incremented by this function,
- * if one wishes to use them after unrefing the BSON object, the
- * refcount must be incremented manually.
- */
-bson_t *bson_elements_add (bson_t *b, ...);
-
-/** Reset a BSON object.
- *
- * Removes all elements from the object, without completely destroying
- * it.
- *
- * @param b is the BSON object to drop elements from.
- *
- * @returns The BSON object with its elements removed.
- */
-bson_t *bson_elements_reset (bson_t *b);
-
-/** Build a new BSON object from elements.
- *
- * @param e is the first element to add.
- *
- * The rest of the arguments are #bson_element_t objects aswell,
- * terminated by a #BSON_END.
- *
- * @returns A new BSON object with the elements appended.
- *
- * @note The elements' refcount is NOT incremented by this function,
- * if one wishes to use them after unrefing the BSON object, the
- * refcount must be incremented manually.
- */
-bson_t *bson_new_build (bson_element_t *e, ...);
 
 /** Replace the BSON contents with data from a stream.
  *
@@ -192,24 +172,49 @@ bson_t *bson_stream_set (bson_t *b, const uint8_t *data);
  */
 bson_t *bson_stream_merge (bson_t *b, const uint8_t *data);
 
-/** Create a new BSON object from a datastream.
- *
- * @param data is the BSON datastream to parse.
- *
- * @returns A new BSON object, with its initial data set.
- *
- * @note If the datastream contains unparsable BSON elements, it will
- * only be parsed up to that point, and no rollback will be attempted,
- * thus one can end up with partial results.
- */
-bson_t *bson_new_from_data (const uint8_t *data);
-
 /** @} */
 
 /** @defgroup lmc_bson_accessors Accessors
  * @addtogroup lmc_bson_accessors
  * @{
  */
+
+/** End of element list signal. */
+#define BSON_END NULL
+
+/** Get the number of elements in a BSON object.
+ *
+ * @param b is the object to count elements in.
+ *
+ * @returns The number of elements in the object.
+ */
+uint32_t bson_elements_length (bson_t *b);
+
+/** Add elements to a BSON object.
+ *
+ * @param b is the BSON object to append to.
+ *
+ * It must be followed by #bson_element_t objects, terminated by
+ * #BSON_END, and all of them will be added to the object.
+ *
+ * @returns The BSON object with the elements added.
+ *
+ * @note The elements' refcount is NOT incremented by this function,
+ * if one wishes to use them after unrefing the BSON object, the
+ * refcount must be incremented manually.
+ */
+bson_t *bson_elements_add (bson_t *b, ...);
+
+/** Reset a BSON object.
+ *
+ * Removes all elements from the object, without completely destroying
+ * it.
+ *
+ * @param b is the BSON object to drop elements from.
+ *
+ * @returns The BSON object with its elements removed.
+ */
+bson_t *bson_elements_reset (bson_t *b);
 
 /** Get the Nth element of a BSON object.
  *
