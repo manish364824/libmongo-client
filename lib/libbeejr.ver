@@ -27,6 +27,7 @@ global:
   bson_element_value_set;
   bson_element_set;
   bson_element_create;
+  bson_element_new_from_data;
 
   bson_new;
   bson_new_sized;

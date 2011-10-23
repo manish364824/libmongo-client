@@ -36,6 +36,8 @@
 
 typedef bson_element_t *(*bson_element_value_set_va_cb) (bson_element_t *e,
 							 va_list ap);
+typedef int32_t (*bson_element_value_get_size_cb) (const uint8_t *data);
+
 #define BSON_ELEMENT_VALUE_SET_VA(setter,type,args...)			\
   static bson_element_t *						\
   _bson_element_value_set_##type##_va (bson_element_t *e, va_list aq)	\
@@ -47,6 +49,13 @@ typedef bson_element_t *(*bson_element_value_set_va_cb) (bson_element_t *e,
     n = bson_element_value_set_##setter (e, ## args );			\
     va_end (aq);							\
     return n;								\
+  }
+
+#define BSON_ELEMENT_VALUE_GET_SIZE(type,size)			\
+  static int32_t						\
+  _bson_element_value_get_size_##type (void)			\
+  {								\
+    return size;						\
   }
 
 typedef union
@@ -284,7 +293,7 @@ bson_element_value_set_double (bson_element_t *e,
   return e;
 }
 
-BSON_ELEMENT_VALUE_SET_VA(double, DOUBLE, va_arg (ap, double));
+BSON_ELEMENT_VALUE_SET_VA (double, DOUBLE, va_arg (ap, double));
 
 lmc_bool_t
 bson_element_value_get_double (bson_element_t *e,
@@ -298,6 +307,8 @@ bson_element_value_get_double (bson_element_t *e,
   *oval = LMC_DOUBLE_FROM_LE (v->dbl);
   return TRUE;
 }
+
+BSON_ELEMENT_VALUE_GET_SIZE (DOUBLE, sizeof (double));
 
 /* int32 */
 bson_element_t *
@@ -314,7 +325,7 @@ bson_element_value_set_int32 (bson_element_t *e,
   return e;
 }
 
-BSON_ELEMENT_VALUE_SET_VA(int32, INT32, va_arg (ap, int32_t));
+BSON_ELEMENT_VALUE_SET_VA (int32, INT32, va_arg (ap, int32_t));
 
 lmc_bool_t
 bson_element_value_get_int32 (bson_element_t *e,
@@ -328,6 +339,8 @@ bson_element_value_get_int32 (bson_element_t *e,
   *oval = LMC_INT32_FROM_LE (v->i32);
   return TRUE;
 }
+
+BSON_ELEMENT_VALUE_GET_SIZE (INT32, sizeof (int32_t));
 
 /* string */
 bson_element_t *
@@ -379,16 +392,34 @@ bson_element_value_get_string (bson_element_t *e,
   return TRUE;
 }
 
+static int32_t
+_bson_element_value_get_size_STRING (const uint8_t *data)
+{
+  return LMC_INT32_FROM_LE (((bson_element_value_t *)data)->str.len) +
+    (int32_t)sizeof (int32_t);
+}
+
 /** Builders **/
 
 #define BSON_VALUE_SET_CB(type) \
   [BSON_TYPE_##type] = _bson_element_value_set_##type##_va
+
+#define BSON_VALUE_GET_SIZE_CB(type)					\
+  [BSON_TYPE_##type] =							\
+    (bson_element_value_get_size_cb) _bson_element_value_get_size_##type
 
 static bson_element_value_set_va_cb _bson_element_value_set_cbs[BSON_TYPE_MAX] =
 {
   BSON_VALUE_SET_CB(DOUBLE),
   BSON_VALUE_SET_CB(INT32),
   BSON_VALUE_SET_CB(STRING),
+};
+
+static bson_element_value_get_size_cb _bson_element_value_get_size_cbs[BSON_TYPE_MAX] =
+{
+  BSON_VALUE_GET_SIZE_CB(DOUBLE),
+  BSON_VALUE_GET_SIZE_CB(INT32),
+  BSON_VALUE_GET_SIZE_CB(STRING),
 };
 
 static bson_element_t *
@@ -450,5 +481,37 @@ bson_element_create (const char *name,
   if (bson_element_type_get (e) != type)
     e = bson_element_unref (e);
 
+  return e;
+}
+
+bson_element_t *
+bson_element_new_from_data (const uint8_t *data)
+{
+  bson_element_t *e;
+  uint8_t type;
+  const char *name;
+  const uint8_t *value;
+  int32_t size;
+
+  if (!data)
+    return NULL;
+
+  type = data[0];
+  name = (char *)(data + 1);
+  value = data + 2 + strlen (name);
+
+  if (type >= BSON_TYPE_MAX)
+    return NULL;
+
+  if (_bson_element_value_get_size_cbs[type])
+    size = _bson_element_value_get_size_cbs[type] (value);
+
+  if (size < 0)
+    return NULL;
+
+  e = bson_element_new_sized (size);
+  e = bson_element_type_set (e, type);
+  e = bson_element_name_set (e, name);
+  e = bson_element_data_set (e, value, size);
   return e;
 }

@@ -351,6 +351,15 @@ bson_element_t *bson_element_set (bson_element_t *e, const char *name,
 bson_element_t *bson_element_create (const char *name,
 				     bson_element_type_t type, ...);
 
+/** Create a new BSON element from raw data.
+ *
+ * @param data is the raw BSON element data.
+ *
+ * @returns A new BSON element, with its properties copied from the
+ * raw data.
+ */
+bson_element_t *bson_element_new_from_data (const uint8_t *data);
+
 /** @}
  * @}
  *@}

@@ -371,6 +371,40 @@ START_TEST (test_bson_element_create)
 }
 END_TEST
 
+static void
+_test_copy (bson_element_t *orig)
+{
+  bson_element_t *copy;
+  uint32_t size;
+
+  copy = bson_element_new_from_data (bson_element_stream_get (orig));
+  ck_assert (copy != NULL);
+  ck_assert (bson_element_type_get (orig) == bson_element_type_get (copy));
+  ck_assert_int_eq (bson_element_stream_get_size (orig),
+		    bson_element_stream_get_size (copy));
+  size = bson_element_stream_get_size (orig);
+  ck_assert (memcmp (bson_element_stream_get (orig),
+		     bson_element_stream_get (copy),
+		     size) == 0);
+
+  bson_element_unref (orig);
+  bson_element_unref (copy);
+}
+
+START_TEST (test_bson_element_new_from_data)
+{
+  ck_assert (bson_element_new_from_data (NULL) == NULL);
+
+  _test_copy
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO));
+  _test_copy
+    (bson_element_create ("answer", BSON_TYPE_INT32, 42));
+  _test_copy
+    (bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14));
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -404,6 +438,7 @@ bson_element_suite (void)
   tcase_add_test (tc_builder, test_bson_element_value);
   tcase_add_test (tc_builder, test_bson_element_set);
   tcase_add_test (tc_builder, test_bson_element_create);
+  tcase_add_test (tc_builder, test_bson_element_new_from_data);
   suite_add_tcase (s, tc_builder);
 
   return s;
