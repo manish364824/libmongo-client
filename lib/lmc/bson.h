@@ -166,6 +166,24 @@ bson_t *bson_reset_elements (bson_t *b);
  */
 bson_t *bson_new_build (bson_element_t *e, ...);
 
+/** @} */
+
+/** @defgroup lmc_bson_accessors Accessors
+ * @addtogroup lmc_bson_accessors
+ * @{
+ */
+
+/** Get the Nth element of a BSON object.
+ *
+ * @param b is the object to work with.
+ * @param n is the index of the element we want to retrieve.
+ *
+ * @returns A pointer to the nth element. The pointer is part of an
+ * internal structure, and if freed or modified, the appropriate
+ * function must be called to update the BSON object too.
+ */
+bson_element_t *bson_get_nth_element (bson_t *b, uint32_t n);
+
 /** @}
  * @}
  */

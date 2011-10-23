@@ -294,3 +294,23 @@ bson_new_build (bson_element_t *e, ...)
 
   return b;
 }
+
+bson_element_t *
+bson_get_nth_element (bson_t *b, uint32_t n)
+{
+  uint32_t i;
+  bson_node_t *node;
+
+  if (!b || n > bson_length (b))
+    return NULL;
+
+  if (b->stream.len != 0)
+    return b->elements.index.ptrs[n - 1]->e;
+
+  node = b->elements.head;
+
+  for (i = 1; i < n; i++)
+    node = node->next;
+
+  return node->e;
+}

@@ -57,6 +57,32 @@ START_TEST (test_func_bson_flatten)
 }
 END_TEST
 
+START_TEST (test_func_bson_get_nth_element)
+{
+  bson_t *b;
+  bson_element_t *e1, *e2;
+
+  b = bson_new_build
+    (bson_element_create ("hello", BSON_TYPE_STRING, "world", -1),
+     bson_element_create ("answer", BSON_TYPE_INT32, 42),
+     BSON_END);
+
+  e1 = bson_get_nth_element (b, 2);
+  ck_assert (bson_element_type_get (e1) == BSON_TYPE_STRING ||
+	     bson_element_type_get (e1) == BSON_TYPE_INT32);
+
+  b = bson_close (b);
+
+  e2 = bson_get_nth_element (b, 2);
+  ck_assert (bson_element_type_get (e2) == BSON_TYPE_STRING ||
+	     bson_element_type_get (e2) == BSON_TYPE_INT32);
+
+  ck_assert (e1 == e2);
+
+  bson_unref (b);
+}
+END_TEST
+
 Suite *
 bson_func_suite (void)
 {
@@ -69,6 +95,7 @@ bson_func_suite (void)
   tc_manip = tcase_create ("BSON manipulation");
   tcase_add_test (tc_manip, test_func_bson_close);
   tcase_add_test (tc_manip, test_func_bson_flatten);
+  tcase_add_test (tc_manip, test_func_bson_get_nth_element);
   suite_add_tcase (s, tc_manip);
 
   return s;
