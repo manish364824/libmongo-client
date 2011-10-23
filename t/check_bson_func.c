@@ -86,12 +86,31 @@ START_TEST (test_func_bson_get_nth_element)
 }
 END_TEST
 
+START_TEST (test_func_bson_stream)
+{
+  bson_t *b;
+
+  b = bson_new_build
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
+     BSON_END);
+  b = bson_close (b);
+
+  ck_assert_int_eq (bson_data_get_size (b), 22);
+  ck_assert (memcmp (bson_data_get (b),
+		     "\x16\x00\x00\x00\x02hello\x00"
+		     "\x06\x00\x00\x00world\x00\x00", 22) == 0);
+
+  bson_unref (b);
+}
+END_TEST
+
 Suite *
 bson_func_suite (void)
 {
   Suite *s;
 
-  TCase *tc_manip;
+  TCase *tc_manip, *tc_stream;
 
   s = suite_create ("BSON functional tests");
 
@@ -100,6 +119,10 @@ bson_func_suite (void)
   tcase_add_test (tc_manip, test_func_bson_flatten);
   tcase_add_test (tc_manip, test_func_bson_get_nth_element);
   suite_add_tcase (s, tc_manip);
+
+  tc_stream = tcase_create ("BSON stream");
+  tcase_add_test (tc_stream, test_func_bson_stream);
+  suite_add_tcase (s, tc_stream);
 
   return s;
 }

@@ -220,9 +220,9 @@ bson_flatten (bson_t *b)
   for (i = 1; i <= bson_length (b); i++)
     {
       memcpy (b->stream.with_size.data + pos,
-	      bson_element_data_get (index[i - 1]->e),
-	      bson_element_data_get_size (index[i - 1]->e));
-      pos += bson_element_data_get_size (index[i - 1]->e);
+	      bson_element_stream_get (index[i - 1]->e),
+	      bson_element_stream_get_size (index[i - 1]->e));
+      pos += bson_element_stream_get_size (index[i - 1]->e);
     }
   b->stream.with_size.data[size] = 0;
 
