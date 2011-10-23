@@ -293,7 +293,7 @@ bson_add_elements_va (bson_t *b, va_list ap)
       n->next = NULL;
 
       _bson_index_add (b, b->elements.len + c, n);
-      b->elements.total_size += bson_element_data_get_size (e);
+      b->elements.total_size += bson_element_stream_get_size (e);
 
       t->next = n;
       t = t->next;
