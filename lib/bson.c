@@ -353,6 +353,7 @@ bson_elements_nth_set (bson_t *b, uint32_t n, bson_element_t *e)
   if (n > bson_elements_length (b) || !e || n == 0)
     return b;
 
+  bson_element_unref (b->elements.index.ptrs[n - 1]->e);
   b->elements.index.ptrs[n - 1]->e = e;
   return b;
 }
