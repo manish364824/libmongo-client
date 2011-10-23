@@ -198,15 +198,6 @@ bson_flatten (bson_t *b)
   bson_node_t *t = b->elements.head;
   bson_node_t **index;
 
-  if (bson_length (b) > b->elements.index.alloc)
-    {
-      b->elements.index.alloc = bson_length (b);
-      b->elements.index.ptrs =
-	(bson_node_t **)realloc (b->elements.index.ptrs,
-				 bson_length (b) *
-				 sizeof (bson_node_t *));
-    }
-
   while (t)
     {
       size += bson_element_data_get_size (t->e);
