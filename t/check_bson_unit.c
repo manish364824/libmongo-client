@@ -394,36 +394,33 @@ bson_suite (void)
 {
   Suite *s;
 
-  TCase *tc_core, *tc_manip, *tc_access, *tc_parse;
+  TCase *tc_core, *tc_ele, *tc_stream;
 
   s = suite_create ("BSON unit tests");
 
   tc_core = tcase_create ("Core");
   tcase_add_test (tc_core, test_bson_new);
   tcase_add_test (tc_core, test_bson_new_sized);
+  tcase_add_test (tc_core, test_bson_new_build);
+  tcase_add_test (tc_core, test_bson_new_from_data);
   tcase_add_test (tc_core, test_bson_ref);
-  tcase_add_test (tc_core, test_bson_stream_open_close);
-  tcase_add_test (tc_core, test_bson_elements_length);
-  tcase_add_test (tc_core, test_bson_stream);
   suite_add_tcase (s, tc_core);
 
-  tc_manip = tcase_create ("BSON manipulation");
-  tcase_add_test (tc_manip, test_bson_elements_add);
-  tcase_add_test (tc_manip, test_bson_new_build);
-  tcase_add_test (tc_manip, test_bson_elements_reset);
-  tcase_add_test (tc_manip, test_bson_elements_nth_get_set);
-  suite_add_tcase (s, tc_manip);
+  tc_ele = tcase_create ("Elements");
+  tcase_add_test (tc_ele, test_bson_elements_length);
+  tcase_add_test (tc_ele, test_bson_elements_add);
+  tcase_add_test (tc_ele, test_bson_elements_reset);
+  tcase_add_test (tc_ele, test_bson_elements_nth_get_set);
+  tcase_add_test (tc_ele, test_bson_elements_key_find);
+  tcase_add_test (tc_ele, test_bson_elements_key_get);
+  suite_add_tcase (s, tc_ele);
 
-  tc_access = tcase_create ("BSON accessors");
-  tcase_add_test (tc_access, test_bson_elements_key_find);
-  tcase_add_test (tc_access, test_bson_elements_key_get);
-  suite_add_tcase (s, tc_access);
-
-  tc_parse = tcase_create ("Parsing");
-  tcase_add_test (tc_parse, test_bson_stream_merge);
-  tcase_add_test (tc_parse, test_bson_stream_set);
-  tcase_add_test (tc_parse, test_bson_new_from_data);
-  suite_add_tcase (s, tc_parse);
+  tc_stream = tcase_create ("Stream");
+  tcase_add_test (tc_stream, test_bson_stream_open_close);
+  tcase_add_test (tc_stream, test_bson_stream);
+  tcase_add_test (tc_stream, test_bson_stream_merge);
+  tcase_add_test (tc_stream, test_bson_stream_set);
+  suite_add_tcase (s, tc_stream);
 
   return s;
 }

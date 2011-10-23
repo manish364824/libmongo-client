@@ -92,7 +92,7 @@ bson_element_suite (void)
   tcase_add_test (tc_core, test_func_bson_element_data_manip);
   suite_add_tcase (s, tc_core);
 
-  tc_value = tcase_create ("Value manipulations");
+  tc_value = tcase_create ("Manipulations");
   tcase_add_test (tc_value, test_func_bson_element_value_manip);
   suite_add_tcase (s, tc_value);
 

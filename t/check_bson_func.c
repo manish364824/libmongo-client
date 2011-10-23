@@ -114,13 +114,13 @@ bson_func_suite (void)
 
   s = suite_create ("BSON functional tests");
 
-  tc_manip = tcase_create ("BSON manipulation");
+  tc_manip = tcase_create ("Manipulations");
   tcase_add_test (tc_manip, test_func_bson_stream_close);
   tcase_add_test (tc_manip, test_func_bson_flatten);
   tcase_add_test (tc_manip, test_func_bson_elements_nth_get);
   suite_add_tcase (s, tc_manip);
 
-  tc_stream = tcase_create ("BSON stream");
+  tc_stream = tcase_create ("Stream");
   tcase_add_test (tc_stream, test_func_bson_stream);
   suite_add_tcase (s, tc_stream);
 
