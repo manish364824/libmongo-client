@@ -389,6 +389,39 @@ START_TEST (test_bson_new_from_data)
 }
 END_TEST
 
+START_TEST (test_bson_elements_merge)
+{
+  bson_t *b1, *b2;
+
+  b1 = bson_new_build
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
+     BSON_END);
+
+  b2 = bson_new_build
+    (bson_element_create ("answer", BSON_TYPE_INT32, 42),
+     BSON_END);
+
+  ck_assert (bson_elements_merge (NULL, b2) == NULL);
+
+  b1 = bson_elements_merge (b1, NULL);
+  ck_assert_int_eq (bson_elements_length (b1), 1);
+
+  b1 = bson_elements_merge (b1, bson_ref (b2));
+  ck_assert_int_eq (bson_elements_length (b1), 2);
+
+  b2 = bson_stream_close (b2);
+  b1 = bson_elements_merge (b1, bson_ref (b2));
+  ck_assert_int_eq (bson_elements_length (b1), 3);
+
+  b1 = bson_stream_close (b1);
+  b1 = bson_elements_merge (b1, b2);
+  ck_assert_int_eq (bson_elements_length (b1), 3);
+
+  bson_unref (b1);
+}
+END_TEST
+
 Suite *
 bson_suite (void)
 {
@@ -413,6 +446,7 @@ bson_suite (void)
   tcase_add_test (tc_ele, test_bson_elements_nth_get_set);
   tcase_add_test (tc_ele, test_bson_elements_key_find);
   tcase_add_test (tc_ele, test_bson_elements_key_get);
+  tcase_add_test (tc_ele, test_bson_elements_merge);
   suite_add_tcase (s, tc_ele);
 
   tc_stream = tcase_create ("Stream");

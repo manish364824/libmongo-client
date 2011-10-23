@@ -49,6 +49,7 @@ LMC_0.2.0 {
 
 		bson_elements_length;
 		bson_elements_add;
+		bson_elements_merge;
 		bson_elements_reset;
 
 		bson_elements_nth_get;

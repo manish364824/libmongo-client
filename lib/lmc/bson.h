@@ -216,6 +216,17 @@ bson_t *bson_elements_add (bson_t *b, ...);
  */
 bson_t *bson_elements_reset (bson_t *b);
 
+/** Merges a BSON object into another.
+ *
+ * @param b is the BSON object to merge into.
+ * @param src is the BSON object to merge from.
+ *
+ * @returns A merged BSON object.
+ *
+ * @note A merge will always unref the source!
+ */
+bson_t *bson_elements_merge (bson_t *b, bson_t *src);
+
 /** Get the Nth element of a BSON object.
  *
  * @param b is the object to work with.
