@@ -394,10 +394,12 @@ bson_data_parse (bson_t *b, const uint8_t *data)
   const uint8_t *t;
   uint32_t *size;
 
-  if (!b || !data)
+  if (!b)
     return NULL;
 
   b = bson_reset_elements (b);
+  if (!data)
+    return b;
 
   size = (uint32_t *)data;
   *size -= sizeof (int32_t) + 1;

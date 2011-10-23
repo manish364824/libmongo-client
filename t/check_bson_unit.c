@@ -279,7 +279,10 @@ START_TEST (test_bson_data_parse)
   ck_assert (bson_data_parse (NULL, bson_data_get (old)) == NULL);
 
   new = bson_new_sized (bson_data_get_size (old));
-  ck_assert (bson_data_parse (new, NULL) == NULL);
+  bson_add_elements
+    (new, bson_element_create ("i", BSON_TYPE_INT32, 1), BSON_END);
+  ck_assert (bson_data_parse (new, NULL) != NULL);
+  ck_assert_int_eq (bson_length (new), 0);
 
   new = bson_data_parse (new, bson_data_get (old));
   new = bson_close (new);
