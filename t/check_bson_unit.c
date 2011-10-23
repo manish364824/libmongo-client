@@ -151,10 +151,10 @@ START_TEST (test_bson_reset_elements)
 }
 END_TEST
 
-START_TEST (test_bson_get_nth_element)
+START_TEST (test_bson_get_set_nth_element)
 {
   bson_t *b;
-  bson_element_t *e;
+  bson_element_t *e, *ne;
 
   ck_assert (bson_get_nth_element (NULL, 1) == NULL);
 
@@ -169,6 +169,25 @@ START_TEST (test_bson_get_nth_element)
 	     bson_element_type_get (e) == BSON_TYPE_INT32);
 
   ck_assert (bson_get_nth_element (b, 10) == NULL);
+
+  /* set */
+  ne = bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14);
+
+  ck_assert (bson_set_nth_element (NULL, 1, ne) == NULL);
+
+  b = bson_set_nth_element (b, 10, ne);
+  ck_assert (b != NULL);
+
+  b = bson_set_nth_element (b, 1, NULL);
+  ck_assert (b != NULL);
+  e = bson_get_nth_element (b, 1);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_STRING ||
+	     bson_element_type_get (e) == BSON_TYPE_INT32);
+
+  b = bson_set_nth_element (b, 1, ne);
+  ck_assert (b != NULL);
+  e = bson_get_nth_element (b, 1);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_DOUBLE);
 
   bson_unref (b);
 }
@@ -196,7 +215,7 @@ bson_suite (void)
   tcase_add_test (tc_manip, test_bson_add_elements);
   tcase_add_test (tc_manip, test_bson_new_build);
   tcase_add_test (tc_manip, test_bson_reset_elements);
-  tcase_add_test (tc_manip, test_bson_get_nth_element);
+  tcase_add_test (tc_manip, test_bson_get_set_nth_element);
   suite_add_tcase (s, tc_manip);
 
   return s;

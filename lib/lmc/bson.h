@@ -184,6 +184,16 @@ bson_t *bson_new_build (bson_element_t *e, ...);
  */
 bson_element_t *bson_get_nth_element (bson_t *b, uint32_t n);
 
+/** Set the Nth element of a BSON object.
+ *
+ * @param b is the object to work with.
+ * @param n is the index of the element we want to replace.
+ * @param e is the element to replace the existing element with.
+ *
+ * @returns A BSON object with its Nth element replaced.
+ */
+bson_t *bson_set_nth_element (bson_t *b, uint32_t n, bson_element_t *e);
+
 /** @}
  * @}
  */

@@ -344,3 +344,15 @@ bson_get_nth_element (bson_t *b, uint32_t n)
 
   return b->elements.index.ptrs[n - 1]->e;
 }
+
+bson_t *
+bson_set_nth_element (bson_t *b, uint32_t n, bson_element_t *e)
+{
+  if (!b)
+    return NULL;
+  if (n > bson_length (b) || !e)
+    return b;
+
+  b->elements.index.ptrs[n - 1]->e = e;
+  return b;
+}

@@ -43,4 +43,7 @@ global:
   bson_add_elements;
   bson_reset_elements;
   bson_new_build;
+
+  bson_get_nth_element;
+  bson_set_nth_element;
 };
