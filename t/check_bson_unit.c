@@ -237,10 +237,10 @@ START_TEST (test_bson_elements_key_find)
 }
 END_TEST
 
-START_TEST (test_bson_elements_key_get)
+START_TEST (test_bson_elements_key_get_set)
 {
   bson_t *b;
-  bson_element_t *hello, *answer, *pi;
+  bson_element_t *hello, *answer, *pi, *foo;
 
   hello = bson_element_create ("hello", BSON_TYPE_STRING,
 			       "world", BSON_LENGTH_AUTO);
@@ -258,6 +258,20 @@ START_TEST (test_bson_elements_key_get)
   ck_assert (bson_elements_key_get (b, "hello") == hello);
   ck_assert (bson_elements_key_get (b, "answer") == answer);
   ck_assert (bson_elements_key_get (b, "pi") == pi);
+
+  /* set */
+  foo = bson_element_create ("foo", BSON_TYPE_INT32, 0xf00);
+
+  ck_assert (bson_elements_key_set (NULL, "answer", foo) == NULL);
+
+  b = bson_elements_key_set (b, "invalid-key", foo);
+  ck_assert_int_eq (bson_elements_key_find (b, "foo"), 0);
+  ck_assert_int_eq (bson_elements_length (b), 3);
+
+  b = bson_elements_key_set (b, "pi", foo);
+  ck_assert_int_eq (bson_elements_length (b), 3);
+  ck_assert_int_eq (bson_elements_key_find (b, "pi"), 0);
+  ck_assert_int_ne (bson_elements_key_find (b, "foo"), 0);
 
   bson_unref (b);
 }
@@ -509,7 +523,7 @@ bson_suite (void)
   tcase_add_test (tc_ele, test_bson_elements_nth_get_set);
   tcase_add_test (tc_ele, test_bson_elements_nth_remove);
   tcase_add_test (tc_ele, test_bson_elements_key_find);
-  tcase_add_test (tc_ele, test_bson_elements_key_get);
+  tcase_add_test (tc_ele, test_bson_elements_key_get_set);
   tcase_add_test (tc_ele, test_bson_elements_key_remove);
   tcase_add_test (tc_ele, test_bson_elements_merge);
   suite_add_tcase (s, tc_ele);

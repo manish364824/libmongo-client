@@ -388,6 +388,13 @@ bson_elements_key_get (bson_t *b, const char *key)
   return bson_elements_nth_get (b, bson_elements_key_find (b, key));
 }
 
+bson_t *
+bson_elements_key_set (bson_t *b, const char *key,
+		       bson_element_t *e)
+{
+  return bson_elements_nth_set (b, bson_elements_key_find (b, key), e);
+}
+
 static bson_t *
 _bson_stream_parse (bson_t *b, const uint8_t *data)
 {

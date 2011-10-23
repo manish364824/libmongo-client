@@ -276,6 +276,17 @@ uint32_t bson_elements_key_find (bson_t *b, const char *key);
  */
 bson_element_t *bson_elements_key_get (bson_t *b, const char *key);
 
+/** Replace a key in a BSON object.
+ *
+ * @param b is the object to work with.
+ * @param key is the key to replace.
+ * @param e is the element to replace the existing key with.
+ *
+ * @returns A BSON object with the appropriate key replaced.
+ */
+bson_t *bson_elements_key_set (bson_t *b, const char *key,
+			       bson_element_t *e);
+
 /** Remove a key from a BSON object.
  *
  * @param b is the object to remove from.
