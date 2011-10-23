@@ -35,25 +35,24 @@ LMC_0.2.0 {
 	# bson
 		bson_new;
 		bson_new_sized;
+		bson_new_from_data;
+		bson_new_build;
 		bson_ref;
 		bson_unref;
 
-		bson_open;
-		bson_close;
+		bson_stream_open;
+		bson_stream_close;
+		bson_stream_get_data;
+		bson_stream_get_size;
+		bson_stream_set;
+		bson_stream_merge;
 
-		bson_length;
-		bson_data_get;
-		bson_data_get_size;
-		bson_data_parse;
-		bson_data_merge;
-		bson_new_from_data;
+		bson_elements_length;
+		bson_elements_add;
+		bson_elements_reset;
 
-		bson_add_elements;
-		bson_reset_elements;
-		bson_new_build;
-
- 		bson_get_nth_element;
-		bson_set_nth_element;
-		bson_key_find;
- 		bson_key_get;
+		bson_elements_nth_get;
+		bson_elements_nth_set;
+		bson_elements_key_find;
+		bson_elements_key_get;
 };

@@ -82,14 +82,14 @@ _bson_index_init (bson_t *b)
 static inline void
 _bson_index_ensure_size (bson_t *b)
 {
-  if (bson_length (b) < b->elements.index.alloc)
+  if (bson_elements_length (b) < b->elements.index.alloc)
     return;
 
   do
     {
       b->elements.index.alloc *= 2;
     }
-  while (bson_length (b) > b->elements.index.alloc);
+  while (bson_elements_length (b) > b->elements.index.alloc);
 
   b->elements.index.ptrs =
     (bson_node_t **)realloc (b->elements.index.ptrs,
@@ -162,7 +162,7 @@ _bson_elements_drop (bson_t *b)
 }
 
 bson_t *
-bson_reset_elements (bson_t *b)
+bson_elements_reset (bson_t *b)
 {
   if (!b)
     return NULL;
@@ -216,7 +216,7 @@ bson_flatten (bson_t *b)
   b->stream.with_size.size = LMC_INT32_TO_LE (size);
 
   index = b->elements.index.ptrs;
-  for (i = 1; i <= bson_length (b); i++)
+  for (i = 1; i <= bson_elements_length (b); i++)
     {
       memcpy (b->stream.with_size.data + pos,
 	      bson_element_stream_get (index[i - 1]->e),
@@ -229,7 +229,7 @@ bson_flatten (bson_t *b)
 }
 
 bson_t *
-bson_open (bson_t *b)
+bson_stream_open (bson_t *b)
 {
   if (!b || b->stream.len == 0)
     return b;
@@ -239,7 +239,7 @@ bson_open (bson_t *b)
 }
 
 bson_t *
-bson_close (bson_t *b)
+bson_stream_close (bson_t *b)
 {
   if (!b || b->stream.len != 0)
     return b;
@@ -248,7 +248,7 @@ bson_close (bson_t *b)
 }
 
 uint32_t
-bson_length (bson_t *b)
+bson_elements_length (bson_t *b)
 {
   if (!b)
     return 0;
@@ -256,7 +256,7 @@ bson_length (bson_t *b)
 }
 
 const uint8_t *
-bson_data_get (bson_t *b)
+bson_stream_get_data (bson_t *b)
 {
   if (!b || b->stream.len == 0)
     return NULL;
@@ -264,7 +264,7 @@ bson_data_get (bson_t *b)
 }
 
 uint32_t
-bson_data_get_size (bson_t *b)
+bson_stream_get_size (bson_t *b)
 {
   if (!b)
     return 0;
@@ -272,7 +272,7 @@ bson_data_get_size (bson_t *b)
 }
 
 static inline bson_t *
-bson_add_elements_va (bson_t *b, va_list ap)
+bson_elements_add_va (bson_t *b, va_list ap)
 {
   bson_node_t *t, dummy;
   bson_element_t *e;
@@ -308,12 +308,12 @@ bson_add_elements_va (bson_t *b, va_list ap)
 }
 
 bson_t *
-bson_add_elements (bson_t *b, ...)
+bson_elements_add (bson_t *b, ...)
 {
   va_list ap;
 
   va_start (ap, b);
-  b = bson_add_elements_va (b, ap);
+  b = bson_elements_add_va (b, ap);
   va_end (ap);
   return b;
 }
@@ -329,28 +329,28 @@ bson_new_build (bson_element_t *e, ...)
 
   b = bson_new ();
   va_start (ap, e);
-  b = bson_add_elements (b, e, BSON_END);
-  b = bson_add_elements_va (b, ap);
+  b = bson_elements_add (b, e, BSON_END);
+  b = bson_elements_add_va (b, ap);
   va_end (ap);
 
   return b;
 }
 
 bson_element_t *
-bson_get_nth_element (bson_t *b, uint32_t n)
+bson_elements_nth_get (bson_t *b, uint32_t n)
 {
-  if (!b || n > bson_length (b) || n == 0)
+  if (!b || n > bson_elements_length (b) || n == 0)
     return NULL;
 
   return b->elements.index.ptrs[n - 1]->e;
 }
 
 bson_t *
-bson_set_nth_element (bson_t *b, uint32_t n, bson_element_t *e)
+bson_elements_nth_set (bson_t *b, uint32_t n, bson_element_t *e)
 {
   if (!b)
     return NULL;
-  if (n > bson_length (b) || !e || n == 0)
+  if (n > bson_elements_length (b) || !e || n == 0)
     return b;
 
   b->elements.index.ptrs[n - 1]->e = e;
@@ -358,7 +358,7 @@ bson_set_nth_element (bson_t *b, uint32_t n, bson_element_t *e)
 }
 
 uint32_t
-bson_key_find (bson_t *b, const char *key)
+bson_elements_key_find (bson_t *b, const char *key)
 {
   uint32_t i = 0;
   uint32_t keylen;
@@ -377,19 +377,19 @@ bson_key_find (bson_t *b, const char *key)
 	return i + 1;
       i++;
     }
-  while (i < bson_length (b));
+  while (i < bson_elements_length (b));
 
   return 0;
 }
 
 bson_element_t *
-bson_key_get (bson_t *b, const char *key)
+bson_elements_key_get (bson_t *b, const char *key)
 {
-  return bson_get_nth_element (b, bson_key_find (b, key));
+  return bson_elements_nth_get (b, bson_elements_key_find (b, key));
 }
 
 static bson_t *
-_bson_data_parse (bson_t *b, const uint8_t *data)
+_bson_stream_parse (bson_t *b, const uint8_t *data)
 {
   const uint8_t *t;
   uint32_t *size;
@@ -406,7 +406,7 @@ _bson_data_parse (bson_t *b, const uint8_t *data)
       if (!e)
 	break;
 
-      b = bson_add_elements (b, e, BSON_END);
+      b = bson_elements_add (b, e, BSON_END);
       t += bson_element_stream_get_size (e);
     }
 
@@ -414,24 +414,24 @@ _bson_data_parse (bson_t *b, const uint8_t *data)
 }
 
 bson_t *
-bson_data_merge (bson_t *b, const uint8_t *data)
+bson_stream_merge (bson_t *b, const uint8_t *data)
 {
   if (!b)
     return NULL;
   if (!data)
     return b;
 
-  return _bson_data_parse (b, data);
+  return _bson_stream_parse (b, data);
 }
 
 bson_t *
-bson_data_parse (bson_t *b, const uint8_t *data)
+bson_stream_set (bson_t *b, const uint8_t *data)
 {
-  return bson_data_merge (bson_reset_elements (b), data);
+  return bson_stream_merge (bson_elements_reset (b), data);
 }
 
 bson_t *
 bson_new_from_data (const uint8_t *data)
 {
-  return bson_data_merge (bson_new (), data);
+  return bson_stream_merge (bson_new (), data);
 }

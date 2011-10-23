@@ -16,25 +16,25 @@ START_TEST (test_perf_flatten)
     {
       snprintf (s, 15, "i%d-%d", n, _i);
 
-      bson_add_elements
+      bson_elements_add
 	(b, bson_element_create (s, BSON_TYPE_INT32, n), BSON_END);
     }
-  ck_assert_int_eq (bson_length (b), 60);
+  ck_assert_int_eq (bson_elements_length (b), 60);
 
-  b = bson_close (b);
-  _ck_assert_int (bson_data_get_size (b), >, 64);
+  b = bson_stream_close (b);
+  _ck_assert_int (bson_stream_get_size (b), >, 64);
 
-  b = bson_open (b);
+  b = bson_stream_open (b);
   for (n = 0; n < 256; n++)
     {
       snprintf (s, 15, "i%d-%d", n + 64, _i);
 
-      bson_add_elements
+      bson_elements_add
 	(b, bson_element_create (s, BSON_TYPE_INT32, n), BSON_END);
     }
-  ck_assert_int_eq (bson_length (b), 256 + 60);
+  ck_assert_int_eq (bson_elements_length (b), 256 + 60);
 
-  b = bson_close (b);
+  b = bson_stream_close (b);
 
   bson_unref (b);
 }

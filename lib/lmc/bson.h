@@ -77,7 +77,7 @@ bson_t *bson_unref (bson_t *b);
  *
  * @returns The opened BSON object.
  */
-bson_t *bson_open (bson_t *b);
+bson_t *bson_stream_open (bson_t *b);
 
 /** Close a BSON object, so that elements cannot be added.
  *
@@ -85,7 +85,7 @@ bson_t *bson_open (bson_t *b);
  *
  * @returns The closed BSON object.
  */
-bson_t *bson_close (bson_t *b);
+bson_t *bson_stream_close (bson_t *b);
 
 /** Get the number of elements in a BSON object.
  *
@@ -93,7 +93,7 @@ bson_t *bson_close (bson_t *b);
  *
  * @returns The number of elements in the object.
  */
-uint32_t bson_length (bson_t *b);
+uint32_t bson_elements_length (bson_t *b);
 
 /** Get the data stream of the BSON object.
  *
@@ -105,7 +105,7 @@ uint32_t bson_length (bson_t *b);
  *
  * @note The object must be closed!
  */
-const uint8_t *bson_data_get (bson_t *b);
+const uint8_t *bson_stream_get_data (bson_t *b);
 
 /** Get the size of the BSON object's data stream.
  *
@@ -115,7 +115,7 @@ const uint8_t *bson_data_get (bson_t *b);
  *
  * @note The object must be closed!
  */
-uint32_t bson_data_get_size (bson_t *b);
+uint32_t bson_stream_get_size (bson_t *b);
 
 /** @defgroup lmc_bson_builder Builder
  * @addtogroup lmc_bson_builder
@@ -138,7 +138,7 @@ uint32_t bson_data_get_size (bson_t *b);
  * if one wishes to use them after unrefing the BSON object, the
  * refcount must be incremented manually.
  */
-bson_t *bson_add_elements (bson_t *b, ...);
+bson_t *bson_elements_add (bson_t *b, ...);
 
 /** Reset a BSON object.
  *
@@ -149,7 +149,7 @@ bson_t *bson_add_elements (bson_t *b, ...);
  *
  * @returns The BSON object with its elements removed.
  */
-bson_t *bson_reset_elements (bson_t *b);
+bson_t *bson_elements_reset (bson_t *b);
 
 /** Build a new BSON object from elements.
  *
@@ -177,7 +177,7 @@ bson_t *bson_new_build (bson_element_t *e, ...);
  * only be parsed up to that point, and no rollback will be attempted,
  * thus one can end up with partial results.
  */
-bson_t *bson_data_parse (bson_t *b, const uint8_t *data);
+bson_t *bson_stream_set (bson_t *b, const uint8_t *data);
 
 /** Merge data from a datastream into a BSON object.
  *
@@ -190,7 +190,7 @@ bson_t *bson_data_parse (bson_t *b, const uint8_t *data);
  * only be parsed up to that point, and no rollback will be attempted,
  * thus one can end up with partial results.
  */
-bson_t *bson_data_merge (bson_t *b, const uint8_t *data);
+bson_t *bson_stream_merge (bson_t *b, const uint8_t *data);
 
 /** Create a new BSON object from a datastream.
  *
@@ -220,7 +220,7 @@ bson_t *bson_new_from_data (const uint8_t *data);
  * internal structure, and if freed or modified, the appropriate
  * function must be called to update the BSON object too.
  */
-bson_element_t *bson_get_nth_element (bson_t *b, uint32_t n);
+bson_element_t *bson_elements_nth_get (bson_t *b, uint32_t n);
 
 /** Set the Nth element of a BSON object.
  *
@@ -230,7 +230,7 @@ bson_element_t *bson_get_nth_element (bson_t *b, uint32_t n);
  *
  * @returns A BSON object with its Nth element replaced.
  */
-bson_t *bson_set_nth_element (bson_t *b, uint32_t n, bson_element_t *e);
+bson_t *bson_elements_nth_set (bson_t *b, uint32_t n, bson_element_t *e);
 
 /** Find the index of a key in a BSON object.
  *
@@ -239,7 +239,7 @@ bson_t *bson_set_nth_element (bson_t *b, uint32_t n, bson_element_t *e);
  *
  * @returns The index of the key, or 0 if not found.
  */
-uint32_t bson_key_find (bson_t *b, const char *key);
+uint32_t bson_elements_key_find (bson_t *b, const char *key);
 
 /** Retrieve a key from a BSON object.
  *
@@ -249,7 +249,7 @@ uint32_t bson_key_find (bson_t *b, const char *key);
  * @returns The BSON element associated with the key, or NULL if not
  * found.
  */
-bson_element_t *bson_key_get (bson_t *b, const char *key);
+bson_element_t *bson_elements_key_get (bson_t *b, const char *key);
 
 /** @}
  * @}
