@@ -346,7 +346,7 @@ bson_element_value_set_string (bson_element_t *e,
   e = bson_element_type_set (e, BSON_TYPE_STRING);
   e = bson_element_add_space (e, sizeof (int32_t));
   BSON_ELEMENT_VALUE (e)->str.len = LMC_INT32_TO_LE (l + 1);
-  e->len = sizeof (int32_t);
+  e->len = e->name_len + sizeof (int32_t);
 
   e = bson_element_data_append (e, (uint8_t *)val, l);
   return bson_element_data_append (e, (uint8_t *)"\0", 1);

@@ -37,7 +37,7 @@ START_TEST (test_func_bson_flatten)
      BSON_END);
   b = bson_close (b);
   size = bson_data_get_size (b);
-  _ck_assert_int (size, >, 5);
+  _ck_assert_int (size, >, 16);
 
   b = bson_open (b);
   b = bson_add_elements (b, bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14),
