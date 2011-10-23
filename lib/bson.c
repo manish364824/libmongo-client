@@ -426,7 +426,7 @@ bson_stream_merge (bson_t *b, const uint8_t *data)
 {
   if (!b)
     return NULL;
-  if (!data)
+  if (!data || b->stream.len != 0)
     return b;
 
   return _bson_stream_parse (b, data);
@@ -453,6 +453,12 @@ bson_elements_merge (bson_t *b, bson_t *src)
     return NULL;
   if (!src)
     return b;
+
+  if (b->stream.len != 0)
+    {
+      bson_unref (src);
+      return b;
+    }
 
   for (i = 1; i <= bson_elements_length (src); i++)
     b = bson_elements_add
