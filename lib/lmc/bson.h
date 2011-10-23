@@ -179,6 +179,31 @@ bson_t *bson_new_build (bson_element_t *e, ...);
  */
 bson_t *bson_data_parse (bson_t *b, const uint8_t *data);
 
+/** Merge data from a datastream into a BSON object.
+ *
+ * @param b is the BSON object to merge into.
+ * @param data is the BSON datastream to merge in.
+ *
+ * @returns A BSON object with the data merged.
+ *
+ * @note If the datastream contains unparsable BSON elements, it will
+ * only be parsed up to that point, and no rollback will be attempted,
+ * thus one can end up with partial results.
+ */
+bson_t *bson_data_merge (bson_t *b, const uint8_t *data);
+
+/** Create a new BSON object from a datastream.
+ *
+ * @param data is the BSON datastream to parse.
+ *
+ * @returns A new BSON object, with its initial data set.
+ *
+ * @note If the datastream contains unparsable BSON elements, it will
+ * only be parsed up to that point, and no rollback will be attempted,
+ * thus one can end up with partial results.
+ */
+bson_t *bson_new_from_data (const uint8_t *data);
+
 /** @} */
 
 /** @defgroup lmc_bson_accessors Accessors

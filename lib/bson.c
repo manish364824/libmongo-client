@@ -388,18 +388,11 @@ bson_key_get (bson_t *b, const char *key)
   return bson_get_nth_element (b, bson_key_find (b, key));
 }
 
-bson_t *
-bson_data_parse (bson_t *b, const uint8_t *data)
+static bson_t *
+_bson_data_parse (bson_t *b, const uint8_t *data)
 {
   const uint8_t *t;
   uint32_t *size;
-
-  if (!b)
-    return NULL;
-
-  b = bson_reset_elements (b);
-  if (!data)
-    return b;
 
   size = (uint32_t *)data;
   *size -= sizeof (int32_t) + 1;
@@ -418,4 +411,27 @@ bson_data_parse (bson_t *b, const uint8_t *data)
     }
 
   return b;
+}
+
+bson_t *
+bson_data_merge (bson_t *b, const uint8_t *data)
+{
+  if (!b)
+    return NULL;
+  if (!data)
+    return b;
+
+  return _bson_data_parse (b, data);
+}
+
+bson_t *
+bson_data_parse (bson_t *b, const uint8_t *data)
+{
+  return bson_data_merge (bson_reset_elements (b), data);
+}
+
+bson_t *
+bson_new_from_data (const uint8_t *data)
+{
+  return bson_data_merge (bson_new (), data);
 }

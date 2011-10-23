@@ -315,6 +315,82 @@ START_TEST (test_bson_data_parse)
 }
 END_TEST
 
+START_TEST (test_bson_data_merge)
+{
+  bson_t *b1, *b2;
+
+  b1 = bson_new_build
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
+     BSON_END);
+
+  b2 = bson_new_build
+    (bson_element_create ("answer", BSON_TYPE_INT32, 42),
+     BSON_END);
+  b2 = bson_close (b2);
+
+  b1 = bson_data_merge (b1, bson_data_get (b2));
+  ck_assert_int_eq (bson_length (b1), 2);
+
+  b1 = bson_data_merge (b1, NULL);
+  ck_assert_int_eq (bson_length (b1), 2);
+
+  ck_assert (bson_data_merge (NULL, bson_data_get (b2)) == NULL);
+
+  b1 = bson_close (b1);
+  b1 = bson_data_merge (b1, bson_data_get (b2));
+  ck_assert_int_eq (bson_length (b1), 2);
+
+  bson_unref (b1);
+  bson_unref (b2);
+}
+END_TEST
+
+START_TEST (test_bson_new_from_data)
+{
+  bson_t *old, *new;
+  bson_element_t *e;
+
+  old = bson_new_build
+    (bson_element_create ("hello", BSON_TYPE_STRING,
+			  "world", BSON_LENGTH_AUTO),
+     bson_element_create ("answer", BSON_TYPE_INT32, 42),
+     bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14),
+     BSON_END);
+  old = bson_close (old);
+
+  ck_assert (bson_data_parse (NULL, bson_data_get (old)) == NULL);
+
+  new = bson_new_from_data (bson_data_get (old));
+  new = bson_close (new);
+
+  ck_assert_int_eq (bson_data_get_size (old),
+		    bson_data_get_size (new));
+
+  bson_unref (new);
+
+  /* Add an invalid element... */
+  old = bson_open (old);
+  e = bson_element_new ();
+  e = bson_element_type_set (e, 42);
+  e = bson_element_name_set (e, "invalid");
+  e = bson_element_data_set (e, (uint8_t *)"foobar", strlen ("foobar"));
+
+  old = bson_add_elements (old, e,
+			   bson_element_create ("valid", BSON_TYPE_INT32, 1),
+			   BSON_END);
+  old = bson_close (old);
+
+  new = bson_new_from_data (bson_data_get (old));
+
+  _ck_assert_int (bson_length (old), >,
+		  bson_length (new));
+
+  bson_unref (old);
+  bson_unref (new);
+}
+END_TEST
+
 Suite *
 bson_suite (void)
 {
@@ -346,7 +422,9 @@ bson_suite (void)
   suite_add_tcase (s, tc_access);
 
   tc_parse = tcase_create ("Parsing");
+  tcase_add_test (tc_parse, test_bson_data_merge);
   tcase_add_test (tc_parse, test_bson_data_parse);
+  tcase_add_test (tc_parse, test_bson_new_from_data);
   suite_add_tcase (s, tc_parse);
 
   return s;
