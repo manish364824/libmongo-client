@@ -1,56 +1,59 @@
 LMC_0.2.0 {
-global:
-  bson_element_new;
-  bson_element_new_sized;
-  bson_element_ref;
-  bson_element_unref;
-  bson_element_type_get;
-  bson_element_type_set;
-  bson_element_name_set;
-  bson_element_name_get;
+	global:
+	# bson_element
+		bson_element_new;
+		bson_element_new_sized;
+		bson_element_ref;
+		bson_element_unref;
 
-  bson_element_data_reset;
-  bson_element_data_append;
-  bson_element_data_set;
-  bson_element_data_get;
-  bson_element_data_get_size;
-  bson_element_stream_get;
-  bson_element_stream_get_size;
+		bson_element_type_get;
+		bson_element_type_set;
+		bson_element_name_set;
+		bson_element_name_get;
 
-  bson_element_value_set_double;
-  bson_element_value_get_double;
-  bson_element_value_set_int32;
-  bson_element_value_get_int32;
-  bson_element_value_set_string;
-  bson_element_value_get_string;
+		bson_element_data_reset;
+		bson_element_data_append;
+		bson_element_data_set;
+		bson_element_data_get;
+		bson_element_data_get_size;
 
-  bson_element_value_set;
-  bson_element_set;
-  bson_element_create;
-  bson_element_new_from_data;
+		bson_element_stream_get;
+		bson_element_stream_get_size;
 
-  bson_new;
-  bson_new_sized;
-  bson_ref;
-  bson_unref;
+		bson_element_value_set_double;
+		bson_element_value_get_double;
+		bson_element_value_set_int32;
+		bson_element_value_get_int32;
+		bson_element_value_set_string;
+		bson_element_value_get_string;
 
-  bson_open;
-  bson_close;
+		bson_element_value_set;
+		bson_element_set;
+		bson_element_create;
+		bson_element_new_from_data;
 
-  bson_length;
-  bson_data_get;
-  bson_data_get_size;
-  bson_data_parse;
-  bson_data_merge;
-  bson_new_from_data;
+	# bson
+		bson_new;
+		bson_new_sized;
+		bson_ref;
+		bson_unref;
 
-  bson_add_elements;
-  bson_reset_elements;
-  bson_new_build;
+		bson_open;
+		bson_close;
 
-  bson_get_nth_element;
-  bson_set_nth_element;
+		bson_length;
+		bson_data_get;
+		bson_data_get_size;
+		bson_data_parse;
+		bson_data_merge;
+		bson_new_from_data;
 
-  bson_key_find;
-  bson_key_get;
+		bson_add_elements;
+		bson_reset_elements;
+		bson_new_build;
+
+ 		bson_get_nth_element;
+		bson_set_nth_element;
+		bson_key_find;
+ 		bson_key_get;
 };
