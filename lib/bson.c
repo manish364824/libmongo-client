@@ -45,6 +45,7 @@ struct _bson_t
   struct
   {
     uint32_t len;
+    uint32_t total_size;
     bson_node_t *head;
 
     struct
@@ -170,6 +171,7 @@ bson_reset_elements (bson_t *b)
   b->stream.len = 0;
   b->elements.len = 0;
   b->elements.head = NULL;
+  b->elements.total_size = 0;
   return b;
 }
 
@@ -201,15 +203,10 @@ bson_unref (bson_t *b)
 static inline bson_t *
 bson_flatten (bson_t *b)
 {
-  uint32_t size = sizeof (int32_t) + sizeof (uint8_t), i, pos = 0;
-  bson_node_t *t = b->elements.head;
+  uint32_t size, i, pos = 0;
   bson_node_t **index;
 
-  while (t)
-    {
-      size += bson_element_data_get_size (t->e);
-      t = t->next;
-    }
+  size = sizeof (int32_t) + sizeof (uint8_t) + b->elements.total_size;
 
   if (size > b->stream.alloc)
     {
@@ -296,6 +293,7 @@ bson_add_elements_va (bson_t *b, va_list ap)
       n->next = NULL;
 
       _bson_index_add (b, b->elements.len + c, n);
+      b->elements.total_size += bson_element_data_get_size (e);
 
       t->next = n;
       t = t->next;
