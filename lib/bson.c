@@ -454,7 +454,8 @@ bson_elements_merge (bson_t *b, bson_t *src)
     return b;
 
   for (i = 1; i <= bson_elements_length (src); i++)
-    b = bson_elements_add (b, bson_elements_nth_get (src, i), BSON_END);
+    b = bson_elements_add
+      (b, bson_element_ref (bson_elements_nth_get (src, i)), BSON_END);
   bson_unref (src);
   return b;
 }
