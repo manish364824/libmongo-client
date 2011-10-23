@@ -223,7 +223,7 @@ bson_flatten (bson_t *b)
 	      bson_element_stream_get_size (index[i - 1]->e));
       pos += bson_element_stream_get_size (index[i - 1]->e);
     }
-  b->stream.with_size.data[size] = 0;
+  b->stream.with_size.data[pos] = 0;
 
   return b;
 }
