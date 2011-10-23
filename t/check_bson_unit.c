@@ -169,11 +169,15 @@ START_TEST (test_bson_get_set_nth_element)
 	     bson_element_type_get (e) == BSON_TYPE_INT32);
 
   ck_assert (bson_get_nth_element (b, 10) == NULL);
+  ck_assert (bson_get_nth_element (b, 0) == NULL);
 
   /* set */
   ne = bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14);
 
   ck_assert (bson_set_nth_element (NULL, 1, ne) == NULL);
+
+  b = bson_set_nth_element (b, 0, ne);
+  ck_assert (b != NULL);
 
   b = bson_set_nth_element (b, 10, ne);
   ck_assert (b != NULL);

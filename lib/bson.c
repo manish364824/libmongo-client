@@ -339,7 +339,7 @@ bson_new_build (bson_element_t *e, ...)
 bson_element_t *
 bson_get_nth_element (bson_t *b, uint32_t n)
 {
-  if (!b || n > bson_length (b))
+  if (!b || n > bson_length (b) || n == 0)
     return NULL;
 
   return b->elements.index.ptrs[n - 1]->e;
@@ -350,7 +350,7 @@ bson_set_nth_element (bson_t *b, uint32_t n, bson_element_t *e)
 {
   if (!b)
     return NULL;
-  if (n > bson_length (b) || !e)
+  if (n > bson_length (b) || !e || n == 0)
     return b;
 
   b->elements.index.ptrs[n - 1]->e = e;
