@@ -70,6 +70,50 @@ struct _bson_t
   } stream;
 };
 
+static inline void
+_bson_index_init (bson_t *b)
+{
+  b->elements.index.ptrs =
+    (bson_node_t **)malloc (16 * sizeof (bson_node_t *));
+  b->elements.index.alloc = 16;
+}
+
+static inline void
+_bson_index_ensure_size (bson_t *b)
+{
+  if (bson_length (b) < b->elements.index.alloc)
+    return;
+
+  do
+    {
+      b->elements.index.alloc *= 2;
+    }
+  while (bson_length (b) > b->elements.index.alloc);
+
+  b->elements.index.ptrs =
+    (bson_node_t **)realloc (b->elements.index.ptrs,
+			     b->elements.index.alloc * sizeof (bson_node_t *));
+}
+
+static inline void
+_bson_index_rebuild (bson_t *b)
+{
+  bson_node_t *t;
+  bson_node_t **index;
+  uint32_t i = 0;
+
+  _bson_index_ensure_size (b);
+
+  index = b->elements.index.ptrs;
+  t = b->elements.head;
+
+  while (t)
+    {
+      index[i++] = t;
+      t = t->next;
+    }
+}
+
 bson_t *
 bson_new_sized (uint32_t size)
 {
@@ -79,6 +123,7 @@ bson_new_sized (uint32_t size)
 
   b->ref = 1;
   b->stream.alloc = size;
+  _bson_index_init (b);
 
   return b;
 }
@@ -149,8 +194,9 @@ bson_unref (bson_t *b)
 static inline bson_t *
 bson_flatten (bson_t *b)
 {
-  uint32_t size = sizeof (int32_t) + sizeof (uint8_t), i = 0, pos = 0;
-  bson_node_t *t = b->elements.head, **index;
+  uint32_t size = sizeof (int32_t) + sizeof (uint8_t), i, pos = 0;
+  bson_node_t *t = b->elements.head;
+  bson_node_t **index;
 
   if (bson_length (b) > b->elements.index.alloc)
     {
@@ -160,13 +206,10 @@ bson_flatten (bson_t *b)
 				 bson_length (b) *
 				 sizeof (bson_node_t *));
     }
-  index = b->elements.index.ptrs;
 
   while (t)
     {
-      index[i] = t;
       size += bson_element_data_get_size (t->e);
-      i++;
       t = t->next;
     }
 
@@ -178,7 +221,9 @@ bson_flatten (bson_t *b)
   b->stream.len = size;
   b->stream.with_size.size = LMC_INT32_TO_LE (size);
 
-  for (i = 1; i <= b->elements.len; i++)
+  _bson_index_rebuild (b);
+  index = b->elements.index.ptrs;
+  for (i = 1; i <= bson_length (b); i++)
     {
       memcpy (b->stream.with_size.data + pos,
 	      bson_element_data_get (index[i - 1]->e),
