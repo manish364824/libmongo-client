@@ -356,3 +356,34 @@ bson_set_nth_element (bson_t *b, uint32_t n, bson_element_t *e)
   b->elements.index.ptrs[n - 1]->e = e;
   return b;
 }
+
+uint32_t
+bson_key_find (bson_t *b, const char *key)
+{
+  uint32_t i = 0;
+  uint32_t keylen;
+
+  if (!b || !key)
+    return 0;
+
+  keylen = strlen (key);
+
+  do
+    {
+      const char *n = bson_element_name_get (b->elements.index.ptrs[i]->e);
+      uint32_t len = strlen (n);
+
+      if (len == keylen && memcmp (n, key, len) == 0)
+	return i + 1;
+      i++;
+    }
+  while (i < bson_length (b));
+
+  return 0;
+}
+
+bson_element_t *
+bson_key_get (bson_t *b, const char *key)
+{
+  return bson_get_nth_element (b, bson_key_find (b, key));
+}

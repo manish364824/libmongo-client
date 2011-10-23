@@ -194,6 +194,25 @@ bson_element_t *bson_get_nth_element (bson_t *b, uint32_t n);
  */
 bson_t *bson_set_nth_element (bson_t *b, uint32_t n, bson_element_t *e);
 
+/** Find the index of a key in a BSON object.
+ *
+ * @param b is the object to search in.
+ * @param key is the key to look for.
+ *
+ * @returns The index of the key, or 0 if not found.
+ */
+uint32_t bson_key_find (bson_t *b, const char *key);
+
+/** Retrieve a key from a BSON object.
+ *
+ * @param b is the object to search in.
+ * @param key is the key to look for.
+ *
+ * @returns The BSON element associated with the key, or NULL if not
+ * found.
+ */
+bson_element_t *bson_key_get (bson_t *b, const char *key);
+
 /** @}
  * @}
  */

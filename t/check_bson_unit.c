@@ -193,12 +193,78 @@ START_TEST (test_bson_get_set_nth_element)
 }
 END_TEST
 
+START_TEST (test_bson_key_find)
+{
+  bson_t *b;
+  bson_element_t *hello, *answer, *pi, *e;
+  uint32_t h_i, a_i, p_i;
+
+  hello = bson_element_create ("hello", BSON_TYPE_STRING,
+			       "world", BSON_LENGTH_AUTO);
+  answer = bson_element_create ("answer", BSON_TYPE_INT32, 42);
+  pi = bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14);
+
+  b = bson_new_build (hello, answer, pi, BSON_END);
+
+  ck_assert (bson_key_find (NULL, "hello") == 0);
+  ck_assert (bson_key_find (b, "does-not-exist") == 0);
+  ck_assert (bson_key_find (b, "hell") == 0);
+  ck_assert (bson_key_find (b, "olleh") == 0);
+  ck_assert (bson_key_find (b, NULL) == 0);
+
+  h_i = bson_key_find (b, "hello");
+  a_i = bson_key_find (b, "answer");
+  p_i = bson_key_find (b, "pi");
+  ck_assert_int_ne (h_i, 0);
+  ck_assert_int_ne (a_i, 0);
+  ck_assert_int_ne (p_i, 0);
+
+  ck_assert_int_ne (h_i, a_i);
+  ck_assert_int_ne (a_i, p_i);
+
+  e = bson_get_nth_element (b, h_i);
+  ck_assert (e == hello);
+  e = bson_get_nth_element (b, a_i);
+  ck_assert (e == answer);
+  e = bson_get_nth_element (b, p_i);
+  ck_assert (e == pi);
+
+  bson_unref (b);
+}
+END_TEST
+
+START_TEST (test_bson_key_get)
+{
+  bson_t *b;
+  bson_element_t *hello, *answer, *pi;
+
+  hello = bson_element_create ("hello", BSON_TYPE_STRING,
+			       "world", BSON_LENGTH_AUTO);
+  answer = bson_element_create ("answer", BSON_TYPE_INT32, 42);
+  pi = bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14);
+
+  b = bson_new_build (hello, answer, pi, BSON_END);
+
+  ck_assert (bson_key_get (NULL, "hello") == NULL);
+  ck_assert (bson_key_get (b, "does-not-exist") == NULL);
+  ck_assert (bson_key_get (b, "hell") == NULL);
+  ck_assert (bson_key_get (b, "olleh") == NULL);
+  ck_assert (bson_key_get (b, NULL) == NULL);
+
+  ck_assert (bson_key_get (b, "hello") == hello);
+  ck_assert (bson_key_get (b, "answer") == answer);
+  ck_assert (bson_key_get (b, "pi") == pi);
+
+  bson_unref (b);
+}
+END_TEST
+
 Suite *
 bson_suite (void)
 {
   Suite *s;
 
-  TCase *tc_core, *tc_manip;
+  TCase *tc_core, *tc_manip, *tc_access;
 
   s = suite_create ("BSON unit tests");
 
@@ -217,6 +283,11 @@ bson_suite (void)
   tcase_add_test (tc_manip, test_bson_reset_elements);
   tcase_add_test (tc_manip, test_bson_get_set_nth_element);
   suite_add_tcase (s, tc_manip);
+
+  tc_access = tcase_create ("BSON accessors");
+  tcase_add_test (tc_access, test_bson_key_find);
+  tcase_add_test (tc_access, test_bson_key_get);
+  suite_add_tcase (s, tc_access);
 
   return s;
 }

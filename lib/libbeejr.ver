@@ -46,4 +46,7 @@ global:
 
   bson_get_nth_element;
   bson_set_nth_element;
+
+  bson_key_find;
+  bson_key_get;
 };
