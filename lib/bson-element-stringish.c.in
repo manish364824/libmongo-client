@@ -17,6 +17,14 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * Variables:
+ *
+ *  + SETTER: The name of the setter (ie, "string", "javascript", etc)
+ *  + TYPE: The type of the setter (the part after BSON_TYPE_, eg,
+ *    "STRING")
+ */
+
 bson_element_t *
 bson_element_value_set_SETTER (bson_element_t *e, const char *val,
 			       int32_t length)

@@ -17,6 +17,19 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * Variables:
+ *  + SETTER: The setter name (ie, "double")
+ *  + TYPE: The BSON type (without the BSON_TYPE_ prefix)
+ *  + CTYPE: The C type (ie, int32_t)
+ *  + SIZE: The size to allocate for the element (ie, sizeof($CTYPE))
+ *  + ACCESSOR: Element inside bson_element_value_t to access.
+ *
+ * Not used here, but used by the Makefile:
+ *  + SWAPPER: Name of the byteswap macro (well, part of it, anyway)
+ *  + NOSWAP: When non-empty, skip byteswapping.
+ */
+
 bson_element_t *
 bson_element_value_set_SETTER (bson_element_t *e, CTYPE val)
 {
