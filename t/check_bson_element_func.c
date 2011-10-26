@@ -163,6 +163,16 @@ START_TEST (test_func_bson_element_datetime)
 }
 END_TEST
 
+START_TEST (test_func_bson_element_js_code)
+{
+  _bson_element_test_stream
+    (bson_element_create ("js", BSON_TYPE_JS_CODE,
+			  "alert('hello world!')", BSON_LENGTH_AUTO),
+     30,
+     "\x0d" "js\x00" "\x16\x00\x00\x00" "alert('hello world!')\x00");
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -181,6 +191,7 @@ bson_element_suite (void)
   tcase_add_test (tc_enc, test_func_bson_element_int32);
   tcase_add_test (tc_enc, test_func_bson_element_int64);
   tcase_add_test (tc_enc, test_func_bson_element_string);
+  tcase_add_test (tc_enc, test_func_bson_element_js_code);
   tcase_add_test (tc_enc, test_func_bson_element_boolean);
   tcase_add_test (tc_enc, test_func_bson_element_null);
   tcase_add_test (tc_enc, test_func_bson_element_datetime);

@@ -401,6 +401,63 @@ _bson_element_value_get_size_STRING (const uint8_t *data)
     (int32_t)sizeof (int32_t);
 }
 
+/* js_code */
+bson_element_t *
+bson_element_value_set_javascript (bson_element_t *e,
+				   const char *val,
+				   int32_t length)
+{
+  int32_t l = length;
+
+  if (!e)
+    return NULL;
+
+  if (l <= BSON_LENGTH_AUTO)
+    l = strlen (val);
+
+  e = bson_element_type_set (e, BSON_TYPE_JS_CODE);
+  e = bson_element_add_space (e, sizeof (int32_t));
+  BSON_ELEMENT_VALUE (e)->str.len = LMC_INT32_TO_LE (l + 1);
+  e->len = e->name_len + sizeof (int32_t);
+
+  e = bson_element_data_append (e, (uint8_t *)val, l);
+  return bson_element_data_append (e, (uint8_t *)"\0", 1);
+}
+
+static bson_element_t *
+_bson_element_value_set_JS_CODE_va (bson_element_t *e, va_list ap)
+{
+  va_list aq;
+  char *s;
+  bson_element_t *n;
+
+  va_copy (aq, ap);
+  s = va_arg (aq, char *);
+  n = bson_element_value_set_javascript (e, s, va_arg (aq, int32_t));
+  va_end (aq);
+  return n;
+}
+
+lmc_bool_t
+bson_element_value_get_javascript (bson_element_t *e,
+				   const char **oval)
+{
+  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_JS_CODE);
+
+  if (!v || !oval)
+    return FALSE;
+
+  *oval = v->str.str;
+  return TRUE;
+}
+
+static int32_t
+_bson_element_value_get_size_JS_CODE (const uint8_t *data)
+{
+  return LMC_INT32_FROM_LE (((bson_element_value_t *)data)->str.len) +
+    (int32_t)sizeof (int32_t);
+}
+
 /* boolean */
 bson_element_t *
 bson_element_value_set_boolean (bson_element_t *e, lmc_bool_t val)
@@ -525,6 +582,7 @@ static bson_element_value_set_va_cb _bson_element_value_set_cbs[BSON_TYPE_MAX] =
   BSON_VALUE_SET_CB(STRING),
   BSON_VALUE_SET_CB(BOOLEAN),
   BSON_VALUE_SET_CB(UTC_DATETIME),
+  BSON_VALUE_SET_CB(JS_CODE),
   [BSON_TYPE_NULL] =
    (bson_element_value_set_va_cb) _bson_element_value_set_NULL_va
 };
@@ -537,6 +595,7 @@ static bson_element_value_get_size_cb _bson_element_value_get_size_cbs[BSON_TYPE
   BSON_VALUE_GET_SIZE_CB(STRING),
   BSON_VALUE_GET_SIZE_CB(BOOLEAN),
   BSON_VALUE_GET_SIZE_CB(UTC_DATETIME),
+  BSON_VALUE_GET_SIZE_CB(JS_CODE),
   [BSON_TYPE_NULL] =
    (bson_element_value_get_size_cb) _bson_element_value_get_size_NULL
 };

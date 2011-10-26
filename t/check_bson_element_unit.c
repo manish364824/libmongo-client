@@ -375,6 +375,36 @@ START_TEST (test_bson_element_value_datetime)
 }
 END_TEST
 
+START_TEST (test_bson_element_value_javascript)
+{
+  bson_element_t *e;
+  const char *d = "test-string", *v = NULL;
+
+  ck_assert (bson_element_value_set_javascript (NULL, d,
+						BSON_LENGTH_AUTO) == NULL);
+  ck_assert (bson_element_value_get_javascript (NULL, &v) == FALSE);
+
+  e = bson_element_new ();
+
+  ck_assert (bson_element_value_get_javascript (e, &v) == FALSE);
+
+  e = bson_element_value_set_javascript (e, d, BSON_LENGTH_AUTO);
+  ck_assert (e != NULL);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_JS_CODE);
+
+  ck_assert (bson_element_value_get_javascript (e, &v) == TRUE);
+  ck_assert_str_eq (d, v);
+
+  e = bson_element_value_set_javascript (e, d, 4);
+  ck_assert (bson_element_value_get_javascript (e, &v) == TRUE);
+  ck_assert_str_eq (v, "test");
+
+  ck_assert (bson_element_value_get_javascript (e, NULL) == FALSE);
+
+  bson_element_unref (e);
+}
+END_TEST
+
 START_TEST (test_bson_element_value)
 {
   bson_element_t *e;
@@ -569,6 +599,7 @@ bson_element_suite (void)
   tcase_add_test (tc_access, test_bson_element_value_int32);
   tcase_add_test (tc_access, test_bson_element_value_int64);
   tcase_add_test (tc_access, test_bson_element_value_string);
+  tcase_add_test (tc_access, test_bson_element_value_javascript);
   tcase_add_test (tc_access, test_bson_element_value_boolean);
   tcase_add_test (tc_access, test_bson_element_value_datetime);
   suite_add_tcase (s, tc_access);

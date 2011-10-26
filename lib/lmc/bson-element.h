@@ -394,6 +394,32 @@ bson_element_t *bson_element_value_set_string (bson_element_t *e,
 lmc_bool_t bson_element_value_get_string (bson_element_t *e,
 					  const char **oval);
 
+/** Set the value of a BSON element to a javascript code.
+ *
+ * @param e is the element whose value to set.
+ * @param val is the value to set.
+ * @param length is the lenght of the string to use. A negative number
+ * (or #BSON_LENGTH_AUTO) means the length should be autodetected.
+ *
+ * @returns The BSON element with the value set, or NULL on error.
+ */
+bson_element_t *bson_element_value_set_javascript (bson_element_t *e,
+						   const char *val,
+						   int32_t length);
+
+/** Get the value of a BSON element, as a javascript code type.
+ *
+ * @param e is the element whose value we want to retrieve.
+ * @param oval is the output variable to put the value into.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ *
+ * @note The returned string is an internal pointer, it is only valid
+ * as long as the object is, and must not be freed or modified.
+ */
+lmc_bool_t bson_element_value_get_javascript (bson_element_t *e,
+					      const char **oval);
+
 /** Set the value of a BSON element to a boolean.
  *
  * @param e is the element whose value to set.
