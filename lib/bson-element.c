@@ -37,26 +37,6 @@ typedef bson_element_t *(*bson_element_value_set_va_cb) (bson_element_t *e,
 							 va_list ap);
 typedef int32_t (*bson_element_value_get_size_cb) (const uint8_t *data);
 
-#define BSON_ELEMENT_VALUE_SET_VA(setter,type,args...)			\
-  static bson_element_t *						\
-  _bson_element_value_set_##type##_va (bson_element_t *e, va_list aq)	\
-  {									\
-    bson_element_t *n;							\
-    va_list ap;								\
-									\
-    va_copy (ap, aq);							\
-    n = bson_element_value_set_##setter (e, ## args );			\
-    va_end (aq);							\
-    return n;								\
-  }
-
-#define BSON_ELEMENT_VALUE_GET_SIZE(type,size)			\
-  static int32_t						\
-  _bson_element_value_get_size_##type (void)			\
-  {								\
-    return size;						\
-  }
-
 typedef union
 {
   double dbl;
@@ -292,66 +272,6 @@ _bson_element_meta_set (bson_element_t *e, bson_element_type_t type,
   return e;
 }
 
-/* double */
-bson_element_t *
-bson_element_value_set_double (bson_element_t *e,
-			       double val)
-{
-  if (!(e = _bson_element_meta_set (e, BSON_TYPE_DOUBLE, sizeof (double),
-				    sizeof (double))))
-    return NULL;
-
-  BSON_ELEMENT_VALUE (e)->dbl = LMC_DOUBLE_TO_LE (val);
-  return e;
-}
-
-BSON_ELEMENT_VALUE_SET_VA (double, DOUBLE, va_arg (ap, double));
-
-lmc_bool_t
-bson_element_value_get_double (bson_element_t *e,
-			       double *oval)
-{
-  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_DOUBLE);
-
-  if (!v || !oval)
-    return FALSE;
-
-  *oval = LMC_DOUBLE_FROM_LE (v->dbl);
-  return TRUE;
-}
-
-BSON_ELEMENT_VALUE_GET_SIZE (DOUBLE, sizeof (double));
-
-/* int32 */
-bson_element_t *
-bson_element_value_set_int32 (bson_element_t *e,
-			      int32_t val)
-{
-  if (!(e = _bson_element_meta_set (e, BSON_TYPE_INT32, sizeof (int32_t),
-				    sizeof (int32_t))))
-    return NULL;
-
-  BSON_ELEMENT_VALUE (e)->i32 = LMC_INT32_TO_LE (val);
-  return e;
-}
-
-BSON_ELEMENT_VALUE_SET_VA (int32, INT32, va_arg (ap, int32_t));
-
-lmc_bool_t
-bson_element_value_get_int32 (bson_element_t *e,
-			      int32_t *oval)
-{
-  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_INT32);
-
-  if (!v || !oval)
-    return FALSE;
-
-  *oval = LMC_INT32_FROM_LE (v->i32);
-  return TRUE;
-}
-
-BSON_ELEMENT_VALUE_GET_SIZE (INT32, sizeof (int32_t));
-
 /* stringish */
 static inline bson_element_t *
 _bson_element_value_set_stringish (bson_element_t *e,
@@ -411,39 +331,15 @@ _bson_element_value_set_stringish_va (bson_element_t *e,
   return n;
 }
 
-/* string */
+/* factories */
+#include "bson-element-double.c"
+#include "bson-element-int32.c"
+#include "bson-element-int64.c"
+#include "bson-element-datetime.c"
+#include "bson-element-boolean.c"
+
 #include "bson-element-string.c"
-
-/* js_code */
 #include "bson-element-js-code.c"
-
-/* boolean */
-bson_element_t *
-bson_element_value_set_boolean (bson_element_t *e, lmc_bool_t val)
-{
-  if (!(e = _bson_element_meta_set (e, BSON_TYPE_BOOLEAN,
-				    sizeof (lmc_bool_t), 1)))
-    return NULL;
-
-  BSON_ELEMENT_VALUE (e)->bool = val;
-  return e;
-}
-
-BSON_ELEMENT_VALUE_SET_VA (boolean, BOOLEAN, va_arg (ap, int));
-
-lmc_bool_t
-bson_element_value_get_boolean (bson_element_t *e, lmc_bool_t *oval)
-{
-  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_BOOLEAN);
-
-  if (!v || !oval)
-    return FALSE;
-
-  *oval = v->bool;
-  return TRUE;
-}
-
-BSON_ELEMENT_VALUE_GET_SIZE (BOOLEAN, 1);
 
 /* null */
 static bson_element_t *
@@ -454,69 +350,11 @@ _bson_element_value_set_NULL_va (bson_element_t *e)
   return e;
 }
 
-BSON_ELEMENT_VALUE_GET_SIZE (NULL, 0);
-
-/* int64 */
-bson_element_t *
-bson_element_value_set_int64 (bson_element_t *e,
-			      int64_t val)
+static int32_t
+_bson_element_value_get_size_NULL (void)
 {
-  if (!(e = _bson_element_meta_set (e, BSON_TYPE_INT64, sizeof (int64_t),
-				    sizeof (int64_t))))
-    return NULL;
-
-  BSON_ELEMENT_VALUE (e)->i64 = LMC_INT64_TO_LE (val);
-  return e;
+  return 0;
 }
-
-BSON_ELEMENT_VALUE_SET_VA (int64, INT64, va_arg (ap, int64_t));
-
-lmc_bool_t
-bson_element_value_get_int64 (bson_element_t *e,
-			      int64_t *oval)
-{
-  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_INT64);
-
-  if (!v || !oval)
-    return FALSE;
-
-  *oval = LMC_INT64_FROM_LE (v->i64);
-  return TRUE;
-}
-
-BSON_ELEMENT_VALUE_GET_SIZE (INT64, sizeof (int64_t));
-
-/* datetime */
-bson_element_t *
-bson_element_value_set_datetime (bson_element_t *e,
-				 int64_t val)
-{
-  if (!(e = _bson_element_meta_set (e, BSON_TYPE_UTC_DATETIME,
-				    sizeof (int64_t),
-				    sizeof (int64_t))))
-    return NULL;
-
-  BSON_ELEMENT_VALUE (e)->i64 = LMC_INT64_TO_LE (val);
-  return e;
-}
-
-BSON_ELEMENT_VALUE_SET_VA (datetime, UTC_DATETIME, va_arg (ap, int64_t));
-
-lmc_bool_t
-bson_element_value_get_datetime (bson_element_t *e,
-				 int64_t *oval)
-{
-  bson_element_value_t *v =
-    bson_element_data_type_get (e, BSON_TYPE_UTC_DATETIME);
-
-  if (!v || !oval)
-    return FALSE;
-
-  *oval = LMC_INT64_FROM_LE (v->i64);
-  return TRUE;
-}
-
-BSON_ELEMENT_VALUE_GET_SIZE (UTC_DATETIME, sizeof (int64_t));
 
 /** Builders **/
 

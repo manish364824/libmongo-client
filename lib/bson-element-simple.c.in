@@ -1,0 +1,58 @@
+/* lib/bson-element-simple.c.in - simple setter/getter factory
+ * Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
+ * This file is part of the libmongo-client library.
+ *
+ * This library is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+
+bson_element_t *
+bson_element_value_set_SETTER (bson_element_t *e, CTYPE val)
+{
+  if (!(e = _bson_element_meta_set (e, TYPE, sizeof (CTYPE), SIZE)))
+    return NULL;
+
+  BSON_ELEMENT_VALUE (e)->ACCESSOR = LMC_CTYPE_TO_LE (val);
+  return e;
+}
+
+lmc_bool_t
+bson_element_value_get_SETTER (bson_element_t *e, CTYPE *oval)
+{
+  bson_element_value_t *v = bson_element_data_type_get (e, TYPE);
+
+  if (!v || !oval)
+    return FALSE;
+
+  *oval = LMC_CTYPE_FROM_LE (v->ACCESSOR);
+  return TRUE;
+}
+
+static bson_element_t *
+_bson_element_value_set_TYPE_va (bson_element_t *e, va_list aq)
+{
+  bson_element_t *n;
+  va_list ap;
+
+  va_copy (ap, aq);
+  n = bson_element_value_set_SETTER (e, va_arg (ap, CTYPE));
+  va_end (aq);
+  return n;
+}
+
+static int32_t
+_bson_element_value_get_size_TYPE (void)
+{
+  return SIZE;
+}
