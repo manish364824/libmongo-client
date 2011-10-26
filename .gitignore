@@ -18,3 +18,4 @@ depcomp
 /doc/html/
 /.pc/
 /b/
+/lib/bson-element-*.c
