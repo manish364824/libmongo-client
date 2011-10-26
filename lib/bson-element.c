@@ -62,7 +62,6 @@ typedef union
   double dbl;
   int32_t i32;
   int64_t i64;
-  int64_t date;
   uint8_t bool;
   struct
   {
@@ -280,18 +279,29 @@ bson_element_data_type_get (bson_element_t *e, bson_element_type_t type)
 
 /** Element accessors **/
 
+static inline bson_element_t *
+_bson_element_meta_set (bson_element_t *e, bson_element_type_t type,
+			uint32_t space, uint32_t len)
+{
+  if (!e)
+    return NULL;
+
+  e = bson_element_type_set (e, type);
+  e = bson_element_add_space (e, space);
+  e->len = e->name_len + len;
+  return e;
+}
+
 /* double */
 bson_element_t *
 bson_element_value_set_double (bson_element_t *e,
 			       double val)
 {
-  if (!e)
+  if (!(e = _bson_element_meta_set (e, BSON_TYPE_DOUBLE, sizeof (double),
+				    sizeof (double))))
     return NULL;
 
-  e = bson_element_type_set (e, BSON_TYPE_DOUBLE);
-  e = bson_element_add_space (e, sizeof (double));
   BSON_ELEMENT_VALUE (e)->dbl = LMC_DOUBLE_TO_LE (val);
-  e->len = e->name_len + sizeof (double);
   return e;
 }
 
@@ -317,13 +327,11 @@ bson_element_t *
 bson_element_value_set_int32 (bson_element_t *e,
 			      int32_t val)
 {
-  if (!e)
+  if (!(e = _bson_element_meta_set (e, BSON_TYPE_INT32, sizeof (int32_t),
+				    sizeof (int32_t))))
     return NULL;
 
-  e = bson_element_type_set (e, BSON_TYPE_INT32);
-  e = bson_element_add_space (e, sizeof (int32_t));
   BSON_ELEMENT_VALUE (e)->i32 = LMC_INT32_TO_LE (val);
-  e->len = e->name_len + sizeof (int32_t);
   return e;
 }
 
@@ -344,48 +352,35 @@ bson_element_value_get_int32 (bson_element_t *e,
 
 BSON_ELEMENT_VALUE_GET_SIZE (INT32, sizeof (int32_t));
 
-/* string */
-bson_element_t *
-bson_element_value_set_string (bson_element_t *e,
-			       const char *val,
-			       int32_t length)
+/* stringish */
+static inline bson_element_t *
+_bson_element_value_set_stringish (bson_element_t *e,
+				   bson_element_type_t type,
+				   const char *val,
+				   int32_t length)
 {
   int32_t l = length;
-
-  if (!e)
-    return NULL;
 
   if (l <= BSON_LENGTH_AUTO)
     l = strlen (val);
 
-  e = bson_element_type_set (e, BSON_TYPE_STRING);
-  e = bson_element_add_space (e, sizeof (int32_t));
-  BSON_ELEMENT_VALUE (e)->str.len = LMC_INT32_TO_LE (l + 1);
-  e->len = e->name_len + sizeof (int32_t);
+  if (!(e = _bson_element_meta_set (e, type,
+				    sizeof (int32_t) + l + 1,
+				    sizeof (int32_t))))
+    return NULL;
 
+
+  BSON_ELEMENT_VALUE (e)->str.len = LMC_INT32_TO_LE (l + 1);
   e = bson_element_data_append (e, (uint8_t *)val, l);
   return bson_element_data_append (e, (uint8_t *)"\0", 1);
 }
 
-static bson_element_t *
-_bson_element_value_set_STRING_va (bson_element_t *e, va_list ap)
+static inline lmc_bool_t
+_bson_element_value_get_stringish (bson_element_t *e,
+				   bson_element_type_t type,
+				   const char **oval)
 {
-  va_list aq;
-  char *s;
-  bson_element_t *n;
-
-  va_copy (aq, ap);
-  s = va_arg (aq, char *);
-  n = bson_element_value_set_string (e, s, va_arg (aq, int32_t));
-  va_end (aq);
-  return n;
-}
-
-lmc_bool_t
-bson_element_value_get_string (bson_element_t *e,
-			       const char **oval)
-{
-  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_STRING);
+  bson_element_value_t *v = bson_element_data_type_get (e, type);
 
   if (!v || !oval)
     return FALSE;
@@ -394,11 +389,54 @@ bson_element_value_get_string (bson_element_t *e,
   return TRUE;
 }
 
-static int32_t
-_bson_element_value_get_size_STRING (const uint8_t *data)
+static inline int32_t
+_bson_element_value_get_size_stringish (const uint8_t *data)
 {
   return LMC_INT32_FROM_LE (((bson_element_value_t *)data)->str.len) +
     (int32_t)sizeof (int32_t);
+}
+
+static bson_element_t *
+_bson_element_value_set_stringish_va (bson_element_t *e,
+				      bson_element_type_t type, va_list ap)
+{
+  va_list aq;
+  char *s;
+  bson_element_t *n;
+
+  va_copy (aq, ap);
+  s = va_arg (aq, char *);
+  n = _bson_element_value_set_stringish (e, type, s, va_arg (aq, int32_t));
+  va_end (aq);
+  return n;
+}
+
+/* string */
+bson_element_t *
+bson_element_value_set_string (bson_element_t *e,
+			       const char *val,
+			       int32_t length)
+{
+  return _bson_element_value_set_stringish (e, BSON_TYPE_STRING, val, length);
+}
+
+static bson_element_t *
+_bson_element_value_set_STRING_va (bson_element_t *e, va_list ap)
+{
+  return _bson_element_value_set_stringish_va (e, BSON_TYPE_STRING, ap);
+}
+
+lmc_bool_t
+bson_element_value_get_string (bson_element_t *e,
+			       const char **oval)
+{
+  return _bson_element_value_get_stringish (e, BSON_TYPE_STRING, oval);
+}
+
+static int32_t
+_bson_element_value_get_size_STRING (const uint8_t *data)
+{
+  return _bson_element_value_get_size_stringish (data);
 }
 
 /* js_code */
@@ -407,68 +445,37 @@ bson_element_value_set_javascript (bson_element_t *e,
 				   const char *val,
 				   int32_t length)
 {
-  int32_t l = length;
-
-  if (!e)
-    return NULL;
-
-  if (l <= BSON_LENGTH_AUTO)
-    l = strlen (val);
-
-  e = bson_element_type_set (e, BSON_TYPE_JS_CODE);
-  e = bson_element_add_space (e, sizeof (int32_t));
-  BSON_ELEMENT_VALUE (e)->str.len = LMC_INT32_TO_LE (l + 1);
-  e->len = e->name_len + sizeof (int32_t);
-
-  e = bson_element_data_append (e, (uint8_t *)val, l);
-  return bson_element_data_append (e, (uint8_t *)"\0", 1);
+  return _bson_element_value_set_stringish (e, BSON_TYPE_JS_CODE, val, length);
 }
 
 static bson_element_t *
 _bson_element_value_set_JS_CODE_va (bson_element_t *e, va_list ap)
 {
-  va_list aq;
-  char *s;
-  bson_element_t *n;
-
-  va_copy (aq, ap);
-  s = va_arg (aq, char *);
-  n = bson_element_value_set_javascript (e, s, va_arg (aq, int32_t));
-  va_end (aq);
-  return n;
+  return _bson_element_value_set_stringish_va (e, BSON_TYPE_JS_CODE, ap);
 }
 
 lmc_bool_t
 bson_element_value_get_javascript (bson_element_t *e,
 				   const char **oval)
 {
-  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_JS_CODE);
-
-  if (!v || !oval)
-    return FALSE;
-
-  *oval = v->str.str;
-  return TRUE;
+  return _bson_element_value_get_stringish (e, BSON_TYPE_JS_CODE, oval);
 }
 
 static int32_t
 _bson_element_value_get_size_JS_CODE (const uint8_t *data)
 {
-  return LMC_INT32_FROM_LE (((bson_element_value_t *)data)->str.len) +
-    (int32_t)sizeof (int32_t);
+  return _bson_element_value_get_size_stringish (data);
 }
 
 /* boolean */
 bson_element_t *
 bson_element_value_set_boolean (bson_element_t *e, lmc_bool_t val)
 {
-  if (!e)
+  if (!(e = _bson_element_meta_set (e, BSON_TYPE_BOOLEAN,
+				    sizeof (lmc_bool_t), 1)))
     return NULL;
 
-  e = bson_element_type_set (e, BSON_TYPE_BOOLEAN);
-  e = bson_element_add_space (e, sizeof (lmc_bool_t));
   BSON_ELEMENT_VALUE (e)->bool = val;
-  e->len = e->name_len + 1;
   return e;
 }
 
@@ -504,13 +511,11 @@ bson_element_t *
 bson_element_value_set_int64 (bson_element_t *e,
 			      int64_t val)
 {
-  if (!e)
+  if (!(e = _bson_element_meta_set (e, BSON_TYPE_INT64, sizeof (int64_t),
+				    sizeof (int64_t))))
     return NULL;
 
-  e = bson_element_type_set (e, BSON_TYPE_INT64);
-  e = bson_element_add_space (e, sizeof (int64_t));
   BSON_ELEMENT_VALUE (e)->i64 = LMC_INT64_TO_LE (val);
-  e->len = e->name_len + sizeof (int64_t);
   return e;
 }
 
@@ -536,13 +541,12 @@ bson_element_t *
 bson_element_value_set_datetime (bson_element_t *e,
 				 int64_t val)
 {
-  if (!e)
+  if (!(e = _bson_element_meta_set (e, BSON_TYPE_UTC_DATETIME,
+				    sizeof (int64_t),
+				    sizeof (int64_t))))
     return NULL;
 
-  e = bson_element_type_set (e, BSON_TYPE_UTC_DATETIME);
-  e = bson_element_add_space (e, sizeof (int64_t));
-  BSON_ELEMENT_VALUE (e)->date = LMC_INT64_TO_LE (val);
-  e->len = e->name_len + sizeof (int64_t);
+  BSON_ELEMENT_VALUE (e)->i64 = LMC_INT64_TO_LE (val);
   return e;
 }
 
@@ -558,7 +562,7 @@ bson_element_value_get_datetime (bson_element_t *e,
   if (!v || !oval)
     return FALSE;
 
-  *oval = LMC_INT64_FROM_LE (v->date);
+  *oval = LMC_INT64_FROM_LE (v->i64);
   return TRUE;
 }
 
