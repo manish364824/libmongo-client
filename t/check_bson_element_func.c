@@ -154,6 +154,15 @@ START_TEST (test_func_bson_element_int64)
 }
 END_TEST
 
+START_TEST (test_func_bson_element_datetime)
+{
+  _bson_element_test_stream
+    (bson_element_create ("date", BSON_TYPE_UTC_DATETIME, (int64_t)42),
+     14,
+     "\x09" "date\x00" "\x2a\x00\x00\x00\x00\x00\x00\x00");
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -174,6 +183,7 @@ bson_element_suite (void)
   tcase_add_test (tc_enc, test_func_bson_element_string);
   tcase_add_test (tc_enc, test_func_bson_element_boolean);
   tcase_add_test (tc_enc, test_func_bson_element_null);
+  tcase_add_test (tc_enc, test_func_bson_element_datetime);
   suite_add_tcase (s, tc_enc);
 
   tc_value = tcase_create ("Manipulations");

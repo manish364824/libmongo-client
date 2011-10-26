@@ -62,6 +62,7 @@ typedef union
   double dbl;
   int32_t i32;
   int64_t i64;
+  int64_t date;
   uint8_t bool;
   struct
   {
@@ -473,6 +474,39 @@ bson_element_value_get_int64 (bson_element_t *e,
 
 BSON_ELEMENT_VALUE_GET_SIZE (INT64, sizeof (int64_t));
 
+/* datetime */
+bson_element_t *
+bson_element_value_set_datetime (bson_element_t *e,
+				 int64_t val)
+{
+  if (!e)
+    return NULL;
+
+  e = bson_element_type_set (e, BSON_TYPE_UTC_DATETIME);
+  e = bson_element_add_space (e, sizeof (int64_t));
+  BSON_ELEMENT_VALUE (e)->date = LMC_INT64_TO_LE (val);
+  e->len = e->name_len + sizeof (int64_t);
+  return e;
+}
+
+BSON_ELEMENT_VALUE_SET_VA (datetime, UTC_DATETIME, va_arg (ap, int64_t));
+
+lmc_bool_t
+bson_element_value_get_datetime (bson_element_t *e,
+				 int64_t *oval)
+{
+  bson_element_value_t *v =
+    bson_element_data_type_get (e, BSON_TYPE_UTC_DATETIME);
+
+  if (!v || !oval)
+    return FALSE;
+
+  *oval = LMC_INT64_FROM_LE (v->date);
+  return TRUE;
+}
+
+BSON_ELEMENT_VALUE_GET_SIZE (UTC_DATETIME, sizeof (int64_t));
+
 /** Builders **/
 
 #define BSON_VALUE_SET_CB(type)						\
@@ -490,6 +524,7 @@ static bson_element_value_set_va_cb _bson_element_value_set_cbs[BSON_TYPE_MAX] =
   BSON_VALUE_SET_CB(INT64),
   BSON_VALUE_SET_CB(STRING),
   BSON_VALUE_SET_CB(BOOLEAN),
+  BSON_VALUE_SET_CB(UTC_DATETIME),
   [BSON_TYPE_NULL] =
    (bson_element_value_set_va_cb) _bson_element_value_set_NULL_va
 };
@@ -501,6 +536,7 @@ static bson_element_value_get_size_cb _bson_element_value_get_size_cbs[BSON_TYPE
   BSON_VALUE_GET_SIZE_CB(INT64),
   BSON_VALUE_GET_SIZE_CB(STRING),
   BSON_VALUE_GET_SIZE_CB(BOOLEAN),
+  BSON_VALUE_GET_SIZE_CB(UTC_DATETIME),
   [BSON_TYPE_NULL] =
    (bson_element_value_get_size_cb) _bson_element_value_get_size_NULL
 };

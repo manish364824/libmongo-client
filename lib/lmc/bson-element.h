@@ -414,6 +414,27 @@ bson_element_t *bson_element_value_set_boolean (bson_element_t *e,
 lmc_bool_t bson_element_value_get_boolean (bson_element_t *e,
 					   lmc_bool_t *oval);
 
+/** Set the value of a BSON element to UTC datetime.
+ *
+ * @param e is the element whose value to set.
+ * @param val is the value to set.
+ *
+ * @returns The BSON element with the value set, or NULL on error.
+ */
+bson_element_t *bson_element_value_set_datetime (bson_element_t *e,
+						 int64_t val);
+
+/** Get the value of a BSON element, as a UTC datetime type.
+ *
+ * @param e is the element whose value we want to retrieve.
+ * @param oval is the output variable to put the value into.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+lmc_bool_t bson_element_value_get_datetime (bson_element_t *e,
+					    int64_t *oval);
+
+
 /** Set the type and the value of a BSON element.
  *
  * @param e is the element to modify.
