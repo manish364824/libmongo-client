@@ -51,8 +51,23 @@ nobase_include_HEADERS		= \
 pkgconfigdir			= $(libdir)/pkgconfig
 pkgconfig_DATA			= libbeejr.pc libmongo-client.pc
 
-CLEANFILES			= *.gcda *.gcno *.gcov
+CLEANFILES			= *.gcda *.gcno *.gcov \
+				bson-element-string.c bson-element-js-code.c
 CLEANDIRS			= coverage
+
+# Setter factory magic!
+bson-element.c: bson-element-string.c bson-element-js-code.c
+
+bson-element-string.c: SETTER=string
+bson-element-string.c: TYPE=STRING
+bson-element-js-code.c: SETTER=javascript
+bson-element-js-code.c: TYPE=JS_CODE
+bson-element-string.c bson-element-js-code.c: bson-element-stringish.c.in
+	$(AM_V_GEN)
+	$(AM_V_at) sed -e "s/SETTER/${SETTER}/g" \
+		       -e "s/_TYPE/_${TYPE}/g" \
+		       -e "s/TYPE/BSON_TYPE_${TYPE}/g" \
+		       <$^ >$@
 
 coverage:
 	$(AM_V_GEN)

@@ -411,41 +411,11 @@ _bson_element_value_set_stringish_va (bson_element_t *e,
   return n;
 }
 
-#define BSON_SETTER_STRINGISH(setter,type)				\
-  bson_element_t *							\
-  bson_element_value_set_##setter (bson_element_t *e, const char *val,	\
-				   int32_t length)			\
-  {									\
-    return _bson_element_value_set_stringish				\
-      (e, BSON_TYPE_##type, val, length);				\
-  }									\
-									\
-  static bson_element_t *						\
-  _bson_element_value_set_##type##_va (bson_element_t *e, va_list ap)	\
-  {									\
-    return _bson_element_value_set_stringish_va				\
-      (e, BSON_TYPE_##type, ap);					\
-  }									\
-									\
-  lmc_bool_t								\
-  bson_element_value_get_##setter (bson_element_t *e,			\
-				   const char **oval)			\
-  {									\
-    return _bson_element_value_get_stringish				\
-      (e, BSON_TYPE_##type, oval);					\
-  }									\
-									\
-  static int32_t							\
-  _bson_element_value_get_size_##type (const uint8_t *data)		\
-  {									\
-    return _bson_element_value_get_size_stringish (data);		\
-  }
-
 /* string */
-BSON_SETTER_STRINGISH (string, STRING);
+#include "bson-element-string.c"
 
 /* js_code */
-BSON_SETTER_STRINGISH (javascript, JS_CODE);
+#include "bson-element-js-code.c"
 
 /* boolean */
 bson_element_t *
