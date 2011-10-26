@@ -79,11 +79,46 @@ START_TEST (test_func_bson_element_value_manip)
 }
 END_TEST
 
+static void
+_bson_element_test_stream (bson_element_t *e, int32_t size,
+			   char *data)
+{
+  ck_assert_int_eq (bson_element_stream_get_size (e), size);
+  ck_assert (memcmp (bson_element_stream_get (e),
+		     data, size) == 0 );
+  bson_element_unref (e);
+}
+
+START_TEST (test_func_bson_element_double)
+{
+  _bson_element_test_stream
+    (bson_element_create ("d", BSON_TYPE_DOUBLE, 3.14), 11,
+     "\x01\x64\x00\x1f\x85\xeb\x51\xb8\x1e\x09\x40");
+}
+END_TEST
+
+START_TEST (test_func_bson_element_int32)
+{
+  _bson_element_test_stream
+    (bson_element_create ("i", BSON_TYPE_INT32, 42), 7,
+     "\x10\x69\x00\x2a\x00\x00\x00");
+}
+END_TEST
+
+START_TEST (test_func_bson_element_string)
+{
+  _bson_element_test_stream
+    (bson_element_create ("s", BSON_TYPE_STRING, "hello", BSON_LENGTH_AUTO),
+     13,
+     "\x02\x73\x00\x06\x00\x00\x00hello\x00");
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
   Suite *s;
-  TCase *tc_core, *tc_value;
+  TCase *tc_core, *tc_value, *tc_enc;
 
   s = suite_create ("BSON Elements functional tests");
 
@@ -91,6 +126,12 @@ bson_element_suite (void)
   tcase_add_test (tc_core, test_func_bson_element_data_move);
   tcase_add_test (tc_core, test_func_bson_element_data_manip);
   suite_add_tcase (s, tc_core);
+
+  tc_enc = tcase_create ("Encoding");
+  tcase_add_test (tc_enc, test_func_bson_element_double);
+  tcase_add_test (tc_enc, test_func_bson_element_int32);
+  tcase_add_test (tc_enc, test_func_bson_element_string);
+  suite_add_tcase (s, tc_enc);
 
   tc_value = tcase_create ("Manipulations");
   tcase_add_test (tc_value, test_func_bson_element_value_manip);
