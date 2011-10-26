@@ -136,6 +136,15 @@ START_TEST (test_func_bson_element_boolean)
 }
 END_TEST
 
+START_TEST (test_func_bson_element_null)
+{
+  _bson_element_test_stream
+    (bson_element_create ("null", BSON_TYPE_NULL),
+     6,
+     "\x0a" "null\x00");
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -154,6 +163,7 @@ bson_element_suite (void)
   tcase_add_test (tc_enc, test_func_bson_element_int32);
   tcase_add_test (tc_enc, test_func_bson_element_string);
   tcase_add_test (tc_enc, test_func_bson_element_boolean);
+  tcase_add_test (tc_enc, test_func_bson_element_null);
   suite_add_tcase (s, tc_enc);
 
   tc_value = tcase_create ("Manipulations");

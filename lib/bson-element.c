@@ -429,10 +429,22 @@ bson_element_value_get_boolean (bson_element_t *e, lmc_bool_t *oval)
 
 BSON_ELEMENT_VALUE_GET_SIZE (BOOLEAN, 1);
 
+/* null */
+static bson_element_t *
+_bson_element_value_set_NULL_va (bson_element_t *e)
+{
+  e = bson_element_type_set (e, BSON_TYPE_NULL);
+  e->len = e->name_len;
+  return e;
+}
+
+BSON_ELEMENT_VALUE_GET_SIZE (NULL, 0);
+
 /** Builders **/
 
-#define BSON_VALUE_SET_CB(type) \
-  [BSON_TYPE_##type] = _bson_element_value_set_##type##_va
+#define BSON_VALUE_SET_CB(type)						\
+  [BSON_TYPE_##type] =							\
+    (bson_element_value_set_va_cb) _bson_element_value_set_##type##_va
 
 #define BSON_VALUE_GET_SIZE_CB(type)					\
   [BSON_TYPE_##type] =							\
@@ -444,6 +456,8 @@ static bson_element_value_set_va_cb _bson_element_value_set_cbs[BSON_TYPE_MAX] =
   BSON_VALUE_SET_CB(INT32),
   BSON_VALUE_SET_CB(STRING),
   BSON_VALUE_SET_CB(BOOLEAN),
+  [BSON_TYPE_NULL] =
+   (bson_element_value_set_va_cb) _bson_element_value_set_NULL_va
 };
 
 static bson_element_value_get_size_cb _bson_element_value_get_size_cbs[BSON_TYPE_MAX] =
@@ -452,6 +466,8 @@ static bson_element_value_get_size_cb _bson_element_value_get_size_cbs[BSON_TYPE
   BSON_VALUE_GET_SIZE_CB(INT32),
   BSON_VALUE_GET_SIZE_CB(STRING),
   BSON_VALUE_GET_SIZE_CB(BOOLEAN),
+  [BSON_TYPE_NULL] =
+   (bson_element_value_get_size_cb) _bson_element_value_get_size_NULL
 };
 
 static bson_element_t *
