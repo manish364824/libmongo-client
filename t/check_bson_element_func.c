@@ -83,9 +83,20 @@ static void
 _bson_element_test_stream (bson_element_t *e, int32_t size,
 			   char *data)
 {
+  bson_element_t *n;
+
   ck_assert_int_eq (bson_element_stream_get_size (e), size);
   ck_assert (memcmp (bson_element_stream_get (e),
 		     data, size) == 0 );
+
+  n = bson_element_new_from_data (bson_element_stream_get (e));
+  ck_assert (bson_element_type_get (e) == bson_element_type_get (n));
+  ck_assert_str_eq (bson_element_name_get (e), bson_element_name_get (n));
+  ck_assert (memcmp (bson_element_data_get (e),
+		     bson_element_data_get (n),
+		     bson_element_data_get_size (n)) == 0);
+
+  bson_element_unref (n);
   bson_element_unref (e);
 }
 
