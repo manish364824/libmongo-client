@@ -145,6 +145,15 @@ START_TEST (test_func_bson_element_null)
 }
 END_TEST
 
+START_TEST (test_func_bson_element_int64)
+{
+  _bson_element_test_stream
+    (bson_element_create ("i64", BSON_TYPE_INT64, (int64_t)42),
+     13,
+     "\x12" "i64\x00" "\x2a\x00\x00\x00\x00\x00\x00\x00");
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -161,6 +170,7 @@ bson_element_suite (void)
   tc_enc = tcase_create ("Encoding");
   tcase_add_test (tc_enc, test_func_bson_element_double);
   tcase_add_test (tc_enc, test_func_bson_element_int32);
+  tcase_add_test (tc_enc, test_func_bson_element_int64);
   tcase_add_test (tc_enc, test_func_bson_element_string);
   tcase_add_test (tc_enc, test_func_bson_element_boolean);
   tcase_add_test (tc_enc, test_func_bson_element_null);

@@ -61,6 +61,7 @@ typedef union
 {
   double dbl;
   int32_t i32;
+  int64_t i64;
   uint8_t bool;
   struct
   {
@@ -440,6 +441,38 @@ _bson_element_value_set_NULL_va (bson_element_t *e)
 
 BSON_ELEMENT_VALUE_GET_SIZE (NULL, 0);
 
+/* int64 */
+bson_element_t *
+bson_element_value_set_int64 (bson_element_t *e,
+			      int64_t val)
+{
+  if (!e)
+    return NULL;
+
+  e = bson_element_type_set (e, BSON_TYPE_INT64);
+  e = bson_element_add_space (e, sizeof (int64_t));
+  BSON_ELEMENT_VALUE (e)->i64 = LMC_INT64_TO_LE (val);
+  e->len = e->name_len + sizeof (int64_t);
+  return e;
+}
+
+BSON_ELEMENT_VALUE_SET_VA (int64, INT64, va_arg (ap, int64_t));
+
+lmc_bool_t
+bson_element_value_get_int64 (bson_element_t *e,
+			      int64_t *oval)
+{
+  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_INT64);
+
+  if (!v || !oval)
+    return FALSE;
+
+  *oval = LMC_INT64_FROM_LE (v->i64);
+  return TRUE;
+}
+
+BSON_ELEMENT_VALUE_GET_SIZE (INT64, sizeof (int64_t));
+
 /** Builders **/
 
 #define BSON_VALUE_SET_CB(type)						\
@@ -454,6 +487,7 @@ static bson_element_value_set_va_cb _bson_element_value_set_cbs[BSON_TYPE_MAX] =
 {
   BSON_VALUE_SET_CB(DOUBLE),
   BSON_VALUE_SET_CB(INT32),
+  BSON_VALUE_SET_CB(INT64),
   BSON_VALUE_SET_CB(STRING),
   BSON_VALUE_SET_CB(BOOLEAN),
   [BSON_TYPE_NULL] =
@@ -464,6 +498,7 @@ static bson_element_value_get_size_cb _bson_element_value_get_size_cbs[BSON_TYPE
 {
   BSON_VALUE_GET_SIZE_CB(DOUBLE),
   BSON_VALUE_GET_SIZE_CB(INT32),
+  BSON_VALUE_GET_SIZE_CB(INT64),
   BSON_VALUE_GET_SIZE_CB(STRING),
   BSON_VALUE_GET_SIZE_CB(BOOLEAN),
   [BSON_TYPE_NULL] =
