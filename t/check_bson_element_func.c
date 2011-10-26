@@ -85,6 +85,8 @@ _bson_element_test_stream (bson_element_t *e, int32_t size,
 {
   bson_element_t *n;
 
+  ck_assert (e != NULL);
+
   ck_assert_int_eq (bson_element_stream_get_size (e), size);
   ck_assert (memcmp (bson_element_stream_get (e),
 		     data, size) == 0 );
