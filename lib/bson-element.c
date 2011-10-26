@@ -411,61 +411,41 @@ _bson_element_value_set_stringish_va (bson_element_t *e,
   return n;
 }
 
+#define BSON_SETTER_STRINGISH(setter,type)				\
+  bson_element_t *							\
+  bson_element_value_set_##setter (bson_element_t *e, const char *val,	\
+				   int32_t length)			\
+  {									\
+    return _bson_element_value_set_stringish				\
+      (e, BSON_TYPE_##type, val, length);				\
+  }									\
+									\
+  static bson_element_t *						\
+  _bson_element_value_set_##type##_va (bson_element_t *e, va_list ap)	\
+  {									\
+    return _bson_element_value_set_stringish_va				\
+      (e, BSON_TYPE_##type, ap);					\
+  }									\
+									\
+  lmc_bool_t								\
+  bson_element_value_get_##setter (bson_element_t *e,			\
+				   const char **oval)			\
+  {									\
+    return _bson_element_value_get_stringish				\
+      (e, BSON_TYPE_##type, oval);					\
+  }									\
+									\
+  static int32_t							\
+  _bson_element_value_get_size_##type (const uint8_t *data)		\
+  {									\
+    return _bson_element_value_get_size_stringish (data);		\
+  }
+
 /* string */
-bson_element_t *
-bson_element_value_set_string (bson_element_t *e,
-			       const char *val,
-			       int32_t length)
-{
-  return _bson_element_value_set_stringish (e, BSON_TYPE_STRING, val, length);
-}
-
-static bson_element_t *
-_bson_element_value_set_STRING_va (bson_element_t *e, va_list ap)
-{
-  return _bson_element_value_set_stringish_va (e, BSON_TYPE_STRING, ap);
-}
-
-lmc_bool_t
-bson_element_value_get_string (bson_element_t *e,
-			       const char **oval)
-{
-  return _bson_element_value_get_stringish (e, BSON_TYPE_STRING, oval);
-}
-
-static int32_t
-_bson_element_value_get_size_STRING (const uint8_t *data)
-{
-  return _bson_element_value_get_size_stringish (data);
-}
+BSON_SETTER_STRINGISH (string, STRING);
 
 /* js_code */
-bson_element_t *
-bson_element_value_set_javascript (bson_element_t *e,
-				   const char *val,
-				   int32_t length)
-{
-  return _bson_element_value_set_stringish (e, BSON_TYPE_JS_CODE, val, length);
-}
-
-static bson_element_t *
-_bson_element_value_set_JS_CODE_va (bson_element_t *e, va_list ap)
-{
-  return _bson_element_value_set_stringish_va (e, BSON_TYPE_JS_CODE, ap);
-}
-
-lmc_bool_t
-bson_element_value_get_javascript (bson_element_t *e,
-				   const char **oval)
-{
-  return _bson_element_value_get_stringish (e, BSON_TYPE_JS_CODE, oval);
-}
-
-static int32_t
-_bson_element_value_get_size_JS_CODE (const uint8_t *data)
-{
-  return _bson_element_value_get_size_stringish (data);
-}
+BSON_SETTER_STRINGISH (javascript, JS_CODE);
 
 /* boolean */
 bson_element_t *
