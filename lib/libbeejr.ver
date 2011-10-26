@@ -29,6 +29,12 @@ LMC_0.2.0 {
 		bson_element_value_get_string;
 		bson_element_value_set_boolean;
 		bson_element_value_get_boolean;
+		bson_element_value_set_int64;
+		bson_element_value_get_int64;
+		bson_element_value_set_datetime;
+		bson_element_value_get_datetime;
+		bson_element_value_set_javascript;
+		bson_element_value_get_javascript;
 
 		bson_element_value_set;
 		bson_element_set;
