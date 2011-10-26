@@ -406,7 +406,7 @@ _bson_stream_parse (bson_t *b, const uint8_t *data)
 
   t = data + sizeof (int32_t);
 
-  while ((t - data) < *size)
+  while ((uint32_t)(t - data) < *size)
     {
       bson_element_t *e = bson_element_new_from_data (t);
 
