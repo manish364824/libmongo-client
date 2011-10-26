@@ -61,6 +61,7 @@ typedef union
 {
   double dbl;
   int32_t i32;
+  uint8_t bool;
   struct
   {
     int32_t len;
@@ -398,6 +399,36 @@ _bson_element_value_get_size_STRING (const uint8_t *data)
     (int32_t)sizeof (int32_t);
 }
 
+/* boolean */
+bson_element_t *
+bson_element_value_set_boolean (bson_element_t *e, lmc_bool_t val)
+{
+  if (!e)
+    return NULL;
+
+  e = bson_element_type_set (e, BSON_TYPE_BOOLEAN);
+  e = bson_element_add_space (e, sizeof (lmc_bool_t));
+  BSON_ELEMENT_VALUE (e)->bool = val;
+  e->len = e->name_len + 1;
+  return e;
+}
+
+BSON_ELEMENT_VALUE_SET_VA (boolean, BOOLEAN, va_arg (ap, int));
+
+lmc_bool_t
+bson_element_value_get_boolean (bson_element_t *e, lmc_bool_t *oval)
+{
+  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_BOOLEAN);
+
+  if (!v || !oval)
+    return FALSE;
+
+  *oval = v->bool;
+  return TRUE;
+}
+
+BSON_ELEMENT_VALUE_GET_SIZE (BOOLEAN, 1);
+
 /** Builders **/
 
 #define BSON_VALUE_SET_CB(type) \
@@ -412,6 +443,7 @@ static bson_element_value_set_va_cb _bson_element_value_set_cbs[BSON_TYPE_MAX] =
   BSON_VALUE_SET_CB(DOUBLE),
   BSON_VALUE_SET_CB(INT32),
   BSON_VALUE_SET_CB(STRING),
+  BSON_VALUE_SET_CB(BOOLEAN),
 };
 
 static bson_element_value_get_size_cb _bson_element_value_get_size_cbs[BSON_TYPE_MAX] =
@@ -419,6 +451,7 @@ static bson_element_value_get_size_cb _bson_element_value_get_size_cbs[BSON_TYPE
   BSON_VALUE_GET_SIZE_CB(DOUBLE),
   BSON_VALUE_GET_SIZE_CB(INT32),
   BSON_VALUE_GET_SIZE_CB(STRING),
+  BSON_VALUE_GET_SIZE_CB(BOOLEAN),
 };
 
 static bson_element_t *

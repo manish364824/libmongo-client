@@ -296,6 +296,35 @@ START_TEST (test_bson_element_value_string)
 }
 END_TEST
 
+START_TEST (test_bson_element_value_boolean)
+{
+  bson_element_t *e;
+  lmc_bool_t b = FALSE;
+
+  ck_assert (bson_element_value_set_boolean (NULL, TRUE) == NULL);
+  ck_assert (bson_element_value_get_boolean (NULL, &b) == FALSE);
+
+  e = bson_element_new ();
+
+  ck_assert (bson_element_value_get_boolean (e, &b) == FALSE);
+
+  e = bson_element_value_set_boolean (e, TRUE);
+  ck_assert (e != NULL);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_BOOLEAN);
+
+  ck_assert (bson_element_value_get_boolean (e, &b) == TRUE);
+  ck_assert (b == TRUE);
+
+  e = bson_element_value_set_boolean (e, FALSE);
+  ck_assert (bson_element_value_get_boolean (e, &b) == TRUE);
+  ck_assert (b == FALSE);
+
+  ck_assert (bson_element_value_get_boolean (e, NULL) == FALSE);
+
+  bson_element_unref (e);
+}
+END_TEST
+
 START_TEST (test_bson_element_value)
 {
   bson_element_t *e;
@@ -404,6 +433,8 @@ START_TEST (test_bson_element_new_from_data)
     (bson_element_create ("answer", BSON_TYPE_INT32, 42));
   _test_copy
     (bson_element_create ("pi", BSON_TYPE_DOUBLE, 3.14));
+  _test_copy
+    (bson_element_create ("bool", BSON_TYPE_BOOLEAN, TRUE));
 
   e = bson_element_new ();
   e = bson_element_type_set (e, 142);
@@ -487,6 +518,7 @@ bson_element_suite (void)
   tcase_add_test (tc_access, test_bson_element_value_double);
   tcase_add_test (tc_access, test_bson_element_value_int32);
   tcase_add_test (tc_access, test_bson_element_value_string);
+  tcase_add_test (tc_access, test_bson_element_value_boolean);
   suite_add_tcase (s, tc_access);
 
   tc_builder = tcase_create ("Builder");

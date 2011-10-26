@@ -27,6 +27,8 @@ LMC_0.2.0 {
 		bson_element_value_get_int32;
 		bson_element_value_set_string;
 		bson_element_value_get_string;
+		bson_element_value_set_boolean;
+		bson_element_value_get_boolean;
 
 		bson_element_value_set;
 		bson_element_set;

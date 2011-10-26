@@ -121,7 +121,16 @@ START_TEST (test_func_bson_element_string)
   _bson_element_test_stream
     (bson_element_create ("s", BSON_TYPE_STRING, "hello", BSON_LENGTH_AUTO),
      13,
-     "\x02\x73\x00\x06\x00\x00\x00hello\x00");
+     "\x02\x73\x00\x06\x00\x00\x00" "hello" "\x00");
+}
+END_TEST
+
+START_TEST (test_func_bson_element_boolean)
+{
+  _bson_element_test_stream
+    (bson_element_create ("b", BSON_TYPE_BOOLEAN, TRUE),
+     4,
+     "\x08" "b\x00\x01");
 }
 END_TEST
 
@@ -142,6 +151,7 @@ bson_element_suite (void)
   tcase_add_test (tc_enc, test_func_bson_element_double);
   tcase_add_test (tc_enc, test_func_bson_element_int32);
   tcase_add_test (tc_enc, test_func_bson_element_string);
+  tcase_add_test (tc_enc, test_func_bson_element_boolean);
   suite_add_tcase (s, tc_enc);
 
   tc_value = tcase_create ("Manipulations");
