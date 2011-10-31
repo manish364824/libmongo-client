@@ -142,13 +142,12 @@ bson_element_name_get (bson_element_t *e)
 }
 
 static inline bson_element_t *
-bson_element_add_space (bson_element_t *e, int32_t size)
+bson_element_ensure_space (bson_element_t *e, int32_t size)
 {
-  if (size > 0)
+  if (size > 0 && e->len + e->name_len + size > e->alloc)
     {
-      e = (bson_element_t *)realloc (e, sizeof (bson_element_t) +
-				     e->alloc + size);
-      e->alloc += size;
+      e->alloc = e->len + e->name_len + size;
+      e = (bson_element_t *)realloc (e, sizeof (bson_element_t) + e->alloc);
     }
   return e;
 }
@@ -165,7 +164,7 @@ bson_element_name_set (bson_element_t *e,
       size_t name_len = strlen (name) + 1;
       uint32_t size = e->len - e->name_len;
 
-      e = bson_element_add_space (e, name_len - e->name_len);
+      e = bson_element_ensure_space (e, name_len - e->name_len);
       e->len = size + name_len;
 
       memmove (e->as_typed.data + name_len,
@@ -217,7 +216,7 @@ bson_element_data_append (bson_element_t *e, const uint8_t *data,
   if (!e || !data || size == 0)
     return e;
 
-  e = bson_element_add_space (e, size);
+  e = bson_element_ensure_space (e, size);
   memcpy (e->as_typed.data + e->len, data, size);
   e->len += size;
   return e;
@@ -267,7 +266,7 @@ _bson_element_meta_set (bson_element_t *e, bson_element_type_t type,
     return NULL;
 
   e = bson_element_type_set (e, type);
-  e = bson_element_add_space (e, space);
+  e = bson_element_ensure_space (e, space);
   e->len = e->name_len + len;
   return e;
 }
