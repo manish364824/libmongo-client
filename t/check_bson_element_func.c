@@ -173,6 +173,16 @@ START_TEST (test_func_bson_element_js_code)
 }
 END_TEST
 
+START_TEST (test_func_bson_element_symbol)
+{
+  _bson_element_test_stream
+    (bson_element_create ("symbol", BSON_TYPE_SYMBOL,
+			  ":something", BSON_LENGTH_AUTO),
+     23,
+     "\x0e" "symbol\x00" "\x0b\x00\x00\x00" ":something\x00");
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -192,6 +202,7 @@ bson_element_suite (void)
   tcase_add_test (tc_enc, test_func_bson_element_int64);
   tcase_add_test (tc_enc, test_func_bson_element_string);
   tcase_add_test (tc_enc, test_func_bson_element_js_code);
+  tcase_add_test (tc_enc, test_func_bson_element_symbol);
   tcase_add_test (tc_enc, test_func_bson_element_boolean);
   tcase_add_test (tc_enc, test_func_bson_element_null);
   tcase_add_test (tc_enc, test_func_bson_element_datetime);

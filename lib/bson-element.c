@@ -340,6 +340,7 @@ _bson_element_value_set_stringish_va (bson_element_t *e,
 
 #include "bson-element-string.c"
 #include "bson-element-js-code.c"
+#include "bson-element-symbol.c"
 
 /* null */
 static bson_element_t *
@@ -375,6 +376,7 @@ static bson_element_value_set_va_cb _bson_element_value_set_cbs[BSON_TYPE_MAX] =
   BSON_VALUE_SET_CB(BOOLEAN),
   BSON_VALUE_SET_CB(UTC_DATETIME),
   BSON_VALUE_SET_CB(JS_CODE),
+  BSON_VALUE_SET_CB(SYMBOL),
   [BSON_TYPE_NULL] =
    (bson_element_value_set_va_cb) _bson_element_value_set_NULL_va
 };
@@ -388,6 +390,7 @@ static bson_element_value_get_size_cb _bson_element_value_get_size_cbs[BSON_TYPE
   BSON_VALUE_GET_SIZE_CB(BOOLEAN),
   BSON_VALUE_GET_SIZE_CB(UTC_DATETIME),
   BSON_VALUE_GET_SIZE_CB(JS_CODE),
+  BSON_VALUE_GET_SIZE_CB(SYMBOL),
   [BSON_TYPE_NULL] =
    (bson_element_value_get_size_cb) _bson_element_value_get_size_NULL
 };

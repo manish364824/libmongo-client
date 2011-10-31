@@ -405,6 +405,36 @@ START_TEST (test_bson_element_value_javascript)
 }
 END_TEST
 
+START_TEST (test_bson_element_value_symbol)
+{
+  bson_element_t *e;
+  const char *d = "symbol", *v = NULL;
+
+  ck_assert (bson_element_value_set_symbol (NULL, d,
+					    BSON_LENGTH_AUTO) == NULL);
+  ck_assert (bson_element_value_get_symbol (NULL, &v) == FALSE);
+
+  e = bson_element_new ();
+
+  ck_assert (bson_element_value_get_symbol (e, &v) == FALSE);
+
+  e = bson_element_value_set_symbol (e, d, BSON_LENGTH_AUTO);
+  ck_assert (e != NULL);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_SYMBOL);
+
+  ck_assert (bson_element_value_get_symbol (e, &v) == TRUE);
+  ck_assert_str_eq (d, v);
+
+  e = bson_element_value_set_symbol (e, d, 4);
+  ck_assert (bson_element_value_get_symbol (e, &v) == TRUE);
+  ck_assert_str_eq (v, "symb");
+
+  ck_assert (bson_element_value_get_symbol (e, NULL) == FALSE);
+
+  bson_element_unref (e);
+}
+END_TEST
+
 START_TEST (test_bson_element_value)
 {
   bson_element_t *e;
@@ -600,6 +630,7 @@ bson_element_suite (void)
   tcase_add_test (tc_access, test_bson_element_value_int64);
   tcase_add_test (tc_access, test_bson_element_value_string);
   tcase_add_test (tc_access, test_bson_element_value_javascript);
+  tcase_add_test (tc_access, test_bson_element_value_symbol);
   tcase_add_test (tc_access, test_bson_element_value_boolean);
   tcase_add_test (tc_access, test_bson_element_value_datetime);
   suite_add_tcase (s, tc_access);

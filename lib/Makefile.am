@@ -56,7 +56,8 @@ CLEANFILES			= *.gcda *.gcno *.gcov \
 CLEANDIRS			= coverage
 
 # Setter factory magic!
-stringish_SETTERS		= bson-element-string.c bson-element-js-code.c
+stringish_SETTERS		= bson-element-string.c bson-element-js-code.c \
+				bson-element-symbol.c
 simple_SETTERS			= bson-element-double.c bson-element-int32.c \
 				bson-element-int64.c bson-element-datetime.c \
 				bson-element-boolean.c
@@ -67,6 +68,8 @@ bson-element-string.c: SETTER=string
 bson-element-string.c: TYPE=STRING
 bson-element-js-code.c: SETTER=javascript
 bson-element-js-code.c: TYPE=JS_CODE
+bson-element-symbol.c: SETTER=symbol
+bson-element-symbol.c: TYPE=SYMBOL
 ${stringish_SETTERS}: bson-element-stringish.c.in
 	$(AM_V_GEN)
 	$(AM_V_at) sed -e "s/SETTER/${SETTER}/g" \
