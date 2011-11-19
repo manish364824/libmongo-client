@@ -191,20 +191,14 @@ START_TEST (test_func_bson_element_document)
   bson_t *b = bson_stream_close
     (bson_new_build
      (bson_element_create ("i32", BSON_TYPE_INT32, 42), NULL));
-  bson_element_t *e;
-
-  e = bson_element_create ("document", BSON_TYPE_DOCUMENT, b);
-#if 0
-  e = bson_element_new ();
-  e = bson_element_name_set (e, "document");
-  e = bson_element_value_set_document (e, b);
-#endif
 
   _bson_element_test_stream
-    (e,
+    (bson_element_create ("document", BSON_TYPE_DOCUMENT, b),
      25,
      "\x03" "document\x00" "\x0e\x00\x00\x00"
      "\x10" "i32\x00" "\x2a\x00\x00\x00" "\x00\x00o");
+
+  bson_unref (b);
 }
 END_TEST
 
