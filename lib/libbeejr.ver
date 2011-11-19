@@ -37,6 +37,8 @@ LMC_0.2.0 {
 		bson_element_value_get_javascript;
 		bson_element_value_set_symbol;
 		bson_element_value_get_symbol;
+                bson_element_value_set_document;
+                bson_element_value_get_document;
 
 		bson_element_value_set;
 		bson_element_set;

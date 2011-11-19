@@ -20,9 +20,8 @@
 /** @file lib/bson-element.c
  */
 
-#include <lmc/common.h>
+#include <lmc.h>
 #include <lmc/endian.h>
-#include <lmc/bson-element.h>
 
 #include <stdlib.h>
 #include <signal.h>
@@ -356,6 +355,61 @@ _bson_element_value_get_size_NULL (void)
   return 0;
 }
 
+/* document */
+bson_element_t *
+bson_element_value_set_document (bson_element_t *e,
+				 const void *val)
+{
+  bson_t *b = (bson_t *)val;
+
+  if (bson_stream_get_size (b) <= 0)
+    return e;
+
+  if (!(e = _bson_element_meta_set (e, BSON_TYPE_DOCUMENT,
+				    bson_stream_get_size (b) + 1,
+				    0)))
+    return NULL;
+
+  e = bson_element_data_append (e, bson_stream_get_data (b),
+                                bson_stream_get_size (b));
+  return bson_element_data_append (e, (uint8_t *)"\0", 1);
+}
+
+static bson_element_t *
+_bson_element_value_set_DOCUMENT_va (bson_element_t *e,
+                                     va_list ap)
+{
+  va_list aq;
+  bson_element_t *n;
+
+  va_copy (aq, ap);
+  n = bson_element_value_set_document (e, va_arg (aq, void *));
+  va_end (aq);
+  return n;
+}
+
+lmc_bool_t
+bson_element_value_get_document (bson_element_t *e,
+				 void **oval)
+{
+  bson_t *b;
+  bson_element_value_t *v = bson_element_data_type_get (e, BSON_TYPE_DOCUMENT);
+
+  if (!v || !oval)
+    return FALSE;
+
+  b = bson_new_from_data (e->as_typed.data);
+
+  *oval = b;
+  return TRUE;
+}
+
+static inline int32_t
+_bson_element_value_get_size_DOCUMENT (const uint8_t *data)
+{
+  return LMC_INT32_FROM_LE (((bson_element_value_t *)data)->str.len) + 1;
+}
+
 /** Builders **/
 
 #define BSON_VALUE_SET_CB(type)						\
@@ -376,6 +430,7 @@ static bson_element_value_set_va_cb _bson_element_value_set_cbs[BSON_TYPE_MAX] =
   BSON_VALUE_SET_CB(UTC_DATETIME),
   BSON_VALUE_SET_CB(JS_CODE),
   BSON_VALUE_SET_CB(SYMBOL),
+  BSON_VALUE_SET_CB(DOCUMENT),
   [BSON_TYPE_NULL] =
    (bson_element_value_set_va_cb) _bson_element_value_set_NULL_va
 };
@@ -390,6 +445,7 @@ static bson_element_value_get_size_cb _bson_element_value_get_size_cbs[BSON_TYPE
   BSON_VALUE_GET_SIZE_CB(UTC_DATETIME),
   BSON_VALUE_GET_SIZE_CB(JS_CODE),
   BSON_VALUE_GET_SIZE_CB(SYMBOL),
+  BSON_VALUE_GET_SIZE_CB(DOCUMENT),
   [BSON_TYPE_NULL] =
    (bson_element_value_get_size_cb) _bson_element_value_get_size_NULL
 };

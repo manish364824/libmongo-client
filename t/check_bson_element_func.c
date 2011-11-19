@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include <lmc/bson-element.h>
+#include <lmc/bson.h>
 
 START_TEST (test_func_bson_element_data_move)
 {
@@ -94,6 +95,8 @@ _bson_element_test_stream (bson_element_t *e, int32_t size,
   n = bson_element_new_from_data (bson_element_stream_get (e));
   ck_assert (bson_element_type_get (e) == bson_element_type_get (n));
   ck_assert_str_eq (bson_element_name_get (e), bson_element_name_get (n));
+  ck_assert_int_eq (bson_element_data_get_size (e),
+                    bson_element_data_get_size (n));
   ck_assert (memcmp (bson_element_data_get (e),
 		     bson_element_data_get (n),
 		     bson_element_data_get_size (n)) == 0);
@@ -183,6 +186,28 @@ START_TEST (test_func_bson_element_symbol)
 }
 END_TEST
 
+START_TEST (test_func_bson_element_document)
+{
+  bson_t *b = bson_stream_close
+    (bson_new_build
+     (bson_element_create ("i32", BSON_TYPE_INT32, 42), NULL));
+  bson_element_t *e;
+
+  e = bson_element_create ("document", BSON_TYPE_DOCUMENT, b);
+#if 0
+  e = bson_element_new ();
+  e = bson_element_name_set (e, "document");
+  e = bson_element_value_set_document (e, b);
+#endif
+
+  _bson_element_test_stream
+    (e,
+     25,
+     "\x03" "document\x00" "\x0e\x00\x00\x00"
+     "\x10" "i32\x00" "\x2a\x00\x00\x00" "\x00\x00o");
+}
+END_TEST
+
 Suite *
 bson_element_suite (void)
 {
@@ -206,6 +231,7 @@ bson_element_suite (void)
   tcase_add_test (tc_enc, test_func_bson_element_boolean);
   tcase_add_test (tc_enc, test_func_bson_element_null);
   tcase_add_test (tc_enc, test_func_bson_element_datetime);
+  tcase_add_test (tc_enc, test_func_bson_element_document);
   suite_add_tcase (s, tc_enc);
 
   tc_value = tcase_create ("Manipulations");

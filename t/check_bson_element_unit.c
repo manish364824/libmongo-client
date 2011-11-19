@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include <lmc/bson-element.h>
+#include <lmc/bson.h>
 
 START_TEST (test_bson_element_new)
 {
@@ -435,6 +436,47 @@ START_TEST (test_bson_element_value_symbol)
 }
 END_TEST
 
+START_TEST (test_bson_element_value_document)
+{
+  bson_t *b, *v;
+  bson_element_t *e;
+
+  b = bson_new_build
+    (bson_element_create ("str", BSON_TYPE_STRING,
+			  "test me", BSON_LENGTH_AUTO),
+     BSON_END);
+  b = bson_stream_close (b);
+
+  ck_assert (bson_element_value_set_document (NULL, b) == NULL);
+  ck_assert (bson_element_value_get_document (NULL, (void **)&v) == FALSE);
+
+  e = bson_element_new ();
+
+  ck_assert (bson_element_value_get_document (e, (void **)&v) == FALSE);
+
+  b = bson_stream_open (b);
+  e = bson_element_value_set_document (e, b);
+  ck_assert (e != NULL);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_NONE);
+
+  b = bson_stream_close (b);
+  e = bson_element_value_set_document (e, b);
+  ck_assert (e != NULL);
+  ck_assert (bson_element_type_get (e) == BSON_TYPE_DOCUMENT);
+
+  ck_assert (bson_element_value_get_document (e, (void **)&v) == TRUE);
+  v = bson_stream_close (v);
+  ck_assert_int_eq (bson_stream_get_size (b),
+		    bson_stream_get_size (v));
+
+  ck_assert (bson_element_value_get_document (e, NULL) == FALSE);
+
+  bson_element_unref (e);
+  bson_unref (b);
+  bson_unref (v);
+}
+END_TEST
+
 START_TEST (test_bson_element_value)
 {
   bson_element_t *e;
@@ -633,6 +675,7 @@ bson_element_suite (void)
   tcase_add_test (tc_access, test_bson_element_value_symbol);
   tcase_add_test (tc_access, test_bson_element_value_boolean);
   tcase_add_test (tc_access, test_bson_element_value_datetime);
+  tcase_add_test (tc_access, test_bson_element_value_document);
   suite_add_tcase (s, tc_access);
 
   tc_builder = tcase_create ("Builder");

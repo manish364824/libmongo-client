@@ -487,6 +487,29 @@ lmc_bool_t bson_element_value_get_datetime (bson_element_t *e,
 					    int64_t *oval);
 
 
+/** Set the value of a BSON element to a BSON document.
+ *
+ * @param e is the element whose value to set.
+ * @param val is the BSON object to use as the value.
+ *
+ * @returns The BSON element with the value set, or NULL on error.
+ */
+bson_element_t *bson_element_value_set_document (bson_element_t *e,
+						 const void *val);
+
+/** Get the value of a BSON element, as a BSON object.
+ *
+ * @param e is the element whose value we want to retrieve.
+ * @param oval is the output variable to put the value into.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ *
+ * @note The returned document is newly allocated, and must be freed
+ * by the caller!
+ */
+lmc_bool_t bson_element_value_get_document (bson_element_t *e,
+					    void **oval);
+
 /** Set the type and the value of a BSON element.
  *
  * @param e is the element to modify.
