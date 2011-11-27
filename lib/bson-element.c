@@ -32,10 +32,6 @@
 #define BSON_ELEMENT_VALUE(e) \
   ((bson_element_value_t *)(e->as_typed.data + e->name_len))
 
-typedef bson_element_t *(*bson_element_value_set_va_cb) (bson_element_t *e,
-							 va_list ap);
-typedef int32_t (*bson_element_value_get_size_cb) (const uint8_t *data);
-
 typedef union
 {
   double dbl;
@@ -412,55 +408,38 @@ _bson_element_value_get_size_DOCUMENT (const uint8_t *data)
 
 /** Builders **/
 
-#define BSON_VALUE_SET_CB(type)						\
-  [BSON_TYPE_##type] =							\
-    (bson_element_value_set_va_cb) _bson_element_value_set_##type##_va
+#define _bson_element_value_set_TYPE_va(type,e,ap) \
+  case BSON_TYPE_##type:                           \
+    return _bson_element_value_set_##type##_va (e, ap)
 
-#define BSON_VALUE_GET_SIZE_CB(type)					\
-  [BSON_TYPE_##type] =							\
-    (bson_element_value_get_size_cb) _bson_element_value_get_size_##type
+#define _bson_element_value_get_TYPE_size(type,value) \
+  case BSON_TYPE_##type:                              \
+    return _bson_element_value_get_size_##type (value)
 
-static bson_element_value_set_va_cb _bson_element_value_set_cbs[BSON_TYPE_MAX] =
-{
-  BSON_VALUE_SET_CB(DOUBLE),
-  BSON_VALUE_SET_CB(INT32),
-  BSON_VALUE_SET_CB(INT64),
-  BSON_VALUE_SET_CB(STRING),
-  BSON_VALUE_SET_CB(BOOLEAN),
-  BSON_VALUE_SET_CB(UTC_DATETIME),
-  BSON_VALUE_SET_CB(JS_CODE),
-  BSON_VALUE_SET_CB(SYMBOL),
-  BSON_VALUE_SET_CB(DOCUMENT),
-  [BSON_TYPE_NULL] =
-   (bson_element_value_set_va_cb) _bson_element_value_set_NULL_va
-};
-
-static bson_element_value_get_size_cb _bson_element_value_get_size_cbs[BSON_TYPE_MAX] =
-{
-  BSON_VALUE_GET_SIZE_CB(DOUBLE),
-  BSON_VALUE_GET_SIZE_CB(INT32),
-  BSON_VALUE_GET_SIZE_CB(INT64),
-  BSON_VALUE_GET_SIZE_CB(STRING),
-  BSON_VALUE_GET_SIZE_CB(BOOLEAN),
-  BSON_VALUE_GET_SIZE_CB(UTC_DATETIME),
-  BSON_VALUE_GET_SIZE_CB(JS_CODE),
-  BSON_VALUE_GET_SIZE_CB(SYMBOL),
-  BSON_VALUE_GET_SIZE_CB(DOCUMENT),
-  [BSON_TYPE_NULL] =
-   (bson_element_value_get_size_cb) _bson_element_value_get_size_NULL
-};
+#define _bson_element_value_get_TYPE_size_static(type,value) \
+  case BSON_TYPE_##type:                                     \
+    return _bson_element_value_get_size_##type ()
 
 static bson_element_t *
 bson_element_value_set_va (bson_element_t *e, bson_element_type_t type,
 			   va_list ap)
 {
-  if (type >= BSON_TYPE_MAX)
-    return e;
-
-  if (_bson_element_value_set_cbs[type])
-    return _bson_element_value_set_cbs[type] (e, ap);
-  else
-    return e;
+  switch (type)
+    {
+      _bson_element_value_set_TYPE_va(DOUBLE, e, ap);
+      _bson_element_value_set_TYPE_va(INT32, e, ap);
+      _bson_element_value_set_TYPE_va(INT64, e, ap);
+      _bson_element_value_set_TYPE_va(STRING, e, ap);
+      _bson_element_value_set_TYPE_va(BOOLEAN, e, ap);
+      _bson_element_value_set_TYPE_va(UTC_DATETIME, e, ap);
+      _bson_element_value_set_TYPE_va(JS_CODE, e, ap);
+      _bson_element_value_set_TYPE_va(SYMBOL, e, ap);
+      _bson_element_value_set_TYPE_va(DOCUMENT, e, ap);
+    case BSON_TYPE_NULL:
+      return _bson_element_value_set_NULL_va (e);
+    default:
+      return e;
+    }
 }
 
 bson_element_t *
@@ -512,6 +491,27 @@ bson_element_create (const char *name,
   return e;
 }
 
+static int32_t
+_bson_element_value_get_size (bson_element_type_t type, const uint8_t *value)
+{
+  switch (type)
+    {
+      _bson_element_value_get_TYPE_size_static(DOUBLE, value);
+      _bson_element_value_get_TYPE_size_static(INT32, value);
+      _bson_element_value_get_TYPE_size_static(INT64, value);
+      _bson_element_value_get_TYPE_size(STRING, value);
+      _bson_element_value_get_TYPE_size_static(BOOLEAN, value);
+      _bson_element_value_get_TYPE_size_static(UTC_DATETIME, value);
+      _bson_element_value_get_TYPE_size(JS_CODE, value);
+      _bson_element_value_get_TYPE_size(SYMBOL, value);
+      _bson_element_value_get_TYPE_size(DOCUMENT, value);
+    case BSON_TYPE_NULL:
+      return _bson_element_value_get_size_NULL ();
+    default:
+      return -1;
+    }
+}
+
 bson_element_t *
 bson_element_new_from_data (const uint8_t *data)
 {
@@ -519,7 +519,7 @@ bson_element_new_from_data (const uint8_t *data)
   uint8_t type;
   const char *name;
   const uint8_t *value;
-  int32_t size = -1;
+  int32_t size;
 
   if (!data)
     return NULL;
@@ -531,8 +531,7 @@ bson_element_new_from_data (const uint8_t *data)
   if (type >= BSON_TYPE_MAX)
     return NULL;
 
-  if (_bson_element_value_get_size_cbs[type])
-    size = _bson_element_value_get_size_cbs[type] (value);
+  size = _bson_element_value_get_size (type, value);
 
   if (size < 0)
     return NULL;
