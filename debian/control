@@ -1,11 +1,10 @@
 Source: libmongo-client
 Priority: extra
 Maintainer: Gergely Nagy <algernon@madhouse-project.org>
-Build-Depends: debhelper (>= 8.9.7~), libglib2.0-dev, perl, dh-autoreconf
+Build-Depends: debhelper (>= 9~), libglib2.0-dev, perl, dh-autoreconf
 Build-Depends-Indep: doxygen, graphviz
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3
 Section: libs
-DM-Upload-Allowed: yes
 Homepage: https://github.com/algernon/libmongo-client
 Vcs-Git: git://git.madhouse-project.org/projects/libmongo-client.git
 Vcs-Browser: http://git.madhouse-project.org/projects/libmongo-client/
