@@ -59,7 +59,7 @@ guint8 *
 mongo_util_oid_new_with_time (gint32 ts, gint32 seq)
 {
   guint8 *oid;
-  time_t t = GINT32_TO_BE (ts);
+  gint32 t = GINT32_TO_BE (ts);
   gint32 tmp = GINT32_TO_BE (seq);
 
   if (machine_id == 0 || pid == 0)
