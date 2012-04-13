@@ -1,6 +1,6 @@
 #+STARTUP: indent showall			-*- org -*-
 
-* 0.1.5
+* 0.1.5 - <2012-04-13 Fri>
 
 This is a bugfix release, without any new functionality. It is
 expected that this will be the last release before a complete overhaul
