@@ -1,5 +1,44 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.1.5 - <2012-04-13 Fri>
+
+This is a bugfix release, without any new functionality. It is
+expected that this will be the last release before a complete overhaul
+of the library.
+
+** Bugfix: Restore glib 2.12 compatibility
+
+The examples used features not available in glib 2.12, they were
+changed to not do that, and work with this old version too.
+
+** Bugfix: Do not accept invalid index specifications
+
+When creating an index, the library now bails out early with an error
+in case the index specification is not acceptable.
+
+** Bugfix: Fix glib sanity check when glib is on a non-standard path
+
+In case glib was installed to a path that is not on the compiler's
+default search path, the sanity check at configure time failed. This
+has been corrected.
+
+** Bugfix: bson_cursor_find() & co. must match the whole key
+
+Due to a silly matching logic in bson_cursor_find(), and anything that
+built on it (bson_find() included) was able to match keys of which the
+sought name was a prefix of.
+
+This is now fixed, and the find functions will correctly match the
+whole key.
+
+** Bugfix: Fixed OID generation on 64-bit big-endian machines
+
+Due to a rounding error, OID generation on certain 64-bit big-endian
+platforms resulted in the timestamp part always being zeroed out,
+which made OIDs generated on such platforms useless.
+
+The rounding error was eliminated.
+
 * 0.1.4 - <2011-08-27 Sat>
 
 This release is a minor update, with neither new functionality, nor

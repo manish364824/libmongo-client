@@ -1670,7 +1670,9 @@ _mongo_index_gen_name (const bson *key)
 	    break;
 	  }
 	default:
-	  break;
+	  bson_cursor_free (c);
+	  g_string_free (name, TRUE);
+	  return NULL;
 	}
       if (v != 0)
 	g_string_append_printf (name, "%" G_GINT64_FORMAT "_", v);
@@ -1707,6 +1709,11 @@ mongo_sync_cmd_index_create (mongo_sync_connection *conn,
     }
 
   name = _mongo_index_gen_name (key);
+  if (!name)
+    {
+      errno = ENOTSUP;
+      return FALSE;
+    }
 
   cmd = bson_new_sized (bson_size (key) + name->len + 128);
   bson_append_document (cmd, "key", key);

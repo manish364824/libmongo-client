@@ -909,7 +909,7 @@ _bson_cursor_find (const bson *b, const gchar *name, size_t start_pos,
       gint32 key_len = strlen (key);
       gint32 value_pos = pos + key_len + 2;
 
-      if (!memcmp (key, name, (name_len <= key_len) ? name_len : key_len))
+      if (key_len == name_len && memcmp (key, name, key_len) == 0)
 	{
 	  dest_c->obj = b;
 	  dest_c->key = key;
