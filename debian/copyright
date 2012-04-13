@@ -1,16 +1,16 @@
-Format: http://anonscm.debian.org/viewvc/dep/web/deps/dep5.mdwn?revision=174&view=co&pathrev=174
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: libmongo-client
 Upstream-Contact: Gergely Nagy <algernon@balabit.hu>
 Source: git://git.madhouse-project.org/projects/libmongo-client.git
-Copyright: Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
+Copyright: Copyright (C) 2011-2012 Gergely Nagy <algernon@balabit.hu>
 License: Apache-2.0
 
 Files: *
-Copyright: Copyright (C) 2011 Gergely Nagy <algernon@balabit.hu>
+Copyright: Copyright (C) 2011-2012 Gergely Nagy <algernon@balabit.hu>
 License: Apache-2.0
 
 Files: debian/*
-Copyright: Copyright (C) 2011 Gergely Nagy <algernon@madhouse-project.org>
+Copyright: Copyright (C) 2011-2012 Gergely Nagy <algernon@madhouse-project.org>
 License: Apache-2.0
 
 License: Apache-2.0
