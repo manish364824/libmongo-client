@@ -1,3 +1,13 @@
+libmongo-client (0.1.5-1) unstable; urgency=low
+
+  * New upstream bugfix release.
+    + Fixes build on s390x, sparc64 and ppc64.
+  * Bump debhelper build-dependency to >= 9~
+  * Update debian/copyright to copyright-format-1.0.
+  * Bump Standards-Version to 3.9.3 (no other changes necessary)
+
+ -- Gergely Nagy <algernon@madhouse-project.org>  Fri, 13 Apr 2012 18:37:21 +0200
+
 libmongo-client (0.1.4-3) unstable; urgency=low
 
   * Build-Depend on debhelper (>= 8.9.7~) for -arch/-indep override
