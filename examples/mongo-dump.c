@@ -139,7 +139,11 @@ mongo_dump (config_t *config)
       if (pos % 10 == 0)
 	VLOG ("\rDumping... %03.2f%%", (pos * 1.0) / (cnt * 1.0) * 100);
 
-      write (fd, bson_data (b), bson_size (b));
+      if (write (fd, bson_data (b), bson_size (b)) != bson_size (b))
+        {
+          perror ("write()");
+          exit (1);
+        }
       bson_free (b);
     }
   VLOG ("\rDumping... %03.2f%%\n", (double)((pos / cnt) * 100));

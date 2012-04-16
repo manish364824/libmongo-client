@@ -137,7 +137,11 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
       if (!data)
 	mongo_gridfs_error (errno);
 
-      write (fd, data, size);
+      if (write (fd, data, size) != size)
+        {
+          perror ("write()");
+          exit (1);
+        }
       g_free (data);
     }
   mongo_sync_cursor_free (cursor);
