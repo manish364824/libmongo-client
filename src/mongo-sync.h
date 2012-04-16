@@ -357,7 +357,7 @@ enum
     /** The collection's _id should be autoindexed. */
     MONGO_COLLECTION_AUTO_INDEX_ID = 1 << 2,
     /** The collection needs to be pre-allocated. */
-    MONGO_COLLECTION_SIZED = 1 << 3,
+    MONGO_COLLECTION_SIZED = 1 << 3
   };
 
 /** Create a new MongoDB collection.
@@ -502,7 +502,7 @@ enum
 				     creating the indexes. */
     MONGO_INDEX_BACKGROUND = 0x04, /**< Create indexes in the
 				      background. */
-    MONGO_INDEX_SPARSE = 0x08, /**< Create sparse indexes. */
+    MONGO_INDEX_SPARSE = 0x08 /**< Create sparse indexes. */
   };
 
 /** Create an index.
