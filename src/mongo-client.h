@@ -50,6 +50,18 @@ typedef struct _mongo_connection mongo_connection;
  */
 mongo_connection *mongo_connect (const char *host, int port);
 
+/** Connect to a MongoDB server via a Unix socket.
+ *
+ * Connects to a single MongoDB server using a Unix Domain Socket.
+ *
+ * @param path is the path of the Unix socket.
+ *
+ * @returns A newly allocated mongo_connection object or NULL on
+ * error. It is the responsibility of the caller to free it once it is
+ * not used anymore.
+ */
+mongo_connection *mongo_unix_connect (const char *path);
+
 /** Disconnect from a MongoDB server.
  *
  * @param conn is the connection object to disconnect from.

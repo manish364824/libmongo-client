@@ -29,6 +29,7 @@ typedef struct
 {
   gchar *host;
   gint port;
+  gchar *path;
   gchar *db;
   gchar *coll;
   gchar *output;
@@ -53,10 +54,19 @@ mongo_dump (config_t *config)
   gchar *error = NULL;
   int e;
 
-  VLOG ("Connecting to %s:%d/%s.%s...\n", config->host, config->port,
-	config->db, config->coll);
+  if (config->path)
+    {
+      VLOG ("Connecting to %s/%s.%s...\n", config->path,config->db,
+	    config->coll);
+      conn = mongo_sync_unix_connect (config->path, config->slaveok);
+    }
+  else
+    {
+      VLOG ("Connecting to %s:%d/%s.%s...\n", config->host, config->port,
+	    config->db, config->coll);
+      conn = mongo_sync_connect (config->host, config->port, config->slaveok);
+    }
 
-  conn = mongo_sync_connect (config->host, config->port, config->slaveok);
   if (!conn)
     {
       e = errno;
@@ -160,7 +170,7 @@ main (int argc, char *argv[])
   GError *error = NULL;
   GOptionContext *context;
   config_t config = {
-    NULL, 27017, NULL, NULL, NULL, NULL, FALSE, FALSE, FALSE
+    NULL, 27017, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE, FALSE
   };
 
   GOptionEntry entries[] =
@@ -168,6 +178,8 @@ main (int argc, char *argv[])
       { "host", 'h', 0, G_OPTION_ARG_STRING, &config.host,
 	"Host to connect to", "HOST" },
       { "port", 'p', 0, G_OPTION_ARG_INT, &config.port, "Port", "PORT" },
+      { "path", 'P', 0, G_OPTION_ARG_STRING, &config.path,
+	"Path of Unix socket to connect to", "PATH" },
       { "db", 'd', 0, G_OPTION_ARG_STRING, &config.db, "Database", "DB" },
       { "collection", 'c', 0, G_OPTION_ARG_STRING, &config.coll, "Collection",
 	"COLL" },
@@ -190,7 +202,7 @@ main (int argc, char *argv[])
       exit (1);
     }
 
-  if (!config.host || !config.port || !config.db ||
+  if (!((config.host && config.port) || config.path) || !config.db ||
       !config.coll || !config.output)
     {
       gchar **nargv;

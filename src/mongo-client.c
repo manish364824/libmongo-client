@@ -29,6 +29,7 @@
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <netdb.h>
 #include <sys/uio.h>
 #include <netinet/in.h>
@@ -103,6 +104,44 @@ mongo_connect (const char *host, int port)
     }
 
   setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, (char *)&one, sizeof (one));
+
+  conn->fd = fd;
+
+  return conn;
+}
+
+mongo_connection *
+mongo_unix_connect (const char *path)
+{
+  int fd = -1;
+  mongo_connection *conn;
+  struct sockaddr_un remote;
+
+  if (!path || strlen (path) >= sizeof (remote.sun_path))
+    {
+      errno = path ? ENAMETOOLONG : EINVAL;
+      return NULL;
+    }
+
+  conn = g_new0 (mongo_connection, 1);
+
+  fd = socket (AF_UNIX, SOCK_STREAM, 0);
+  if (fd == -1)
+    {
+      g_free (conn);
+      errno = EADDRNOTAVAIL;
+      return NULL;
+    }
+
+  remote.sun_family = AF_UNIX;
+  strncpy (remote.sun_path, path, sizeof (remote.sun_path));
+  if (connect (fd, (struct sockaddr *)&remote, sizeof (remote)) == -1)
+    {
+      close (fd);
+      g_free (conn);
+      errno = EADDRNOTAVAIL;
+      return NULL;
+    }
 
   conn->fd = fd;
 
