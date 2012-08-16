@@ -60,8 +60,6 @@ mongo_tcp_connect (const char *host, int port)
       return NULL;
     }
 
-  conn = g_new0 (mongo_connection, 1);
-
   memset (&hints, 0, sizeof (hints));
   hints.ai_socktype = SOCK_STREAM;
 
@@ -75,7 +73,6 @@ mongo_tcp_connect (const char *host, int port)
     {
       int err = errno;
 
-      g_free (conn);
       g_free (port_s);
       errno = err;
       return NULL;
@@ -97,14 +94,13 @@ mongo_tcp_connect (const char *host, int port)
 
   if (fd == -1)
     {
-      g_free (conn);
-
       errno = EADDRNOTAVAIL;
       return NULL;
     }
 
   setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, (char *)&one, sizeof (one));
 
+  conn = g_new0 (mongo_connection, 1);
   conn->fd = fd;
 
   return conn;
@@ -123,12 +119,9 @@ mongo_unix_connect (const char *path)
       return NULL;
     }
 
-  conn = g_new0 (mongo_connection, 1);
-
   fd = socket (AF_UNIX, SOCK_STREAM, 0);
   if (fd == -1)
     {
-      g_free (conn);
       errno = EADDRNOTAVAIL;
       return NULL;
     }
@@ -138,11 +131,11 @@ mongo_unix_connect (const char *path)
   if (connect (fd, (struct sockaddr *)&remote, sizeof (remote)) == -1)
     {
       close (fd);
-      g_free (conn);
       errno = EADDRNOTAVAIL;
       return NULL;
     }
 
+  conn = g_new0 (mongo_connection, 1);
   conn->fd = fd;
 
   return conn;
