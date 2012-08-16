@@ -14,12 +14,14 @@ test_mongo_connect (void)
   ok (errno == EINVAL,
       "mongo_connect() should fail with EINVAL if host is NULL");
 
-  begin_network_tests (3);
+  begin_network_tests (4);
 
   ok (mongo_connect ("invalid.example.com", 27017) == NULL,
       "Connecting to an invalid host fails");
   ok (mongo_connect ("example.com", 27017) == NULL,
       "Connecting to an unavailable host/port fails");
+  ok (mongo_connect ("/does/not/exist.sock", MONGO_CONN_LOCAL) == NULL,
+      "Connecting to an unavailable unix socket fails");
 
   ok ((c = mongo_connect (config.primary_host,
 			  config.primary_port)) != NULL,
@@ -29,4 +31,4 @@ test_mongo_connect (void)
   end_network_tests ();
 }
 
-RUN_TEST (5, mongo_connect);
+RUN_TEST (6, mongo_connect);

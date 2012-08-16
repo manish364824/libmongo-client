@@ -28,13 +28,13 @@
 #include <unistd.h>
 
 mongo_sync_connection *
-mongo_sync_connect (const gchar *host, gint port,
+mongo_sync_connect (const gchar *address, gint port,
 		    gboolean slaveok)
 {
   mongo_sync_connection *s;
   mongo_connection *c;
 
-  c = mongo_connect (host, port);
+  c = mongo_connect (address, port);
   if (!c)
     return NULL;
   s = g_realloc (c, sizeof (mongo_sync_connection));
@@ -42,30 +42,7 @@ mongo_sync_connect (const gchar *host, gint port,
   s->slaveok = slaveok;
   s->safe_mode = FALSE;
   s->auto_reconnect = FALSE;
-  s->rs.seeds = g_list_append (NULL, g_strdup_printf ("%s:%d", host, port));
-  s->rs.hosts = NULL;
-  s->rs.primary = NULL;
-  s->last_error = NULL;
-  s->max_insert_size = MONGO_SYNC_DEFAULT_MAX_INSERT_SIZE;
-
-  return s;
-}
-
-mongo_sync_connection *
-mongo_sync_unix_connect (const gchar *path, gboolean slaveok)
-{
-  mongo_sync_connection *s;
-  mongo_connection *c;
-
-  c = mongo_unix_connect (path);
-  if (!c)
-    return NULL;
-  s = g_realloc (c, sizeof (mongo_sync_connection));
-
-  s->slaveok = slaveok;
-  s->safe_mode = FALSE;
-  s->auto_reconnect = FALSE;
-  s->rs.seeds = NULL;
+  s->rs.seeds = g_list_append (NULL, g_strdup_printf ("%s:%d", address, port));
   s->rs.hosts = NULL;
   s->rs.primary = NULL;
   s->last_error = NULL;

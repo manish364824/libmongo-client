@@ -45,8 +45,8 @@
 
 static const int one = 1;
 
-mongo_connection *
-mongo_connect (const char *host, int port)
+static mongo_connection *
+mongo_tcp_connect (const char *host, int port)
 {
   struct addrinfo *res = NULL, *r;
   struct addrinfo hints;
@@ -110,7 +110,7 @@ mongo_connect (const char *host, int port)
   return conn;
 }
 
-mongo_connection *
+static mongo_connection *
 mongo_unix_connect (const char *path)
 {
   int fd = -1;
@@ -146,6 +146,15 @@ mongo_unix_connect (const char *path)
   conn->fd = fd;
 
   return conn;
+}
+
+mongo_connection *
+mongo_connect (const char *address, int port)
+{
+  if (port == MONGO_CONN_LOCAL)
+    return mongo_unix_connect (address);
+
+  return mongo_tcp_connect (address, port);
 }
 
 void
