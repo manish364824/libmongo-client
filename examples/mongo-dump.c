@@ -27,7 +27,7 @@
 
 typedef struct
 {
-  gchar *host;
+  gchar *addr;
   gint port;
   gchar *db;
   gchar *coll;
@@ -53,16 +53,24 @@ mongo_dump (config_t *config)
   gchar *error = NULL;
   int e;
 
-  VLOG ("Connecting to %s:%d/%s.%s...\n", config->host, config->port,
-	config->db, config->coll);
+  if (config->port == MONGO_CONN_LOCAL)
+    {
+      VLOG ("Connecting to %s/%s.%s...\n", config->addr, config->db,
+            config->coll);
+    }
+  else
+    {
+      VLOG ("Connecting to %s:%d/%s.%s...\n", config->addr, config->port,
+	    config->db, config->coll);
+    }
+  conn = mongo_sync_connect (config->addr, config->port, config->slaveok);
 
-  conn = mongo_sync_connect (config->host, config->port, config->slaveok);
   if (!conn)
     {
       e = errno;
 
       mongo_sync_cmd_get_last_error (conn, config->db, &error);
-      fprintf (stderr, "Error connecting to %s:%d: %s\n", config->host,
+      fprintf (stderr, "Error connecting to %s:%d: %s\n", config->addr,
 	       config->port, (error) ? error : strerror (e));
       g_free (error);
       exit (1);
@@ -78,7 +86,7 @@ mongo_dump (config_t *config)
 
 	  mongo_sync_cmd_get_last_error (conn, config->db, &error);
 	  fprintf (stderr, "Error reconnecting to the master of %s:%d: %s\n",
-		   config->host, config->port, (error) ? error : strerror (e));
+		   config->addr, config->port, (error) ? error : strerror (e));
 	  exit (1);
 	}
     }
@@ -165,8 +173,8 @@ main (int argc, char *argv[])
 
   GOptionEntry entries[] =
     {
-      { "host", 'h', 0, G_OPTION_ARG_STRING, &config.host,
-	"Host to connect to", "HOST" },
+      { "addr", 'a', 0, G_OPTION_ARG_STRING, &config.addr,
+	"Address to connect to", "ADDRESS" },
       { "port", 'p', 0, G_OPTION_ARG_INT, &config.port, "Port", "PORT" },
       { "db", 'd', 0, G_OPTION_ARG_STRING, &config.db, "Database", "DB" },
       { "collection", 'c', 0, G_OPTION_ARG_STRING, &config.coll, "Collection",
@@ -190,7 +198,7 @@ main (int argc, char *argv[])
       exit (1);
     }
 
-  if (!config.host || !config.port || !config.db ||
+  if (!((config.addr && config.port)) || !config.db ||
       !config.coll || !config.output)
     {
       gchar **nargv;

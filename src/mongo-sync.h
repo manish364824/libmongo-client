@@ -54,8 +54,9 @@ typedef struct _mongo_sync_connection mongo_sync_connection;
  *
  * Sets up a synchronous connection to a MongoDB server.
  *
- * @param host is the address of the server.
- * @param port is the port to connect to.
+ * @param address is the address of the server (IP or unix socket path).
+ * @param port is the port to connect to, or #MONGO_CONN_LOCAL if
+ * address is a unix socket.
  * @param slaveok signals whether queries made against a slave are
  * acceptable.
  *
@@ -63,9 +64,24 @@ typedef struct _mongo_sync_connection mongo_sync_connection;
  * error. It is the responsibility of the caller to close and free the
  * connection when appropriate.
  */
-mongo_sync_connection *mongo_sync_connect (const gchar *host,
+mongo_sync_connection *mongo_sync_connect (const gchar *address,
 					   gint port,
 					   gboolean slaveok);
+
+/** Synchronously connect to a MongoDB server via Unix socket.
+ *
+ * Sets up a synchronous connection to a MongoDB server.
+ *
+ * @param path is the path to the Unix Domain Socket to connect to.
+ * @param slaveok signals whether queries made against a slave are
+ * acceptable.
+ *
+ * @returns A newly allocated mongo_sync_connection object, or NULL on
+ * error. It is the responsibility of the caller to close and free the
+ * connection when appropriate.
+ */
+mongo_sync_connection *mongo_sync_unix_connect (const gchar *host,
+						gboolean slaveok);
 
 /** Add a seed to an existing MongoDB connection.
  *
