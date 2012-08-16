@@ -44,7 +44,8 @@ To build the documentation, `Doxygen`_ will be needed too.
 Installation
 ------------
 
-The library follows the usual autotools way of installation:
+The library follows the usual autotools way of installation (one will
+need libtool 2.2+ to build from git!):
 
 ::
 
