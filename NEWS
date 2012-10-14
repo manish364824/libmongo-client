@@ -1,6 +1,6 @@
 #+STARTUP: indent showall			-*- org -*-
 
-* 0.1.6 - UNRELEASED
+* 0.1.6 - <2012-10-14 Sun>
 
 With this release, thanks to Conrad Hoffmann <ch@bitfehler.net>, it is
 now possible to connect to mongodb via unix sockets.
