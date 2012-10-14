@@ -68,21 +68,6 @@ mongo_sync_connection *mongo_sync_connect (const gchar *address,
 					   gint port,
 					   gboolean slaveok);
 
-/** Synchronously connect to a MongoDB server via Unix socket.
- *
- * Sets up a synchronous connection to a MongoDB server.
- *
- * @param path is the path to the Unix Domain Socket to connect to.
- * @param slaveok signals whether queries made against a slave are
- * acceptable.
- *
- * @returns A newly allocated mongo_sync_connection object, or NULL on
- * error. It is the responsibility of the caller to close and free the
- * connection when appropriate.
- */
-mongo_sync_connection *mongo_sync_unix_connect (const gchar *host,
-						gboolean slaveok);
-
 /** Add a seed to an existing MongoDB connection.
  *
  * The seed list will be used for reconnects, prioritized before the
