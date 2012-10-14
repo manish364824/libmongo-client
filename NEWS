@@ -1,5 +1,10 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.1.6.1 - <2012-10-14 Sun>
+
+This is a quick bugfix release, that restores ABI compatibility with
+versions prior to 0.1.6, and cleans up a few other minor issues.
+
 * 0.1.6 - <2012-10-14 Sun>
 
 With this release, thanks to Conrad Hoffmann <ch@bitfehler.net>, it is
