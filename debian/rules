@@ -48,9 +48,9 @@ override_dh_compress:
 
 override_dh_builddeb:
 ifneq (Ubuntu,$(shell dpkg-vendor --query Vendor))
-	dh_builddeb -a -- -Zxz
+	dh_builddeb -- -Zxz
 else
-	dh_builddeb -a
+	dh_builddeb
 endif
 
 %:
