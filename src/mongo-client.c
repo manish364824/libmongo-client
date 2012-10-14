@@ -18,6 +18,7 @@
  * MongoDB client API implementation.
  */
 
+#include "config.h"
 #include "mongo-client.h"
 #include "bson.h"
 #include "mongo-wire.h"
@@ -45,7 +46,7 @@
 
 static const int one = 1;
 
-static mongo_connection *
+mongo_connection *
 mongo_tcp_connect (const char *host, int port)
 {
   struct addrinfo *res = NULL, *r;
@@ -149,6 +150,10 @@ mongo_connect (const char *address, int port)
 
   return mongo_tcp_connect (address, port);
 }
+
+#if VERSIONED_SYMBOLS
+__asm__(".symver mongo_tcp_connect,mongo_connect@LMC_0.1.0");
+#endif
 
 void
 mongo_disconnect (mongo_connection *conn)
