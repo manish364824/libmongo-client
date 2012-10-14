@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['mongo_5fcollection_5fauto_5findex_5fid',['MONGO_COLLECTION_AUTO_INDEX_ID',['../group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea307874ef23c8e6cfe2edd90c40ff8855',1,'mongo-sync.h']]],
+  ['mongo_5fcollection_5fcapped',['MONGO_COLLECTION_CAPPED',['../group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea87d3d094a9a7bcdd73e18f5a8a0839c8',1,'mongo-sync.h']]],
+  ['mongo_5fcollection_5fcapped_5fmax',['MONGO_COLLECTION_CAPPED_MAX',['../group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea50f6e1a79c91f4c683385839a7980940',1,'mongo-sync.h']]],
+  ['mongo_5fcollection_5fdefaults',['MONGO_COLLECTION_DEFAULTS',['../group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9ea57d3aa843580dc934014ff67b949a2ad',1,'mongo-sync.h']]],
+  ['mongo_5fcollection_5fsized',['MONGO_COLLECTION_SIZED',['../group__mongo__sync.html#gga05589fbab0657f08285ebdfe93f5ec9eaebac473a06bc56de39f1d5bf247be93e',1,'mongo-sync.h']]],
+  ['mongo_5findex_5fbackground',['MONGO_INDEX_BACKGROUND',['../group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4da24291685786563d9e27e959946c5e3f3',1,'mongo-sync.h']]],
+  ['mongo_5findex_5fdrop_5fdups',['MONGO_INDEX_DROP_DUPS',['../group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4da1f17ac23aa3790516427b30a976490b5',1,'mongo-sync.h']]],
+  ['mongo_5findex_5fsparse',['MONGO_INDEX_SPARSE',['../group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4daca69693fc239bb6cc24e2d0d42543b46',1,'mongo-sync.h']]],
+  ['mongo_5findex_5funique',['MONGO_INDEX_UNIQUE',['../group__mongo__sync.html#gga16af7b253440dadd46a80a4b9fddba4da9bba6324f54c9c4be4526a75de4f069d',1,'mongo-sync.h']]],
+  ['mongo_5freply_5fflag_5fawaitcapable',['MONGO_REPLY_FLAG_AWAITCAPABLE',['../group__mongo__wire__reply.html#ggaba01db17f4a2bfbc3db60dc172972a25ae5a6961ae5f12632a21fcc37a5304abb',1,'mongo-wire.h']]],
+  ['mongo_5freply_5fflag_5fno_5fcursor',['MONGO_REPLY_FLAG_NO_CURSOR',['../group__mongo__wire__reply.html#ggaba01db17f4a2bfbc3db60dc172972a25a451db5f21c7c43f9cca3b875b0e35750',1,'mongo-wire.h']]],
+  ['mongo_5freply_5fflag_5fquery_5ffail',['MONGO_REPLY_FLAG_QUERY_FAIL',['../group__mongo__wire__reply.html#ggaba01db17f4a2bfbc3db60dc172972a25a199b2f5de60a6e97c9e434ab6d8fcdf7',1,'mongo-wire.h']]],
+  ['mongo_5fwire_5fflag_5fdelete_5fsingle',['MONGO_WIRE_FLAG_DELETE_SINGLE',['../group__mongo__wire__cmd.html#gga6b7b47dd702d9e331586d485013fd1eaa12352814d851fba7a1a178ca97e5a10b',1,'mongo-wire.h']]],
+  ['mongo_5fwire_5fflag_5fquery_5fawait_5fdata',['MONGO_WIRE_FLAG_QUERY_AWAIT_DATA',['../group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaaa7d3068d6f7c54a81c30cc12a0806517',1,'mongo-wire.h']]],
+  ['mongo_5fwire_5fflag_5fquery_5fexhaust',['MONGO_WIRE_FLAG_QUERY_EXHAUST',['../group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaa2789e480d7582afb41a9471ce0c602eb',1,'mongo-wire.h']]],
+  ['mongo_5fwire_5fflag_5fquery_5fno_5fcursor_5ftimeout',['MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT',['../group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaa61f4eec7d66626b4b3dd8cfd4637a61c',1,'mongo-wire.h']]],
+  ['mongo_5fwire_5fflag_5fquery_5fpartial_5fresults',['MONGO_WIRE_FLAG_QUERY_PARTIAL_RESULTS',['../group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaa52fcba0c02713c5353b2300d311551e0',1,'mongo-wire.h']]],
+  ['mongo_5fwire_5fflag_5fquery_5fslave_5fok',['MONGO_WIRE_FLAG_QUERY_SLAVE_OK',['../group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaa041055bcf40f8d3cc4543f6ada3fc53e',1,'mongo-wire.h']]],
+  ['mongo_5fwire_5fflag_5fquery_5ftailable_5fcursor',['MONGO_WIRE_FLAG_QUERY_TAILABLE_CURSOR',['../group__mongo__wire__cmd.html#gga80155586fa275b28773c9b203f52cabaa371353ae287a99e7f43902ec00472798',1,'mongo-wire.h']]],
+  ['mongo_5fwire_5fflag_5fupdate_5fmulti',['MONGO_WIRE_FLAG_UPDATE_MULTI',['../group__mongo__wire__cmd.html#ggaaf105ae5beaca1dee30ae54530691fceaac446cd2b1a1e2b5cb77350d2ff203bb',1,'mongo-wire.h']]],
+  ['mongo_5fwire_5fflag_5fupdate_5fupsert',['MONGO_WIRE_FLAG_UPDATE_UPSERT',['../group__mongo__wire__cmd.html#ggaaf105ae5beaca1dee30ae54530691fceaa73d76d928ff95cc8dc903247148f54d',1,'mongo-wire.h']]]
+];

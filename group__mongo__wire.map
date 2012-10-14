@@ -1,5 +1,5 @@
-<map id="structs" name="structs">
-<area shape="rect" id="node1" href="$group__mongo__wire__packet.html" title="Packets" alt="" coords="228,5,297,35"/>
-<area shape="rect" id="node2" href="$group__mongo__wire__cmd.html" title="Each command has an id parameter, which can be used to track replies to various commands." alt="" coords="215,59,311,88"/>
-<area shape="rect" id="node4" href="$group__mongo__wire__reply.html" title="Reply handling" alt="" coords="207,112,319,141"/>
+<map id="Mongo Wire Protocol" name="Mongo Wire Protocol">
+<area shape="rect" id="node1" href="$group__mongo__wire__packet.html" title="Packets" alt="" coords="217,5,287,35"/>
+<area shape="rect" id="node2" href="$group__mongo__wire__cmd.html" title="Each command has an id parameter, which can be used to track replies to various commands." alt="" coords="208,59,296,88"/>
+<area shape="rect" id="node4" href="$group__mongo__wire__reply.html" title="Reply handling" alt="" coords="199,112,305,141"/>
 </map>

@@ -1,5 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync.html#ga4748ae0caf5b361929580d42ff369815" title="Send a get more command to MongoDB." alt="" coords="257,5,463,35"/>
-<area shape="rect" id="node5" href="$group__mongo__sync__cursor.html#ga321b3b8a39de8b5afd3accd9b9310d22" title="Iterate a MongoDB cursor." alt="" coords="513,5,697,35"/>
-<area shape="rect" id="node7" href="$group__mongo__sync__gridfs__api.html#ga98a18a4524def495ccc2b9e37679f11c" title="Delete files matching a query from GridFS." alt="" coords="748,5,948,35"/>
-</map>

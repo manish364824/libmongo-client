@@ -1,8 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object." alt="" coords="380,5,473,35"/>
-<area shape="rect" id="node5" href="$group__mongo__wire__reply.html#ga3f074589b15788ce7fd8e67867864033" title="Get the Nth document from a reply packet." alt="" coords="269,59,584,88"/>
-<area shape="rect" id="node7" href="$group__bson__object__access.html#gad456a97b9a887b96373b8e519d76ecff" title="Create a BSON object from existing data." alt="" coords="687,5,844,35"/>
-<area shape="rect" id="node9" href="$group__mongo__wire__reply.html#gad4378c89fad2dc0834eb0e709d6124b2" title="Get the full data part of a reply packet." alt="" coords="640,59,891,88"/>
-<area shape="rect" id="node13" href="$group__mongo__wire__reply.html#ga5d207b5b89cfee839f2129251aab5261" title="Get the header of a reply packet." alt="" coords="632,112,899,141"/>
-<area shape="rect" id="node11" href="$group__mongo__wire__packet.html#ga5350d54b0a6800ecd7df81d5c2b80c6b" title="Get the data part of a packet." alt="" coords="947,85,1160,115"/>
-</map>

@@ -1,6 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync.html#ga96a2018a7b4f04e73e19da2eadf8d3e4" title="Send a kill_cursors command to MongoDB." alt="" coords="239,32,452,61"/>
-<area shape="rect" id="node9" href="$group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet." alt="" coords="255,85,436,115"/>
-<area shape="rect" id="node5" href="$group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99" title="Get the last requestID from a connection object." alt="" coords="503,5,740,35"/>
-<area shape="rect" id="node7" href="$libmongo-private_8h.html#a616af143aa2a10f5ce29ff784ea210b8" title="mongo_wire_cmd_kill_cursors_va" alt="" coords="505,59,737,88"/>
-</map>

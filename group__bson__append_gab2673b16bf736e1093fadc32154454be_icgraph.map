@@ -1,5 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync.html#gaedac9fdb1e5ec77e0fedd2289d5a8c18" title="Send a count() command to MongoDB." alt="" coords="257,5,439,35"/>
-<area shape="rect" id="node5" href="$group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index." alt="" coords="235,59,461,88"/>
-<area shape="rect" id="node7" href="$group__mongo__sync__gridfs__api.html#gafb787e1b2dd183b9461b55fa6c96abbb" title="Create a new GridFS object." alt="" coords="511,59,687,88"/>
-</map>

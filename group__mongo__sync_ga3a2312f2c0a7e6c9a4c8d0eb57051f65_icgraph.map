@@ -1,4 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync__gridfs__chunk__api.html#gaf398eaa2d1bfb24f879af6f6899c8278" title="Upload a file to GridFS from a buffer." alt="" coords="235,5,579,35"/>
-<area shape="rect" id="node5" href="$group__mongo__sync__gridfs__stream__api.html#gaaf94f166caa84ab51ab1e7d2d4553e2c" title="Close a GridFS stream." alt="" coords="288,59,525,88"/>
-</map>

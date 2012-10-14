@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync.html#gab5fa65825c2bc29fdea7d925237556d5" title="Close and free a synchronous MongoDB connection." alt="" coords="197,59,376,88"/>
-<area shape="rect" id="node5" href="$group__mongo__sync__gridfs__api.html#ga9b2ac40335c4026bc0f8b43366f80419" title="Close and free a GridFS object." alt="" coords="425,5,601,35"/>
-<area shape="rect" id="node9" href="$group__mongo__sync__pool__api.html#gaa9362a74d4b5383aa2e903bcb920733f" title="Close and free a synchronous connection pool." alt="" coords="429,59,597,88"/>
-<area shape="rect" id="node11" href="$group__mongo__sync__pool__api.html#gacdb2162ca636a523dc344b31a099ba62" title="Create a new synchronous connection pool." alt="" coords="429,112,597,141"/>
-<area shape="rect" id="node7" href="$group__mongo__sync__gridfs__api.html#gafb787e1b2dd183b9461b55fa6c96abbb" title="Create a new GridFS object." alt="" coords="652,5,828,35"/>
-</map>

@@ -1,5 +1,5 @@
-<map id="structs" name="structs">
-<area shape="rect" id="node1" href="$group__mongo__sync__cursor.html" title="Mongo Sync Cursor API" alt="" coords="179,5,349,35"/>
-<area shape="rect" id="node3" href="$group__mongo__sync__pool__api.html" title="These commands implement connection pooling over the mongo_sync family of commands." alt="" coords="187,59,341,88"/>
-<area shape="rect" id="node4" href="$group__mongo__sync__gridfs__api.html" title="The GridFS API &#45; and related modules, like Mongo GridFS Chunk API and Mongo GridFS Streaming API &#45; pr..." alt="" coords="197,112,331,141"/>
+<map id="Mongo Sync API" name="Mongo Sync API">
+<area shape="rect" id="node1" href="$group__mongo__sync__cursor.html" title="Mongo Sync Cursor API" alt="" coords="177,5,340,35"/>
+<area shape="rect" id="node3" href="$group__mongo__sync__pool__api.html" title="These commands implement connection pooling over the mongo_sync family of commands." alt="" coords="184,59,333,88"/>
+<area shape="rect" id="node4" href="$group__mongo__sync__gridfs__api.html" title="The GridFS API &#45; and related modules, like Mongo GridFS Chunk API and Mongo GridFS Streaming API &#45; pr..." alt="" coords="193,112,324,141"/>
 </map>

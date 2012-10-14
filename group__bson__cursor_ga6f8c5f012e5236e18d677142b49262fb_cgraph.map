@@ -1,5 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object." alt="" coords="272,5,360,35"/>
-<area shape="rect" id="node5" href="$group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object." alt="" coords="269,59,363,88"/>
-<area shape="rect" id="node7" href="$group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space." alt="" coords="253,112,379,141"/>
-</map>

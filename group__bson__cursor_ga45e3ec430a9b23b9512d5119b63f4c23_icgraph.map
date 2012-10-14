@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync__gridfs__chunk__api.html#gaf398eaa2d1bfb24f879af6f6899c8278" title="Upload a file to GridFS from a buffer." alt="" coords="208,5,552,35"/>
-<area shape="rect" id="node5" href="$group__mongo__sync__gridfs__chunk__api.html#ga54de2ac6d88a819b4c6b9a1560fbe9c0" title="Find a file on GridFS." alt="" coords="263,59,497,88"/>
-<area shape="rect" id="node7" href="$group__mongo__sync__gridfs__api.html#ga98a18a4524def495ccc2b9e37679f11c" title="Delete files matching a query from GridFS." alt="" coords="280,112,480,141"/>
-<area shape="rect" id="node9" href="$group__mongo__sync__gridfs__stream__api.html#ga991b7e09191d888e8709705df3c5a558" title="Create a stream reader by finding the file matching a query." alt="" coords="267,165,493,195"/>
-<area shape="rect" id="node11" href="$group__mongo__sync__gridfs__stream__api.html#gaf7b0d0c1302180e31e648419f1613bca" title="Create a new GridFS stream writer." alt="" coords="265,219,495,248"/>
-</map>

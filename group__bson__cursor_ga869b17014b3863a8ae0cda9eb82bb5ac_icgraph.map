@@ -1,4 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync__gridfs__chunk__api.html#ga54de2ac6d88a819b4c6b9a1560fbe9c0" title="Find a file on GridFS." alt="" coords="223,5,457,35"/>
-<area shape="rect" id="node5" href="$group__mongo__sync__gridfs__stream__api.html#ga991b7e09191d888e8709705df3c5a558" title="Create a stream reader by finding the file matching a query." alt="" coords="227,59,453,88"/>
-</map>

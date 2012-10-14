@@ -1,5 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object." alt="" coords="168,5,253,35"/>
-<area shape="rect" id="node5" href="$group__bson__object__access.html#ga357437f58074c2dee668a0cae2595b8b" title="Create a new BSON object." alt="" coords="168,59,253,88"/>
-<area shape="rect" id="node7" href="$group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space." alt="" coords="301,59,427,88"/>
-</map>

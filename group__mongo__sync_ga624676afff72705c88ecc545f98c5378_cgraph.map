@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__bson__append.html#ga96b16e53097496dcf333f09d29b04aa8" title="Append a string to a BSON object." alt="" coords="245,5,395,35"/>
-<area shape="rect" id="node5" href="$group__bson__object__access.html#gaa9919014ef9d2e2c1b04efa31e0f2124" title="Finish a BSON object." alt="" coords="273,59,367,88"/>
-<area shape="rect" id="node7" href="$group__bson__object__access.html#ga1c0a306bfbe71d42218a3882ed188dd8" title="Free the memory associated with a BSON object." alt="" coords="277,112,363,141"/>
-<area shape="rect" id="node9" href="$group__bson__object__access.html#ga5880491cfbf32f576ca7ed289c7a5d6c" title="Create a new BSON object, preallocating a given amount of space." alt="" coords="257,165,383,195"/>
-<area shape="rect" id="node11" href="$group__mongo__wire__packet.html#ga84ffaee415e08bb61456dc2abfbfa6c6" title="Free up a mongo packet." alt="" coords="229,219,411,248"/>
-</map>

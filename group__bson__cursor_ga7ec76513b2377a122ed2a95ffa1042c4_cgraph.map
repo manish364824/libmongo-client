@@ -1,5 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__bson__cursor.html#gac2b4e5dca25475ed4842ca4dd86413f3" title="Determine the type of the current element." alt="" coords="264,5,397,35"/>
-<area shape="rect" id="node7" href="$group__bson__types.html#ga9b20c4997794324865f54f606a984c58" title="Return a type&#39;s stringified name." alt="" coords="255,59,407,88"/>
-<area shape="rect" id="node5" href="$group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object." alt="" coords="457,5,545,35"/>
-</map>

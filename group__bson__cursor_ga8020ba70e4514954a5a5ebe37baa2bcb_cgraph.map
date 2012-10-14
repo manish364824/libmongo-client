@@ -1,5 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__bson__cursor.html#gaae32a6eae2be182d26c8f2a79a07ac12" title="Delete a cursor, and free up all resources used by it." alt="" coords="137,5,268,35"/>
-<area shape="rect" id="node5" href="$group__bson__cursor.html#gadcac4b9c2076afa5e7e656baed077b18" title="Create a new cursor." alt="" coords="137,59,268,88"/>
-<area shape="rect" id="node7" href="$group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object." alt="" coords="317,85,403,115"/>
-</map>

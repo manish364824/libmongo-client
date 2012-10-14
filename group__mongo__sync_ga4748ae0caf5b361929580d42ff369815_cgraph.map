@@ -1,4 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99" title="Get the last requestID from a connection object." alt="" coords="263,5,500,35"/>
-<area shape="rect" id="node5" href="$group__mongo__wire__cmd.html#ga9ee20dc3832cf1a950e545d4891ed7bf" title="Construct a get more command." alt="" coords="280,59,483,88"/>
-</map>

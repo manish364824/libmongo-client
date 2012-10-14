@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__bson__object__access.html#ga57fb6a03f8e9948901945f4b5fc0793c" title="Return the size of a finished BSON object." alt="" coords="771,29,856,59"/>
-<area shape="rect" id="node5" href="$group__mongo__sync.html#ga60b1dea6c43b120d84f6d424e773f52b" title="Send an insert command to MongoDB." alt="" coords="236,56,431,85"/>
-<area shape="rect" id="node8" href="$group__mongo__client.html#ga70ff2b3c762e7a40f9d7f6df7a9e6e99" title="Get the last requestID from a connection object." alt="" coords="481,81,719,111"/>
-<area shape="rect" id="node10" href="$group__mongo__wire__cmd.html#ga96457147e0540ea46503ca61f87c566b" title="Construct an insert command with N documents." alt="" coords="504,135,696,164"/>
-<area shape="rect" id="node12" href="$group__bson__object__access.html#ga053d619f59aa8effe973b5b8077fb57b" title="Return the raw bytestream form of the BSON object." alt="" coords="769,135,857,164"/>
-</map>

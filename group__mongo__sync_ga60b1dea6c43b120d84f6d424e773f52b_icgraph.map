@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$group__mongo__sync.html#ga6488a7ddebd38ce47c8a449320b3e98c" title="Create an index." alt="" coords="251,5,477,35"/>
-<area shape="rect" id="node7" href="$group__mongo__sync.html#ga3a2312f2c0a7e6c9a4c8d0eb57051f65" title="Send an insert command to MongoDB." alt="" coords="273,59,455,88"/>
-<area shape="rect" id="node5" href="$group__mongo__sync__gridfs__api.html#gafb787e1b2dd183b9461b55fa6c96abbb" title="Create a new GridFS object." alt="" coords="609,5,785,35"/>
-<area shape="rect" id="node9" href="$group__mongo__sync__gridfs__chunk__api.html#gaf398eaa2d1bfb24f879af6f6899c8278" title="Upload a file to GridFS from a buffer." alt="" coords="525,59,869,88"/>
-<area shape="rect" id="node11" href="$group__mongo__sync__gridfs__stream__api.html#gaaf94f166caa84ab51ab1e7d2d4553e2c" title="Close a GridFS stream." alt="" coords="579,112,816,141"/>
-</map>
