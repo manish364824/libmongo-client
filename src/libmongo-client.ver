@@ -29,6 +29,10 @@ LMC_0.1.3 {
 } LMC_0.1.2;
 
 LMC_0.1.6 {
- mongo_connect;
- mongo_sync_connect;
+  global:
+    mongo_connect;
+    mongo_sync_connect;
+  local:
+    mongo_tcp_connect;
+    mongo_sync_connect_0_1_0;
 } LMC_0.1.3;

@@ -134,6 +134,16 @@ else
    AC_MSG_RESULT([yes, ${vsymldflags}])
 fi
 
+enable_value () {
+   if test -z "$1"; then
+      echo 0
+   else
+      echo 1
+   fi
+}
+
+AC_DEFINE_UNQUOTED(VERSIONED_SYMBOLS, `enable_value ${vsymldflags}`,
+                   [Define to 1 if symbol versioning is enabled])
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [package name])
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [version number])
 
