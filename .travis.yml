@@ -13,3 +13,5 @@ script:
 compiler:
   - gcc
   - clang
+services:
+  - mongodb
