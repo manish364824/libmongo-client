@@ -16,7 +16,7 @@ build: ;
 # Arch dependent overrides
 ##
 override_dh_autoreconf-arch:
-	dh_autoreconf ./autogen.sh
+	dh_autoreconf
 
 override_dh_auto_configure-arch:
 	dh_auto_configure -- --enable-shared --with-versioned-symbols
