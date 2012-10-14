@@ -88,7 +88,7 @@ test_mongo_sync_cmd_get_more_net (void)
   cid = rh.cursor_id;
   mongo_wire_packet_free (p);
 
-  p = mongo_sync_cmd_get_more (conn, config.db, 3, cid);
+  p = mongo_sync_cmd_get_more (conn, config.ns, 3, cid);
   ok (p != NULL,
       "mongo_sync_cmd_get_more() works");
   mongo_wire_packet_free (p);
@@ -97,7 +97,7 @@ test_mongo_sync_cmd_get_more_net (void)
   shutdown (conn->super.fd, SHUT_RDWR);
   sleep (3);
 
-  p = mongo_sync_cmd_get_more (conn, config.db, 10, cid);
+  p = mongo_sync_cmd_get_more (conn, config.ns, 10, cid);
   ok (p != NULL,
       "mongo_sync_cmd_get_more() automatically reconnects");
   mongo_wire_packet_free (p);

@@ -1,5 +1,5 @@
 /* mongo-wire.h - libmongo-client's MongoDB wire protocoll implementation.
- * Copyright 2011 Gergely Nagy <algernon@balabit.hu>
+ * Copyright 2011, 2012 Gergely Nagy <algernon@balabit.hu>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -165,7 +165,7 @@ enum
      * calls on a tailable cursor. On Mongo >= 1.6, this flag is
      * always set.
      */
-    MONGO_REPLY_FLAG_AWAITCAPABLE = 0x8,
+    MONGO_REPLY_FLAG_AWAITCAPABLE = 0x8
   };
 
 /** Mongo reply packet header.
@@ -249,7 +249,7 @@ enum
     MONGO_WIRE_FLAG_UPDATE_UPSERT = 0x1,
     /** When set, all matching documents will be updated, not just
 	the first. */
-    MONGO_WIRE_FLAG_UPDATE_MULTI = 0x2,
+    MONGO_WIRE_FLAG_UPDATE_MULTI = 0x2
   };
 
 /** Construct an update command.
