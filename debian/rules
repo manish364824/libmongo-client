@@ -46,5 +46,12 @@ override_dh_compress:
 	dh_compress -Xusr/share/doc/libmongo-client0/examples/ \
 		    -Xusr/share/doc/libmongo-client0/html/
 
+override_dh_builddeb:
+ifneq (Ubuntu,$(shell dpkg-vendor --query Vendor))
+	dh_builddeb -a -- -Zxz
+else
+	dh_builddeb -a
+endif
+
 %:
 	dh $@ --with autoreconf

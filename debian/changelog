@@ -2,8 +2,9 @@ libmongo-client (0.1.6-1) unstable; urgency=low
 
   * New upstream release.
   * Build with verbose messages enabled.
+  * Use xz compression for source & binaries too.
 
- -- Gergely Nagy <algernon@madhouse-project.org>  Sun, 14 Oct 2012 21:17:15 +0200
+ -- Gergely Nagy <algernon@madhouse-project.org>  Sun, 14 Oct 2012 21:18:39 +0200
 
 libmongo-client (0.1.5-1) unstable; urgency=low
 
