@@ -51,7 +51,7 @@ need libtool 2.2+ to build from git!):
 
  $ git clone git://github.com/algernon/libmongo-client.git
  $ cd libmongo-client
- $ ./autogen.sh
+ $ autoreconf -i
  $ ./configure && make && make install
 
 License

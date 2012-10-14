@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 dnl
 
 AC_INIT(libmongo-client, 0.1.5, algernon@madhouse-project.org, libmongo-client, https://github.com/algernon/libmongo-client)
-AM_INIT_AUTOMAKE([1.9 tar-ustar])
+AM_INIT_AUTOMAKE([1.9 tar-ustar foreign])
 
 dnl ***************************************************************************
 dnl dependencies

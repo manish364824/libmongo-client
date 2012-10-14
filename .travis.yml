@@ -1,8 +1,9 @@
 language: c
-install: sudo apt-get install libglib2.0-dev perl
+install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libglib2.0-dev perl
 before_script:
-  - install -d m4
-  - ./autogen.sh
+  - autoreconf -i
 script:
   - ./configure
   - make
