@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
 
-AC_INIT(libmongo-client, 0.1.6, algernon@madhouse-project.org, libmongo-client, https://github.com/algernon/libmongo-client)
+AC_INIT(libmongo-client, 0.1.6.1, algernon@madhouse-project.org, libmongo-client, https://github.com/algernon/libmongo-client)
 AM_INIT_AUTOMAKE([1.9 tar-ustar foreign no-dist-gzip dist-xz])
 
 dnl ***************************************************************************
@@ -134,6 +134,16 @@ else
    AC_MSG_RESULT([yes, ${vsymldflags}])
 fi
 
+enable_value () {
+   if test -z "$1"; then
+      echo 0
+   else
+      echo 1
+   fi
+}
+
+AC_DEFINE_UNQUOTED(VERSIONED_SYMBOLS, `enable_value ${vsymldflags}`,
+                   [Define to 1 if symbol versioning is enabled])
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [package name])
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [version number])
 

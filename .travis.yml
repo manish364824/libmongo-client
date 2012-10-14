@@ -3,6 +3,7 @@ install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libglib2.0-dev perl
 before_script:
+  - install -d m4
   - autoreconf -i
 script:
   - ./configure
@@ -12,3 +13,5 @@ script:
 compiler:
   - gcc
   - clang
+services:
+  - mongodb
