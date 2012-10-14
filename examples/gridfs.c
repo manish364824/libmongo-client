@@ -1,5 +1,5 @@
 /* gridfs.c - A GridFS utility; example application
- * Copyright 2011 Gergely Nagy <algernon@balabit.hu>
+ * Copyright 2011, 2012 Gergely Nagy <algernon@balabit.hu>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -137,7 +137,11 @@ mongo_gridfs_get (config_t *config, gint argc, gchar *argv[])
       if (!data)
 	mongo_gridfs_error (errno);
 
-      write (fd, data, size);
+      if (write (fd, data, size) != size)
+        {
+          perror ("write()");
+          exit (1);
+        }
       g_free (data);
     }
   mongo_sync_cursor_free (cursor);

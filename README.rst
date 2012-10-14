@@ -44,13 +44,14 @@ To build the documentation, `Doxygen`_ will be needed too.
 Installation
 ------------
 
-The library follows the usual autotools way of installation:
+The library follows the usual autotools way of installation (one will
+need libtool 2.2+ to build from git!):
 
 ::
 
  $ git clone git://github.com/algernon/libmongo-client.git
  $ cd libmongo-client
- $ ./autogen.sh
+ $ autoreconf -i
  $ ./configure && make && make install
 
 License
