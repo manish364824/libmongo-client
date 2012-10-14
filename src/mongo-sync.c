@@ -51,6 +51,17 @@ mongo_sync_connect (const gchar *address, gint port,
   return s;
 }
 
+mongo_sync_connection *
+mongo_sync_connect_0_1_0 (const gchar *host, gint port,
+                          gboolean slaveok)
+{
+  return mongo_sync_connect (host, port, slaveok);
+}
+
+#if VERSIONED_SYMBOLS
+__asm__(".symver mongo_sync_connect_0_1_0,mongo_sync_connect@LMC_0.1.0");
+#endif
+
 gboolean
 mongo_sync_conn_seed_add (mongo_sync_connection *conn,
 			  const gchar *host, gint port)
