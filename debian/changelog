@@ -1,3 +1,10 @@
+libmongo-client (0.1.6.1-1) unstable; urgency=low
+
+  * New upstream bugfix release.
+    + Restores ABI compatibility with versions prior to 0.1.6.
+
+ -- Gergely Nagy <algernon@madhouse-project.org>  Sun, 14 Oct 2012 23:15:47 +0200
+
 libmongo-client (0.1.6-1) unstable; urgency=low
 
   * New upstream release.
