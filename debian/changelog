@@ -1,3 +1,9 @@
+libmongo-client (0.1.6.1-2~nma1) unstable; urgency=low
+
+  * Non-multiarch version for backports.
+
+ -- Gergely Nagy <algernon@madhouse-project.org>  Mon, 15 Oct 2012 10:13:16 +0200
+
 libmongo-client (0.1.6.1-2) unstable; urgency=low
 
   * Really build with verbose messages enabled, the test suite too.
