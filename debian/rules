@@ -16,6 +16,7 @@ build: ;
 # Arch dependent overrides
 ##
 override_dh_autoreconf-arch:
+	install -d m4
 	dh_autoreconf
 
 override_dh_auto_configure-arch:
@@ -42,6 +43,10 @@ override_dh_auto_build-indep:
 ##
 # Overrides common to both
 ##
+override_dh_clean:
+	dh_clean
+	rm -rf m4
+
 override_dh_installdocs:
 	dh_installdocs --link-doc=libmongo-client0
 
