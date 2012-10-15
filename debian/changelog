@@ -1,3 +1,9 @@
+libmongo-client (0.1.6.1-2) unstable; urgency=low
+
+  * Really build with verbose messages enabled, the test suite too.
+
+ -- Gergely Nagy <algernon@madhouse-project.org>  Mon, 15 Oct 2012 08:36:51 +0200
+
 libmongo-client (0.1.6.1-1) unstable; urgency=low
 
   * New upstream bugfix release.
