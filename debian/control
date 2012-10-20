@@ -34,7 +34,7 @@ Description: Alternate C driver for the MongoDB document-oriented datastore
 Package: libmongo-client-dev
 Section: libdevel
 Architecture: any
-Depends: libmongo-client0 (= ${binary:Version}), pkg-config, ${misc:Depends}
+Depends: libmongo-client0 (= ${binary:Version}), pkg-config, libglib2.0-dev, ${misc:Depends}
 Description: Development files for the alternate C driver for MongoDB
  libmongo-client is an alternative C language driver to the MongoDB
  document-oriented datastore.
