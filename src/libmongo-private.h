@@ -180,6 +180,8 @@ struct _mongo_sync_gridfs_stream
       {
 	const guint8 *data; /**< The current chunk data, pointing
 			       into ->reader.bson. */
+	gint32 start_offset; /**< Offset to start reading data from,
+                               needed to support the binary subtype. */
 	gint32 size; /**< Size of the current chunk. */
 	gint32 offset; /**< Offset we're into the chunk. */
       } chunk;
