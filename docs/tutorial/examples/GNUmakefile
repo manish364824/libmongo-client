@@ -29,6 +29,6 @@ tut/json2bson: TUT_CFLAGS += ${JSON_C_CFLAGS}
 tut/json2bson: TUT_LIBS += ${JSON_C_LIBS}
 ${TUTORIAL_PROGRAMS}: tut/%: tut_%.c
 	@install -d tut
-	${CC} ${TUT_CFLAGS} ${CFLAGS} ${TUT_LIBS} ${LDFLAGS} $< -o $@
+	${CC} ${TUT_CFLAGS} ${CFLAGS} $< ${TUT_LIBS} ${LDFLAGS} -o $@
 
 .PHONY: all clean

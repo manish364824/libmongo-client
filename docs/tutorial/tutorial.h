@@ -14,7 +14,7 @@
  * the following command should work:
  *
  * @verbatim
-$ cc $(pkg-config --cflags --libs libmongo-client) tut_bson_build.c -o tut_bson_build
+$ cc $(pkg-config --cflags libmongo-client) tut_bson_build.c $(pkg-config --libs libmongo-client) -o tut_bson_build
 @endverbatim
  *
  * Contents:
