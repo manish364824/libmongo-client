@@ -8,5 +8,4 @@ coverage:
 	($(am__cd) src && $(MAKE) $(AM_MAKEFLAGS) $@)
 
 doxygen:
-	$(AM_V_GEN)
-	doxygen
+	$(AM_V_GEN)doxygen
