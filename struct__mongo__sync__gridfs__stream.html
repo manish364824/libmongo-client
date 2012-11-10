@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">libmongo-client
-   &#160;<span id="projectnumber">0.1.6</span>
+   &#160;<span id="projectnumber">0.1.6.1</span>
    </div>
   </td>
  </tr>
@@ -114,6 +114,8 @@ union {</td></tr>
 <tr class="memitem:a9cf83c5d493752cdf184572ef5b30125"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;struct {</td></tr>
 <tr class="memitem:aaa8edc193116cbdefd689b6c9bd8a8da"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;const guint8 *&#160;&#160;&#160;<a class="el" href="struct__mongo__sync__gridfs__stream.html#a17008f6841ab87eeabb1624810d22b24">data</a></td></tr>
 <tr class="memdesc:aaa8edc193116cbdefd689b6c9bd8a8da"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current chunk data, pointing into -&gt;reader.bson.  <a href="#aaa8edc193116cbdefd689b6c9bd8a8da"></a><br/></td></tr>
+<tr class="memitem:a0d5a6bc81e897a16dd473242d1ddd032"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;gint32&#160;&#160;&#160;<a class="el" href="struct__mongo__sync__gridfs__stream.html#aed122265ab36a049348072f43c30c871">start_offset</a></td></tr>
+<tr class="memdesc:a0d5a6bc81e897a16dd473242d1ddd032"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset to start reading data from, needed to support the binary subtype.  <a href="#a0d5a6bc81e897a16dd473242d1ddd032"></a><br/></td></tr>
 <tr class="memitem:ac82f2a672d6d6eb9cef07d9df3875e8d"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;gint32&#160;&#160;&#160;<a class="el" href="struct__mongo__sync__gridfs__stream.html#a60270d544ed7212debd9397afad6d674">size</a></td></tr>
 <tr class="memdesc:ac82f2a672d6d6eb9cef07d9df3875e8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of the current chunk.  <a href="#ac82f2a672d6d6eb9cef07d9df3875e8d"></a><br/></td></tr>
 <tr class="memitem:a41dd7f2a405dab3716f8ba934ce87dae"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;gint32&#160;&#160;&#160;<a class="el" href="struct__mongo__sync__gridfs__stream.html#ab691c690e7911415540f4be16c67f212">offset</a></td></tr>
@@ -280,10 +282,24 @@ union {</td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aed122265ab36a049348072f43c30c871"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint32 mongo_sync_gridfs_stream::start_offset</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Offset to start reading data from, needed to support the binary subtype. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2012 21:33:34 for libmongo-client by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Nov 10 2012 13:56:05 for libmongo-client by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">libmongo-client
-   &#160;<span id="projectnumber">0.1.6</span>
+   &#160;<span id="projectnumber">0.1.6.1</span>
    </div>
   </td>
  </tr>
@@ -125,8 +125,6 @@ Enumerations</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:ga7f583ef617402135aa8302163358404f"><td class="memItemLeft" align="right" valign="top">mongo_sync_connection *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga7f583ef617402135aa8302163358404f">mongo_sync_connect</a> (const gchar *address, gint port, gboolean slaveok)</td></tr>
 <tr class="memdesc:ga7f583ef617402135aa8302163358404f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronously connect to a MongoDB server.  <a href="#ga7f583ef617402135aa8302163358404f"></a><br/></td></tr>
-<tr class="memitem:ga54fedbe55fd13d8eb7f40a389995c2ab"><td class="memItemLeft" align="right" valign="top">mongo_sync_connection *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#ga54fedbe55fd13d8eb7f40a389995c2ab">mongo_sync_unix_connect</a> (const gchar *host, gboolean slaveok)</td></tr>
-<tr class="memdesc:ga54fedbe55fd13d8eb7f40a389995c2ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronously connect to a MongoDB server via Unix socket.  <a href="#ga54fedbe55fd13d8eb7f40a389995c2ab"></a><br/></td></tr>
 <tr class="memitem:gae8120d828d47e9e33e024c5ccbe53d5c"><td class="memItemLeft" align="right" valign="top">gboolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#gae8120d828d47e9e33e024c5ccbe53d5c">mongo_sync_conn_seed_add</a> (mongo_sync_connection *conn, const gchar *host, gint port)</td></tr>
 <tr class="memdesc:gae8120d828d47e9e33e024c5ccbe53d5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a seed to an existing MongoDB connection.  <a href="#gae8120d828d47e9e33e024c5ccbe53d5c"></a><br/></td></tr>
 <tr class="memitem:gae47159f902ced01122d46bb614091a6d"><td class="memItemLeft" align="right" valign="top">mongo_sync_connection *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mongo__sync.html#gae47159f902ced01122d46bb614091a6d">mongo_sync_reconnect</a> (mongo_sync_connection *conn, gboolean force_master)</td></tr>
@@ -1689,47 +1687,10 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ga54fedbe55fd13d8eb7f40a389995c2ab"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">mongo_sync_connection* mongo_sync_unix_connect </td>
-          <td>(</td>
-          <td class="paramtype">const gchar *&#160;</td>
-          <td class="paramname"><em>host</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gboolean&#160;</td>
-          <td class="paramname"><em>slaveok</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Synchronously connect to a MongoDB server via Unix socket. </p>
-<p>Sets up a synchronous connection to a MongoDB server.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">path</td><td>is the path to the Unix Domain Socket to connect to. </td></tr>
-    <tr><td class="paramname">slaveok</td><td>signals whether queries made against a slave are acceptable.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A newly allocated mongo_sync_connection object, or NULL on error. It is the responsibility of the caller to close and free the connection when appropriate. </dd></dl>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2012 21:33:34 for libmongo-client by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Nov 10 2012 13:56:05 for libmongo-client by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>
