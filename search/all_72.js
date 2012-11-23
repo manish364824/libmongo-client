@@ -6,5 +6,6 @@ var searchData=
   ['resp_5fto',['resp_to',['../structmongo__packet__header.html#a4fcf69c47c3dd4e10d24dbea16a0a84b',1,'mongo_packet_header']]],
   ['results',['results',['../struct__mongo__sync__cursor.html#a81383f1adf6c39d289072031ec72887e',1,'_mongo_sync_cursor']]],
   ['returned',['returned',['../structmongo__reply__packet__header.html#a5a5129b4736cb99dd9894df44bc9b56b',1,'mongo_reply_packet_header']]],
-  ['rs',['rs',['../struct__mongo__sync__connection.html#a2e5b43f3b4cf502dff1ea0a83e7bbb15',1,'_mongo_sync_connection']]]
+  ['rs',['rs',['../struct__mongo__sync__connection.html#a2e5b43f3b4cf502dff1ea0a83e7bbb15',1,'_mongo_sync_connection']]],
+  ['running_20custom_20commands',['Running custom commands',['../tut_mongo_sync_cmd_custom.html',1,'tut_mongo_sync']]]
 ];

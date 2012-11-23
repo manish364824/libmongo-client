@@ -10,5 +10,6 @@ var searchData=
   ['cursor_5fid',['cursor_id',['../structmongo__reply__packet__header.html#aa9eca990075610e675a8ac44693f11d5',1,'mongo_reply_packet_header']]],
   ['commands',['Commands',['../group__mongo__wire__cmd.html',1,'']]],
   ['creating_20collections',['Creating collections',['../tut_mongo_sync_cmd_create.html',1,'tut_mongo_sync']]],
+  ['creating_20indexes',['Creating indexes',['../tut_mongo_sync_cmd_index_create.html',1,'tut_mongo_sync']]],
   ['connecting_20to_20mongodb',['Connecting to MongoDB',['../tut_mongo_sync_connect.html',1,'tut_mongo_sync']]]
 ];
