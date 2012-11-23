@@ -12,4 +12,5 @@
  *  - @subpage tut_mongo_sync_query_complex
  *  - @subpage tut_mongo_sync_cmd_create
  *  - @subpage tut_mongo_sync_cmd_index_create
+ *  - @subpage tut_mongo_sync_cmd_custom
  */
