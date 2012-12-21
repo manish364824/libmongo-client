@@ -201,10 +201,10 @@ FUNC_TESTS	= ${bson_func_tests} ${mongo_sync_func_tests} \
 PERF_TESTS	= ${bson_perf_tests}
 TESTCASES	= ${UNIT_TESTS} ${FUNC_TESTS} ${PERF_TESTS}
 
-check_PROGRAMS	= ${TESTCASES}
-noinst_PROGRAMS= test_cleanup
+check_PROGRAMS	= ${TESTCASES} test_cleanup
 
 AM_CFLAGS = -I$(top_srcdir)/src/ -I${top_srcdir}/tests/libtap/ @GLIB_CFLAGS@
+AM_LDFLAGS = -no-install
 LDADD = $(top_builddir)/src/libmongo-client.la ${top_builddir}/tests/libtap/libtap.la @GLIB_LIBS@
 
 EXTRA_DIST = README \
@@ -214,12 +214,12 @@ EXTRA_DIST = README \
 
 check-%: BASE=$(subst -,_,$(subst check-,,$@))
 check-%: TESTCASES=$(value $(BASE)_unit_tests) $(value $(BASE)_func_tests) $(value $(BASE)_tests)
-check-%: ${TESTCASES} ${noinst_PROGRAMS}
+check-%: check-recursive test_cleanup ${TESTCASES}
 	$(AM_V_at) ${builddir}/test_cleanup
 	$(AM_V_GEN) srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
 	$(AM_V_at) ${builddir}/test_cleanup
 
-check: ${TESTCASES} ${noinst_PROGRAMS}
+check: check-recursive test_cleanup ${TESTCASES}
 	$(AM_V_at) ${builddir}/test_cleanup
 	$(AM_V_GEN) srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
 	$(AM_V_at) ${builddir}/test_cleanup

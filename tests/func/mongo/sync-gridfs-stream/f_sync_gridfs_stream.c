@@ -6,6 +6,24 @@
 #define BUFFER_SIZE 64 * 1024
 
 gchar *write_md5 = NULL;
+static gint seq = 1;
+
+void
+test_func_sync_gridfs_stream_without_oid_init (void)
+{
+  mongo_sync_connection *conn;
+  mongo_sync_gridfs *gfs;
+  mongo_sync_gridfs_stream *stream;
+
+  conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
+  gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
+
+  stream = mongo_sync_gridfs_stream_new (gfs, NULL);
+  ok (stream == NULL,
+      "mongo_sync_gridfs_stream_new() fails without mongo_util_oid_init()");
+
+  mongo_sync_gridfs_free (gfs, TRUE);
+}
 
 void
 test_func_sync_gridfs_stream_write (void)
@@ -23,13 +41,7 @@ test_func_sync_gridfs_stream_write (void)
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
 
-  stream = mongo_sync_gridfs_stream_new (gfs, NULL);
-  ok (stream == NULL,
-      "mongo_sync_gridfs_stream_new() fails without mongo_util_oid_init()");
-
-  mongo_util_oid_init (0);
-
-  oid = mongo_util_oid_new (1);
+  oid = mongo_util_oid_new (seq++);
   meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test-stream", -1,
 		     BSON_TYPE_OID, "_id", oid,
 		     BSON_TYPE_NONE);
@@ -71,6 +83,66 @@ test_func_sync_gridfs_stream_write (void)
   ok (mongo_sync_gridfs_stream_close (stream) == TRUE,
       "mongo_sync_gridfs_stream_close() works");
 
+  mongo_sync_gridfs_free (gfs, TRUE);
+}
+
+void
+test_func_sync_gridfs_stream_write_binary_subtype (void)
+{
+  mongo_sync_connection *conn;
+  mongo_sync_gridfs *gfs;
+  mongo_sync_gridfs_stream *stream;
+  bson *meta, *update;
+  guint8 *data, *oid;
+  gboolean write_ok = TRUE;
+  guint32 size = GINT32_TO_LE(BUFFER_SIZE);
+  gchar *ns;
+
+  conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
+  gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
+
+  oid = mongo_util_oid_new (seq++);
+  meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test-stream-bintype", -1,
+		     BSON_TYPE_OID, "_id", oid,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+
+  stream = mongo_sync_gridfs_stream_new (gfs, meta);
+  ok (stream != NULL,
+      "mongo_sync_gridfs_stream_new() works");
+  bson_free (meta);
+
+  data = g_malloc (BUFFER_SIZE + 4);
+  memcpy (data, &size, 4);
+  memset (data + 4, 'x', BUFFER_SIZE);
+  write_ok = mongo_sync_gridfs_stream_write (stream, data + 4, BUFFER_SIZE);
+  ok (write_ok == TRUE,
+      "All stream_write()s succeeded");
+
+  ok (mongo_sync_gridfs_stream_close (stream) == TRUE,
+      "mongo_sync_gridfs_stream_close() works");
+
+  meta = bson_build (BSON_TYPE_OID, "files_id", oid,
+                     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  update = bson_build_full (BSON_TYPE_DOCUMENT, "$set", TRUE,
+                            bson_build (BSON_TYPE_BINARY, "data",
+                                        BSON_BINARY_SUBTYPE_BINARY,
+                                        data, BUFFER_SIZE + 4,
+                                        BSON_TYPE_NONE),
+                            BSON_TYPE_NONE);
+  bson_finish (update);
+  g_free (data);
+
+  ns = g_strconcat (config.gfs_prefix, ".chunks", NULL);
+  mongo_sync_cmd_update (conn, ns, MONGO_WIRE_FLAG_UPDATE_UPSERT,
+                         meta, update);
+  bson_free (meta);
+  bson_free (update);
+  g_free (ns);
+  g_free (oid);
   mongo_sync_gridfs_free (gfs, TRUE);
 }
 
@@ -184,6 +256,37 @@ test_func_sync_gridfs_stream_read (void)
       "md5sums match");
 
   g_checksum_free (chk);
+  ok (mongo_sync_gridfs_stream_close (stream) == TRUE,
+      "mongo_sync_gridfs_stream_close() works");
+  mongo_sync_gridfs_free (gfs, TRUE);
+}
+
+void
+test_func_sync_gridfs_stream_read_binary_subtype (void)
+{
+  mongo_sync_connection *conn;
+  mongo_sync_gridfs *gfs;
+  mongo_sync_gridfs_stream *stream;
+  guint8 *data;
+  gint64 r;
+  bson *meta;
+
+  conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
+  gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
+  meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test-stream-bintype", -1,
+		     BSON_TYPE_NONE);
+  bson_finish (meta);
+
+  stream = mongo_sync_gridfs_stream_find (gfs, meta);
+  ok (stream != NULL,
+      "mongo_sync_gridfs_stream_find() works");
+  bson_free (meta);
+
+  data = g_malloc (BUFFER_SIZE);
+  r = mongo_sync_gridfs_stream_read (stream, data, BUFFER_SIZE);
+  cmp_ok (r, "==", BUFFER_SIZE,
+          "mongo_sync_gridfs_stream_read() works");
+
   ok (mongo_sync_gridfs_stream_close (stream) == TRUE,
       "mongo_sync_gridfs_stream_close() works");
   mongo_sync_gridfs_free (gfs, TRUE);
@@ -378,9 +481,15 @@ test_func_sync_gridfs_stream_seek_invalid (void)
 void
 test_func_sync_gridfs_stream (void)
 {
+  test_func_sync_gridfs_stream_without_oid_init ();
+
+  mongo_util_oid_init (0);
+
   test_func_sync_gridfs_stream_write ();
+  test_func_sync_gridfs_stream_write_binary_subtype ();
   test_func_sync_gridfs_stream_write_invalid ();
   test_func_sync_gridfs_stream_read ();
+  test_func_sync_gridfs_stream_read_binary_subtype ();
   test_func_sync_gridfs_stream_read_invalid ();
   test_func_sync_gridfs_stream_seek ();
   test_func_sync_gridfs_stream_seek_invalid ();
@@ -389,4 +498,4 @@ test_func_sync_gridfs_stream (void)
   g_free (write_md5);
 }
 
-RUN_NET_TEST (32, func_sync_gridfs_stream);
+RUN_NET_TEST (38, func_sync_gridfs_stream);

@@ -35,8 +35,9 @@ bumped version will be branched off.
 Requirements
 ------------
 
-Apart from `glib`_, there are no other hard dependencies. Though, one
-will need `Perl`_ (with a suitable version of Test::Harness, along
+Apart from `glib`_ (with header files - usually found in a development
+package - installed), there are no other hard dependencies. Though,
+one will need `Perl`_ (with a suitable version of Test::Harness, along
 with the prove utility) to run the test suite.
 
 To build the documentation, `Doxygen`_ will be needed too.
