@@ -1,5 +1,26 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.1.6.2 - <2012-12-21 Fri>
+
+Another bugfix release with mostly minor improvements and
+documentation updates.
+
+** Feature: Support for the Binary subtype in GridFS
+
+The GridFS support in the library only supported the "Generic"
+subtype until now, but with this release, the (obsolete) "Binary"
+subtype is supported aswell.
+
+** Bugfix: Plugged a memory leak in the GridFS code
+
+The GridFS code (the chunked file constructor, in particular) leaked
+the generated ObjectId. This has been corrected.
+
+** Documentation: New tutorials
+
+New tutorials were written for showing how to handle indexes, and how
+to run custom commands.
+
 * 0.1.6.1 - <2012-10-14 Sun>
 
 This is a quick bugfix release, that restores ABI compatibility with
