@@ -193,7 +193,8 @@ _stream_seek_chunk (mongo_sync_gridfs_stream *stream,
   c = bson_find (stream->reader.bson, "data");
   r = bson_cursor_get_binary (c, &subt, &stream->reader.chunk.data,
 			      &stream->reader.chunk.size);
-  if (!r || subt != BSON_BINARY_SUBTYPE_GENERIC)
+  if (!r || (subt != BSON_BINARY_SUBTYPE_GENERIC &&
+             subt != BSON_BINARY_SUBTYPE_BINARY))
     {
       bson_cursor_free (c);
       bson_free (stream->reader.bson);
@@ -205,7 +206,13 @@ _stream_seek_chunk (mongo_sync_gridfs_stream *stream,
     }
   bson_cursor_free (c);
 
+  if (subt == BSON_BINARY_SUBTYPE_BINARY)
+    {
+      stream->reader.chunk.start_offset = 4;
+      stream->reader.chunk.size -= 4;
+    }
   stream->reader.chunk.offset = 0;
+
   return TRUE;
 }
 
@@ -238,7 +245,8 @@ mongo_sync_gridfs_stream_read (mongo_sync_gridfs_stream *stream,
 	return -1;
     }
 
-  while (pos < size && stream->file.offset < stream->file.length)
+  while (pos < size && stream->file.offset +
+         stream->reader.chunk.start_offset < stream->file.length)
     {
       gint32 csize = stream->reader.chunk.size - stream->reader.chunk.offset;
 
@@ -246,14 +254,18 @@ mongo_sync_gridfs_stream_read (mongo_sync_gridfs_stream *stream,
 	csize = size - pos;
 
       memcpy (buffer + pos,
-	      stream->reader.chunk.data + stream->reader.chunk.offset, csize);
+              stream->reader.chunk.data +
+              stream->reader.chunk.start_offset +
+              stream->reader.chunk.offset, csize);
 
       stream->reader.chunk.offset += csize;
       stream->file.offset += csize;
       pos += csize;
 
-      if (stream->reader.chunk.offset >= stream->reader.chunk.size &&
-	  stream->file.offset < stream->file.length)
+      if (stream->reader.chunk.offset + stream->reader.chunk.start_offset >=
+          stream->reader.chunk.size &&
+          stream->file.offset + stream->reader.chunk.start_offset <
+          stream->file.length)
 	{
 	  stream->file.current_chunk++;
 	  if (!_stream_seek_chunk (stream, stream->file.current_chunk))

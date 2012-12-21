@@ -174,7 +174,8 @@ mongo_sync_gridfs_chunked_file_cursor_get_chunk (mongo_sync_cursor *cursor,
   b = mongo_sync_cursor_get_data (cursor);
   c = bson_find (b, "data");
   r = bson_cursor_get_binary (c, &sub, &d, &s);
-  if (!r || sub != BSON_BINARY_SUBTYPE_GENERIC)
+  if (!r || (sub != BSON_BINARY_SUBTYPE_GENERIC &&
+             sub != BSON_BINARY_SUBTYPE_BINARY))
     {
       bson_cursor_free (c);
       errno = EPROTO;
@@ -182,8 +183,17 @@ mongo_sync_gridfs_chunked_file_cursor_get_chunk (mongo_sync_cursor *cursor,
     }
   bson_cursor_free (c);
 
-  data = g_malloc (s);
-  memcpy (data, d, s);
+  if (sub == BSON_BINARY_SUBTYPE_BINARY)
+    {
+      s -= 4;
+      data = g_malloc (s);
+      memcpy (data, d + 4, s);
+    }
+  else
+    {
+      data = g_malloc (s);
+      memcpy (data, d, s);
+    }
 
   if (size)
     *size = s;
@@ -309,6 +319,8 @@ mongo_sync_gridfs_chunked_file_new_from_buffer (mongo_sync_gridfs *gfs,
   bson_cursor_find (c, "md5");
   bson_cursor_get_string (c, &gfile->meta.md5);
   bson_cursor_free (c);
+
+  g_free (oid);
 
   return gfile;
 }
