@@ -4,8 +4,9 @@ libmongo-client (0.1.6.2-1) unstable; urgency=low
     + Minor memory leak fix in the GridFS code
     + Support for the obsolete Binary subtype in GridFS files
     + Documentation improvements
+  * Don't muck with m4/ during build, it is included upstream now.
 
- -- Gergely Nagy <algernon@madhouse-project.org>  Fri, 21 Dec 2012 12:29:03 +0100
+ -- Gergely Nagy <algernon@madhouse-project.org>  Fri, 21 Dec 2012 12:35:43 +0100
 
 libmongo-client (0.1.6.1-3) unstable; urgency=low
 
