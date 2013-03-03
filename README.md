@@ -51,10 +51,10 @@ Installation
 The library follows the usual autotools way of installation (one will
 need libtool 2.2+ to build from git!):
 
-> $ git clone git://github.com/algernon/libmongo-client.git
-> $ cd libmongo-client
-> $ autoreconf -i
-> $ ./configure && make && make install
+     $ git clone git://github.com/algernon/libmongo-client.git
+     $ cd libmongo-client
+     $ autoreconf -i
+     $ ./configure && make && make install
 
 License
 -------
