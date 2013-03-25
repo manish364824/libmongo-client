@@ -22,7 +22,7 @@ test_func_sync_gridfs_put (void)
   oid = mongo_util_oid_new (1);
   meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test", -1,
                      BSON_TYPE_OID, "_id", oid,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_NONE);
   g_free (oid);
   bson_finish (meta);
 
@@ -30,7 +30,7 @@ test_func_sync_gridfs_put (void)
   memset (data, 'x', FILE_SIZE);
 
   gfile = mongo_sync_gridfs_chunked_file_new_from_buffer (gfs, meta,
-							  data, FILE_SIZE);
+                                                          data, FILE_SIZE);
   ok (gfile != NULL,
       "GridFS file upload (with metadata) works!");
   memcpy (named_oid, mongo_sync_gridfs_file_get_id (gfile), 12);
@@ -40,7 +40,7 @@ test_func_sync_gridfs_put (void)
   mongo_sync_gridfs_chunked_file_free (gfile);
 
   gfile = mongo_sync_gridfs_chunked_file_new_from_buffer (gfs, NULL,
-							  data, FILE_SIZE);
+                                                          data, FILE_SIZE);
   ok (gfile != NULL,
       "GridFS file upload (w/o metadata) works!");
   memcpy (noname_oid, mongo_sync_gridfs_file_get_id (gfile), 12);
@@ -66,7 +66,7 @@ test_func_sync_gridfs_put_invalid (void)
 
   /* Insert metadata without any of the required fields but ID. */
   meta = bson_build (BSON_TYPE_STRING, "my-id", "id-only", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
@@ -74,8 +74,8 @@ test_func_sync_gridfs_put_invalid (void)
 
   /* Insert metadata with an ID that's not an ObjectID. */
   meta = bson_build (BSON_TYPE_STRING, "_id", "I'm a teapot", -1,
-		     BSON_TYPE_STRING, "my-id", "string-id", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_STRING, "my-id", "string-id", -1,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
@@ -83,8 +83,8 @@ test_func_sync_gridfs_put_invalid (void)
 
   /* Insert metadata with invalid length type. */
   meta = bson_build (BSON_TYPE_DOUBLE, "length", 1.0,
-		     BSON_TYPE_STRING, "my-id", "invalid-length", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_STRING, "my-id", "invalid-length", -1,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
@@ -92,9 +92,9 @@ test_func_sync_gridfs_put_invalid (void)
 
   /* Insert metadata with invalid chunkSize type. */
   meta = bson_build (BSON_TYPE_INT32, "length", 10,
-		     BSON_TYPE_DOUBLE, "chunkSize", 12.5,
-		     BSON_TYPE_STRING, "my-id", "invalid-chunkSize", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_DOUBLE, "chunkSize", 12.5,
+                     BSON_TYPE_STRING, "my-id", "invalid-chunkSize", -1,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
@@ -102,10 +102,10 @@ test_func_sync_gridfs_put_invalid (void)
 
   /* Insert metadata with invalid uploadDate type. */
   meta = bson_build (BSON_TYPE_INT32, "length", 10,
-		     BSON_TYPE_INT32, "chunkSize", 12,
-		     BSON_TYPE_STRING, "my-id", "invalid-date", -1,
-		     BSON_TYPE_INT32, "uploadDate", 1234,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_INT32, "chunkSize", 12,
+                     BSON_TYPE_STRING, "my-id", "invalid-date", -1,
+                     BSON_TYPE_INT32, "uploadDate", 1234,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
@@ -113,11 +113,11 @@ test_func_sync_gridfs_put_invalid (void)
 
   /* Insert metadata with invalid md5 type. */
   meta = bson_build (BSON_TYPE_INT32, "length", 32,
-		     BSON_TYPE_INT32, "chunkSize", 12,
-		     BSON_TYPE_UTC_DATETIME, "uploadDate", (gint64)1234,
-		     BSON_TYPE_INT32, "md5", 0,
-		     BSON_TYPE_STRING, "my-id", "invalid-md5", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_INT32, "chunkSize", 12,
+                     BSON_TYPE_UTC_DATETIME, "uploadDate", (gint64)1234,
+                     BSON_TYPE_INT32, "md5", 0,
+                     BSON_TYPE_STRING, "my-id", "invalid-md5", -1,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
@@ -125,11 +125,11 @@ test_func_sync_gridfs_put_invalid (void)
 
   /* Insert a valid metadata, without chunks. */
   meta = bson_build (BSON_TYPE_INT32, "length", 32,
-		     BSON_TYPE_INT32, "chunkSize", 12,
-		     BSON_TYPE_UTC_DATETIME, "uploadDate", (gint64)1234,
-		     BSON_TYPE_STRING, "md5", "deadbeef", -1,
-		     BSON_TYPE_STRING, "my-id", "no-chunks", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_INT32, "chunkSize", 12,
+                     BSON_TYPE_UTC_DATETIME, "uploadDate", (gint64)1234,
+                     BSON_TYPE_STRING, "md5", "deadbeef", -1,
+                     BSON_TYPE_STRING, "my-id", "no-chunks", -1,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
@@ -156,22 +156,22 @@ validate_file (mongo_sync_gridfs *gfs, const bson *query, guint8 *oid,
   ok (memcmp (mongo_sync_gridfs_file_get_id (f), oid, 12) == 0,
       "File _id matches");
   cmp_ok (mongo_sync_gridfs_file_get_length (f), "==", FILE_SIZE,
-	  "File length matches");
+          "File length matches");
   cmp_ok (mongo_sync_gridfs_file_get_chunk_size (f), "==",
-	  mongo_sync_gridfs_get_chunk_size (gfs),
-	  "File chunk size matches");
+          mongo_sync_gridfs_get_chunk_size (gfs),
+          "File chunk size matches");
 
   oid_s = mongo_util_oid_as_string (mongo_sync_gridfs_file_get_id (f));
   note ("File info:\n\tid = %s; length = %" G_GINT64_FORMAT "; "
-	"chunk_size = %d; date = %" G_GINT64_FORMAT "; "
-	"md5 = %s; n = %" G_GINT64_FORMAT "\n",
+        "chunk_size = %d; date = %" G_GINT64_FORMAT "; "
+        "md5 = %s; n = %" G_GINT64_FORMAT "\n",
 
-	oid_s,
-	mongo_sync_gridfs_file_get_length (f),
-	mongo_sync_gridfs_file_get_chunk_size (f),
-	mongo_sync_gridfs_file_get_date (f),
-	mongo_sync_gridfs_file_get_md5 (f),
-	mongo_sync_gridfs_file_get_chunks (f));
+        oid_s,
+        mongo_sync_gridfs_file_get_length (f),
+        mongo_sync_gridfs_file_get_chunk_size (f),
+        mongo_sync_gridfs_file_get_date (f),
+        mongo_sync_gridfs_file_get_md5 (f),
+        mongo_sync_gridfs_file_get_chunks (f));
   g_free (oid_s);
   meta = mongo_sync_gridfs_file_get_metadata (f);
   ok (meta != NULL,
@@ -195,7 +195,7 @@ validate_file (mongo_sync_gridfs *gfs, const bson *query, guint8 *oid,
     cmp_ok (mongo_sync_gridfs_file_get_length (f), "==", tsize,
             "File size matches the sum of its chunks");
   cmp_ok (mongo_sync_gridfs_file_get_chunks (f), "==", n,
-	  "Number of chunks matches the expected number");
+          "Number of chunks matches the expected number");
 
   mongo_sync_gridfs_chunked_file_free (f);
 }
@@ -211,13 +211,13 @@ test_func_sync_gridfs_get (void)
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
 
   query = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test", -1,
-		      BSON_TYPE_NONE);
+                      BSON_TYPE_NONE);
   bson_finish (query);
   validate_file (gfs, query, named_oid, TRUE);
   bson_free (query);
 
   query = bson_build (BSON_TYPE_OID, "_id", noname_oid,
-		      BSON_TYPE_NONE);
+                      BSON_TYPE_NONE);
   bson_finish (query);
   validate_file (gfs, query, noname_oid, TRUE);
   bson_free (query);
@@ -231,7 +231,7 @@ test_get_invalid (mongo_sync_gridfs *gfs, gchar *name, gchar *msg)
   bson *query;
 
   query = bson_build (BSON_TYPE_STRING, "my-id", name, -1,
-		      BSON_TYPE_NONE);
+                      BSON_TYPE_NONE);
   bson_finish (query);
   ok (mongo_sync_gridfs_chunked_find (gfs, query) == NULL, msg);
   bson_free (query);
@@ -250,35 +250,35 @@ test_func_sync_gridfs_get_invalid (void)
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
 
   test_get_invalid (gfs, "unknown",
-		    "mongo_sync_gridfs_chunked_find() should fail when no file "
-		    "is found");
+                    "mongo_sync_gridfs_chunked_find() should fail when no file "
+                    "is found");
   test_get_invalid (gfs, "id-only",
-		    "mongo_sync_gridfs_chunked__find() should fail if the metadata "
-		    "is incomplete");
+                    "mongo_sync_gridfs_chunked__find() should fail if the metadata "
+                    "is incomplete");
   test_get_invalid (gfs, "string-id",
-		    "mongo_sync_gridfs_chunked__find() should fail if the _id is "
-		    "not an ObjectID");
+                    "mongo_sync_gridfs_chunked__find() should fail if the _id is "
+                    "not an ObjectID");
   test_get_invalid (gfs, "invalid-length",
-		    "mongo_sync_gridfs_chunked__find() should fail if length is "
-		    "of inappropriate type");
+                    "mongo_sync_gridfs_chunked__find() should fail if length is "
+                    "of inappropriate type");
   test_get_invalid (gfs, "invalid-chunkSize",
-		    "mongo_sync_gridfs_chunked__find() should fail if chunkSize is "
-		    "of inappropriate type");
+                    "mongo_sync_gridfs_chunked__find() should fail if chunkSize is "
+                    "of inappropriate type");
   test_get_invalid (gfs, "invalid-date",
-		    "mongo_sync_gridfs_chunked__find() should fail if uploadDate is "
-		    "of inappropriate type");
+                    "mongo_sync_gridfs_chunked__find() should fail if uploadDate is "
+                    "of inappropriate type");
   test_get_invalid (gfs, "invalid-md5",
-		    "mongo_sync_gridfs_chunked__find() should fail if md5 is of "
-		    "inappropriate type");
+                    "mongo_sync_gridfs_chunked__find() should fail if md5 is of "
+                    "inappropriate type");
 
   ns = g_strconcat (config.gfs_prefix, ".files", NULL);
   query = bson_build (BSON_TYPE_STRING, "my-id", "id-only", -1,
-		      BSON_TYPE_NONE);
+                      BSON_TYPE_NONE);
   bson_finish (query);
 
   cursor = mongo_sync_cursor_new (conn, ns,
-				  mongo_sync_cmd_query (conn, ns, 0, 0, 0,
-							query, NULL));
+                                  mongo_sync_cmd_query (conn, ns, 0, 0, 0,
+                                                        query, NULL));
   bson_free (query);
   mongo_sync_cursor_next (cursor);
   ok (mongo_sync_gridfs_chunked_file_cursor_get_chunk (cursor, NULL) == NULL,
@@ -305,8 +305,8 @@ test_func_sync_gridfs_list (void)
 
   /* Test list with an invalid query */
   query = bson_build (BSON_TYPE_STRING, "no-such-field",
-		      "You're not seeing this field.", -1,
-		      BSON_TYPE_NONE);
+                      "You're not seeing this field.", -1,
+                      BSON_TYPE_NONE);
   bson_finish (query);
 
   cursor = mongo_sync_gridfs_list (gfs, query);
@@ -317,7 +317,7 @@ test_func_sync_gridfs_list (void)
 
   /* Test list with a query */
   query = bson_build (BSON_TYPE_OID, "_id", named_oid,
-		      BSON_TYPE_NONE);
+                      BSON_TYPE_NONE);
   bson_finish (query);
 
   cursor = mongo_sync_gridfs_list (gfs, query);
@@ -348,9 +348,9 @@ test_func_sync_gridfs_list (void)
       bson_cursor_free (c);
 
       if (memcmp (oid, named_oid, 12) == 0)
-	found_named = TRUE;
+        found_named = TRUE;
       if (memcmp (oid, noname_oid, 12) == 0)
-	found_noname = TRUE;
+        found_noname = TRUE;
 
       bson_free (data);
     }
@@ -374,8 +374,8 @@ test_fync_sync_gridfs_remove (void)
 
   /* Test with a non-matching query */
   query = bson_build (BSON_TYPE_STRING, "no-such-field",
-		      "You're not seeing this field.", -1,
-		      BSON_TYPE_NONE);
+                      "You're not seeing this field.", -1,
+                      BSON_TYPE_NONE);
   bson_finish (query);
 
   ok (mongo_sync_gridfs_remove (gfs, query) == FALSE,
@@ -384,7 +384,7 @@ test_fync_sync_gridfs_remove (void)
 
   /* Test with a non-string id */
   query = bson_build (BSON_TYPE_STRING, "my-id", "string-id", -1,
-		      BSON_TYPE_NONE);
+                      BSON_TYPE_NONE);
   bson_finish (query);
 
   ok (mongo_sync_gridfs_remove (gfs, query) == FALSE,
@@ -394,7 +394,7 @@ test_fync_sync_gridfs_remove (void)
 
   /* Test with a working query */
   query = bson_build (BSON_TYPE_OID, "_id", named_oid,
-		      BSON_TYPE_NONE);
+                      BSON_TYPE_NONE);
   bson_finish (query);
 
   ok (mongo_sync_gridfs_remove (gfs, query) == TRUE,

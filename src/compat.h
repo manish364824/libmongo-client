@@ -35,8 +35,8 @@ typedef struct _GChecksum GChecksum;
 GChecksum *g_checksum_new (GChecksumType checksum_type);
 void g_checksum_free (GChecksum *checksum);
 void g_checksum_update (GChecksum *checksum,
-			const unsigned char *data,
-			ssize_t length);
+                        const unsigned char *data,
+                        ssize_t length);
 const char *g_checksum_get_string (GChecksum *checksum);
 
 #endif /* WITH_OPENSSL */

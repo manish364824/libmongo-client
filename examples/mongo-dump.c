@@ -61,7 +61,7 @@ mongo_dump (config_t *config)
   else
     {
       VLOG ("Connecting to %s:%d/%s.%s...\n", config->addr, config->port,
-	    config->db, config->coll);
+            config->db, config->coll);
     }
   conn = mongo_sync_connect (config->addr, config->port, config->slaveok);
 
@@ -71,7 +71,7 @@ mongo_dump (config_t *config)
 
       mongo_sync_cmd_get_last_error (conn, config->db, &error);
       fprintf (stderr, "Error connecting to %s:%d: %s\n", config->addr,
-	       config->port, (error) ? error : strerror (e));
+               config->port, (error) ? error : strerror (e));
       g_free (error);
       exit (1);
     }
@@ -81,14 +81,14 @@ mongo_dump (config_t *config)
       VLOG ("Syncing to master...\n");
       conn = mongo_sync_reconnect (conn, TRUE);
       if (!conn)
-	{
-	  e = errno;
+        {
+          e = errno;
 
-	  mongo_sync_cmd_get_last_error (conn, config->db, &error);
-	  fprintf (stderr, "Error reconnecting to the master of %s:%d: %s\n",
-		   config->addr, config->port, (error) ? error : strerror (e));
-	  exit (1);
-	}
+          mongo_sync_cmd_get_last_error (conn, config->db, &error);
+          fprintf (stderr, "Error reconnecting to the master of %s:%d: %s\n",
+                   config->addr, config->port, (error) ? error : strerror (e));
+          exit (1);
+        }
     }
 
   VLOG ("Counting documents...\n");
@@ -99,7 +99,7 @@ mongo_dump (config_t *config)
 
       mongo_sync_cmd_get_last_error (conn, config->db, &error);
       fprintf (stderr, "Error counting documents in %s.%s: %s\n",
-	       config->db, config->coll, (error) ? error : strerror (e));
+               config->db, config->coll, (error) ? error : strerror (e));
       mongo_sync_disconnect (conn);
       exit (1);
     }
@@ -111,21 +111,21 @@ mongo_dump (config_t *config)
     {
       fd = open (config->output, O_RDWR | O_CREAT | O_TRUNC, 0600);
       if (fd == -1)
-	{
-	  fprintf (stderr, "Error opening output file '%s': %s\n",
-		   config->output, strerror (errno));
-	  mongo_sync_disconnect (conn);
-	  exit (1);
-	}
+        {
+          fprintf (stderr, "Error opening output file '%s': %s\n",
+                   config->output, strerror (errno));
+          mongo_sync_disconnect (conn);
+          exit (1);
+        }
     }
 
   VLOG ("Launching initial query...\n");
   b = bson_new ();
   bson_finish (b);
   cursor = mongo_sync_cursor_new (conn, config->ns,
-				  mongo_sync_cmd_query (conn, config->ns,
-							MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT,
-							0, 10, b, NULL));
+                                  mongo_sync_cmd_query (conn, config->ns,
+                                                        MONGO_WIRE_FLAG_QUERY_NO_CURSOR_TIMEOUT,
+                                                        0, 10, b, NULL));
   bson_free (b);
 
   while ((pos < cnt) && mongo_sync_cursor_next (cursor))
@@ -134,18 +134,18 @@ mongo_dump (config_t *config)
       pos++;
 
       if (!b)
-	{
-	  e = errno;
+        {
+          e = errno;
 
-	  mongo_sync_cmd_get_last_error (conn, config->db, &error);
-	  fprintf (stderr, "Error advancing the cursor: %s\n",
-		   (error) ? error : strerror (e));
-	  mongo_sync_disconnect (conn);
-	  exit (1);
-	}
+          mongo_sync_cmd_get_last_error (conn, config->db, &error);
+          fprintf (stderr, "Error advancing the cursor: %s\n",
+                   (error) ? error : strerror (e));
+          mongo_sync_disconnect (conn);
+          exit (1);
+        }
 
       if (pos % 10 == 0)
-	VLOG ("\rDumping... %03.2f%%", (pos * 1.0) / (cnt * 1.0) * 100);
+        VLOG ("\rDumping... %03.2f%%", (pos * 1.0) / (cnt * 1.0) * 100);
 
       if (write (fd, bson_data (b), bson_size (b)) != bson_size (b))
         {
@@ -174,19 +174,19 @@ main (int argc, char *argv[])
   GOptionEntry entries[] =
     {
       { "addr", 'a', 0, G_OPTION_ARG_STRING, &config.addr,
-	"Address to connect to", "ADDRESS" },
+        "Address to connect to", "ADDRESS" },
       { "port", 'p', 0, G_OPTION_ARG_INT, &config.port, "Port", "PORT" },
       { "db", 'd', 0, G_OPTION_ARG_STRING, &config.db, "Database", "DB" },
       { "collection", 'c', 0, G_OPTION_ARG_STRING, &config.coll, "Collection",
-	"COLL" },
+        "COLL" },
       { "verbose", 'v', 0, G_OPTION_ARG_NONE, &config.verbose,
-	"Be verbose", NULL },
+        "Be verbose", NULL },
       { "output", 'o', 0, G_OPTION_ARG_STRING, &config.output,
-	"Output", "FILENAME" },
+        "Output", "FILENAME" },
       { "slave-ok", 's', 0, G_OPTION_ARG_NONE, &config.slaveok,
-	"Connecting to slaves is ok", NULL },
+        "Connecting to slaves is ok", NULL },
       { "master-sync", 'm', 0, G_OPTION_ARG_NONE, &config.master_sync,
-	"Reconnect to the replica master", NULL },
+        "Reconnect to the replica master", NULL },
       { NULL, 0, 0, 0, NULL, NULL, NULL }
     };
 

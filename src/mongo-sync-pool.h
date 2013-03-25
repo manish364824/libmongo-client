@@ -77,8 +77,8 @@ typedef struct _mongo_sync_pool mongo_sync_pool;
  * pool when appropriate.
  */
 mongo_sync_pool *mongo_sync_pool_new (const gchar *host,
-				      gint port,
-				      gint nmasters, gint nslaves);
+                                      gint port,
+                                      gint nmasters, gint nslaves);
 
 /** Close and free a synchronous connection pool.
  *
@@ -107,7 +107,7 @@ void mongo_sync_pool_free (mongo_sync_pool *pool);
  * free a connection object returned by this function.
  */
 mongo_sync_pool_connection *mongo_sync_pool_pick (mongo_sync_pool *pool,
-						  gboolean want_master);
+                                                  gboolean want_master);
 
 /** Return a connection to the synchronous connection pool.
  *
@@ -122,7 +122,7 @@ mongo_sync_pool_connection *mongo_sync_pool_pick (mongo_sync_pool *pool,
  * @note The returned connection should not be used afterwards.
  */
 gboolean mongo_sync_pool_return (mongo_sync_pool *pool,
-				 mongo_sync_pool_connection *conn);
+                                 mongo_sync_pool_connection *conn);
 
 /** @} */
 
