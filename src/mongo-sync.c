@@ -42,6 +42,7 @@ mongo_sync_connect (const gchar *address, gint port,
   s->slaveok = slaveok;
   s->safe_mode = FALSE;
   s->auto_reconnect = FALSE;
+  s->need_retry = FALSE;
   s->rs.seeds = g_list_append (NULL, g_strdup_printf ("%s:%d", address, port));
   s->rs.hosts = NULL;
   s->rs.primary = NULL;
@@ -467,8 +468,12 @@ _mongo_sync_packet_send (mongo_sync_connection *conn,
   gboolean out = FALSE;
 
   if (force_master)
-    if (!_mongo_cmd_ensure_conn (conn, force_master))
-      return FALSE;
+    {
+      if (!_mongo_cmd_ensure_conn (conn, force_master))
+        return FALSE;
+    }
+  else if (conn->need_retry)
+    return TRUE;
 
   for (;;)
     {
@@ -508,7 +513,12 @@ _mongo_sync_packet_recv (mongo_sync_connection *conn, gint32 rid, gint32 flags)
 
   p = mongo_packet_recv ((mongo_connection *)conn);
   if (!p)
-    return NULL;
+    {
+      if (errno == EAGAIN)
+        conn->need_retry = TRUE;
+      return NULL;
+    }
+  conn->need_retry = FALSE;
 
   if (!mongo_wire_packet_get_header_raw (p, &h))
     {
@@ -698,7 +708,9 @@ mongo_sync_cmd_update (mongo_sync_connection *conn,
   mongo_packet *p;
   gint32 rid;
 
-  rid = mongo_connection_get_requestid ((mongo_connection *)conn) + 1;
+  rid = mongo_connection_get_requestid ((mongo_connection *)conn);
+  if (!conn->need_retry)
+    rid++;
 
   p = mongo_wire_cmd_update (rid, ns, flags, selector, update);
   if (!p)
@@ -760,7 +772,9 @@ mongo_sync_cmd_insert_n (mongo_sync_connection *conn,
       if (i < n)
         c--;
 
-      rid = mongo_connection_get_requestid ((mongo_connection *)conn) + 1;
+      rid = mongo_connection_get_requestid ((mongo_connection *)conn);
+      if (!conn->need_retry)
+        rid++;
 
       p = mongo_wire_cmd_insert_n (rid, ns, c, &docs[pos]);
       if (!p)
@@ -833,7 +847,9 @@ mongo_sync_cmd_query (mongo_sync_connection *conn,
   if (!_mongo_cmd_verify_slaveok (conn))
     return FALSE;
 
-  rid = mongo_connection_get_requestid ((mongo_connection *)conn) + 1;
+  rid = mongo_connection_get_requestid ((mongo_connection *)conn);
+  if (!conn->need_retry)
+    rid++;
 
   p = mongo_wire_cmd_query (rid, ns, flags | _SLAVE_FLAG (conn),
                             skip, ret, query, sel);
@@ -861,7 +877,9 @@ mongo_sync_cmd_get_more (mongo_sync_connection *conn,
   if (!_mongo_cmd_verify_slaveok (conn))
     return FALSE;
 
-  rid = mongo_connection_get_requestid ((mongo_connection *)conn) + 1;
+  rid = mongo_connection_get_requestid ((mongo_connection *)conn);
+  if (!conn->need_retry)
+    rid++;
 
   p = mongo_wire_cmd_get_more (rid, ns, ret, cursor_id);
   if (!p)
@@ -881,7 +899,9 @@ mongo_sync_cmd_delete (mongo_sync_connection *conn, const gchar *ns,
   mongo_packet *p;
   gint32 rid;
 
-  rid = mongo_connection_get_requestid ((mongo_connection *)conn) + 1;
+  rid = mongo_connection_get_requestid ((mongo_connection *)conn);
+  if (!conn->need_retry)
+    rid++;
 
   p = mongo_wire_cmd_delete (rid, ns, flags, sel);
   if (!p)
@@ -904,7 +924,9 @@ mongo_sync_cmd_kill_cursors (mongo_sync_connection *conn,
       return FALSE;
     }
 
-  rid = mongo_connection_get_requestid ((mongo_connection *)conn) + 1;
+  rid = mongo_connection_get_requestid ((mongo_connection *)conn);
+  if (!conn->need_retry)
+    rid++;
 
   va_start (ap, n);
   p = mongo_wire_cmd_kill_cursors_va (rid, n, ap);
@@ -937,7 +959,9 @@ _mongo_sync_cmd_custom (mongo_sync_connection *conn,
       return NULL;
     }
 
-  rid = mongo_connection_get_requestid ((mongo_connection *)conn) + 1;
+  rid = mongo_connection_get_requestid ((mongo_connection *)conn);
+  if (!conn->need_retry)
+    rid++;
 
   p = mongo_wire_cmd_custom (rid, db, _SLAVE_FLAG (conn), command);
   if (!p)
@@ -1110,7 +1134,9 @@ mongo_sync_cmd_exists (mongo_sync_connection *conn,
       return NULL;
     }
 
-  rid = mongo_connection_get_requestid ((mongo_connection *)conn) + 1;
+  rid = mongo_connection_get_requestid ((mongo_connection *)conn);
+  if (!conn->need_retry)
+    rid++;
 
   ns = g_strconcat (db, ".", coll, NULL);
   cmd = bson_new_sized (128);

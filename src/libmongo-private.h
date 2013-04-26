@@ -62,6 +62,9 @@ struct _mongo_sync_connection
   gint32 max_insert_size; /**< Maximum number of bytes an insert
                              command can be before being split to
                              smaller chunks. Used for bulk inserts. */
+  gboolean need_retry; /**< When set, the connection is in retry
+                          mode, and commands should reuse the
+                          existing request id. */
 };
 
 /** @internal MongoDB cursor object.
