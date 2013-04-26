@@ -472,7 +472,7 @@ _mongo_sync_packet_send (mongo_sync_connection *conn,
       if (!_mongo_cmd_ensure_conn (conn, force_master))
         return FALSE;
     }
-  else if (conn->need_retry)
+  else if (conn && conn->need_retry)
     return TRUE;
 
   for (;;)
@@ -514,7 +514,7 @@ _mongo_sync_packet_recv (mongo_sync_connection *conn, gint32 rid, gint32 flags)
   p = mongo_packet_recv ((mongo_connection *)conn);
   if (!p)
     {
-      if (errno == EAGAIN)
+      if (errno == EAGAIN && conn)
         conn->need_retry = TRUE;
       return NULL;
     }
@@ -709,7 +709,7 @@ mongo_sync_cmd_update (mongo_sync_connection *conn,
   gint32 rid;
 
   rid = mongo_connection_get_requestid ((mongo_connection *)conn);
-  if (!conn->need_retry)
+  if (conn && !conn->need_retry)
     rid++;
 
   p = mongo_wire_cmd_update (rid, ns, flags, selector, update);
@@ -900,7 +900,7 @@ mongo_sync_cmd_delete (mongo_sync_connection *conn, const gchar *ns,
   gint32 rid;
 
   rid = mongo_connection_get_requestid ((mongo_connection *)conn);
-  if (!conn->need_retry)
+  if (conn && !conn->need_retry)
     rid++;
 
   p = mongo_wire_cmd_delete (rid, ns, flags, sel);
@@ -925,7 +925,7 @@ mongo_sync_cmd_kill_cursors (mongo_sync_connection *conn,
     }
 
   rid = mongo_connection_get_requestid ((mongo_connection *)conn);
-  if (!conn->need_retry)
+  if (conn && !conn->need_retry)
     rid++;
 
   va_start (ap, n);
