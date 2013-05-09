@@ -1,5 +1,5 @@
 /* mongo-sync.c - libmongo-client synchronous wrapper API
- * Copyright 2011, 2012 Gergely Nagy <algernon@balabit.hu>
+ * Copyright 2011, 2012, 2013 Gergely Nagy <algernon@balabit.hu>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -667,7 +667,7 @@ static inline gboolean
 _mongo_sync_cmd_verify_result (mongo_sync_connection *conn,
                                const gchar *ns)
 {
-  gchar *error, *db, *tmp;
+  gchar *error = NULL, *db, *tmp;
   gboolean res;
 
   if (!conn || !ns)
