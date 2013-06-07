@@ -1,5 +1,27 @@
 #+STARTUP: indent showall			-*- org -*-
 
+* 0.1.6.3 - UNRELEASED
+
+Another bugfix release with a couple of important bugfixes, and a few
+minor improvements here and there.
+
+** Improvement: configure.ac updated to modern autotools
+
+The configure.ac script was updated to not use obsolete macros, and to
+work with automake 1.13+ (where the aforementioned macros were
+removed).
+
+** Bugfix: Fix chunked GridFS file retrieval
+
+When retrieving files via the chunked GridFS API, order the chunks by
+their number, so reassembling them will succeed.
+
+** Bugfix: Stop crashing in case verification fails
+
+When safe-mode is enabled, but getLastError() fails, the library
+crashed due to an uninitialised pointer. This has been fixed in this
+release.
+
 * 0.1.6.2 - <2012-12-21 Fri>
 
 Another bugfix release with mostly minor improvements and
