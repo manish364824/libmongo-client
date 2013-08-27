@@ -55,8 +55,8 @@ typedef struct _mongo_sync_cursor mongo_sync_cursor;
  * @returns A newly allocated cursor, or NULL on error.
  */
 mongo_sync_cursor *mongo_sync_cursor_new (mongo_sync_connection *conn,
-					  const gchar *ns,
-					  mongo_packet *packet);
+                                          const gchar *ns,
+                                          mongo_packet *packet);
 
 /** Iterate a MongoDB cursor.
  *

@@ -60,8 +60,8 @@ g_checksum_free (GChecksum *checksum)
 
 void
 g_checksum_update (GChecksum *checksum,
-		   const unsigned char *data,
-		   ssize_t length)
+                   const unsigned char *data,
+                   ssize_t length)
 {
   size_t l = length;
 

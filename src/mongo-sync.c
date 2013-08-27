@@ -1,5 +1,5 @@
 /* mongo-sync.c - libmongo-client synchronous wrapper API
- * Copyright 2011, 2012 Gergely Nagy <algernon@balabit.hu>
+ * Copyright 2011, 2012, 2013 Gergely Nagy <algernon@balabit.hu>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@
 
 mongo_sync_connection *
 mongo_sync_connect (const gchar *address, gint port,
-		    gboolean slaveok)
+                    gboolean slaveok)
 {
   mongo_sync_connection *s;
   mongo_connection *c;
@@ -64,7 +64,7 @@ __asm__(".symver mongo_sync_connect_0_1_0,mongo_sync_connect@LMC_0.1.0");
 
 gboolean
 mongo_sync_conn_seed_add (mongo_sync_connection *conn,
-			  const gchar *host, gint port)
+                          const gchar *host, gint port)
 {
   if (!conn)
     {
@@ -78,13 +78,13 @@ mongo_sync_conn_seed_add (mongo_sync_connection *conn,
     }
 
   conn->rs.seeds = g_list_append (conn->rs.seeds,
-				  g_strdup_printf ("%s:%d", host, port));
+                                  g_strdup_printf ("%s:%d", host, port));
   return TRUE;
 }
 
 static void
 _mongo_sync_connect_replace (mongo_sync_connection *old,
-			     mongo_sync_connection *new)
+                             mongo_sync_connection *new)
 {
   GList *l;
 
@@ -133,7 +133,7 @@ _mongo_sync_connect_replace (mongo_sync_connection *old,
 
 mongo_sync_connection *
 mongo_sync_reconnect (mongo_sync_connection *conn,
-		      gboolean force_master)
+                      gboolean force_master)
 {
   gboolean ping = FALSE;
   guint i;
@@ -152,9 +152,9 @@ mongo_sync_reconnect (mongo_sync_connection *conn,
   if (ping)
     {
       if (!force_master)
-	return conn;
+        return conn;
       if (force_master && mongo_sync_cmd_is_master (conn))
-	return conn;
+        return conn;
 
       /* Force refresh the host list. */
       mongo_sync_cmd_is_master (conn);
@@ -169,22 +169,22 @@ mongo_sync_reconnect (mongo_sync_connection *conn,
   if (conn->rs.primary)
     {
       if (mongo_util_parse_addr (conn->rs.primary, &host, &port))
-	{
-	  nc = mongo_sync_connect (host, port, conn->slaveok);
-	  g_free (host);
-	  if (nc)
-	    {
-	      int e;
+        {
+          nc = mongo_sync_connect (host, port, conn->slaveok);
+          g_free (host);
+          if (nc)
+            {
+              int e;
 
-	      /* We can call ourselves here, since connect does not set
-		 conn->rs, thus, we won't end up in an infinite loop. */
-	      nc = mongo_sync_reconnect (nc, force_master);
-	      e = errno;
-	      _mongo_sync_connect_replace (conn, nc);
-	      errno = e;
-	      return conn;
-	    }
-	}
+              /* We can call ourselves here, since connect does not set
+                 conn->rs, thus, we won't end up in an infinite loop. */
+              nc = mongo_sync_reconnect (nc, force_master);
+              e = errno;
+              _mongo_sync_connect_replace (conn, nc);
+              errno = e;
+              return conn;
+            }
+        }
     }
 
   /* No primary found, or we couldn't connect, try the rest of the
@@ -196,12 +196,12 @@ mongo_sync_reconnect (mongo_sync_connection *conn,
       int e;
 
       if (!mongo_util_parse_addr (addr, &host, &port))
-	continue;
+        continue;
 
       nc = mongo_sync_connect (host, port, conn->slaveok);
       g_free (host);
       if (!nc)
-	continue;
+        continue;
 
       nc = mongo_sync_reconnect (nc, force_master);
       e = errno;
@@ -218,12 +218,12 @@ mongo_sync_reconnect (mongo_sync_connection *conn,
       int e;
 
       if (!mongo_util_parse_addr (addr, &host, &port))
-	continue;
+        continue;
 
       nc = mongo_sync_connect (host, port, conn->slaveok);
       g_free (host);
       if (!nc)
-	continue;
+        continue;
 
       nc = mongo_sync_reconnect (nc, force_master);
       e = errno;
@@ -279,7 +279,7 @@ mongo_sync_conn_get_max_insert_size (mongo_sync_connection *conn)
 
 gboolean
 mongo_sync_conn_set_max_insert_size (mongo_sync_connection *conn,
-				     gint32 max_size)
+                                     gint32 max_size)
 {
   if (!conn)
     {
@@ -312,7 +312,7 @@ mongo_sync_conn_get_safe_mode (const mongo_sync_connection *conn)
 
 gboolean
 mongo_sync_conn_set_safe_mode (mongo_sync_connection *conn,
-			       gboolean safe_mode)
+                               gboolean safe_mode)
 {
   if (!conn)
     {
@@ -340,7 +340,7 @@ mongo_sync_conn_get_auto_reconnect (const mongo_sync_connection *conn)
 
 gboolean
 mongo_sync_conn_set_auto_reconnect (mongo_sync_connection *conn,
-				    gboolean auto_reconnect)
+                                    gboolean auto_reconnect)
 {
   if (!conn)
     {
@@ -367,7 +367,7 @@ mongo_sync_conn_get_slaveok (const mongo_sync_connection *conn)
 
 gboolean
 mongo_sync_conn_set_slaveok (mongo_sync_connection *conn,
-			     gboolean slaveok)
+                             gboolean slaveok)
 {
   if (!conn)
     {
@@ -384,7 +384,7 @@ mongo_sync_conn_set_slaveok (mongo_sync_connection *conn,
 
 static inline gboolean
 _mongo_cmd_ensure_conn (mongo_sync_connection *conn,
-			gboolean force_master)
+                        gboolean force_master)
 {
   if (!conn)
     {
@@ -396,17 +396,17 @@ _mongo_cmd_ensure_conn (mongo_sync_connection *conn,
     {
       errno = 0;
       if (!mongo_sync_cmd_is_master (conn))
-	{
-	  if (errno == EPROTO)
-	    return FALSE;
-	  if (!conn->auto_reconnect)
-	    {
-	      errno = ENOTCONN;
-	      return FALSE;
-	    }
-	  if (!mongo_sync_reconnect (conn, TRUE))
-	    return FALSE;
-	}
+        {
+          if (errno == EPROTO)
+            return FALSE;
+          if (!conn->auto_reconnect)
+            {
+              errno = ENOTCONN;
+              return FALSE;
+            }
+          if (!mongo_sync_reconnect (conn, TRUE))
+            return FALSE;
+        }
       return TRUE;
     }
 
@@ -414,17 +414,17 @@ _mongo_cmd_ensure_conn (mongo_sync_connection *conn,
   if (!mongo_sync_cmd_ping (conn))
     {
       if (errno == EPROTO)
-	return FALSE;
+        return FALSE;
       if (!conn->auto_reconnect)
-	{
-	  errno = ENOTCONN;
-	  return FALSE;
-	}
+        {
+          errno = ENOTCONN;
+          return FALSE;
+        }
       if (!mongo_sync_reconnect (conn, FALSE))
-	{
-	  errno = ENOTCONN;
-	  return FALSE;
-	}
+        {
+          errno = ENOTCONN;
+          return FALSE;
+        }
     }
   errno = 0;
   return TRUE;
@@ -446,23 +446,23 @@ _mongo_cmd_verify_slaveok (mongo_sync_connection *conn)
   if (!mongo_sync_cmd_is_master (conn))
     {
       if (errno == EPROTO)
-	return FALSE;
+        return FALSE;
       if (!conn->auto_reconnect)
-	{
-	  errno = ENOTCONN;
-	  return FALSE;
-	}
+        {
+          errno = ENOTCONN;
+          return FALSE;
+        }
       if (!mongo_sync_reconnect (conn, TRUE))
-	return FALSE;
+        return FALSE;
     }
   return TRUE;
 }
 
 static inline gboolean
 _mongo_sync_packet_send (mongo_sync_connection *conn,
-			 mongo_packet *p,
-			 gboolean force_master,
-			 gboolean auto_reconnect)
+                         mongo_packet *p,
+                         gboolean force_master,
+                         gboolean auto_reconnect)
 {
   gboolean out = FALSE;
 
@@ -473,26 +473,26 @@ _mongo_sync_packet_send (mongo_sync_connection *conn,
   for (;;)
     {
       if (!mongo_packet_send ((mongo_connection *)conn, p))
-	{
-	  int e = errno;
+        {
+          int e = errno;
 
-	  if (!auto_reconnect || (conn && !conn->auto_reconnect))
-	    {
-	      mongo_wire_packet_free (p);
-	      errno = e;
-	      return FALSE;
-	    }
+          if (!auto_reconnect || (conn && !conn->auto_reconnect))
+            {
+              mongo_wire_packet_free (p);
+              errno = e;
+              return FALSE;
+            }
 
-	  if (out || !mongo_sync_reconnect (conn, force_master))
-	    {
-	      mongo_wire_packet_free (p);
-	      errno = e;
-	      return FALSE;
-	    }
+          if (out || !mongo_sync_reconnect (conn, force_master))
+            {
+              mongo_wire_packet_free (p);
+              errno = e;
+              return FALSE;
+            }
 
-	  out = TRUE;
-	  continue;
-	}
+          out = TRUE;
+          continue;
+        }
       break;
     }
   mongo_wire_packet_free (p);
@@ -589,10 +589,10 @@ _mongo_sync_get_error (const bson *rep, gchar **error)
     {
       c = bson_find (rep, "errmsg");
       if (!c)
-	{
-	  errno = EPROTO;
-	  return FALSE;
-	}
+        {
+          errno = EPROTO;
+          return FALSE;
+        }
     }
   if (bson_cursor_type (c) == BSON_TYPE_NONE ||
       bson_cursor_type (c) == BSON_TYPE_NULL)
@@ -616,7 +616,7 @@ _mongo_sync_get_error (const bson *rep, gchar **error)
 
 static mongo_packet *
 _mongo_sync_packet_check_error (mongo_sync_connection *conn, mongo_packet *p,
-				gboolean check_ok)
+                                gboolean check_ok)
 {
   bson *b;
   gboolean error;
@@ -635,17 +635,17 @@ _mongo_sync_packet_check_error (mongo_sync_connection *conn, mongo_packet *p,
   if (check_ok)
     {
       if (!_mongo_sync_check_ok (b))
-	{
-	  int e = errno;
+        {
+          int e = errno;
 
-	  g_free (conn->last_error);
-	  conn->last_error = NULL;
-	  _mongo_sync_get_error (b, &conn->last_error);
-	  bson_free (b);
-	  mongo_wire_packet_free (p);
-	  errno = e;
-	  return NULL;
-	}
+          g_free (conn->last_error);
+          conn->last_error = NULL;
+          _mongo_sync_get_error (b, &conn->last_error);
+          bson_free (b);
+          mongo_wire_packet_free (p);
+          errno = e;
+          return NULL;
+        }
       bson_free (b);
       return p;
     }
@@ -665,9 +665,9 @@ _mongo_sync_packet_check_error (mongo_sync_connection *conn, mongo_packet *p,
 
 static inline gboolean
 _mongo_sync_cmd_verify_result (mongo_sync_connection *conn,
-			       const gchar *ns)
+                               const gchar *ns)
 {
-  gchar *error, *db, *tmp;
+  gchar *error = NULL, *db, *tmp;
   gboolean res;
 
   if (!conn || !ns)
@@ -691,9 +691,9 @@ _mongo_sync_cmd_verify_result (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_update (mongo_sync_connection *conn,
-		       const gchar *ns,
-		       gint32 flags, const bson *selector,
-		       const bson *update)
+                       const gchar *ns,
+                       gint32 flags, const bson *selector,
+                       const bson *update)
 {
   mongo_packet *p;
   gint32 rid;
@@ -712,8 +712,8 @@ mongo_sync_cmd_update (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_insert_n (mongo_sync_connection *conn,
-			 const gchar *ns, gint32 n,
-			 const bson **docs)
+                         const gchar *ns, gint32 n,
+                         const bson **docs)
 {
   mongo_packet *p;
   gint32 rid;
@@ -740,10 +740,10 @@ mongo_sync_cmd_insert_n (mongo_sync_connection *conn,
   for (i = 0; i < n; i++)
     {
       if (bson_size (docs[i]) >= conn->max_insert_size)
-	{
-	  errno = EMSGSIZE;
-	  return FALSE;
-	}
+        {
+          errno = EMSGSIZE;
+          return FALSE;
+        }
     }
 
   do
@@ -752,25 +752,25 @@ mongo_sync_cmd_insert_n (mongo_sync_connection *conn,
       c = 0;
 
       while (i < n && size < conn->max_insert_size)
-	{
-	  size += bson_size (docs[i++]);
-	  c++;
-	}
+        {
+          size += bson_size (docs[i++]);
+          c++;
+        }
       size = 0;
       if (i < n)
-	c--;
+        c--;
 
       rid = mongo_connection_get_requestid ((mongo_connection *)conn) + 1;
 
       p = mongo_wire_cmd_insert_n (rid, ns, c, &docs[pos]);
       if (!p)
-	return FALSE;
+        return FALSE;
 
       if (!_mongo_sync_packet_send (conn, p, TRUE, TRUE))
-	return FALSE;
+        return FALSE;
 
       if (!_mongo_sync_cmd_verify_result (conn, ns))
-	return FALSE;
+        return FALSE;
 
       pos += c;
     } while (pos < n);
@@ -780,7 +780,7 @@ mongo_sync_cmd_insert_n (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_insert (mongo_sync_connection *conn,
-		       const gchar *ns, ...)
+                       const gchar *ns, ...)
 {
   gboolean b;
   bson **docs, *d;
@@ -805,11 +805,11 @@ mongo_sync_cmd_insert (mongo_sync_connection *conn,
   while ((d = (bson *)va_arg (ap, gpointer)))
     {
       if (bson_size (d) < 0)
-	{
-	  g_free (docs);
-	  errno = EINVAL;
-	  return FALSE;
-	}
+        {
+          g_free (docs);
+          errno = EINVAL;
+          return FALSE;
+        }
 
       docs = (bson **)g_renew (bson *, docs, n + 1);
       docs[n++] = d;
@@ -823,9 +823,9 @@ mongo_sync_cmd_insert (mongo_sync_connection *conn,
 
 mongo_packet *
 mongo_sync_cmd_query (mongo_sync_connection *conn,
-		      const gchar *ns, gint32 flags,
-		      gint32 skip, gint32 ret,
-		      const bson *query, const bson *sel)
+                      const gchar *ns, gint32 flags,
+                      gint32 skip, gint32 ret,
+                      const bson *query, const bson *sel)
 {
   mongo_packet *p;
   gint32 rid;
@@ -836,14 +836,14 @@ mongo_sync_cmd_query (mongo_sync_connection *conn,
   rid = mongo_connection_get_requestid ((mongo_connection *)conn) + 1;
 
   p = mongo_wire_cmd_query (rid, ns, flags | _SLAVE_FLAG (conn),
-			    skip, ret, query, sel);
+                            skip, ret, query, sel);
   if (!p)
     return NULL;
 
   if (!_mongo_sync_packet_send (conn, p,
-				!((conn && conn->slaveok) ||
-				  (flags & MONGO_WIRE_FLAG_QUERY_SLAVE_OK)),
-				TRUE))
+                                !((conn && conn->slaveok) ||
+                                  (flags & MONGO_WIRE_FLAG_QUERY_SLAVE_OK)),
+                                TRUE))
     return NULL;
 
   p = _mongo_sync_packet_recv (conn, rid, MONGO_REPLY_FLAG_QUERY_FAIL);
@@ -852,8 +852,8 @@ mongo_sync_cmd_query (mongo_sync_connection *conn,
 
 mongo_packet *
 mongo_sync_cmd_get_more (mongo_sync_connection *conn,
-			 const gchar *ns,
-			 gint32 ret, gint64 cursor_id)
+                         const gchar *ns,
+                         gint32 ret, gint64 cursor_id)
 {
   mongo_packet *p;
   gint32 rid;
@@ -876,7 +876,7 @@ mongo_sync_cmd_get_more (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_delete (mongo_sync_connection *conn, const gchar *ns,
-		       gint32 flags, const bson *sel)
+                       gint32 flags, const bson *sel)
 {
   mongo_packet *p;
   gint32 rid;
@@ -892,7 +892,7 @@ mongo_sync_cmd_delete (mongo_sync_connection *conn, const gchar *ns,
 
 gboolean
 mongo_sync_cmd_kill_cursors (mongo_sync_connection *conn,
-			     gint32 n, ...)
+                             gint32 n, ...)
 {
   mongo_packet *p;
   gint32 rid;
@@ -923,10 +923,10 @@ mongo_sync_cmd_kill_cursors (mongo_sync_connection *conn,
 
 static mongo_packet *
 _mongo_sync_cmd_custom (mongo_sync_connection *conn,
-			const gchar *db,
-			const bson *command,
-			gboolean check_conn,
-			gboolean force_master)
+                        const gchar *db,
+                        const bson *command,
+                        gboolean check_conn,
+                        gboolean force_master)
 {
   mongo_packet *p;
   gint32 rid;
@@ -952,16 +952,16 @@ _mongo_sync_cmd_custom (mongo_sync_connection *conn,
 
 mongo_packet *
 mongo_sync_cmd_custom (mongo_sync_connection *conn,
-		       const gchar *db,
-		       const bson *command)
+                       const gchar *db,
+                       const bson *command)
 {
   return _mongo_sync_cmd_custom (conn, db, command, TRUE, FALSE);
 }
 
 gdouble
 mongo_sync_cmd_count (mongo_sync_connection *conn,
-		      const gchar *db, const gchar *coll,
-		      const bson *query)
+                      const gchar *db, const gchar *coll,
+                      const bson *query)
 {
   mongo_packet *p;
   bson *cmd;
@@ -1018,8 +1018,8 @@ mongo_sync_cmd_count (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_create (mongo_sync_connection *conn,
-		       const gchar *db, const gchar *coll,
-		       gint flags, ...)
+                       const gchar *db, const gchar *coll,
+                       gint flags, ...)
 {
   mongo_packet *p;
   bson *cmd;
@@ -1047,30 +1047,30 @@ mongo_sync_cmd_create (mongo_sync_connection *conn,
       gint64 i;
 
       if (flags & MONGO_COLLECTION_CAPPED ||
-	  flags & MONGO_COLLECTION_CAPPED_MAX)
-	bson_append_boolean (cmd, "capped", TRUE);
+          flags & MONGO_COLLECTION_CAPPED_MAX)
+        bson_append_boolean (cmd, "capped", TRUE);
 
       va_start (ap, flags);
       i = (gint64)va_arg (ap, gint64);
       if (i <= 0)
-	{
-	  bson_free (cmd);
-	  errno = ERANGE;
-	  return FALSE;
-	}
+        {
+          bson_free (cmd);
+          errno = ERANGE;
+          return FALSE;
+        }
       bson_append_int64 (cmd, "size", i);
 
       if (flags & MONGO_COLLECTION_CAPPED_MAX)
-	{
-	  i = (gint64)va_arg (ap, gint64);
-	  if (i <= 0)
-	    {
-	      bson_free (cmd);
-	      errno = ERANGE;
-	      return FALSE;
-	    }
-	  bson_append_int64 (cmd, "max", i);
-	}
+        {
+          i = (gint64)va_arg (ap, gint64);
+          if (i <= 0)
+            {
+              bson_free (cmd);
+              errno = ERANGE;
+              return FALSE;
+            }
+          bson_append_int64 (cmd, "max", i);
+        }
       va_end (ap);
     }
   bson_finish (cmd);
@@ -1092,7 +1092,7 @@ mongo_sync_cmd_create (mongo_sync_connection *conn,
 
 bson *
 mongo_sync_cmd_exists (mongo_sync_connection *conn,
-		       const gchar *db, const gchar *coll)
+                       const gchar *db, const gchar *coll)
 {
   bson *cmd, *r;
   mongo_packet *p;
@@ -1161,7 +1161,7 @@ mongo_sync_cmd_exists (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_drop (mongo_sync_connection *conn,
-		     const gchar *db, const gchar *coll)
+                     const gchar *db, const gchar *coll)
 {
   mongo_packet *p;
   bson *cmd;
@@ -1187,7 +1187,7 @@ mongo_sync_cmd_drop (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_get_last_error (mongo_sync_connection *conn,
-			       const gchar *db, gchar **error)
+                               const gchar *db, gchar **error)
 {
   mongo_packet *p;
   bson *cmd;
@@ -1252,7 +1252,7 @@ mongo_sync_cmd_get_last_error (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_reset_error (mongo_sync_connection *conn,
-			    const gchar *db)
+                            const gchar *db)
 {
   mongo_packet *p;
   bson *cmd;
@@ -1331,13 +1331,13 @@ mongo_sync_cmd_is_master (mongo_sync_connection *conn)
       const gchar *s;
 
       /* We're not the master, so we should have a 'primary' key in
-	 the response. */
+         the response. */
       c = bson_find (res, "primary");
       if (bson_cursor_get_string (c, &s))
-	{
-	  g_free (conn->rs.primary);
-	  conn->rs.primary = g_strdup (s);
-	}
+        {
+          g_free (conn->rs.primary);
+          conn->rs.primary = g_strdup (s);
+        }
       bson_cursor_free (c);
     }
 
@@ -1375,7 +1375,7 @@ mongo_sync_cmd_is_master (mongo_sync_connection *conn)
       const gchar *s;
 
       if (bson_cursor_get_string (c, &s))
-	conn->rs.hosts = g_list_append (conn->rs.hosts, g_strdup (s));
+        conn->rs.hosts = g_list_append (conn->rs.hosts, g_strdup (s));
     }
   bson_cursor_free (c);
   bson_free (hosts);
@@ -1388,12 +1388,12 @@ mongo_sync_cmd_is_master (mongo_sync_connection *conn)
 
       c = bson_cursor_new (hosts);
       while (bson_cursor_next (c))
-	{
-	  const gchar *s;
+        {
+          const gchar *s;
 
-	  if (bson_cursor_get_string (c, &s))
-	    conn->rs.hosts = g_list_append (conn->rs.hosts, g_strdup (s));
-	}
+          if (bson_cursor_get_string (c, &s))
+            conn->rs.hosts = g_list_append (conn->rs.hosts, g_strdup (s));
+        }
       bson_free (hosts);
     }
   bson_cursor_free (c);
@@ -1447,9 +1447,9 @@ _pass_digest (const gchar *user, const gchar *pw)
 
 gboolean
 mongo_sync_cmd_user_add (mongo_sync_connection *conn,
-			 const gchar *db,
-			 const gchar *user,
-			 const gchar *pw)
+                         const gchar *db,
+                         const gchar *user,
+                         const gchar *pw)
 {
   bson *s, *u;
   gchar *userns;
@@ -1466,17 +1466,17 @@ mongo_sync_cmd_user_add (mongo_sync_connection *conn,
   hex_digest = _pass_digest (user, pw);
 
   s = bson_build (BSON_TYPE_STRING, "user", user, -1,
-		  BSON_TYPE_NONE);
+                  BSON_TYPE_NONE);
   bson_finish (s);
   u = bson_build_full (BSON_TYPE_DOCUMENT, "$set", TRUE,
-		       bson_build (BSON_TYPE_STRING, "pwd", hex_digest, -1,
-				   BSON_TYPE_NONE),
-		       BSON_TYPE_NONE);
+                       bson_build (BSON_TYPE_STRING, "pwd", hex_digest, -1,
+                                   BSON_TYPE_NONE),
+                       BSON_TYPE_NONE);
   bson_finish (u);
   g_free (hex_digest);
 
   if (!mongo_sync_cmd_update (conn, userns, MONGO_WIRE_FLAG_UPDATE_UPSERT,
-			      s, u))
+                              s, u))
     {
       int e = errno;
 
@@ -1495,8 +1495,8 @@ mongo_sync_cmd_user_add (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_user_remove (mongo_sync_connection *conn,
-			    const gchar *db,
-			    const gchar *user)
+                            const gchar *db,
+                            const gchar *user)
 {
   bson *s;
   gchar *userns;
@@ -1510,7 +1510,7 @@ mongo_sync_cmd_user_remove (mongo_sync_connection *conn,
   userns = g_strconcat (db, ".system.users", NULL);
 
   s = bson_build (BSON_TYPE_STRING, "user", user, -1,
-		  BSON_TYPE_NONE);
+                  BSON_TYPE_NONE);
   bson_finish (s);
 
   if (!mongo_sync_cmd_delete (conn, userns, 0, s))
@@ -1530,9 +1530,9 @@ mongo_sync_cmd_user_remove (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
-			     const gchar *db,
-			     const gchar *user,
-			     const gchar *pw)
+                             const gchar *db,
+                             const gchar *user,
+                             const gchar *pw)
 {
   bson *b;
   mongo_packet *p;
@@ -1608,10 +1608,10 @@ mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
 
   /* Run the authenticate command. */
   b = bson_build (BSON_TYPE_INT32, "authenticate", 1,
-		  BSON_TYPE_STRING, "user", user, -1,
-		  BSON_TYPE_STRING, "nonce", nonce, -1,
-		  BSON_TYPE_STRING, "key", digest, -1,
-		  BSON_TYPE_NONE);
+                  BSON_TYPE_STRING, "user", user, -1,
+                  BSON_TYPE_STRING, "nonce", nonce, -1,
+                  BSON_TYPE_STRING, "key", digest, -1,
+                  BSON_TYPE_NONE);
   bson_finish (b);
   g_free (nonce);
   g_checksum_free (chk);
@@ -1647,46 +1647,46 @@ _mongo_index_gen_name (const bson *key)
       g_string_append_c (name, '_');
 
       switch (bson_cursor_type (c))
-	{
-	case BSON_TYPE_BOOLEAN:
-	  {
-	    gboolean vb;
+        {
+        case BSON_TYPE_BOOLEAN:
+          {
+            gboolean vb;
 
-	    bson_cursor_get_boolean (c, &vb);
-	    v = vb;
-	    break;
-	  }
-	case BSON_TYPE_INT32:
-	  {
-	    gint32 vi;
+            bson_cursor_get_boolean (c, &vb);
+            v = vb;
+            break;
+          }
+        case BSON_TYPE_INT32:
+          {
+            gint32 vi;
 
-	    bson_cursor_get_int32 (c, &vi);
-	    v = vi;
-	    break;
-	  }
-	case BSON_TYPE_INT64:
-	  {
-	    gint64 vl;
+            bson_cursor_get_int32 (c, &vi);
+            v = vi;
+            break;
+          }
+        case BSON_TYPE_INT64:
+          {
+            gint64 vl;
 
-	    bson_cursor_get_int64 (c, &vl);
-	    v = vl;
-	    break;
-	  }
-	case BSON_TYPE_DOUBLE:
-	  {
-	    gdouble vd;
+            bson_cursor_get_int64 (c, &vl);
+            v = vl;
+            break;
+          }
+        case BSON_TYPE_DOUBLE:
+          {
+            gdouble vd;
 
-	    bson_cursor_get_double (c, &vd);
-	    v = (gint64)vd;
-	    break;
-	  }
-	default:
-	  bson_cursor_free (c);
-	  g_string_free (name, TRUE);
-	  return NULL;
-	}
+            bson_cursor_get_double (c, &vd);
+            v = (gint64)vd;
+            break;
+          }
+        default:
+          bson_cursor_free (c);
+          g_string_free (name, TRUE);
+          return NULL;
+        }
       if (v != 0)
-	g_string_append_printf (name, "%" G_GINT64_FORMAT "_", v);
+        g_string_append_printf (name, "%" G_GINT64_FORMAT "_", v);
     }
   bson_cursor_free (c);
 
@@ -1695,9 +1695,9 @@ _mongo_index_gen_name (const bson *key)
 
 gboolean
 mongo_sync_cmd_index_create (mongo_sync_connection *conn,
-			     const gchar *ns,
-			     const bson *key,
-			     gint options)
+                             const gchar *ns,
+                             const bson *key,
+                             gint options)
 {
   GString *name;
   gchar *idxns, *t;
@@ -1763,8 +1763,8 @@ mongo_sync_cmd_index_create (mongo_sync_connection *conn,
 
 static gboolean
 _mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
-			    const gchar *full_ns,
-			    const gchar *index_name)
+                            const gchar *full_ns,
+                            const gchar *index_name)
 {
   bson *cmd;
   gchar *db, *ns;
@@ -1813,8 +1813,8 @@ _mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
-			   const gchar *ns,
-			   const bson *key)
+                           const gchar *ns,
+                           const bson *key)
 {
   GString *name;
   gboolean b;
@@ -1834,7 +1834,7 @@ mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
 
 gboolean
 mongo_sync_cmd_index_drop_all (mongo_sync_connection *conn,
-			       const gchar *ns)
+                               const gchar *ns)
 {
   return _mongo_sync_cmd_index_drop (conn, ns, "*");
 }

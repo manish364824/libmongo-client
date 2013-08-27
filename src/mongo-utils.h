@@ -112,7 +112,7 @@ gchar *mongo_util_oid_as_string (const guint8 *oid);
  * will be set to NULL, and port to -1.
  */
 gboolean mongo_util_parse_addr (const gchar *addr, gchar **host,
-				gint *port);
+                                gint *port);
 
 /** @} */
 

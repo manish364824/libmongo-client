@@ -1,7 +1,9 @@
 libmongo-client
 ===============
 
-This is an alternative C driver for `MongoDB`_, with slightly
+[![Build Status](https://travis-ci.org/algernon/libmongo-client.png?branch=master)](https://travis-ci.org/algernon/libmongo-client)
+
+This is an alternative C driver for [MongoDB][mongodb], with slightly
 different goals than the official one:
 
 libmongo-client is meant to be a stable (API, ABI and quality alike),
@@ -35,12 +37,13 @@ bumped version will be branched off.
 Requirements
 ------------
 
-Apart from `glib`_ (with header files - usually found in a development
-package - installed), there are no other hard dependencies. Though,
-one will need `Perl`_ (with a suitable version of Test::Harness, along
-with the prove utility) to run the test suite.
+Apart from [glib][glib] (with header files - usually found in a
+development package - installed), there are no other hard
+dependencies. Though, one will need [Perl][perl] (with a suitable
+version of Test::Harness, along with the prove utility) to run the
+test suite.
 
-To build the documentation, `Doxygen`_ will be needed too.
+To build the documentation, [Doxygen][doxygen] will be needed too.
 
 Installation
 ------------
@@ -48,12 +51,10 @@ Installation
 The library follows the usual autotools way of installation (one will
 need libtool 2.2+ to build from git!):
 
-::
-
- $ git clone git://github.com/algernon/libmongo-client.git
- $ cd libmongo-client
- $ autoreconf -i
- $ ./configure && make && make install
+     $ git clone git://github.com/algernon/libmongo-client.git
+     $ cd libmongo-client
+     $ autoreconf -i
+     $ ./configure && make && make install
 
 License
 -------
@@ -62,7 +63,7 @@ Although the code is not based on any other driver, it is released
 under the same Apache License, version 2.0 (included as the file
 LICENSE).
 
-.. _MongoDB: http://www.mongodb.org/
-.. _glib: http://developer.gnome.org/glib/
-.. _Perl: http://www.perl.org/
-.. _Doxygen: http://www.stack.nl/~dimitri/doxygen/
+ [mongodb]: http://www.mongodb.org/
+ [glib]: http://developer.gnome.org/glib/
+ [perl]: http://www.perl.org/
+ [doxygen]: http://www.stack.nl/~dimitri/doxygen/

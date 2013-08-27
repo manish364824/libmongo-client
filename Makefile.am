@@ -1,7 +1,7 @@
 SUBDIRS		= docs src tests examples
 
 ACLOCAL_AMFLAGS	= -I m4 --install
-EXTRA_DIST	= NEWS README.rst m4/.placeholder
+EXTRA_DIST	= NEWS README.md m4/.placeholder
 
 coverage:
 	@echo "Making $@ in src"

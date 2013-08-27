@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
 
-AC_INIT(libmongo-client, 0.1.6.2, algernon@madhouse-project.org, libmongo-client, https://github.com/algernon/libmongo-client)
+AC_INIT([libmongo-client],[0.1.6.3],[algernon@madhouse-project.org],[libmongo-client],[https://github.com/algernon/libmongo-client])
 AM_INIT_AUTOMAKE([1.9 tar-ustar foreign no-dist-gzip dist-xz])
 
 dnl ***************************************************************************
@@ -15,16 +15,16 @@ dnl Initial setup
 
 AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
-AC_ARG_WITH([versioned-symbols], AC_HELP_STRING([--with-versioned-symbols],[Use versioned symbols]),[dnl
+AC_ARG_WITH([versioned-symbols], AS_HELP_STRING([--with-versioned-symbols],[Use versioned symbols]),[dnl
 vsymldflags="-Wl,--version-script,\${srcdir}/libmongo-client.ver -Wl,-O1"
 ],[vsymldflags=])
 
 dnl ***************************************************************************
 dnl Checks for programs.
 AC_PROG_CC
-AM_PROG_CC_STDC
+
 AC_PROG_MAKE_SET
 PKG_PROG_PKG_CONFIG
 LT_INIT([shared])
@@ -74,7 +74,7 @@ LDFLAGS="$LDFLAGS $GLIB_LIBS"
 
 AC_CACHE_CHECK(sanity checking Glib headers,
                blb_cv_glib_sane,
-[AC_TRY_RUN([
+[AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <glib.h>
 
 int main()
@@ -83,10 +83,7 @@ int main()
     return 1;
   return 0;
 }
-],
-blb_cv_glib_sane=yes,
-blb_cv_glib_sane=no,
-blb_cv_glib_sane=yes)])
+]])],[blb_cv_glib_sane=yes],[blb_cv_glib_sane=no],[blb_cv_glib_sane=yes])])
 CPPFLAGS=$old_CPPFLAGS
 LDFLAGS=$old_LDFLAGS
 
@@ -147,8 +144,7 @@ AC_DEFINE_UNQUOTED(VERSIONED_SYMBOLS, `enable_value ${vsymldflags}`,
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [package name])
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [version number])
 
-AC_OUTPUT(
-	Doxyfile
+AC_CONFIG_FILES([Doxyfile
 	Makefile
 	docs/Makefile
 	docs/tutorial/Makefile
@@ -157,4 +153,5 @@ AC_OUTPUT(
 	src/libmongo-client.pc
 	tests/Makefile
 	tests/libtap/Makefile
-)
+])
+AC_OUTPUT

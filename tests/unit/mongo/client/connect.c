@@ -24,7 +24,7 @@ test_mongo_connect (void)
       "Connecting to an unavailable unix socket fails");
 
   ok ((c = mongo_connect (config.primary_host,
-			  config.primary_port)) != NULL,
+                          config.primary_port)) != NULL,
       "Connecting to the primary server works");
   mongo_disconnect (c);
 

@@ -43,8 +43,8 @@ test_func_sync_gridfs_stream_write (void)
 
   oid = mongo_util_oid_new (seq++);
   meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test-stream", -1,
-		     BSON_TYPE_OID, "_id", oid,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_OID, "_id", oid,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
   g_free (oid);
 
@@ -62,7 +62,7 @@ test_func_sync_gridfs_stream_write (void)
       gint csize = BUFFER_SIZE;
 
       if (csize + pos > FILE_SIZE)
-	csize = FILE_SIZE - pos;
+        csize = FILE_SIZE - pos;
 
       memset (data, filler++, BUFFER_SIZE);
 
@@ -103,8 +103,8 @@ test_func_sync_gridfs_stream_write_binary_subtype (void)
 
   oid = mongo_util_oid_new (seq++);
   meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test-stream-bintype", -1,
-		     BSON_TYPE_OID, "_id", oid,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_OID, "_id", oid,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
 
@@ -161,8 +161,8 @@ test_func_sync_gridfs_stream_write_invalid (void)
 
   /* Try to write a file with a custom, non-OID _id */
   meta = bson_build (BSON_TYPE_STRING, "filename", "lmc-invalid-id", -1,
-		     BSON_TYPE_STRING, "_id", "Short and stout", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_STRING, "_id", "Short and stout", -1,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   stream = mongo_sync_gridfs_stream_new (gfs, meta);
@@ -172,8 +172,8 @@ test_func_sync_gridfs_stream_write_invalid (void)
 
   /* Write a file with a non-OID _id, bypassing the GridFS API. */
   meta = bson_build (BSON_TYPE_STRING, "_id", "Short and stout", -1,
-		     BSON_TYPE_STRING, "my-id", "stream:string-id", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_STRING, "my-id", "stream:string-id", -1,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
@@ -181,8 +181,8 @@ test_func_sync_gridfs_stream_write_invalid (void)
 
   /* Insert metadata with invalid length type. */
   meta = bson_build (BSON_TYPE_DOUBLE, "length", 1.0,
-		     BSON_TYPE_STRING, "my-id", "stream:invalid-length", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_STRING, "my-id", "stream:invalid-length", -1,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
@@ -190,9 +190,9 @@ test_func_sync_gridfs_stream_write_invalid (void)
 
   /* Insert metadata with invalid chunkSize type. */
   meta = bson_build (BSON_TYPE_INT32, "length", 10,
-		     BSON_TYPE_DOUBLE, "chunkSize", 12.5,
-		     BSON_TYPE_STRING, "my-id", "stream:invalid-chunkSize", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_DOUBLE, "chunkSize", 12.5,
+                     BSON_TYPE_STRING, "my-id", "stream:invalid-chunkSize", -1,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
@@ -200,11 +200,11 @@ test_func_sync_gridfs_stream_write_invalid (void)
 
   /* Insert a valid metadata, without chunks. */
   meta = bson_build (BSON_TYPE_INT32, "length", 32,
-		     BSON_TYPE_INT32, "chunkSize", 12,
-		     BSON_TYPE_UTC_DATETIME, "uploadDate", (gint64)1234,
-		     BSON_TYPE_STRING, "md5", "deadbeef", -1,
-		     BSON_TYPE_STRING, "my-id", "stream:no-chunks", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_INT32, "chunkSize", 12,
+                     BSON_TYPE_UTC_DATETIME, "uploadDate", (gint64)1234,
+                     BSON_TYPE_STRING, "md5", "deadbeef", -1,
+                     BSON_TYPE_STRING, "my-id", "stream:no-chunks", -1,
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   mongo_sync_cmd_insert (conn, ns, meta, NULL);
@@ -228,7 +228,7 @@ test_func_sync_gridfs_stream_read (void)
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
   meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test-stream", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   stream = mongo_sync_gridfs_stream_find (gfs, meta);
@@ -244,14 +244,14 @@ test_func_sync_gridfs_stream_read (void)
 
       r = mongo_sync_gridfs_stream_read (stream, data, sizeof (data));
       if (r == -1)
-	break;
+        break;
 
       g_checksum_update (chk, data, r);
       pos += r;
     }
 
   cmp_ok (pos, "==", FILE_SIZE,
-	  "mongo_sync_gridfs_stream_read() works");
+          "mongo_sync_gridfs_stream_read() works");
   is (g_checksum_get_string (chk), write_md5,
       "md5sums match");
 
@@ -274,7 +274,7 @@ test_func_sync_gridfs_stream_read_binary_subtype (void)
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
   meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test-stream-bintype", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   stream = mongo_sync_gridfs_stream_find (gfs, meta);
@@ -304,7 +304,7 @@ test_func_sync_gridfs_stream_meta (void)
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
   meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test-stream", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   stream = mongo_sync_gridfs_stream_find (gfs, meta);
@@ -341,7 +341,7 @@ test_func_sync_gridfs_stream_read_invalid (void)
 
   /* ---- */
   meta = bson_build (BSON_TYPE_STRING, "my-id", "stream:string-id", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   stream = mongo_sync_gridfs_stream_find (gfs, meta);
@@ -351,7 +351,7 @@ test_func_sync_gridfs_stream_read_invalid (void)
 
   /* ---- */
   meta = bson_build (BSON_TYPE_STRING, "my-id", "stream:invalid-length", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   stream = mongo_sync_gridfs_stream_find (gfs, meta);
@@ -361,7 +361,7 @@ test_func_sync_gridfs_stream_read_invalid (void)
 
   /* ---- */
   meta = bson_build (BSON_TYPE_STRING, "my-id", "stream:invalid-chunkSize", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   stream = mongo_sync_gridfs_stream_find (gfs, meta);
@@ -371,7 +371,7 @@ test_func_sync_gridfs_stream_read_invalid (void)
 
   /* no-chunk test */
   meta = bson_build (BSON_TYPE_STRING, "my-id", "stream:no-chunks", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   stream = mongo_sync_gridfs_stream_find (gfs, meta);
@@ -381,7 +381,7 @@ test_func_sync_gridfs_stream_read_invalid (void)
 
   r = mongo_sync_gridfs_stream_read (stream, data, sizeof (data));
   cmp_ok (r, "==", -1,
-	  "Reading from a chunk-less file should fail");
+          "Reading from a chunk-less file should fail");
 
   mongo_sync_gridfs_stream_close (stream);
 
@@ -400,7 +400,7 @@ test_func_sync_gridfs_stream_seek (void)
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
   meta = bson_build (BSON_TYPE_STRING, "filename", "libmongo-test-stream", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   stream = mongo_sync_gridfs_stream_find (gfs, meta);
@@ -411,36 +411,36 @@ test_func_sync_gridfs_stream_seek (void)
   chunk3 = g_malloc (300 * 1024);
 
   cmp_ok (mongo_sync_gridfs_stream_read (stream, chunk1, 300 * 1024), "==",
-	  300 * 1024,
-	  "reading the first chunk works");
+          300 * 1024,
+          "reading the first chunk works");
   cmp_ok (mongo_sync_gridfs_stream_read (stream, chunk2, 300 * 1024), "==",
-	  300 * 1024,
-	  "reading the second chunk works");
+          300 * 1024,
+          "reading the second chunk works");
   ok (memcmp (chunk1, chunk2, 300 * 1024) != 0,
       "The two chunks differ, as they should");
 
   ok (mongo_sync_gridfs_stream_seek (stream, 0, SEEK_END) == TRUE,
       "mongo_sync_gridfs_stream_seek() works, with SEEK_END");
   cmp_ok (stream->file.offset, "==", stream->file.length,
-	  "mongo_sync_gridfs_stream_seek() can seek to the end");
+          "mongo_sync_gridfs_stream_seek() can seek to the end");
 
   ok (mongo_sync_gridfs_stream_seek (stream, 1, SEEK_SET) == TRUE,
       "mongo_sync_gridfs_stream_seek() works, with SEEK_SET");
   cmp_ok (stream->file.offset, "==", 1,
-	  "mongo_sync_gridfs_stream_seek()'s SEEK_SET works");
+          "mongo_sync_gridfs_stream_seek()'s SEEK_SET works");
   ok (mongo_sync_gridfs_stream_seek (stream, 1, SEEK_SET) == TRUE,
       "mongo_sync_gridfs_stream_seek() works, with SEEK_SET");
 
   ok (mongo_sync_gridfs_stream_seek (stream, -1, SEEK_CUR) == TRUE,
       "mongo_sync_gridfs_stream_seek() works, with SEEK_CUR");
   cmp_ok (stream->file.offset, "==", 0,
-	  "mongo_sync_gridfs_stream_seek()'s SEEK_CUR works");
+          "mongo_sync_gridfs_stream_seek()'s SEEK_CUR works");
   ok (mongo_sync_gridfs_stream_seek (stream, 0, SEEK_CUR) == TRUE,
       "mongo_sync_gridfs_stream_seek() works, with SEEK_CUR");
 
   cmp_ok (mongo_sync_gridfs_stream_read (stream, chunk3, 300 * 1024), "==",
-	  300 * 1024,
-	  "reading after seeking works");
+          300 * 1024,
+          "reading after seeking works");
 
   ok (memcmp (chunk1, chunk3, 300 * 1024) == 0,
       "After seeking, we're at the beginning");
@@ -464,7 +464,7 @@ test_func_sync_gridfs_stream_seek_invalid (void)
   conn = mongo_sync_connect (config.primary_host, config.primary_port, FALSE);
   gfs = mongo_sync_gridfs_new (conn, config.gfs_prefix);
   meta = bson_build (BSON_TYPE_STRING, "my-id", "stream:no-chunks", -1,
-		     BSON_TYPE_NONE);
+                     BSON_TYPE_NONE);
   bson_finish (meta);
 
   stream = mongo_sync_gridfs_stream_find (gfs, meta);
