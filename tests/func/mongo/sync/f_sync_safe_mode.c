@@ -34,7 +34,7 @@ test_func_mongo_sync_safe_mode (void)
   docs[3] = b4;
 
   conn = mongo_sync_connect (config.primary_host, config.primary_port,
-			     FALSE);
+                             FALSE);
 
   /* Test inserts */
   mongo_sync_conn_set_safe_mode (conn, FALSE);

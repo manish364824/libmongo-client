@@ -84,12 +84,12 @@ mongo_tcp_connect (const char *host, int port)
     {
       fd = socket (r->ai_family, r->ai_socktype, r->ai_protocol);
       if (fd != -1 && connect (fd, r->ai_addr, r->ai_addrlen) == 0)
-	break;
+        break;
       if (fd != -1)
-	{
-	  close (fd);
-	  fd = -1;
-	}
+        {
+          close (fd);
+          fd = -1;
+        }
     }
   freeaddrinfo (res);
 
@@ -244,7 +244,7 @@ mongo_packet_recv (mongo_connection *conn)
 
   memset (&h, 0, sizeof (h));
   if (recv (conn->fd, &h, sizeof (mongo_packet_header),
-	    MSG_NOSIGNAL | MSG_WAITALL) != sizeof (mongo_packet_header))
+            MSG_NOSIGNAL | MSG_WAITALL) != sizeof (mongo_packet_header))
     {
       return NULL;
     }
