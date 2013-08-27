@@ -1,3 +1,13 @@
+libmongo-client (0.1.6.3-1) unstable; urgency=low
+
+  * New upstream release.
+    + Fixed chunked GridFS file retrieval, to keep the chunk order.
+    + Fixed a crash that happened when verification in safe-mode failed.
+  * Bumped Standards-Version to 3.9.4, no changes necessary.
+  * debian/copyright: Updated the copyright years.
+
+ -- Gergely Nagy <algernon@madhouse-project.org>  Tue, 27 Aug 2013 10:10:37 +0200
+
 libmongo-client (0.1.6.2-1) unstable; urgency=low
 
   * New upstream release.
