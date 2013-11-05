@@ -3,7 +3,7 @@ Priority: extra
 Maintainer: Gergely Nagy <algernon@madhouse-project.org>
 Build-Depends: debhelper (>= 9~), libglib2.0-dev, perl, dh-autoreconf
 Build-Depends-Indep: doxygen, graphviz
-Standards-Version: 3.9.4
+Standards-Version: 3.9.5
 Section: libs
 Homepage: https://github.com/algernon/libmongo-client
 Vcs-Git: git://git.madhouse-project.org/projects/libmongo-client.git
