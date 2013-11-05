@@ -1,3 +1,11 @@
+libmongo-client (0.1.6.3-2) unstable; urgency=low
+
+  * debian/copyright: Point to /usr/share/common-licenses/Apache-2.0 for
+    the full text of the license. (Thanks, lintian!)
+  * Bumped Standards-Version to 3.9.5, no changed necessary.
+
+ -- Gergely Nagy <algernon@madhouse-project.org>  Tue, 05 Nov 2013 10:38:33 +0100
+
 libmongo-client (0.1.6.3-1) unstable; urgency=low
 
   * New upstream release.
