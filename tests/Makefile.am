@@ -125,6 +125,7 @@ mongo_sync_unit_tests	= \
 		unit/mongo/sync/sync_cmd_is_master \
 		unit/mongo/sync/sync_cmd_ping \
 		unit/mongo/sync/sync_cmd_user_add \
+		unit/mongo/sync/sync_cmd_user_add_with_roles \
 		unit/mongo/sync/sync_cmd_user_remove \
 		unit/mongo/sync/sync_cmd_authenticate \
 		unit/mongo/sync/sync_cmd_index_create \
@@ -136,7 +137,8 @@ mongo_sync_func_tests	= \
 		func/mongo/sync/f_sync_conn_seed_add \
 		func/mongo/sync/f_sync_safe_mode \
 		func/mongo/sync/f_sync_auto_reconnect \
-		func/mongo/sync/f_sync_oidtest
+		func/mongo/sync/f_sync_oidtest \
+		func/mongo/sync/f_sync_auto_reauth
 
 mongo_sync_cursor_unit_tests	= \
 		unit/mongo/sync-cursor/sync_cursor_new \

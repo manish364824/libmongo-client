@@ -26,6 +26,7 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/mman.h>
 
 mongo_sync_connection *
 mongo_sync_connect (const gchar *address, gint port,
@@ -47,6 +48,10 @@ mongo_sync_connect (const gchar *address, gint port,
   s->rs.primary = NULL;
   s->last_error = NULL;
   s->max_insert_size = MONGO_SYNC_DEFAULT_MAX_INSERT_SIZE;
+
+  s->auth.db = NULL;
+  s->auth.user = NULL;
+  s->auth.pw = NULL;
 
   return s;
 }
@@ -182,6 +187,10 @@ mongo_sync_reconnect (mongo_sync_connection *conn,
               e = errno;
               _mongo_sync_connect_replace (conn, nc);
               errno = e;
+              if (conn->auth.db && conn->auth.user && conn->auth.pw)
+                mongo_sync_cmd_authenticate (conn, conn->auth.db,
+                                             conn->auth.user,
+                                             conn->auth.pw);
               return conn;
             }
         }
@@ -207,6 +216,12 @@ mongo_sync_reconnect (mongo_sync_connection *conn,
       e = errno;
       _mongo_sync_connect_replace (conn, nc);
       errno = e;
+
+      if (conn->auth.db && conn->auth.user && conn->auth.pw)
+        mongo_sync_cmd_authenticate (conn, conn->auth.db,
+                                     conn->auth.user,
+                                     conn->auth.pw);
+
       return conn;
     }
 
@@ -229,11 +244,33 @@ mongo_sync_reconnect (mongo_sync_connection *conn,
       e = errno;
       _mongo_sync_connect_replace (conn, nc);
       errno = e;
+
+      if (conn->auth.db && conn->auth.user && conn->auth.pw)
+        mongo_sync_cmd_authenticate (conn, conn->auth.db,
+                                     conn->auth.user,
+                                     conn->auth.pw);
+
       return conn;
     }
 
   errno = EHOSTUNREACH;
   return NULL;
+}
+
+static void
+_mongo_auth_prop_destroy (gchar **prop)
+{
+  size_t l;
+
+  if (!prop || !*prop)
+    return;
+
+  l = strlen (*prop);
+  memset (*prop, 0, l);
+  munlock (*prop, l);
+  g_free (*prop);
+
+  *prop = NULL;
 }
 
 void
@@ -243,6 +280,10 @@ mongo_sync_disconnect (mongo_sync_connection *conn)
 
   if (!conn)
     return;
+
+  _mongo_auth_prop_destroy (&conn->auth.db);
+  _mongo_auth_prop_destroy (&conn->auth.user);
+  _mongo_auth_prop_destroy (&conn->auth.pw);
 
   g_free (conn->rs.primary);
   g_free (conn->last_error);
@@ -1446,10 +1487,11 @@ _pass_digest (const gchar *user, const gchar *pw)
 }
 
 gboolean
-mongo_sync_cmd_user_add (mongo_sync_connection *conn,
-                         const gchar *db,
-                         const gchar *user,
-                         const gchar *pw)
+mongo_sync_cmd_user_add_with_roles (mongo_sync_connection *conn,
+                                    const gchar *db,
+                                    const gchar *user,
+                                    const gchar *pw,
+                                    const bson *roles)
 {
   bson *s, *u;
   gchar *userns;
@@ -1472,6 +1514,8 @@ mongo_sync_cmd_user_add (mongo_sync_connection *conn,
                        bson_build (BSON_TYPE_STRING, "pwd", hex_digest, -1,
                                    BSON_TYPE_NONE),
                        BSON_TYPE_NONE);
+  if (roles)
+    bson_append_array (u, "roles", roles);
   bson_finish (u);
   g_free (hex_digest);
 
@@ -1491,6 +1535,15 @@ mongo_sync_cmd_user_add (mongo_sync_connection *conn,
   g_free (userns);
 
   return TRUE;
+}
+
+gboolean
+mongo_sync_cmd_user_add (mongo_sync_connection *conn,
+                         const gchar *db,
+                         const gchar *user,
+                         const gchar *pw)
+{
+  return mongo_sync_cmd_user_add_with_roles (conn, db, user, pw, NULL);
 }
 
 gboolean
@@ -1543,6 +1596,7 @@ mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
   GChecksum *chk;
   gchar *hex_digest;
   const gchar *digest;
+  gchar *ndb, *nuser, *npw;
 
   if (!db || !user || !pw)
     {
@@ -1627,6 +1681,21 @@ mongo_sync_cmd_authenticate (mongo_sync_connection *conn,
     }
   bson_free (b);
   mongo_wire_packet_free (p);
+
+  ndb = g_strdup (db);
+  _mongo_auth_prop_destroy (&conn->auth.db);
+  conn->auth.db = ndb;
+  mlock (conn->auth.db, strlen (ndb));
+
+  nuser = g_strdup (user);
+  _mongo_auth_prop_destroy (&conn->auth.user);
+  conn->auth.user = nuser;
+  mlock (conn->auth.user, strlen (nuser));
+
+  npw = g_strdup (pw);
+  _mongo_auth_prop_destroy (&conn->auth.pw);
+  conn->auth.pw = npw;
+  mlock (conn->auth.pw, strlen (npw));
 
   return TRUE;
 }
