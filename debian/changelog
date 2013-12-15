@@ -1,3 +1,12 @@
+libmongo-client (0.1.7-1) unstable; urgency=low
+
+  * New upstream release.
+    + Automatic re-authentication support, even when using automatic
+      failover with replicasets.
+  * debian/symbols updated with the new LMC_0.1.7 version tag.
+
+ -- Gergely Nagy <algernon@madhouse-project.org>  Sun, 15 Dec 2013 11:37:03 +0100
+
 libmongo-client (0.1.6.3-2) unstable; urgency=low
 
   * debian/copyright: Point to /usr/share/common-licenses/Apache-2.0 for
