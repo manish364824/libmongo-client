@@ -722,9 +722,9 @@ _mongo_sync_cmd_verify_result (mongo_sync_connection *conn,
   else
     db = g_strdup (ns);
 
-  mongo_sync_cmd_get_last_error (conn, db, &error);
+  res = mongo_sync_cmd_get_last_error (conn, db, &error);
   g_free (db);
-  res = (error) ? FALSE : TRUE;
+  res = res && ((error) ? FALSE : TRUE);
   g_free (error);
 
   return res;
