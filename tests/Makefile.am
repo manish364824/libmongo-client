@@ -138,7 +138,8 @@ mongo_sync_func_tests	= \
 		func/mongo/sync/f_sync_safe_mode \
 		func/mongo/sync/f_sync_auto_reconnect \
 		func/mongo/sync/f_sync_oidtest \
-		func/mongo/sync/f_sync_auto_reauth
+		func/mongo/sync/f_sync_auto_reauth \
+		func/mongo/sync/f_sync_invalid_getlasterror
 
 mongo_sync_cursor_unit_tests	= \
 		unit/mongo/sync-cursor/sync_cursor_new \
@@ -210,20 +211,23 @@ AM_LDFLAGS = -no-install
 LDADD = $(top_builddir)/src/libmongo-client.la ${top_builddir}/tests/libtap/libtap.la @GLIB_LIBS@
 
 EXTRA_DIST = README \
+	     runall \
 	     coverage.sh \
              tools/coverage-report-entry.pl tools/coverage-report.pl \
              tools/coverage-report.xsl
+
+PROVE      = prove -e "${PROVE_ENV}" ${PROVE_OPTIONS}
 
 check-%: BASE=$(subst -,_,$(subst check-,,$@))
 check-%: TESTCASES=$(value $(BASE)_unit_tests) $(value $(BASE)_func_tests) $(value $(BASE)_tests)
 check-%: check-recursive test_cleanup ${TESTCASES}
 	$(AM_V_at) ${builddir}/test_cleanup
-	$(AM_V_GEN) srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
+	$(AM_V_GEN) srcdir=${srcdir} ${PROVE} ${TESTCASES}
 	$(AM_V_at) ${builddir}/test_cleanup
 
 check: check-recursive test_cleanup ${TESTCASES}
 	$(AM_V_at) ${builddir}/test_cleanup
-	$(AM_V_GEN) srcdir=${srcdir} prove -e "${PROVE_ENV}" ${PROVE_OPTIONS} ${TESTCASES}
+	$(AM_V_GEN) srcdir=${srcdir} ${PROVE} ${TESTCASES}
 	$(AM_V_at) ${builddir}/test_cleanup
 
 .PHONY: check

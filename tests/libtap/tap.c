@@ -24,7 +24,7 @@ vstrdupf (const char *fmt, va_list args) {
     va_copy(args2, args);
     if (!fmt)
         fmt = "";
-    size = vsnprintf(NULL, 0, fmt, args2) + 2;
+    size = g_vsnprintf(NULL, 0, fmt, args2) + 2;
     str = malloc(size);
     vsprintf(str, fmt, args);
     va_end(args2);
@@ -239,6 +239,10 @@ cendtodo () {
 
 #ifdef __APPLE__
 #define MAP_ANONYMOUS MAP_ANON
+#endif
+
+#ifndef MAP_ANON
+#define MAP_ANON MAP_ANONYMOUS
 #endif
 
 /* Create a shared memory int to keep track of whether a piece of code executed
