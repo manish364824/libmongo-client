@@ -1,3 +1,10 @@
+libmongo-client (0.1.7.1-1) unstable; urgency=medium
+
+  * New upstream release.
+    + Improves the roboustness of safe mode.
+
+ -- Gergely Nagy <algernon@madhouse-project.org>  Fri, 14 Mar 2014 11:04:43 +0100
+
 libmongo-client (0.1.7-1) unstable; urgency=low
 
   * New upstream release.
