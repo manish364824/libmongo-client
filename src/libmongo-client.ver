@@ -151,3 +151,10 @@ LMC_0.1.6 {
 LMC_0.1.7 {
   mongo_sync_cmd_user_add_with_roles;
 } LMC_0.1.6;
+
+LMC_0.1.8 {
+  mongo_sync_conn_recovery_cache_init;
+  mongo_sync_conn_recovery_cache_discard;
+  mongo_sync_conn_recovery_cache_seed_add;
+  mongo_sync_connect_recovery_cache;
+} LMC_0.1.7;
