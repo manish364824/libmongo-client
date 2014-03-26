@@ -92,8 +92,6 @@ test_func_mongo_sync_safe_mode_invalid_db_cache (void)
 {
   mongo_sync_connection *conn;
   mongo_sync_conn_recovery_cache cache;
-  gchar *error = NULL;
-  gboolean res;
   bson *b;
   const bson *docs[1];
 

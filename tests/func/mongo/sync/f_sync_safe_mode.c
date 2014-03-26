@@ -82,8 +82,6 @@ void
 test_func_mongo_sync_safe_mode_invalid_db (void)
 {
   mongo_sync_connection *conn;
-  gchar *error = NULL;
-  gboolean res;
   bson *b;
   const bson *docs[1];
 
