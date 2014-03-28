@@ -178,7 +178,7 @@ _mongo_sync_connect_replace (mongo_sync_connection *old,
     }
 
   g_free (new->last_error);
-  if (old->super.fd)
+  if (old->super.fd && (old->super.fd != new->super.fd))
     close (old->super.fd);
 
   old->super.fd = new->super.fd;
