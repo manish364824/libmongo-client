@@ -28,6 +28,8 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include "mongo-client.h"
+
 static guint32 machine_id = 0;
 static gint16 pid = 0;
 
@@ -173,7 +175,7 @@ mongo_util_parse_addr (const gchar *addr, gchar **host, gint *port)
       errno = ERANGE;
       return FALSE;
     }
-  if (p < 0 || p > INT_MAX)
+  if ((p != MONGO_CONN_LOCAL) && (p < 0 || p > INT_MAX))
     {
       g_free (*host);
       *host = NULL;
