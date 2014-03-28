@@ -136,7 +136,10 @@ mongo_util_parse_addr (const gchar *addr, gchar **host, gint *port)
 
       port_s += 2;
       if (port_s - addr >= (glong)strlen (addr))
-        return TRUE;
+        {
+          *port = -1;
+          return TRUE;
+        }
     }
   else
     {
@@ -147,6 +150,7 @@ mongo_util_parse_addr (const gchar *addr, gchar **host, gint *port)
       if (!port_s)
         {
           *host = g_strdup (addr);
+          *port = -1;
           return TRUE;
         }
       if (port_s == addr)
