@@ -584,7 +584,10 @@ _mongo_sync_packet_send (mongo_sync_connection *conn,
 
   if (force_master)
     if (!_mongo_cmd_ensure_conn (conn, force_master))
-      return FALSE;
+      {
+        mongo_wire_packet_free (p);
+        return FALSE;
+      }
 
   for (;;)
     {
