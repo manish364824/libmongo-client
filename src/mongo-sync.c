@@ -75,17 +75,6 @@ _replica_set_free(replica_set *rs)
   rs->primary = NULL;
 }
 
-
-static gpointer *
-_copy_gchar (gpointer src, gpointer data)
-{
-  gchar *copy;
-
-  copy = g_strdup (src);
-
-  return (gpointer)data;
-}
-
 static GList *
 _list_copy_full (GList *list)
 {
