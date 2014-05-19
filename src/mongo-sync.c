@@ -79,7 +79,7 @@ static GList *
 _list_copy_full (GList *list)
 {
   GList *new_list = NULL;
-  int i;
+  guint i;
 
   for (i = 0; i < g_list_length (list); i++)
     {
