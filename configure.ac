@@ -37,16 +37,6 @@ dnl Header checks
 dnl ***************************************************************************
 AC_CHECK_HEADERS([arpa/inet.h fcntl.h netinet/in.h sys/socket.h netdb.h])
 
-AC_CACHE_CHECK(for struct sockaddr_storage, blb_cv_c_struct_sockaddr_storage,
-  [AC_EGREP_HEADER([sockaddr_storage], sys/socket.h, blb_cv_c_struct_sockaddr_storage=yes,blb_cv_c_struct_sockaddr_storage=no)])
-
-if test "$blb_cv_c_struct_sockaddr_storage" = "yes"; then
-	AC_DEFINE(HAVE_STRUCT_SOCKADDR_STORAGE,[1],[struct sockaddr_storage is present on your system])
-fi
-
-AC_CACHE_CHECK(for struct sockaddr_in6, blb_cv_c_struct_sockaddr_in6,
-  [AC_EGREP_HEADER([sockaddr_in6], netinet/in.h, blb_cv_c_struct_sockaddr_in6=yes,blb_cv_c_struct_sockaddr_in6=no)])
-
 AC_EGREP_HEADER([MSG_NOSIGNAL], [sys/socket.h], AC_DEFINE([HAVE_MSG_NOSIGNAL], [1], [Define to 1 when your system supports MSG_NOSIGNAL]))
 
 dnl ***************************************************************************
@@ -112,15 +102,6 @@ dnl ***************************************************************************
 dnl misc features to be enabled
 dnl ***************************************************************************
 AC_C_INLINE
-
-AC_MSG_CHECKING(whether to enable IPv6 support)
-if test "x$blb_cv_c_struct_sockaddr_in6" = "xyes"; then
-	enable_ipv6=yes
-	AC_MSG_RESULT(yes)
-else
-	enable_ipv6=no
-	AC_MSG_RESULT(no)
-fi
 
 # Check for linker version script support.
 if test "x$symbol_versioning" != "xno"; then
