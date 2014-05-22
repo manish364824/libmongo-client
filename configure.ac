@@ -17,10 +17,6 @@ AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_CONFIG_HEADERS([config.h])
 
-AC_ARG_WITH([versioned-symbols], AS_HELP_STRING([--with-versioned-symbols],[Use versioned symbols]),[dnl
-vsymldflags="-Wl,--version-script,\${srcdir}/libmongo-client.ver -Wl,-O1"
-],[vsymldflags=])
-
 dnl ***************************************************************************
 dnl Checks for programs.
 AC_PROG_CC
@@ -103,7 +99,7 @@ AC_CHECK_LIB(glib-2.0, g_checksum_new, [glib_checksum="yes"; with_openssl="0"], 
 LIBS=$old_LIBS
 if test "x$glib_checksum" = "xno"; then
   dnl Using the compat stuff disables symbol versioning
-  vsymldflags=""
+  symbol_versioning=no
   PKG_CHECK_MODULES(OPENSSL, openssl >= $OPENSSL_MIN_VERSION,, OPENSSL_LIBS="")
   if test "x$OPENSSL_LIBS" = "x"; then
      AC_MSG_ERROR([OpenSSL is required when glib-2.0 << 2.16.0])
@@ -126,23 +122,33 @@ else
 	AC_MSG_RESULT(no)
 fi
 
-AC_MSG_CHECKING([whether to enable symbol versioning])
-AC_SUBST(vsymldflags)
-if test -z "${vsymldflags}"; then
-   AC_MSG_RESULT([no])
-else
-   AC_MSG_RESULT([yes, ${vsymldflags}])
+# Check for linker version script support.
+if test "x$symbol_versioning" != "xno"; then
+  ac_save_LDFLAGS=$LDFLAGS
+  AC_CACHE_CHECK(whether $LD supports symbol version scripts,
+          ac_cv_prog_ld_version_script,
+          [ac_cv_prog_ld_version_script=no
+           echo "TEST { local: *; };" > conftest.ver
+           LDFLAGS="$LDFLAGS -Wl,--version-script,conftest.ver"
+           _AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+                  [ac_cv_prog_ld_version_script=yes], [])
+          ])
+  LDFLAGS=$ac_save_LDFLAGS
 fi
+AM_CONDITIONAL([HAVE_VERSIONING], [test x$ac_cv_prog_ld_version_script = xyes])
 
 enable_value () {
-   if test -z "$1"; then
-      echo 0
-   else
-      echo 1
-   fi
+   case "$1" in
+        yes|y*)
+                echo 1
+                ;;
+        *)
+                echo 0
+                ;;
+   esac
 }
 
-AC_DEFINE_UNQUOTED(VERSIONED_SYMBOLS, `enable_value ${vsymldflags}`,
+AC_DEFINE_UNQUOTED(VERSIONED_SYMBOLS, `enable_value ${ac_cv_prog_ld_version_script}`,
                    [Define to 1 if symbol versioning is enabled])
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [package name])
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [version number])
