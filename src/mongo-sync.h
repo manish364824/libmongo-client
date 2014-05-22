@@ -1,5 +1,5 @@
 /* mongo-sync.h - libmongo-client synchronous wrapper API
- * Copyright 2011, 2012, 2013 Gergely Nagy <algernon@balabit.hu>
+ * Copyright 2011, 2012, 2013, 2014 Gergely Nagy <algernon@balabit.hu>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,57 @@ G_BEGIN_DECLS
 
 /** Opaque synchronous connection object. */
 typedef struct _mongo_sync_connection mongo_sync_connection;
+
+/** synchronous connection recovery cache object */
+typedef struct _mongo_sync_conn_recovery_cache mongo_sync_conn_recovery_cache;
+
+/** Create a new connection recovery cache object.
+ *
+ * @return the newly created recovery cache object
+ */
+mongo_sync_conn_recovery_cache *mongo_sync_conn_recovery_cache_new (void);
+
+/** Free a connection recovery cache object.
+ *
+ * @param cache is the recovery cache object
+ */
+void mongo_sync_conn_recovery_cache_free (mongo_sync_conn_recovery_cache *cache);
+
+/** Discards a connection recovery cache object.
+ *
+ * @param cache is the recovery cache object
+ */
+void mongo_sync_conn_recovery_cache_discard (mongo_sync_conn_recovery_cache *cache);
+
+/** Add a seed to a connection recovery cache object.
+ *
+ * The seed list will be used for reconnects, prioritized before the
+ * automatically discovered host list.
+ *
+ * @param cache is the connection recovery cache to add a seed to.
+ * @param host is the seed host to add.
+ * @param port is the seed's port.
+ *
+ * @returns TRUE on success, FALSE otherwise.
+ */
+gboolean mongo_sync_conn_recovery_cache_seed_add (mongo_sync_conn_recovery_cache *cache,
+                                                  const gchar *host, gint port);
+
+/** Synchronously connect to a MongoDB server using an external
+ *  connection recovery cache object.
+ *
+ * Sets up a synchronous connection to a MongoDB server.
+ *
+ * @param cache is the externally managed connection recovery cache object.
+ * @param slaveok signals whether queries made against a slave are
+ * acceptable.
+ *
+ * @returns A newly allocated mongo_sync_connection object, or NULL on
+ * error. It is the responsibility of the caller to close and free the
+ * connection when appropriate.
+ */
+mongo_sync_connection *mongo_sync_connect_recovery_cache (mongo_sync_conn_recovery_cache *cache,
+                                                          gboolean slaveok);
 
 /** Synchronously connect to a MongoDB server.
  *
@@ -428,6 +479,22 @@ gboolean mongo_sync_cmd_drop (mongo_sync_connection *conn,
 gboolean mongo_sync_cmd_get_last_error (mongo_sync_connection *conn,
                                         const gchar *db, gchar **error);
 
+/** Get the last error from MongoDB.
+ *
+ * Retrieves the last error from MongoDB.
+ *
+ * @param conn is the connection to work with.
+ * @param db is the name of the database.
+ * @param error is a pointer to a BSON variable that will hold the
+ * error message.
+ *
+ * @returns TRUE if the error was succesfully retrieved, FALSE
+ * otherwise. The output variable @a error is only set if the function
+ * is returning TRUE.
+ */
+gboolean mongo_sync_cmd_get_last_error_full (mongo_sync_connection *conn,
+                                             const gchar *db, bson **error);
+
 /** Reset the last error variable in MongoDB.
  *
  * @param conn is the connection to work with.
@@ -557,6 +624,14 @@ gboolean mongo_sync_cmd_index_drop (mongo_sync_connection *conn,
  */
 gboolean mongo_sync_cmd_index_drop_all (mongo_sync_connection *conn,
                                         const gchar *ns);
+
+/** Get the last error message on a connection
+ *
+ * @param conn is the connection
+ *
+ * @returns pointer to the error message, if exists, NULL otherwise
+ */
+const gchar *mongo_sync_conn_get_last_error (mongo_sync_connection *conn);
 
 /** @} */
 
