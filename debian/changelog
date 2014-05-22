@@ -1,3 +1,13 @@
+libmongo-client (0.1.8-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/symbols updated with the new LMC_0.1.8 version tag.
+  * debian/copyright updated to include 2014 in copyright years.
+  * debian/rules updated to drop --with-versioned-symbols: it is
+    automatically enabled now, if supported.
+
+ -- Gergely Nagy <algernon@madhouse-project.org>  Thu, 22 May 2014 13:05:18 +0200
+
 libmongo-client (0.1.7.1-1) unstable; urgency=medium
 
   * New upstream release.
