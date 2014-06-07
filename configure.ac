@@ -96,7 +96,21 @@ if test "x$glib_checksum" = "xno"; then
   fi
 fi
 
+
+AC_DEFINE_UNQUOTED(NO_GLIB_HASH_FUNCTIONS, $with_openssl, [Glib has no checksum functions])
+
+AC_ARG_WITH([ssl], [AS_HELP_STRING([--with-ssl], [Compile with SSL support (OpenSSL)])], [with_ssl_support="1"], [with_ssl_support="0"])
+
+if test "x$with_ssl_support" = "x1" -a "x$with_openssl" = "x0"; then 
+  PKG_CHECK_MODULES(OPENSSL, openssl >= $OPENSSL_MIN_VERSION,, OPENSSL_LIBS="")
+  if test "x$OPENSSL_LIBS" = "x"; then
+    AC_MSG_ERROR([OpenSSL is required when configured with --with-ssl])
+  fi
+  with_openssl="1"
+fi
+
 AC_DEFINE_UNQUOTED(WITH_OPENSSL, $with_openssl, [Compile with OpenSSL])
+AM_CONDITIONAL([HAVE_OPENSSL], [test $with_openssl -eq 1])
 
 dnl ***************************************************************************
 dnl misc features to be enabled
