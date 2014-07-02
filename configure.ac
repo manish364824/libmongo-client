@@ -103,6 +103,10 @@ dnl misc features to be enabled
 dnl ***************************************************************************
 AC_C_INLINE
 
+if test "x$enable_shared" = "xno"; then
+	symbol_versioning=no
+fi
+
 # Check for linker version script support.
 if test "x$symbol_versioning" != "xno"; then
   ac_save_LDFLAGS=$LDFLAGS
