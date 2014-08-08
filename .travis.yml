@@ -1,4 +1,6 @@
 language: c
+before_install:
+  - sudo pip install cpp-coveralls
 install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libglib2.0-dev perl
@@ -6,7 +8,7 @@ before_script:
   - install -d m4
   - autoreconf -i
 script:
-  - ./configure
+  - ./configure CFLAGS="-ggdb3 -O0 -ftest-coverage -fprofile-arcs"
   - make
   - "export TEST_PRIMARY=localhost:27017"
   - make check
@@ -15,3 +17,5 @@ compiler:
   - clang
 services:
   - mongodb
+after_success:
+  - if [ "${TRAVIS_BRANCH}" = "master" ]; then coveralls -e tests -e examples -e docs -e config.h -e src/compat.c -e src/compat.h; fi

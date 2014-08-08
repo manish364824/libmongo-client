@@ -2,6 +2,7 @@ libmongo-client
 ===============
 
 [![Build Status](https://travis-ci.org/algernon/libmongo-client.png?branch=master)](https://travis-ci.org/algernon/libmongo-client)
+[![Coverage Status](https://coveralls.io/repos/algernon/libmongo-client/badge.png?branch=master)](https://coveralls.io/r/algernon/libmongo-client?branch=master)
 
 This is an alternative C driver for [MongoDB][mongodb], with slightly
 different goals than the official one:
