@@ -1,5 +1,6 @@
 /* mongo-client.h - libmongo-client user API
  * Copyright 2011, 2012 Gergely Nagy <algernon@balabit.hu>
+ * Copyright 2014 Gyorgy Demarcsek <gyorgy.demarcsek@icloud.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +73,8 @@ mongo_connection *mongo_connect (const char *address, int port);
  * error. It is the responsibility of the caller to free it once it is
  * not used anymore.
  */
-mongo_connection *mongo_ssl_connect (const char *address, int port, mongo_ssl_ctx *conf); 
+mongo_connection *mongo_ssl_connect (const char *address, int port,
+                                     mongo_ssl_ctx *conf);
 
 /** Disconnect from a MongoDB server.
  *
