@@ -11,6 +11,14 @@ libmongo-client is meant to be a stable (API, ABI and quality alike),
 clean, well documented and well tested shared library, that strives to
 make the most common use cases as convenient as possible.
 
+Looking for a new home
+----------------------
+
+I do not use neither this driver, nor MongoDB anymore, and development
+on this driver stopped a while ago. I am looking for a new maintainer
+to take over development and maintenance, please contact me if
+interested.
+
 Features
 --------
 
