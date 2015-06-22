@@ -892,9 +892,10 @@ bson_cursor_next (bson_cursor *c)
 
 static inline gboolean
 _bson_cursor_find (const bson *b, const gchar *name, size_t start_pos,
-                   gint32 end_pos, gboolean wrap_over, bson_cursor *dest_c)
+                   guint32 end_pos, gboolean wrap_over, bson_cursor *dest_c)
 {
-  gint32 pos = start_pos, bs;
+  size_t pos = start_pos;
+  gint32 bs;
   const guint8 *d;
   gint32 name_len;
 
